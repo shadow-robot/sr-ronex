@@ -24,6 +24,7 @@
 <export>
   <cpp cflags="-I${prefix}/include" lflags="-L${prefix}/lib -lsr_ronex_ethercat_drivers -Wl,-rpath,${prefix}/lib"/>
   <ethercat_hardware plugin="${prefix}/ethercat_device_plugin.xml" />
+  <sr_ronex_ethercat_drivers plugin="${prefix}/ethercat_device_plugin.xml" />
 </export>
   <platform os="ubuntu" version="9.04"/>
   <platform os="ubuntu" version="9.10"/>
