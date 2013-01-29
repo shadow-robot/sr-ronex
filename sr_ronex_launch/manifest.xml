@@ -1,0 +1,16 @@
+<package>
+  <description brief="sr_ronex_launch">
+
+    Contains the main launch files for the RoNeX system.
+
+  </description>
+  <author>Toni Oliver (software@shadowrobot.com)</author>
+  <license>GPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/sr_ronex_launch</url>
+
+  <depend package="sr_ronex_ethercat_drivers"/>
+
+</package>
+
+

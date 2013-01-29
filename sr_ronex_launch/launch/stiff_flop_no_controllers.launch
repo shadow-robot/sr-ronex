@@ -1,0 +1,9 @@
+<launch>
+  <!-- Loads the robot description -->
+  <include file="$(find sr_ronex_launch)/loaders/load_ronex_model.launch" />
+
+  <!-- etherCAT -->
+  <node name="realtime_loop" pkg="pr2_etherCAT" type="pr2_etherCAT" args="-i $(env ETHERCAT_PORT) -x /robot_description" output="screen"  launch-prefix="nice -n -20" /> <!--launch-prefix="gdb -ex run -args" launch-prefix="xterm -hold -e strace -f -e trace=!gettimeofday,futex"> -->
+
+</launch>
+
