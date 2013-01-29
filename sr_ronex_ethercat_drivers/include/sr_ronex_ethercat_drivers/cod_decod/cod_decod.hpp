@@ -27,7 +27,7 @@
 #ifndef _COD_DECOD_HPP_
 #define _COD_DECOD_HPP_
 
-#include <pr2_hardware_interface/hardware_interface.hpp>
+#include <pr2_hardware_interface/hardware_interface.h>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_updater/DiagnosticStatusWrapper.h>
 #include <al/ethercat_slave_handler.h>
