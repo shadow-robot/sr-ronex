@@ -1,0 +1,7 @@
+sr_common_msgs/build/
+sr_common_msgs/msg_gen/
+sr_common_msgs/src/
+sr_ronex_ethercat_drivers/build/
+sr_ronex_ethercat_drivers/lib/
+sr_ronex_launch/build/
+
