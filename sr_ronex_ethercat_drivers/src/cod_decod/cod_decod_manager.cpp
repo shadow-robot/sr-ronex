@@ -93,17 +93,14 @@ namespace sr_cod_decod
     }
     else
     {
-      ROS_ERROR("Unable to find CodDecod plugin for slave #%d, product code: %u (0x%X), serial: %u (0x%X), revision: %d (0x%X)",
+      ROS_INFO("Unable to find a dedicated CodDecod plugin for slave #%d, product code: %u (0x%X), serial: %u (0x%X), revision: %d (0x%X)",
                 slave, product_code, product_code, serial, serial, revision, revision);
-      ROS_ERROR("Possible classes:");
+      ROS_INFO("Possible classes:");
       BOOST_FOREACH(const std::string &class_name, classes)
       {
-        ROS_ERROR("  %s", class_name.c_str());
+        ROS_INFO("  %s", class_name.c_str());
       }
-      ROS_ERROR("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      ROS_ERROR("Loading the deafult CodDecod plugin: CodDecodStdIo");
-      ROS_ERROR("For most practical purposes you need to create a custom CodDecod plugin for every one of your I/O HW modules");
-      ROS_ERROR("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      ROS_INFO("Loading the deafult CodDecod plugin: CodDecodStdIo");
       try {
         cod_decod_ = boost::shared_ptr<CodDecod>(cod_decod_loader_.createClassInstance("sr_ronex_ethercat_drivers/87032868_0"));
       }
