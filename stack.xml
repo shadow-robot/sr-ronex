@@ -17,6 +17,7 @@
   <depend stack="pr2_common" /> <!-- pr2_description, pr2_msgs -->
   <depend stack="pr2_ethercat_drivers" /> <!-- eml, ethercat_hardware -->
   <depend stack="pr2_mechanism" /> <!-- pr2_hardware_interface, pr2_mechanism_model, realtime_tools, pr2_mechanism_diagnostics, pr2_mechanism_msgs -->
+  <depend stack="pr2_robot" /> <!-- pr2_etherCAT -->
   <depend stack="pr2_simulator" /> <!-- pr2_gazebo_plugins -->
   <depend stack="robot_model" /> <!-- robot_state_publisher, urdf -->
   <depend stack="ros" />

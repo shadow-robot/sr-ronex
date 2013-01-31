@@ -9,7 +9,7 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/sr_ronex_launch</url>
 
-  <depend package="sr_ronex_ethercat_drivers"/>
+  <depend package="pr2_etherCAT"/>
 
 </package>
 
