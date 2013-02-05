@@ -38,7 +38,6 @@
 
 #include <math.h>
 
-PLUGINLIB_DECLARE_CLASS(sr_ronex_ethercat_drivers, 72100946, StandardEthercatDevice, EthercatDevice);
 PLUGINLIB_DECLARE_CLASS(sr_ronex_ethercat_drivers, 0, StandardEthercatDevice, EthercatDevice);
 
 StandardEthercatDevice::StandardEthercatDevice() : EthercatDevice()
