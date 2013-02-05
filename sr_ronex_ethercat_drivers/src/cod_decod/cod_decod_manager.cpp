@@ -43,13 +43,13 @@ namespace sr_cod_decod
 
     // The point of this code to find a cod_decod class whose name matches the EtherCAT product ID and Serial Number
     // for a given device.
-    // Thus cod_decod plugins would register themselves with PLUGINLIB_DECLARE_CLASS
+    // Thus cod_decod plugins would register themselves with PLUGINLIB_EXPORT_CLASS
     //
-    //   PLUGINLIB_DECLARE_CLASS(package, name, class_namespace::class_type, base_class_namespace::base_class_type)
+    //   PLUGINLIB_EXPORT_CLASS(class_namespace::class_type, base_class_namespace::base_class_type)
     //
     // For the CodDecodExample cod_decod example module to be use with e.g productID = 87032868 and serialNumber = 21, this statement would look something like:
     //
-    //  PLUGINLIB_DECLARE_CLASS(sr_ronex_ethercat_drivers, 87032868_21, sr_cod_decod::CodDecodExample, sr_cod_decod::CodDecod);
+    //  PLUGINLIB_EXPORT_CLASS(sr_cod_decod::CodDecodExample, sr_cod_decod::CodDecod);
     //
     //
     // Unfortunately, we don't know which ROS package a particular cod_decod class is defined in.

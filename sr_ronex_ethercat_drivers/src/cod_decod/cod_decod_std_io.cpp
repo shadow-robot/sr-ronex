@@ -28,7 +28,7 @@
 #include "sr_ronex_ethercat_drivers/cod_decod/cod_decod_std_io.hpp"
 #include <sstream>
 
-PLUGINLIB_DECLARE_CLASS(sr_ronex_ethercat_drivers, 87032868_0, sr_cod_decod::CodDecodStdIo, sr_cod_decod::CodDecod);
+PLUGINLIB_EXPORT_CLASS(sr_cod_decod::CodDecodStdIo, sr_cod_decod::CodDecod);
 
 namespace sr_cod_decod
 {

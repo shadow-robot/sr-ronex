@@ -40,7 +40,7 @@
 //TODO only for testing purposes (it will be read from eeprom)
 #define ETHERCAT_COMMAND_DATA_ADDRESS               0x1000
 
-PLUGINLIB_DECLARE_CLASS(sr_ronex_ethercat_drivers, 87032868, SrBoard0X, EthercatDevice);
+PLUGINLIB_EXPORT_CLASS(SrBoard0X, EthercatDevice);
 
 SrBoard0X::SrBoard0X() :
     StandardEthercatDevice()
