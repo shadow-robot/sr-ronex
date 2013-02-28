@@ -93,7 +93,7 @@ namespace sr_cod_decod
      *
      * \param pin the physical digital I/O pin of the ethercat module
      */
-    virtual void setPinAsDigitalInput(sf_cod_decod_std_io::DigitalIo pin);
+    virtual void setPinAsDigitalInput(sr_cod_decod_std_io::DigitalIo pin);
 
     /*!
      * \brief returns the value read from a digital input of the ethercat module

@@ -362,11 +362,11 @@ namespace sr_cod_decod
 
   }
 
-  void CodDecodStdIo::setPinAsDigitalInput(sf_cod_decod_std_io::DigitalIo pin)
+  void CodDecodStdIo::setPinAsDigitalInput(sr_cod_decod_std_io::DigitalIo pin)
   {
     //Read the digital outputs from the digital_output_ realtime box and set the right values to the digital_output_ realtime box again
-    boost::shared_ptr<sf_common_msgs::BoolArray> d_out_ptr(new sf_common_msgs::BoolArray());
-    boost::shared_ptr<const sf_common_msgs::BoolArray> current_d_out_ptr;
+    boost::shared_ptr<sr_common_msgs::BoolArray> d_out_ptr(new sr_common_msgs::BoolArray());
+    boost::shared_ptr<const sr_common_msgs::BoolArray> current_d_out_ptr;
     digital_output_.get(current_d_out_ptr);
     d_out_ptr->data = current_d_out_ptr->data;
     //set the pin as digital input
