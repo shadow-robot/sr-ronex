@@ -362,6 +362,18 @@ namespace sr_cod_decod
 
   }
 
+  void CodDecodStdIo::setPinAsDigitalInput(sr_cod_decod_std_io::DigitalIo pin)
+  {
+    //Read the digital outputs from the digital_output_ realtime box and set the right values to the digital_output_ realtime box again
+    boost::shared_ptr<sr_common_msgs::BoolArray> d_out_ptr(new sr_common_msgs::BoolArray());
+    boost::shared_ptr<const sr_common_msgs::BoolArray> current_d_out_ptr;
+    digital_output_.get(current_d_out_ptr);
+    d_out_ptr->data = current_d_out_ptr->data;
+    //set the pin as digital input
+    d_out_ptr->data.at(pin * 2) = true;
+    digital_output_.set(d_out_ptr);
+  }
+
   bool CodDecodStdIo::digitalInputToBool(sr_cod_decod_std_io::DigitalIo input_pin)
   {
     //The following line gets the digital input input_pin value
@@ -423,7 +435,7 @@ namespace sr_cod_decod
     digital_output_.get(current_d_out_ptr);
     d_out_ptr->data = current_d_out_ptr->data;
     //set the pin as digital output
-    d_out_ptr->data.at(output_pin * 2) = true;
+    d_out_ptr->data.at(output_pin * 2) = false;
     //Set the dig. out. to the corresponding state
     d_out_ptr->data.at(output_pin * 2 + 1) = value;
     digital_output_.set(d_out_ptr);
