@@ -8,9 +8,9 @@
       SrBoard0X - Shadow Robot RoNeX Board
     </description>
   </class>
-  <class name="sr_ronex_ethercat_drivers/1" type="StandardEthercatDevice" base_class_type="EthercatDevice">
+  <class name="sr_ronex_ethercat_drivers/7" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
-      Shadow bridge
+      RoNeX bridge
     </description>
   </class>
   
