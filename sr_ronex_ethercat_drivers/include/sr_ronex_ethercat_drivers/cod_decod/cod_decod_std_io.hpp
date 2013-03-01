@@ -89,6 +89,13 @@ namespace sr_cod_decod
                                      diagnostic_updater::DiagnosticStatusWrapper &d);
 
     /*!
+     * \brief Configures a digital I/O pin as digital input
+     *
+     * \param pin the physical digital I/O pin of the ethercat module
+     */
+    virtual void setPinAsDigitalInput(sr_cod_decod_std_io::DigitalIo pin);
+
+    /*!
      * \brief returns the value read from a digital input of the ethercat module
      *
      * \param input_pin the physical digital I/O pin of the ethercat module
