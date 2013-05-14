@@ -45,7 +45,7 @@ class IoTest(object):
     The digital outputs will be tested by turning on and off LEDs attached to them.
     The digital inputs will read back the value we set for the outputs.
     The PWM outputs will be set to their lower frequency, and the digital inputs used to check the on-off period
-    The analog output 0 will be wired to analog inputs 0 and 1, output 1 to inputs 2 and 3
+    The analog output 0 will be wired to analog inputs 0 and 2, output 1 to inputs 1 and 3
 
     Keep in mind that the test is intended to be run with the LEDs attached to the digital I/Os and the correct wiring of the analog I and O
     """
