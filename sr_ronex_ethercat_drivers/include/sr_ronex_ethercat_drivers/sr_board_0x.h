@@ -29,6 +29,9 @@
 #define SR_BOARD_0X_H
 
 #include <sr_ronex_ethercat_drivers/standard_ethercat_device.h>
+
+#include <sr_ronex_external_protocol/Ronex_Protocol_0x0000000C_GIO_00.h>
+
 #include <vector>
 using namespace std;
 

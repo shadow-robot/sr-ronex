@@ -2,7 +2,7 @@
 //! Works on Node revision 01
 
 
-#include "typedefs.shadow.h"
+#include "typedefs_shadow.h"
 
 #define RONEX_COMMAND_0000000C_MASTER_CLOCK_SPEED_HZ        64000000
 #define RONEX_COMMAND_0000000C_ADC_SAMPLE_RATE_HZ               1000
