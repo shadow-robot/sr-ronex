@@ -38,19 +38,21 @@
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-    StandardEthercatDevice()
+    EthercatDevice()
 {
 }
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
 {
-  //delete sh_->get_fmmu_config();
-  //delete sh_->get_pd_config();
+  delete sh_->get_fmmu_config();
+  delete sh_->get_pd_config();
 }
 
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
-  StandardEthercatDevice::construct(sh,start_address);
+  EthercatDevice::construct(sh,start_address);
+  sh->set_fmmu_config( new EtherCAT_FMMU_Config(0) );
+  sh->set_pd_config( new EtherCAT_PD_Config(0) );
 
   n_digital_outputs = NUM_DIGITAL_IO;
   n_digital_inputs = NUM_DIGITAL_IO;
@@ -68,7 +70,6 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
   start_address += status_size_;
 
-
   // ETHERCAT_COMMAND_DATA
   //
   // This is for data going TO the board
@@ -84,7 +85,7 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
                                       false,                                                          // Read Enable
                                       true,                                                           // Write Enable
                                       true                                                            // Channel Enable
-                                     );
+    );
 
 
   // WARNING!!!
@@ -137,7 +138,14 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
 int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
 {
-  StandardEthercatDevice::initialize(hw, allow_unprogrammed);
+  ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
+            sh_->get_ring_position(),
+            sh_->get_product_code(),
+            sh_->get_product_code(),
+            sh_->get_serial(),
+            sh_->get_serial());
+
+  device_offset_ = sh_->get_ring_position();// - hand_->getBridgeRingPosition();
 
   return 0;
 }
