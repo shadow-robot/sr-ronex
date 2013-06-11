@@ -11,6 +11,7 @@
 #define NUM_ANALOGUE_OUTPUTS                                       0
 #define NUM_DIGITAL_IO                                            12
 #define NUM_PWM_MODULES                            (NUM_DIGITAL_IO/2)
+#define RONEX_0000000C_STACKER_0_PRESENT                      0x8000
 
                                                                             // Syncmanager Definitions
                                                                             // -----------------------
@@ -22,7 +23,7 @@ typedef enum                                                                //!<
 {                                                                           //!  access to a much wider range of PWM frequencies, from 32MHz
     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_64_MHZ   =    1,                 //!  right down to 1.9Hz. This feature was added so that people could
     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_32_MHZ   =    2,                 //!  control RC servos, which require 50Hz control frequency.
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_16_MHZ   =    4,                 //!  For RC Servos, set Clock Speed = 2MHz, and PWM period to 39999.
+    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_16_MHZ   =    4,                 //!  For RC Servos, set Clock Speed = 2MHz, and PWM period to 39999. 
     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_08_MHZ   =    8,                 //!  This gives 20ms period.
     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_04_MHZ   =   16,
     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_02_MHZ   =   32,
@@ -32,6 +33,9 @@ typedef enum                                                                //!<
     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_250_KHZ  =  256,
     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_125_KHZ  =  512,
 }RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED;
+
+
+
 
 typedef struct                                                      //!< Each PWM module has two outputs. There are six modules, giving 12 outputs total.
 {
