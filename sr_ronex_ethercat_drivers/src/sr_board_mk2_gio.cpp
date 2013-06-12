@@ -39,7 +39,7 @@
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), cycle_count_(0), has_stacker_(false)
+  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
 {
 }
 
@@ -57,12 +57,6 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   EthercatDevice::construct(sh,start_address);
   sh->set_fmmu_config( new EtherCAT_FMMU_Config(0) );
   sh->set_pd_config( new EtherCAT_PD_Config(0) );
-
-  n_digital_outputs = NUM_DIGITAL_IO;
-  n_digital_inputs = NUM_DIGITAL_IO;
-  n_analog_outputs = NUM_ANALOGUE_OUTPUTS;
-  n_analog_inputs = NUM_ANALOGUE_INPUTS;
-  n_PWM_outputs = NUM_PWM_MODULES;
 
   command_base_ = start_address;
   command_size_ = sizeof(RONEX_COMMAND_0000000C);
@@ -174,17 +168,34 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 {
   RONEX_STATUS_0000000C* status_data = (RONEX_STATUS_0000000C *)(this_buffer+  command_size_);
 
-  if (status_data->digital_in & RONEX_0000000C_STACKER_0_PRESENT)
+  if( analogue_publishers_.size() == 0)
   {
-    has_stacker_ = true;
-  }
-  else
-  {
-    has_stacker_ = false;
+    //The publishers haven't been initialised yet.
+    // Checking if the stacker board is plugged in or not
+    // to determine the number of publishers.
+    if (status_data->digital_in & RONEX_0000000C_STACKER_0_PRESENT)
+    {
+      has_stacker_ = true;
+      analogue_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::UInt16>(node_, "analogue", 1));
+    }
+    else
+    {
+      has_stacker_ = false;
+    }
   }
 
   if( cycle_count_ >= 9)
   {
+    for(size_t i = 0; i < analogue_publishers_.size(); ++i)
+    {
+      if( analogue_publishers_[i].trylock() )
+      {
+        analogue_msg_.data = status_data->analogue_in[i];
+        analogue_publishers_[i].msg_ = analogue_msg_;
+        analogue_publishers_[i].unlockAndPublish();
+      }
+    }
+
     cycle_count_ = 0;
   }
   ++cycle_count_;

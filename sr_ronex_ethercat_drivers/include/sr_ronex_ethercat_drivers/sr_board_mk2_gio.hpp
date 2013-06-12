@@ -28,11 +28,14 @@
 #define _SR_BOARD_MK2_GIO_HPP_
 
 #include <ethercat_hardware/ethercat_device.h>
-#include "realtime_tools/realtime_publisher.h"
+#include <realtime_tools/realtime_publisher.h>
+#include <std_msgs/UInt16.h>
+#include <std_msgs/Bool.h>
 
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x0000000C_GIO_00.h>
 
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 using namespace std;
 
 
@@ -52,11 +55,16 @@ protected:
   int command_base_;
   int status_base_;
 
+  ros::NodeHandle node_;
+
   /**
    * A counter used to publish the data at 100Hz:
    *  count 10 cycles, then reset the cycle_count to 0.
    */
   short cycle_count_;
+
+  boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::UInt16> > analogue_publishers_;
+  boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::Bool> > digital_publishers_;
 
   ///Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;
@@ -68,11 +76,8 @@ protected:
   ///True if a stacker board is plugged in the RoNeX
   bool has_stacker_;
 
-  size_t n_digital_outputs;
-  size_t n_digital_inputs;
-  size_t n_analog_outputs;
-  size_t n_analog_inputs;
-  size_t n_PWM_outputs;
+  ///Temporary message used for publishing the analogue data
+  std_msgs::UInt16 analogue_msg_;
 
   int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
   int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
