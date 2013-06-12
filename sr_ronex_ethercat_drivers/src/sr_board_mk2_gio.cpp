@@ -39,7 +39,7 @@
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), has_stacker_(false)
+  EthercatDevice(), cycle_count_(0), has_stacker_(false)
 {
 }
 
@@ -182,6 +182,12 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
   {
     has_stacker_ = false;
   }
+
+  if( cycle_count_ >= 9)
+  {
+    cycle_count_ = 0;
+  }
+  ++cycle_count_;
 
   return true;
 }

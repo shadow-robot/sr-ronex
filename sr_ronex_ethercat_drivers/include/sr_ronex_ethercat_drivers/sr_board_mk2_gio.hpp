@@ -52,6 +52,12 @@ protected:
   int command_base_;
   int status_base_;
 
+  /**
+   * A counter used to publish the data at 100Hz:
+   *  count 10 cycles, then reset the cycle_count to 0.
+   */
+  short cycle_count_;
+
   ///Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;
   std::string serial_number_;
