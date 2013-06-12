@@ -173,7 +173,6 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 {
   RONEX_STATUS_0000000C* status_data = (RONEX_STATUS_0000000C *)(this_buffer+  command_size_);
 
-  ROS_ERROR_STREAM("status data: " << status_data);
   if (status_data->digital_in & RONEX_0000000C_STACKER_0_PRESENT)
   {
     has_stacker_ = true;
