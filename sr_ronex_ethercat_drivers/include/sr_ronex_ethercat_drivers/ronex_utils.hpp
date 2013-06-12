@@ -31,14 +31,27 @@
 
 namespace ronex
 {
+  static inline std::string get_serial_number(EtherCAT_SlaveHandler *sh)
+  {
+    std::stringstream id;
+    id << sh->get_serial();
+    return id.str();
+  }
+
+  static inline std::string get_product_code(EtherCAT_SlaveHandler *sh)
+  {
+    std::stringstream id;
+    id << sh->get_product_code();
+    return id.str();
+  }
+
   static inline std::string build_name(EtherCAT_SlaveHandler *sh)
   {
-    std::stringstream name, product_id;
+    std::stringstream name;
 
     name << "ronex_";
 
     //lookup the product id in the list of human readable product ids
-    product_id << sh->get_product_code();
     if(false)
     {
       //@todo read human name from param server
@@ -46,12 +59,12 @@ namespace ronex
     else
     {
       //we didn't find a human readable name for the product id, simply using the id
-      name << product_id.str();
+      name << get_product_code(sh);
     }
     name << "_";
 
     //add the serial number for unique identifier
-    name << sh->get_serial();
+    name << get_serial_number(sh);
 
     return name.str();
   }

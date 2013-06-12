@@ -52,6 +52,7 @@ SrBoardMk2GIO::~SrBoardMk2GIO()
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
   device_name_ = ronex::build_name( sh );
+  serial_number_ = ronex::get_serial_number( sh );
 
   EthercatDevice::construct(sh,start_address);
   sh->set_fmmu_config( new EtherCAT_FMMU_Config(0) );
@@ -189,6 +190,7 @@ void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, 
 {
   d.name = device_name_;
   d.summary(d.OK, "OK");
+  d.hardware_id = serial_number_;
 
   d.clear();
   if(has_stacker_)

@@ -54,6 +54,7 @@ protected:
 
   ///Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;
+  std::string serial_number_;
 
   ///Offset of device position from first device
   int device_offset_;
