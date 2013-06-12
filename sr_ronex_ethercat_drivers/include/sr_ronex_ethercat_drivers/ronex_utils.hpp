@@ -35,6 +35,8 @@ namespace ronex
   {
     std::stringstream name, product_id;
 
+    name << "ronex_";
+
     //lookup the product id in the list of human readable product ids
     product_id << sh->get_product_code();
     if(false)
