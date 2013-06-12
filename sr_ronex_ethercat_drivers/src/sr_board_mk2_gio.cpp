@@ -170,18 +170,21 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
   if( analogue_publishers_.size() == 0)
   {
+    size_t nb_analogue_pub = 1;
     //The publishers haven't been initialised yet.
     // Checking if the stacker board is plugged in or not
     // to determine the number of publishers.
     if (status_data->digital_in & RONEX_0000000C_STACKER_0_PRESENT)
     {
       has_stacker_ = true;
-      analogue_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::UInt16>(node_, "analogue", 1));
     }
     else
     {
       has_stacker_ = false;
-    }
+    }      
+    
+    for(size_t i=0; i < nb_analogue_pub; ++i)
+      analogue_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::UInt16>(node_, "analogue", 1));
   }
 
   if( cycle_count_ >= 9)
