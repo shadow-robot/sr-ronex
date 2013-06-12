@@ -38,7 +38,7 @@
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-    EthercatDevice()
+  EthercatDevice(), has_stacker_(false)
 {
 }
 
@@ -173,14 +173,28 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
   ROS_ERROR_STREAM("status data: " << status_data);
   if (status_data->digital_in & RONEX_0000000C_STACKER_0_PRESENT)
   {
-    ROS_INFO("A stacker board is plugged in");
+    has_stacker_ = true;
   }
   else
   {
-    ROS_INFO("No stacker board plugged in");
+    has_stacker_ = false;
   }
 
   return true;
+}
+
+void SrBoardMk2GIO::multiDiagnostics(vector<diagnostic_msgs::DiagnosticStatus> &vec, unsigned char *buffer)
+{
+  diagnostic_updater::DiagnosticStatusWrapper &d(diagnostic_status_);
+
+  d.name = "RoNeX";
+  d.summary(d.OK, "OK");
+
+  d.clear();
+  if(has_stacker_)
+    d.addf("Stacker Board", "True");
+  else
+    d.addf("Stacker Board", "False");
 }
 
 

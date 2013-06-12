@@ -52,7 +52,17 @@ protected:
   int command_base_;
   int status_base_;
 
-  int device_offset_;      //!< Offset of device position from first device
+  ///Offset of device position from first device
+  int device_offset_;
+
+  ///True if a stacker board is plugged in the RoNeX
+  bool has_stacker_;
+
+  size_t n_digital_outputs;
+  size_t n_digital_inputs;
+  size_t n_analog_outputs;
+  size_t n_analog_inputs;
+  size_t n_PWM_outputs;
 
   int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
   int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
@@ -60,7 +70,14 @@ protected:
   void packCommand(unsigned char *buffer, bool halt, bool reset);
   bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 
+  void multiDiagnostics(vector<diagnostic_msgs::DiagnosticStatus> &vec, unsigned char *buffer);
 };
+
+/* For the emacs weenies in the crowd.
+   Local Variables:
+   c-basic-offset: 2
+   End:
+*/
 
 #endif /* _SR_BOARD_MK2_GIO_HPP_ */
 
