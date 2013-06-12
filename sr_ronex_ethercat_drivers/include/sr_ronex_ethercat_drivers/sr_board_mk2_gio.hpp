@@ -52,6 +52,9 @@ protected:
   int command_base_;
   int status_base_;
 
+  ///Name under which the RoNeX will appear (prefix the topics etc...)
+  std::string device_name_;
+
   ///Offset of device position from first device
   int device_offset_;
 
@@ -70,7 +73,7 @@ protected:
   void packCommand(unsigned char *buffer, bool halt, bool reset);
   bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 
-  void multiDiagnostics(vector<diagnostic_msgs::DiagnosticStatus> &vec, unsigned char *buffer);
+  void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
 };
 
 /* For the emacs weenies in the crowd.

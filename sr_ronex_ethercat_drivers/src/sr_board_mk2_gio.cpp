@@ -32,8 +32,9 @@
 #include <sstream>
 #include <iomanip>
 #include <boost/foreach.hpp>
-
 #include <math.h>
+
+#include "sr_ronex_ethercat_drivers/ronex_utils.hpp"
 
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
@@ -50,6 +51,8 @@ SrBoardMk2GIO::~SrBoardMk2GIO()
 
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
+  device_name_ = ronex::build_name( sh );
+
   EthercatDevice::construct(sh,start_address);
   sh->set_fmmu_config( new EtherCAT_FMMU_Config(0) );
   sh->set_pd_config( new EtherCAT_PD_Config(0) );
@@ -183,11 +186,9 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
   return true;
 }
 
-void SrBoardMk2GIO::multiDiagnostics(vector<diagnostic_msgs::DiagnosticStatus> &vec, unsigned char *buffer)
+void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer)
 {
-  diagnostic_updater::DiagnosticStatusWrapper &d(diagnostic_status_);
-
-  d.name = "RoNeX";
+  d.name = device_name_;
   d.summary(d.OK, "OK");
 
   d.clear();
