@@ -28,6 +28,7 @@
 
 #include <ethercat_hardware/ethercat_device.h>
 #include <sstream>
+#include <bitset>
 
 namespace ronex
 {
@@ -67,6 +68,19 @@ namespace ronex
     name << get_serial_number(sh);
 
     return name.str();
+  }
+
+  /**
+   * Checks if the bit is set for the given index.
+   *
+   * @param data The var containing the different bits.
+   * @param index The index for which we're checking the bit.
+   *
+   * @return true if bit at index is set in data.
+   */
+  bool check_bit(int16u data, size_t index)
+  {
+    return std::bitset<sizeof(int16u)>(data).test(index);
   }
 }
 

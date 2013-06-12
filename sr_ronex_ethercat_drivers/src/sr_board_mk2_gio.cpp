@@ -171,20 +171,37 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
   if( analogue_publishers_.size() == 0)
   {
     size_t nb_analogue_pub = 1;
+    size_t nb_digital_pub = 1;
     //The publishers haven't been initialised yet.
     // Checking if the stacker board is plugged in or not
     // to determine the number of publishers.
     if (status_data->digital_in & RONEX_0000000C_STACKER_0_PRESENT)
     {
       has_stacker_ = true;
+      nb_analogue_pub = NUM_ANALOGUE_INPUTS;
+      nb_digital_pub = NUM_DIGITAL_IO;
     }
     else
     {
       has_stacker_ = false;
-    }      
-    
+      nb_analogue_pub = NUM_ANALOGUE_INPUTS / 2;
+      nb_digital_pub = NUM_DIGITAL_IO / 2;
+    }
+
+    std::stringstream pub_topic;
     for(size_t i=0; i < nb_analogue_pub; ++i)
-      analogue_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::UInt16>(node_, "analogue", 1));
+    {
+      pub_topic.str("");
+      pub_topic << device_name_ << "/analogue/" << i;
+      analogue_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::UInt16>(node_, pub_topic.str(), 1));
+    }
+
+    for(size_t i=0; i < nb_digital_pub; ++i)
+    {
+      pub_topic.str("");
+      pub_topic << device_name_ << "/digital/" << i;
+      digital_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::Bool>(node_, pub_topic.str(), 1));
+    }
   }
 
   if( cycle_count_ >= 9)
@@ -196,6 +213,16 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
         analogue_msg_.data = status_data->analogue_in[i];
         analogue_publishers_[i].msg_ = analogue_msg_;
         analogue_publishers_[i].unlockAndPublish();
+      }
+    }
+
+    for(size_t i = 0; i < digital_publishers_.size(); ++i)
+    {
+      if( digital_publishers_[i].trylock() )
+      {
+        digital_msg_.data = ronex::check_bit(status_data->digital_in, i);
+        digital_publishers_[i].msg_ = digital_msg_;
+        digital_publishers_[i].unlockAndPublish();
       }
     }
 

@@ -78,6 +78,8 @@ protected:
 
   ///Temporary message used for publishing the analogue data
   std_msgs::UInt16 analogue_msg_;
+  ///Temporary message used for publishing the digital data
+  std_msgs::Bool digital_msg_;
 
   int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
   int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
