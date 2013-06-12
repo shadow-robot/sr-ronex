@@ -80,7 +80,8 @@ namespace ronex
    */
   bool check_bit(int16u data, size_t index)
   {
-    return std::bitset<sizeof(int16u)>(data).test(index);
+    //*8 because sizeof returns size in bytes not bits
+    return std::bitset<sizeof(int16u)*8>(data).test(index);
   }
 }
 
