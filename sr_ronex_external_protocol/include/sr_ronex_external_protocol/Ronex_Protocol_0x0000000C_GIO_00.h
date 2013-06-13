@@ -59,6 +59,7 @@ typedef struct                                                              //!<
 
 typedef struct                                                              //! Command structure
 {                                                                           //  -----------------
+    int16u                                  command_type;
     RONEX_COMMAND_0000000C_PWM              pwm_module[NUM_PWM_MODULES];
     int32u                                  digital_out;                    //!< Bit 0: Direction of digital pin 0, 0=Output, 1=Input
                                                                             //!< Bit 1: Drive     of digital pin 0, 0=Low,    1=High
