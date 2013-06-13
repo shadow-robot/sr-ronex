@@ -162,6 +162,7 @@ int SrBoardMk2GIO::writeData(EthercatCom *com, EC_UINT address, void const *data
 void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_0000000C* command = (RONEX_COMMAND_0000000C*)(buffer);
+  command->digital_out = digital_commands_;
 }
 
 bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
@@ -170,8 +171,8 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
   if( analogue_publishers_.size() == 0)
   {
-    size_t nb_analogue_pub = 1;
-    size_t nb_digital_pub = 1;
+    size_t nb_analogue_pub;
+    size_t nb_digital_io;
     //The publishers haven't been initialised yet.
     // Checking if the stacker board is plugged in or not
     // to determine the number of publishers.
@@ -179,28 +180,34 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     {
       has_stacker_ = true;
       nb_analogue_pub = NUM_ANALOGUE_INPUTS;
-      nb_digital_pub = NUM_DIGITAL_IO;
+      nb_digital_io = NUM_DIGITAL_IO;
     }
     else
     {
       has_stacker_ = false;
       nb_analogue_pub = NUM_ANALOGUE_INPUTS / 2;
-      nb_digital_pub = NUM_DIGITAL_IO / 2;
+      nb_digital_io = NUM_DIGITAL_IO / 2;
     }
 
     std::stringstream pub_topic;
+    std::stringstream sub_topic;
     for(size_t i=0; i < nb_analogue_pub; ++i)
     {
       pub_topic.str("");
-      pub_topic << device_name_ << "/analogue/" << i;
+      pub_topic << device_name_ << "/state/analogue/" << i;
       analogue_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::UInt16>(node_, pub_topic.str(), 1));
     }
 
-    for(size_t i=0; i < nb_digital_pub; ++i)
+    for(size_t i=0; i < nb_digital_io; ++i)
     {
       pub_topic.str("");
-      pub_topic << device_name_ << "/digital/" << i;
+      pub_topic << device_name_ << "/state/digital/" << i;
       digital_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::Bool>(node_, pub_topic.str(), 1));
+
+      //adding the subscribers for receiving commands
+      sub_topic.str("");
+      sub_topic << device_name_ << "/command/digital/" << i;
+      digital_subscribers_.push_back(node_.subscribe<std_msgs::Bool>(sub_topic.str(), 1, boost::bind(&SrBoardMk2GIO::digital_commands_cb, this, _1,  i )));
     }
   }
 
@@ -231,6 +238,12 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
   ++cycle_count_;
 
   return true;
+}
+
+void SrBoardMk2GIO::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
+{
+  ronex::set_bit(digital_commands_, index*2, 1);
+  ronex::set_bit(digital_commands_, index*2+1, msg->data);
 }
 
 void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer)

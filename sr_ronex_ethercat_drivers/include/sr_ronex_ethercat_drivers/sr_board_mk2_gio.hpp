@@ -48,6 +48,8 @@ public:
   SrBoardMk2GIO();
   virtual ~SrBoardMk2GIO();
 
+  void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
+
 protected:
   string reason_;
   int level_;
@@ -65,6 +67,11 @@ protected:
 
   boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::UInt16> > analogue_publishers_;
   boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::Bool> > digital_publishers_;
+
+  ///send commands to the RoNeX
+  vector<ros::Subscriber> digital_subscribers_;
+  ///the digital commands sent at each cycle (updated when we call the topic)
+  int32u digital_commands_;
 
   ///Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;

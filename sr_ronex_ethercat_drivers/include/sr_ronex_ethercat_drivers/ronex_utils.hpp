@@ -80,8 +80,21 @@ namespace ronex
    */
   bool check_bit(int16u data, size_t index)
   {
-    //*8 because sizeof returns size in bytes not bits
+    // x8 because sizeof returns size in bytes not bits
     return std::bitset<sizeof(int16u)*8>(data).test(index);
+  }
+
+  /**
+   * Sets the given bit to the given value.
+   *
+   * @param data The var containing the different bits.
+   * @param index The index for which we're setting the bit.
+   * @param value The value we want the bit to take
+   */
+  void set_bit(int32u data, size_t index, bool value)
+  {
+    //*8 because sizeof returns size in bytes not bits
+    std::bitset<sizeof(int32u)*8>(data).set(index, value);
   }
 }
 
