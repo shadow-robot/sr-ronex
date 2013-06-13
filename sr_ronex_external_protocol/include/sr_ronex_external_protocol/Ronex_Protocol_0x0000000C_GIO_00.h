@@ -18,21 +18,22 @@
 #define COMMAND_ADDRESS 0x1000                                              //!< ET1200 address containing the Command Structure
 #define STATUS_ADDRESS  (COMMAND_ADDRESS+sizeof(RONEX_COMMAND_0000000C))    //!< ET1200 address containing the Status  Structure
 
+#define STATUS_ARRAY_SIZE_WORDS (sizeof(RONEX_STATUS_0000000C)/2)
 
-typedef enum                                                                //!< The divider for the PWM clock. By adjusting this divider, we have
-{                                                                           //!  access to a much wider range of PWM frequencies, from 32MHz
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_64_MHZ   =    1,                 //!  right down to 1.9Hz. This feature was added so that people could
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_32_MHZ   =    2,                 //!  control RC servos, which require 50Hz control frequency.
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_16_MHZ   =    4,                 //!  For RC Servos, set Clock Speed = 2MHz, and PWM period to 39999.
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_08_MHZ   =    8,                 //!  This gives 20ms period.
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_04_MHZ   =   16,
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_02_MHZ   =   32,
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ   =   64,
+                                                                            //!< The divider for the PWM clock. By adjusting this divider, we have
+                                                                            //!  access to a much wider range of PWM frequencies, from 32MHz
+#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_64_MHZ       1           //!  right down to 1.9Hz. This feature was added so that people could
+#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_32_MHZ       2           //!  control RC servos, which require 50Hz control frequency.
+#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_16_MHZ       4           //!  For RC Servos, set Clock Speed = 2MHz, and PWM period to 39999. 
+#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_08_MHZ       8           //!  This gives 20ms period.
+#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_04_MHZ      16
+#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_02_MHZ      32
+#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ      64
 
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_500_KHZ  =  128,
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_250_KHZ  =  256,
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_125_KHZ  =  512,
-}RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED;
+#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_500_KHZ    128
+#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_250_KHZ    256
+#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_125_KHZ    512
+
 
 
 
@@ -52,7 +53,6 @@ typedef struct                                                              //!<
 {                                                                           //   ----------------
     int16u  analogue_in[12];
     int16u  digital_in;                                                     //!< Bit n: Status of digital pin n.
-                                                                            //!<bit 15: 1 if stacker board is present, 0 otherwise
 }RONEX_STATUS_0000000C;
 
 
@@ -65,6 +65,6 @@ typedef struct                                                              //! 
                                                                             //!< Bit 2: Direction of digital pin 1, 0=Output, 1=Input
                                                                             //!< Bit 3: Drive     of digital pin 1, 0=Low,    1=High
                                                                             //!< etc ..
-    RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED  pwm_clock_speed;
+    int16u                                  pwm_clock_speed;
 }RONEX_COMMAND_0000000C;
 
