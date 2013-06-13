@@ -43,7 +43,7 @@ typedef struct                                                      //!< Each PW
     int16u  pwm_period;                                             //!< PWM period is pwm_period/clock_speed.
     int16u  pwm_on_time_0;                                          //!< On Time is pwm_on_time_0/clock_speed.
     int16u  pwm_on_time_1;
-}RONEX_COMMAND_0000000C_PWM;
+}__attribute((packed)) RONEX_COMMAND_0000000C_PWM;
 
 
 
@@ -53,7 +53,7 @@ typedef struct                                                              //!<
 {                                                                           //   ----------------
     int16u  analogue_in[12];
     int16u  digital_in;                                                     //!< Bit n: Status of digital pin n.
-}RONEX_STATUS_0000000C;
+}__attribute((packed)) RONEX_STATUS_0000000C;
 
 
 
@@ -67,5 +67,5 @@ typedef struct                                                              //! 
                                                                             //!< Bit 3: Drive     of digital pin 1, 0=Low,    1=High
                                                                             //!< etc ..
     int16u                                  pwm_clock_speed;
-}RONEX_COMMAND_0000000C;
+}__attribute((packed)) RONEX_COMMAND_0000000C;
 
