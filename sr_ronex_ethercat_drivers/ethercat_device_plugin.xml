@@ -13,7 +13,7 @@
       RoNeX mk2 - General I/O board.
     </description>
   </class>
-  <class name="sr_ronex_ethercat_drivers/7" type="StandardEthercatDevice" base_class_type="EthercatDevice">
+  <class name="sr_ronex_ethercat_drivers/0" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
       RoNeX bridge
     </description>

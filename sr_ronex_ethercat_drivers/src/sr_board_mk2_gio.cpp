@@ -136,6 +136,7 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
 int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
 {
+  digital_commands_ = 0;
   ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
             sh_->get_ring_position(),
             sh_->get_product_code(),
@@ -162,7 +163,12 @@ int SrBoardMk2GIO::writeData(EthercatCom *com, EC_UINT address, void const *data
 void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_0000000C* command = (RONEX_COMMAND_0000000C*)(buffer);
-  command->digital_out = digital_commands_;
+  command->digital_out = static_cast<int32u>(digital_commands_);
+
+  if( cycle_count_ >= 9)
+  {
+    ROS_DEBUG_STREAM("sending command: " << digital_commands_ << " ("<< sizeof(*command) <<")");
+  }
 }
 
 bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
@@ -213,6 +219,8 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
   if( cycle_count_ >= 9)
   {
+    ROS_DEBUG_STREAM("Status size: " << sizeof(*status_data) << " " << sizeof(RONEX_COMMAND_0000000C) << "=" << sizeof(RONEX_COMMAND_0000000C_PWM) << "*" << NUM_PWM_MODULES << "+" << sizeof(int32u) << "+" << sizeof(int16u));
+
     for(size_t i = 0; i < analogue_publishers_.size(); ++i)
     {
       if( analogue_publishers_[i].trylock() )
@@ -242,8 +250,9 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
 void SrBoardMk2GIO::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
 {
-  ronex::set_bit(digital_commands_, index*2, 1);
-  ronex::set_bit(digital_commands_, index*2+1, msg->data);
+  ROS_ERROR_STREAM("index = " << index);
+  digital_commands_ = ronex::set_bit(digital_commands_, index*2, 1);
+  digital_commands_ = ronex::set_bit(digital_commands_, index*2+1, msg->data);
 }
 
 void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer)
