@@ -80,6 +80,8 @@ protected:
   vector<ros::Subscriber> pwm_subscribers_;
   ///the PWM commands to send to the RoNeX
   std::vector<RONEX_COMMAND_0000000C_PWM> pwm_commands_;
+  ///stores the clock speed we want to use for the PWM commands.
+  int16u pwm_clock_speed_;
 
   ///Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;

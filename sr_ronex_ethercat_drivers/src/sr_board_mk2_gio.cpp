@@ -39,8 +39,12 @@
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
+  EthercatDevice(), node_("~"), cycle_count_(0), pwm_clock_speed_(0), has_stacker_(false)
 {
+  //reading the clock speed from the parameter server. Setting to 1MHz by default
+  int tmp;
+  node_.param("pwm_clock_speed", tmp, RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ);
+  pwm_clock_speed_ = static_cast<int16u>(tmp);
 }
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -173,7 +177,7 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
   for(size_t i = 0; i < pwm_commands_.size(); ++i)
     command->pwm_module[i] = pwm_commands_[i];
 
-  command->pwm_clock_speed = RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ;
+  command->pwm_clock_speed = pwm_clock_speed_;
 
   if( cycle_count_ >= 9)
   {
