@@ -251,8 +251,8 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 void SrBoardMk2GIO::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
 {
   ROS_ERROR_STREAM("index = " << index);
-  digital_commands_ = ronex::set_bit(digital_commands_, index*2, 1);
-  digital_commands_ = ronex::set_bit(digital_commands_, index*2+1, msg->data);
+  ronex::set_bit(digital_commands_, index*2, 1);
+  ronex::set_bit(digital_commands_, index*2+1, msg->data);
 }
 
 void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer)

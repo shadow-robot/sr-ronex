@@ -91,12 +91,12 @@ namespace ronex
    * @param index The index for which we're setting the bit.
    * @param value The value we want the bit to take
    */
-  int32u set_bit(int32u data, size_t index, bool value)
+  void set_bit(int32u &data, size_t index, bool value)
   {
     //*8 because sizeof returns size in bytes not bits
     std::bitset<sizeof(int32u)*8> tmp(data);
     tmp.set(index, value);
-    return static_cast<int32u>(tmp.to_ulong());
+    data = static_cast<int32u>(tmp.to_ulong());
   }
 }
 
