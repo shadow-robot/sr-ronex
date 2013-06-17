@@ -41,10 +41,24 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 SrBoardMk2GIO::SrBoardMk2GIO() :
   EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
 {
+  for(size_t i = 0; i < NUM_PWM_MODULES; ++i)
+  {
+    RONEX_COMMAND_0000000C_PWM pwm;
+    pwm.pwm_period = 0;
+    pwm.pwm_on_time_0 = 0;
+    pwm.pwm_on_time_1 = 0;
+
+    pwm_commands_.push_back(pwm);
+  }
 }
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
 {
+  for(size_t i=0; i < digital_subscribers_.size(); ++i)
+  {
+    digital_subscribers_[i].shutdown();
+  }
+
   delete sh_->get_fmmu_config();
   delete sh_->get_pd_config();
 }
@@ -165,6 +179,9 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
   RONEX_COMMAND_0000000C* command = (RONEX_COMMAND_0000000C*)(buffer);
   command->digital_out = static_cast<int32u>(digital_commands_);
 
+  for(size_t i = 0; pwm_commands_.size(); ++i)
+    command->pwm_module[i] = pwm_commands_[i];
+
   if( cycle_count_ >= 9)
   {
     ROS_DEBUG_STREAM("sending command: " << digital_commands_ << " ("<< sizeof(*command) <<")");
@@ -177,8 +194,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
   if( analogue_publishers_.size() == 0)
   {
-    size_t nb_analogue_pub;
-    size_t nb_digital_io;
+    size_t nb_analogue_pub, nb_digital_io, nb_pwm_modules;
     //The publishers haven't been initialised yet.
     // Checking if the stacker board is plugged in or not
     // to determine the number of publishers.
@@ -187,12 +203,14 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       has_stacker_ = true;
       nb_analogue_pub = NUM_ANALOGUE_INPUTS;
       nb_digital_io = NUM_DIGITAL_IO;
+      nb_pwm_modules = NUM_PWM_MODULES;
     }
     else
     {
       has_stacker_ = false;
       nb_analogue_pub = NUM_ANALOGUE_INPUTS / 2;
       nb_digital_io = NUM_DIGITAL_IO / 2;
+      nb_pwm_modules = NUM_PWM_MODULES / 2;
     }
 
     std::stringstream pub_topic;
@@ -214,6 +232,13 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       sub_topic.str("");
       sub_topic << device_name_ << "/command/digital/" << i;
       digital_subscribers_.push_back(node_.subscribe<std_msgs::Bool>(sub_topic.str(), 1, boost::bind(&SrBoardMk2GIO::digital_commands_cb, this, _1,  i )));
+    }
+
+    for( size_t i = 0; i < nb_pwm_modules; ++i)
+    {
+      sub_topic.str("");
+      sub_topic << device_name_ << "/command/pwm/" << i;
+      pwm_subscribers_.push_back(node_.subscribe<sr_common_msgs::PWM>(sub_topic.str(), 1, boost::bind(&SrBoardMk2GIO::pwm_commands_cb, this, _1, i)));
     }
   }
 
@@ -250,10 +275,17 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
 void SrBoardMk2GIO::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
 {
-  ROS_ERROR_STREAM("index = " << index);
   ronex::set_bit(digital_commands_, index*2, 1);
   ronex::set_bit(digital_commands_, index*2+1, msg->data);
 }
+
+void SrBoardMk2GIO::pwm_commands_cb(const sr_common_msgs::PWMConstPtr& msg, int index)
+{
+  pwm_commands_[index].pwm_period = msg->pwm_period;
+  pwm_commands_[index].pwm_on_time_0 = msg->pwm_on_time_0;
+  pwm_commands_[index].pwm_on_time_1 = msg->pwm_on_time_1;
+}
+
 
 void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer)
 {

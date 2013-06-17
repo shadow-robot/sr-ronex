@@ -31,6 +31,7 @@
 #include <realtime_tools/realtime_publisher.h>
 #include <std_msgs/UInt16.h>
 #include <std_msgs/Bool.h>
+#include <sr_common_msgs/PWM.h>
 
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x0000000C_GIO_00.h>
 
@@ -50,6 +51,8 @@ public:
 
   void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 
+  void pwm_commands_cb(const sr_common_msgs::PWMConstPtr& msg, int index);
+
 protected:
   string reason_;
   int level_;
@@ -68,10 +71,15 @@ protected:
   boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::UInt16> > analogue_publishers_;
   boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::Bool> > digital_publishers_;
 
-  ///send commands to the RoNeX
+  ///send commands to the RoNeX's digital I/O
   vector<ros::Subscriber> digital_subscribers_;
   ///the digital commands sent at each cycle (updated when we call the topic)
   int32u digital_commands_;
+
+  ///send PWM commands to the RoNeX's
+  vector<ros::Subscriber> pwm_subscribers_;
+  ///the PWM commands to send to the RoNeX
+  std::vector<RONEX_COMMAND_0000000C_PWM> pwm_commands_;
 
   ///Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;
