@@ -41,15 +41,6 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 SrBoardMk2GIO::SrBoardMk2GIO() :
   EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
 {
-  for(size_t i = 0; i < NUM_PWM_MODULES; ++i)
-  {
-    RONEX_COMMAND_0000000C_PWM pwm;
-    pwm.pwm_period = 0;
-    pwm.pwm_on_time_0 = 0;
-    pwm.pwm_on_time_1 = 0;
-
-    pwm_commands_.push_back(pwm);
-  }
 }
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -179,7 +170,7 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
   RONEX_COMMAND_0000000C* command = (RONEX_COMMAND_0000000C*)(buffer);
   command->digital_out = static_cast<int32u>(digital_commands_);
 
-  for(size_t i = 0; pwm_commands_.size(); ++i)
+  for(size_t i = 0; i < pwm_commands_.size(); ++i)
     command->pwm_module[i] = pwm_commands_[i];
 
   if( cycle_count_ >= 9)
@@ -236,6 +227,14 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
     for( size_t i = 0; i < nb_pwm_modules; ++i)
     {
+      //initialising the PWM commands to 0s
+      RONEX_COMMAND_0000000C_PWM pwm;
+      pwm.pwm_period = 0;
+      pwm.pwm_on_time_0 = 0;
+      pwm.pwm_on_time_1 = 0;
+
+      pwm_commands_.push_back(pwm);
+
       sub_topic.str("");
       sub_topic << device_name_ << "/command/pwm/" << i;
       pwm_subscribers_.push_back(node_.subscribe<sr_common_msgs::PWM>(sub_topic.str(), 1, boost::bind(&SrBoardMk2GIO::pwm_commands_cb, this, _1, i)));
