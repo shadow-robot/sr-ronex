@@ -173,6 +173,8 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
   for(size_t i = 0; i < pwm_commands_.size(); ++i)
     command->pwm_module[i] = pwm_commands_[i];
 
+  command->pwm_clock_speed = RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ;
+
   if( cycle_count_ >= 9)
   {
     ROS_DEBUG_STREAM("sending command: " << digital_commands_ << " ("<< sizeof(*command) <<")");
