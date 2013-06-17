@@ -275,7 +275,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
 void SrBoardMk2GIO::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
 {
-  ronex::set_bit(digital_commands_, index*2, 1);
+  ronex::set_bit(digital_commands_, index*2, 0);
   ronex::set_bit(digital_commands_, index*2+1, msg->data);
 }
 
