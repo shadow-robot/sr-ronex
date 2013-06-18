@@ -4,7 +4,7 @@
 
 #include "typedefs_shadow.h"
 
-#if defined(__GCC__)
+#if defined(__GNUC__)
 
 #else
     #define __attribute__(x)
@@ -51,15 +51,6 @@
 #define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_125_KHZ    512
 
 
-
-
-#ifndef EC_BUFFERED 
-    #define EC_BUFFERED 1
-#endif
-
-#ifndef EC_QUEUED
-    #define EC_QUEUED   2
-#endif
                                                                                 // EtherCAT Protocol
                                                                                 // =================
                                                                             
@@ -74,10 +65,8 @@
 
     #define STATUS_ARRAY_SIZE_BYTES (sizeof(RONEX_STATUS_0000000C))
     #define STATUS_ARRAY_SIZE_WORDS (sizeof(RONEX_STATUS_0000000C)/2)
-#endif
 
-
-#if PROTOCOL_TYPE == EC_QUEUED                                                  // Queued (Mailbox)
+#elif PROTOCOL_TYPE == EC_QUEUED                                                // Queued (Mailbox)
                                                                                 // Syncmanager Definitions
                                                                                 // -----------------------
     #define COMMAND_ADDRESS 0x1000                                              //!< ET1200 address containing the Command Structure

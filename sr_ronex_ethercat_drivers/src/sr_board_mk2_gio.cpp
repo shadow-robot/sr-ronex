@@ -110,7 +110,7 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
                                       status_size_,
                                       0x00,
                                       0x07,
-                                      COMMAND_ADDRESS + (command_size_ * 4),
+                                      STATUS_ADDRESS,
                                       0x00,
                                       true,
                                       false,
@@ -126,8 +126,9 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
   EtherCAT_PD_Config *pd = new EtherCAT_PD_Config(2);
 
-  (*pd)[0] = EC_SyncMan(COMMAND_ADDRESS,                             command_size_,    EC_BUFFERED, EC_WRITTEN_FROM_MASTER);
-  (*pd)[1] = EC_SyncMan(COMMAND_ADDRESS + (command_size_ * 4),              status_size_,     EC_BUFFERED);
+// SyncMan takes the physical address
+  (*pd)[0] = EC_SyncMan(COMMAND_ADDRESS,              command_size_,    PROTOCOL_TYPE, EC_WRITTEN_FROM_MASTER);
+  (*pd)[1] = EC_SyncMan(STATUS_ADDRESS,               status_size_,     PROTOCOL_TYPE);
 
 
   (*pd)[0].ChannelEnable = true;
@@ -172,17 +173,13 @@ int SrBoardMk2GIO::writeData(EthercatCom *com, EC_UINT address, void const *data
 void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_0000000C* command = (RONEX_COMMAND_0000000C*)(buffer);
+
   command->digital_out = static_cast<int32u>(digital_commands_);
 
   for(size_t i = 0; i < pwm_commands_.size(); ++i)
     command->pwm_module[i] = pwm_commands_[i];
 
   command->pwm_clock_speed = pwm_clock_speed_;
-
-  if( cycle_count_ >= 9)
-  {
-    ROS_DEBUG_STREAM("sending command: " << digital_commands_ << " ("<< sizeof(*command) <<")");
-  }
 }
 
 bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
@@ -195,7 +192,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     //The publishers haven't been initialised yet.
     // Checking if the stacker board is plugged in or not
     // to determine the number of publishers.
-    if (status_data->digital_in & RONEX_0000000C_STACKER_0_PRESENT)
+    if (status_data->digital_in & RONEX_0000000C_FLAGS_STACKER_0_PRESENT)
     {
       has_stacker_ = true;
       nb_analogue_pub = NUM_ANALOGUE_INPUTS;
