@@ -23,7 +23,7 @@
 #define ANALOGUE_OUTPUT_JUSTIFICATION                           LEFT
 #define NUM_DIGITAL_IO                                            12
 #define NUM_PWM_MODULES                            (NUM_DIGITAL_IO/2)
-#define PRODUCT_NAME                                   "General I/O"
+#define PRODUCT_NAME                                   "general_IO"
 #define PRODUCT_ID                                        0x0000000C
 #define MAXIMUM_NUM_STACKERS                                       1
 
@@ -63,8 +63,10 @@
     #define COMMAND_ADDRESS 0x1000                                              //!< ET1200 address containing the Command Structure
     #define STATUS_ADDRESS  (COMMAND_ADDRESS+sizeof(RONEX_COMMAND_0000000C)*4)  //!< ET1200 address containing the Status  Structure
 
-    #define STATUS_ARRAY_SIZE_BYTES (sizeof(RONEX_STATUS_0000000C))
-    #define STATUS_ARRAY_SIZE_WORDS (sizeof(RONEX_STATUS_0000000C)/2)
+    #define COMMAND_ARRAY_SIZE_BYTES    (sizeof(RONEX_COMMAND_0000000C))
+    #define COMMAND_ARRAY_SIZE_WORDS    (sizeof(RONEX_COMMAND_0000000C)/2)
+    #define STATUS_ARRAY_SIZE_BYTES     (sizeof(RONEX_STATUS_0000000C ))
+    #define STATUS_ARRAY_SIZE_WORDS     (sizeof(RONEX_STATUS_0000000C )/2)
 
 #elif PROTOCOL_TYPE == EC_QUEUED                                                // Queued (Mailbox)
                                                                                 // Syncmanager Definitions
@@ -72,8 +74,10 @@
     #define COMMAND_ADDRESS 0x1000                                              //!< ET1200 address containing the Command Structure
     #define STATUS_ADDRESS  (COMMAND_ADDRESS+sizeof(RONEX_COMMAND_0000000C)  )  //!< ET1200 address containing the Status  Structure
 
-    #define STATUS_ARRAY_SIZE_BYTES (sizeof(RONEX_STATUS_0000000C))
-    #define STATUS_ARRAY_SIZE_WORDS (sizeof(RONEX_STATUS_0000000C)/2)
+    #define COMMAND_ARRAY_SIZE_BYTES    (sizeof(RONEX_COMMAND_0000000C))
+    #define COMMAND_ARRAY_SIZE_WORDS    (sizeof(RONEX_COMMAND_0000000C)/2)
+    #define STATUS_ARRAY_SIZE_BYTES     (sizeof(RONEX_STATUS_0000000C ))
+    #define STATUS_ARRAY_SIZE_WORDS     (sizeof(RONEX_STATUS_0000000C )/2)
 #endif
 
 
