@@ -67,13 +67,13 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   sh->set_fmmu_config( new EtherCAT_FMMU_Config(0) );
   sh->set_pd_config( new EtherCAT_PD_Config(0) );
 
-  command_base_ = start_address;
-  command_size_ = sizeof(RONEX_COMMAND_0000000C);
+  command_base_  = start_address;
+  command_size_  = COMMAND_ARRAY_SIZE_BYTES;
 
   start_address += command_size_;
 
-  status_base_ = start_address;
-  status_size_ = sizeof(RONEX_STATUS_0000000C);
+  status_base_   = start_address;
+  status_size_   = STATUS_ARRAY_SIZE_BYTES;
 
   start_address += status_size_;
 
@@ -81,7 +81,14 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   //
   // This is for data going TO the board
   //
-  ROS_INFO("First FMMU (command) : start_address : 0x%08X ; size : %3d bytes ; phy addr : 0x%08X", command_base_, command_size_,
+
+  #if PROTOCOL_TYPE == EC_BUFFERED
+    ROS_INFO("Using EC_BUFFERED");
+  #elif PROTOCOL_TYPE == EC_QUEUED
+    ROS_INFO("Using EC_QUEUED");
+  #endif
+
+  ROS_INFO("First FMMU (command) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", command_base_, command_size_,
            static_cast<int>(COMMAND_ADDRESS) );
   EC_FMMU *commandFMMU = new EC_FMMU( command_base_,                                                  // Logical Start Address    (in ROS address space?)
                                       command_size_,
@@ -104,8 +111,8 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   //
   // This is for data coming FROM the board
   //
-  ROS_INFO("Second FMMU (status) : start_address : 0x%08X ; size : %3d bytes ; phy addr : 0x%08X", status_base_, status_size_,
-           static_cast<int>(COMMAND_ADDRESS + command_size_) );
+  ROS_INFO("Second FMMU (status) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", status_base_, status_size_,
+           static_cast<int>(STATUS_ADDRESS) );
   EC_FMMU *statusFMMU = new EC_FMMU(  status_base_,
                                       status_size_,
                                       0x00,
