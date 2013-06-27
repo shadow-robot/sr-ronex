@@ -39,12 +39,8 @@
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), node_("~"), cycle_count_(0), pwm_clock_speed_(0), has_stacker_(false)
+  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
 {
-  //reading the clock speed from the parameter server. Setting to 1MHz by default
-  int tmp;
-  node_.param("pwm_clock_speed", tmp, RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ);
-  pwm_clock_speed_ = static_cast<int16u>(tmp);
 }
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -163,6 +159,17 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
 
   device_offset_ = sh_->get_ring_position();// - hand_->getBridgeRingPosition();
 
+  //add the RoNeX to the hw interface
+  general_io_.reset( new ronex::GeneralIO() );
+  general_io_->name_ = device_name_;
+
+  //reading the clock speed from the parameter server. Setting to 1MHz by default
+  int tmp;
+  node_.param("pwm_clock_speed", tmp, RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ);
+  general_io_->command_.pwm_clock_speed_ = static_cast<int16u>(tmp);
+
+  hw->addCustomHW( general_io_.get() );
+
   return 0;
 }
 
@@ -181,12 +188,24 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_0000000C* command = (RONEX_COMMAND_0000000C*)(buffer);
 
+  //digital command
+  for (size_t i = 0; i < general_io_->command_.digital_.size(); ++i)
+  {
+    ronex::set_bit(digital_commands_, i*2, 0);
+    ronex::set_bit(digital_commands_, i*2+1, general_io_->command_.digital_[i]);
+  }
+
   command->digital_out = static_cast<int32u>(digital_commands_);
 
-  for(size_t i = 0; i < pwm_commands_.size(); ++i)
-    command->pwm_module[i] = pwm_commands_[i];
+  //PWM command
+  for (size_t i = 0; i < general_io_->command_.pwm_.size(); ++i)
+  {
+    command->pwm_module[i].pwm_period = general_io_->command_.pwm_[i].period;
+    command->pwm_module[i].pwm_on_time_0 = general_io_->command_.pwm_[i].on_time_0;
+    command->pwm_module[i].pwm_on_time_1 = general_io_->command_.pwm_[i].on_time_1;
+  }
 
-  command->pwm_clock_speed = pwm_clock_speed_;
+  command->pwm_clock_speed = general_io_->command_.pwm_clock_speed_;
 }
 
 bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
@@ -213,6 +232,12 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       nb_digital_io = NUM_DIGITAL_IO / 2;
       nb_pwm_modules = NUM_PWM_MODULES / 2;
     }
+
+    //resizing the GeneralIO in the HardwareInterface
+    general_io_->state_.analogue_.resize(nb_analogue_pub);
+    general_io_->state_.digital_.resize(nb_digital_io);
+    general_io_->command_.digital_.resize(nb_digital_io);
+    general_io_->command_.pwm_.resize(nb_pwm_modules);
 
     std::stringstream pub_topic;
     std::stringstream sub_topic;
@@ -249,6 +274,16 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       sub_topic << device_name_ << "/command/pwm/" << i;
       pwm_subscribers_.push_back(node_.subscribe<sr_common_msgs::PWM>(sub_topic.str(), 1, boost::bind(&SrBoardMk2GIO::pwm_commands_cb, this, _1, i)));
     }
+  } //end first time, the sizes are properly initialised, simply fill in the data
+
+  for(size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
+  {
+    general_io_->state_.analogue_[i] = status_data->analogue_in[i];
+  }
+
+  for(size_t i = 0; i < general_io_->state_.digital_.size(); ++i )
+  {
+    general_io_->state_.digital_[i] = ronex::check_bit(status_data->digital_in, i);
   }
 
   if( cycle_count_ >= 9)
@@ -284,15 +319,15 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
 void SrBoardMk2GIO::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
 {
-  ronex::set_bit(digital_commands_, index*2, 0);
-  ronex::set_bit(digital_commands_, index*2+1, msg->data);
+  general_io_->command_.digital_[index] = msg->data;
 }
 
 void SrBoardMk2GIO::pwm_commands_cb(const sr_common_msgs::PWMConstPtr& msg, int index)
 {
-  pwm_commands_[index].pwm_period = msg->pwm_period;
-  pwm_commands_[index].pwm_on_time_0 = msg->pwm_on_time_0;
-  pwm_commands_[index].pwm_on_time_1 = msg->pwm_on_time_1;
+
+  general_io_->command_.pwm_[index].period = msg->pwm_period;
+  general_io_->command_.pwm_[index].on_time_0 = msg->pwm_on_time_0;
+  general_io_->command_.pwm_[index].on_time_1 = msg->pwm_on_time_1;
 }
 
 
