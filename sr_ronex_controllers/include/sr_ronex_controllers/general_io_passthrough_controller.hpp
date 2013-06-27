@@ -35,6 +35,10 @@
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 
+#include <std_msgs/UInt16.h>
+#include <std_msgs/Bool.h>
+#include <sr_common_msgs/PWM.h>
+
 namespace ronex
 {
   class GeneralIOPassthroughController
@@ -53,12 +57,21 @@ namespace ronex
      */
     virtual void update();
 
+    void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
+
+    void pwm_commands_cb(const sr_common_msgs::PWMConstPtr& msg, int index);
+
   private:
     ros::NodeHandle node_;
 
     int loop_count_;
 
     ronex::GeneralIO* general_io_;
+
+    ///send commands to the RoNeX's digital I/O
+    std::vector<ros::Subscriber> digital_subscribers_;
+    ///send PWM commands to the RoNeX's
+    std::vector<ros::Subscriber> pwm_subscribers_;
   };
 }
 

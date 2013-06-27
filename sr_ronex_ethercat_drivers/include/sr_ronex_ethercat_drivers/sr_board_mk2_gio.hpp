@@ -50,9 +50,6 @@ public:
   SrBoardMk2GIO();
   virtual ~SrBoardMk2GIO();
 
-  void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
-
-  void pwm_commands_cb(const sr_common_msgs::PWMConstPtr& msg, int index);
 
 protected:
   string reason_;
@@ -72,18 +69,8 @@ protected:
    */
   short cycle_count_;
 
-  boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::UInt16> > analogue_publishers_;
-  boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::Bool> > digital_publishers_;
-
-  ///send commands to the RoNeX's digital I/O
-  vector<ros::Subscriber> digital_subscribers_;
   ///the digital commands sent at each cycle (updated when we call the topic)
   int32u digital_commands_;
-
-  ///send PWM commands to the RoNeX's
-  vector<ros::Subscriber> pwm_subscribers_;
-  ///the PWM commands to send to the RoNeX
-  std::vector<RONEX_COMMAND_0000000C_PWM> pwm_commands_;
 
   ///Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;
@@ -94,11 +81,6 @@ protected:
 
   ///True if a stacker board is plugged in the RoNeX
   bool has_stacker_;
-
-  ///Temporary message used for publishing the analogue data
-  std_msgs::UInt16 analogue_msg_;
-  ///Temporary message used for publishing the digital data
-  std_msgs::Bool digital_msg_;
 
   int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
   int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);

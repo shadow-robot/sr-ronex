@@ -38,7 +38,12 @@ namespace ronex
   {}
 
   GeneralIOPassthroughController::~GeneralIOPassthroughController()
-  {}
+  {
+    for(size_t i=0; i < digital_subscribers_.size(); ++i)
+    {
+      digital_subscribers_[i].shutdown();
+    }
+  }
 
   bool GeneralIOPassthroughController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
   {
@@ -52,6 +57,22 @@ namespace ronex
     }
 
     general_io_ = static_cast<ronex::GeneralIO*>( robot->model_->hw_->getCustomHW(ronex_name) );
+
+    //init the subscribers
+    std::stringstream sub_topic;
+    for( size_t i=0; i < general_io_->command_.digital_.size(); ++i)
+    {
+      sub_topic.str("");
+      sub_topic << ronex_name << "/command/digital/" << i;
+      digital_subscribers_.push_back(node_.subscribe<std_msgs::Bool>(sub_topic.str(), 1, boost::bind(&GeneralIOPassthroughController::digital_commands_cb, this, _1,  i )));
+    }
+
+    for( size_t i=0; i < general_io_->command_.pwm_.size(); ++i)
+    {
+      sub_topic.str("");
+      sub_topic << ronex_name << "/command/pwm/" << i;
+      pwm_subscribers_.push_back(node_.subscribe<sr_common_msgs::PWM>(sub_topic.str(), 1, boost::bind(&GeneralIOPassthroughController::pwm_commands_cb, this, _1, i)));
+    }
 
     return true;
   }
@@ -72,6 +93,20 @@ namespace ronex
     }
     loop_count_++;
   }
+
+  void GeneralIOPassthroughController::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
+  {
+    general_io_->command_.digital_[index] = msg->data;
+  }
+
+  void GeneralIOPassthroughController::pwm_commands_cb(const sr_common_msgs::PWMConstPtr& msg, int index)
+  {
+
+    general_io_->command_.pwm_[index].period = msg->pwm_period;
+    general_io_->command_.pwm_[index].on_time_0 = msg->pwm_on_time_0;
+    general_io_->command_.pwm_[index].on_time_1 = msg->pwm_on_time_1;
+  }
+
 }
 
 /* For the emacs weenies in the crowd.
