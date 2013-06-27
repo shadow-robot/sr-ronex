@@ -34,6 +34,7 @@
 #include <sr_common_msgs/PWM.h>
 
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x0000000C_GIO_00.h>
+#include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -61,6 +62,9 @@ protected:
   int status_base_;
 
   ros::NodeHandle node_;
+
+  ///The GeneralIO module which is added as a CustomHW to the hardware interface
+  boost::shared_ptr<ronex::GeneralIO> general_io_;
 
   /**
    * A counter used to publish the data at 100Hz:

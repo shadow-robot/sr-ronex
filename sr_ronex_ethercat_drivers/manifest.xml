@@ -18,6 +18,7 @@
   <depend package="diagnostic_updater" />
   <depend package="pluginlib" />
   <depend package="sr_ronex_external_protocol" />
+  <depend package="sr_ronex_hardware_interface" />
 
   <rosdep name="tinyxml"/>
 

@@ -163,6 +163,10 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
 
   device_offset_ = sh_->get_ring_position();// - hand_->getBridgeRingPosition();
 
+  //add the RoNeX to the hw interface
+  general_io_.reset( new ronex::GeneralIO() );
+  hw->addCustomHW( general_io_.get() );
+
   return 0;
 }
 
