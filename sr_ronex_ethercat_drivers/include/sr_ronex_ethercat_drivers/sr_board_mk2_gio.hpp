@@ -34,6 +34,7 @@
 #include <sr_common_msgs/PWM.h>
 
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x0000000C_GIO_00.h>
+#include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -62,6 +63,9 @@ protected:
 
   ros::NodeHandle node_;
 
+  ///The GeneralIO module which is added as a CustomHW to the hardware interface
+  boost::shared_ptr<ronex::GeneralIO> general_io_;
+
   /**
    * A counter used to publish the data at 100Hz:
    *  count 10 cycles, then reset the cycle_count to 0.
@@ -80,8 +84,6 @@ protected:
   vector<ros::Subscriber> pwm_subscribers_;
   ///the PWM commands to send to the RoNeX
   std::vector<RONEX_COMMAND_0000000C_PWM> pwm_commands_;
-  ///stores the clock speed we want to use for the PWM commands.
-  int16u pwm_clock_speed_;
 
   ///Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;
