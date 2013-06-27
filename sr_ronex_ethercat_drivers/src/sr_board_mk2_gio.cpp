@@ -218,7 +218,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     //The publishers haven't been initialised yet.
     // Checking if the stacker board is plugged in or not
     // to determine the number of publishers.
-    if (status_data->digital_in & RONEX_0000000C_FLAGS_STACKER_0_PRESENT)
+    if (status_data->flags & RONEX_0000000C_FLAGS_STACKER_0_PRESENT)
     {
       has_stacker_ = true;
       nb_analogue_pub = NUM_ANALOGUE_INPUTS;
