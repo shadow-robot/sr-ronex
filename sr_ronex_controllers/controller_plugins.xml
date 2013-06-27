@@ -1,0 +1,7 @@
+<library path="lib/libronex_controllers">
+
+  <class name="ronex/GeneralIOPassthroughController"
+         type="controller::GeneralIOPassthroughController"
+         base_class_type="pr2_controller_interface::Controller" />
+
+</library>

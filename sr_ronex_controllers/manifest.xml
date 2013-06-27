@@ -1,0 +1,23 @@
+<package>
+  <description brief="sr_ronex_controllers">
+    Contains different useful controllers to use with the RoNeX.
+  </description>
+  <author>Ugo Cupcic software@shadowrobot.com</author>
+  <license>GPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/sr_ronex_controllers</url>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
+  <depend package="std_srvs"/>
+  <depend package="sr_common_msgs"/>
+  <depend package="sr_ronex_hardware_interface"/>
+  <depend package="pr2_mechanism_controllers"/>
+  <export>
+    <cpp cflags="-I${prefix}/include" lflags="-L${prefix}/lib"/>
+
+    <pr2_controller_interface plugin="${prefix}/controller_plugins.xml"/>
+  </export>
+
+</package>
+
+
