@@ -165,6 +165,7 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
 
   //add the RoNeX to the hw interface
   general_io_.reset( new ronex::GeneralIO() );
+  general_io_->name_ = device_name_;
   hw->addCustomHW( general_io_.get() );
 
   return 0;
@@ -218,6 +219,12 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       nb_pwm_modules = NUM_PWM_MODULES / 2;
     }
 
+    //resizing the GeneralIO in the HardwareInterface
+    general_io_->state_.analogue_.resize(nb_analogue_pub);
+    general_io_->state_.digital_.resize(nb_digital_io);
+    general_io_->command_.digital_.resize(nb_digital_io);
+    general_io_->command_.pwm_.resize(nb_pwm_modules);
+
     std::stringstream pub_topic;
     std::stringstream sub_topic;
     for(size_t i=0; i < nb_analogue_pub; ++i)
@@ -253,6 +260,16 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       sub_topic << device_name_ << "/command/pwm/" << i;
       pwm_subscribers_.push_back(node_.subscribe<sr_common_msgs::PWM>(sub_topic.str(), 1, boost::bind(&SrBoardMk2GIO::pwm_commands_cb, this, _1, i)));
     }
+  } //end first time, the sizes are properly initialised, simply fill in the data
+
+  for(size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
+  {
+    general_io_->state_.analogue_[i] = status_data->analogue_in[i];
+  }
+
+  for(size_t i = 0; i < general_io_->state_.digital_.size(); ++i )
+  {
+    general_io_->state_.digital_[i] = ronex::check_bit(status_data->digital_in, i);
   }
 
   if( cycle_count_ >= 9)

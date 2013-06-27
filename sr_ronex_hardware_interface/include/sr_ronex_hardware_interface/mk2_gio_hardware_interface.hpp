@@ -31,6 +31,7 @@ namespace ronex
   class GeneralIOCommand
     : public pr2_hardware_interface::CustomHWCommand
   {
+  public:
     std::vector<bool> digital_;
 
     struct PWM
@@ -40,13 +41,14 @@ namespace ronex
       unsigned short int on_time_1;
     };
 
-    PWM pwm_;
+    std::vector<PWM> pwm_;
     unsigned short int pwm_clock_speed;
   };
 
   class GeneralIOState
     : public pr2_hardware_interface::CustomHWState
   {
+  public:
     std::vector<bool> digital_;
     std::vector<unsigned short int> analogue_;
   };
@@ -54,6 +56,7 @@ namespace ronex
   class GeneralIO
     : public pr2_hardware_interface::CustomHW
   {
+  public:
     std::string name_;
     GeneralIOState state_;
     GeneralIOCommand command_;
