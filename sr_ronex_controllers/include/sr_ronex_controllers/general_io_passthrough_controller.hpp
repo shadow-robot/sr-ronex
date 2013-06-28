@@ -36,7 +36,6 @@
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 
-#include <std_msgs/UInt16.h>
 #include <std_msgs/Bool.h>
 #include <sr_common_msgs/PWM.h>
 
@@ -73,14 +72,6 @@ namespace ronex
     std::vector<ros::Subscriber> digital_subscribers_;
     ///send PWM commands to the RoNeX's
     std::vector<ros::Subscriber> pwm_subscribers_;
-
-    //publishers for the data. @todo They should go into another controller
-    boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::UInt16> > analogue_publishers_;
-    boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::Bool> > digital_publishers_;
-    ///Temporary message used for publishing the analogue data
-    std_msgs::UInt16 analogue_msg_;
-    ///Temporary message used for publishing the digital data
-    std_msgs::Bool digital_msg_;
   };
 }
 
