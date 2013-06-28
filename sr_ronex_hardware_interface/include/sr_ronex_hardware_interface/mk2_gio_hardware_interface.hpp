@@ -67,7 +67,6 @@ namespace ronex
     : public pr2_hardware_interface::CustomHW
   {
   public:
-    std::string name_;
     GeneralIOState state_;
     GeneralIOCommand command_;
   };
