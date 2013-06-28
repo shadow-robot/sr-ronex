@@ -37,7 +37,6 @@
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 
 #include <vector>
-#include <boost/ptr_container/ptr_vector.hpp>
 using namespace std;
 
 
