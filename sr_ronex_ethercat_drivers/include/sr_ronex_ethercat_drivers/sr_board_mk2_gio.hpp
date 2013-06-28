@@ -36,6 +36,7 @@
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x0000000C_GIO_00.h>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 using namespace std;
 
@@ -88,6 +89,14 @@ protected:
   bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 
   void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
+
+  //publishers for the data. @todo We should publish everything in one msg
+  boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::UInt16> > analogue_publishers_;
+  boost::ptr_vector<realtime_tools::RealtimePublisher<std_msgs::Bool> > digital_publishers_;
+  ///Temporary message used for publishing the analogue data
+  std_msgs::UInt16 analogue_msg_;
+  ///Temporary message used for publishing the digital data
+  std_msgs::Bool digital_msg_;
 };
 
 /* For the emacs weenies in the crowd.
