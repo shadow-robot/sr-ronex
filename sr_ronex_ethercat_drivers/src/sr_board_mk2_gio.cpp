@@ -237,42 +237,30 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     general_io_->command_.pwm_.resize(nb_pwm_modules);
 
     std::stringstream pub_topic;
-    //init the publishers @todo Only ONE message
-    for(size_t i=0; i < general_io_->state_.analogue_.size(); ++i)
-    {
-      pub_topic.str("");
-      pub_topic << device_name_ << "/state/analogue/" << i;
-      analogue_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::UInt16>(node_, pub_topic.str(), 1));
-    }
-    for(size_t i=0; i < general_io_->state_.digital_.size(); ++i)
-    {
-      pub_topic.str("");
-      pub_topic << device_name_ << "/state/digital/" << i;
-      digital_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::Bool>(node_, pub_topic.str(), 1));
-    }
+    //init the state message
+    state_msg_.analogue.resize(nb_analogue_pub);
+    state_msg_.digital.resize(nb_digital_io);
 
     //publishing at 100Hz
     if(cycle_count_ == 9)
     {
+      state_msg_.header.stamp = ros::Time::now();
+
+      //update state message
       for(size_t i=0; i < general_io_->state_.analogue_.size(); ++i)
       {
-        if( analogue_publishers_[i].trylock() )
-        {
-          analogue_msg_.data = general_io_->state_.analogue_[i];
-          analogue_publishers_[i].msg_ = analogue_msg_;
-          analogue_publishers_[i].unlockAndPublish();
-        }
+        state_msg_.analogue[i] = general_io_->state_.analogue_[i];
       }
 
       for(size_t i=0; i < general_io_->state_.digital_.size(); ++i)
       {
-        if( digital_publishers_[i].trylock() )
-        {
-          digital_msg_.data = general_io_->state_.digital_[i];
-          digital_publishers_[i].msg_ = digital_msg_;
-          digital_publishers_[i].unlockAndPublish();
-        }
+        state_msg_.digital[i] = general_io_->state_.digital_[i];
       }
+
+      //publish
+      state_publisher_->msg_ = state_msg_;
+      state_publisher_->unlockAndPublish();
+
       cycle_count_ = 0;
     }
     cycle_count_++;
