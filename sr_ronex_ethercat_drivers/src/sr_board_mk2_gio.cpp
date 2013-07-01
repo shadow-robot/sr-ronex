@@ -257,8 +257,11 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       }
 
       //publish
-      state_publisher_->msg_ = state_msg_;
-      state_publisher_->unlockAndPublish();
+      if( state_publisher_->trylock() )
+      {
+        state_publisher_->msg_ = state_msg_;
+        state_publisher_->unlockAndPublish();
+      }
 
       cycle_count_ = 0;
     }
