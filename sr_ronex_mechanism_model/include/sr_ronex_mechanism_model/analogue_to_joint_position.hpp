@@ -40,17 +40,17 @@ namespace ronex
     AnalogueToJointPosition() {};
     virtual ~AnalogueToJointPosition() {};
 
-    bool initXml(TiXmlElement *config, pr2_mechanism_model::Robot *robot);
-    bool initXml(TiXmlElement *config);
+    bool initXml(TiXmlElement *elt, pr2_mechanism_model::Robot *robot);
+    bool initXml(TiXmlElement *elt);
 
-    void propagatePosition(std::vector<pr2_hardware_interface::Actuator*>&,
-                           std::vector<pr2_mechanism_model::JointState*>&);
-    void propagatePositionBackwards(std::vector<pr2_mechanism_model::JointState*>&,
-                                    std::vector<pr2_hardware_interface::Actuator*>&);
-    void propagateEffort(std::vector<pr2_mechanism_model::JointState*>&,
-                         std::vector<pr2_hardware_interface::Actuator*>&);
-    void propagateEffortBackwards(std::vector<pr2_hardware_interface::Actuator*>&,
-                                  std::vector<pr2_mechanism_model::JointState*>&);
+    void propagatePosition(std::vector<pr2_hardware_interface::Actuator*>& as,
+                           std::vector<pr2_mechanism_model::JointState*>& js);
+    void propagatePositionBackwards(std::vector<pr2_mechanism_model::JointState*>& js,
+                                    std::vector<pr2_hardware_interface::Actuator*>& as);
+    void propagateEffort(std::vector<pr2_mechanism_model::JointState*>& js,
+                         std::vector<pr2_hardware_interface::Actuator*>& as);
+    void propagateEffortBackwards(std::vector<pr2_hardware_interface::Actuator*>& as,
+                                  std::vector<pr2_mechanism_model::JointState*>& js);
 
   private:
     int simulated_actuator_timestamp_initialized_;
@@ -59,6 +59,7 @@ namespace ronex
     pr2_mechanism_model::JointCalibrationSimulator joint_calibration_simulator_;
 
     ronex::GeneralIO* general_io_;
+    size_t pin_index_;
   };
 }
 
