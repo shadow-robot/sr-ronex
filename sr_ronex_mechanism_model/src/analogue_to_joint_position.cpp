@@ -19,7 +19,7 @@
 * with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
  * @brief  A transmission for mapping one analogue input pin from a general I/O
- *         RoNeX board to the position of the joint.
+ *         RoNeX module to the position of the joint.
  *
  *
  */

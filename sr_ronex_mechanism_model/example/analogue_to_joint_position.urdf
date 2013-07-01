@@ -1,0 +1,17 @@
+<!-- Very simple example of a robot with one continuous joint using the analogue pin 0 from
+     a RoNeX GeneralIO module to set the current position of the joint. -->
+<robot name="test_robot">
+  <link name="link1" />
+  <link name="link2" />
+
+  <joint name="joint1" type="continuous">
+    <parent link="link1"/>
+    <child link="link2"/>
+  </joint>
+
+  <transmission type="ronex_mechanism_model/AnalogueToJointPosition" name="my_analogue_to_joint_transmission">
+    <ronex serial="ronex_12_0" />
+    <analogue_pin id="0"/>
+    <joint name="TestJoint" />
+  </transmission>
+</robot>
