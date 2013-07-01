@@ -60,6 +60,7 @@ namespace ronex
 
     ronex::GeneralIO* general_io_;
     size_t pin_index_;
+    bool pin_out_of_bound_;
   };
 }
 

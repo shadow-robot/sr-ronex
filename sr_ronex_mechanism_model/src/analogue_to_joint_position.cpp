@@ -35,6 +35,8 @@ namespace ronex
 {
   bool AnalogueToJointPosition::initXml(TiXmlElement *elt, pr2_mechanism_model::Robot *robot)
   {
+    pin_out_of_bound_ = true;
+
     const char *name = elt->Attribute("name");
     name_ = name ? name : "";
 
@@ -51,6 +53,7 @@ namespace ronex
     if(!general_io_)
     {
       ROS_ERROR_STREAM("The RoNeX: " << ronex_name << " was not found on the system.");
+      return false;
     }
 
     //read ronex pin from urdf
@@ -68,11 +71,6 @@ namespace ronex
     catch( boost::bad_lexical_cast const& )
     {
       ROS_ERROR("AnalogueToJointPosition: Couldn't parse pin to an int.");
-    }
-    if( pin_index_ >= general_io_->state_.analogue_.size() )
-    {
-      //size_t is always >= 0 so no need to check lower bound
-      ROS_ERROR_STREAM("Specified pin is out of bound: " << pin_index_ << " / max = " << general_io_->state_.analogue_.size() << ".");
     }
 
     //read joint name
@@ -97,6 +95,8 @@ namespace ronex
 
   bool AnalogueToJointPosition::initXml(TiXmlElement *elt)
   {
+    pin_out_of_bound_ = true;
+
     const char *name = elt->Attribute("name");
     name_ = name ? name : "";
 
@@ -148,6 +148,17 @@ namespace ronex
                                                   std::vector<pr2_mechanism_model::JointState*>& js)
   {
     assert(js.size() == 1);
+
+    //we have to check here for the size otherwise the general io hasn't been updated.
+    if( pin_out_of_bound_ )
+    {
+      if( pin_index_ >= general_io_->state_.analogue_.size() )
+      {
+        //size_t is always >= 0 so no need to check lower bound
+        ROS_ERROR_STREAM("Specified pin is out of bound: " << pin_index_ << " / max = " << general_io_->state_.analogue_.size() << ", not propagating the RoNeX data to the joint position.");
+        return;
+      }
+    }
 
     //@todo calibrate here?
     js[0]->position_ = general_io_->state_.analogue_[pin_index_];
