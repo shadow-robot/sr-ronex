@@ -236,7 +236,6 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     general_io_->command_.digital_.resize(nb_digital_io);
     general_io_->command_.pwm_.resize(nb_pwm_modules);
 
-    std::stringstream pub_topic;
     //init the state message
     state_msg_.analogue.resize(nb_analogue_pub);
     state_msg_.digital.resize(nb_digital_io);
