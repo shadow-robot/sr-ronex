@@ -54,7 +54,7 @@ namespace ronex
     }
 
     //read ronex pin from urdf
-    const char *ronex_pin = ronex_el ? ronex_el->Attribute("pin") : NULL;
+    const char *ronex_pin = ronex_el ? ronex_el->Attribute("analogue_pin") : NULL;
     if (!ronex_pin)
     {
       ROS_ERROR("AnalogueToJointPosition transmission did not specify the ronex pin.");
@@ -110,7 +110,7 @@ namespace ronex
     }
 
     //read ronex pin from urdf
-    const char *ronex_pin = ronex_el ? ronex_el->Attribute("pin") : NULL;
+    const char *ronex_pin = ronex_el ? ronex_el->Attribute("analogue_pin") : NULL;
     if (!ronex_pin)
     {
       ROS_ERROR("AnalogueToJointPosition transmission did not specify the ronex pin.");
