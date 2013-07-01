@@ -1,7 +1,6 @@
 /**
  * @file   sr_board_mk2_gio.cpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @date   Tue Jun 11 11:56:43 2013
  *
  * Copyright 2012 Shadow Robot Company Ltd.
  *

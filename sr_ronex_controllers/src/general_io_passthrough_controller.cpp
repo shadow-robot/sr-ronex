@@ -1,7 +1,6 @@
 /**
  * @file   general_io_passthrough_controller.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @date   Thu Jun 27 11:04:12 2013
  *
 * Copyright 2011 Shadow Robot Company Ltd.
 *
