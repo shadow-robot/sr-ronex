@@ -9,8 +9,13 @@
     <child link="link2"/>
   </joint>
 
-  <transmission type="sr_ronex_mechanism_model/AnalogueToJointPosition" name="my_analogue_to_joint_transmission">
+  <transmission type="sr_ronex_mechanism_model/AnalogueToJointPosition" name="my_analogue_to_joint_position_transmission">
     <ronex name="ronex_12_0" analogue_pin="0"/>
+    <joint name="joint1" />
+  </transmission>
+
+  <transmission type="sr_ronex_mechanism_model/AnalogueToJointEffort" name="my_analogue_to_joint_effort_transmission">
+    <ronex name="ronex_12_0" analogue_pin="1"/>
     <joint name="joint1" />
   </transmission>
 </robot>

@@ -52,12 +52,7 @@ namespace ronex
     void propagateEffortBackwards(std::vector<pr2_hardware_interface::Actuator*>& as,
                                   std::vector<pr2_mechanism_model::JointState*>& js);
 
-  private:
-    int simulated_actuator_timestamp_initialized_;
-    ros::Time simulated_actuator_start_time_;
-
-    pr2_mechanism_model::JointCalibrationSimulator joint_calibration_simulator_;
-
+  protected:
     ronex::GeneralIO* general_io_;
     size_t pin_index_;
     bool pin_out_of_bound_;
