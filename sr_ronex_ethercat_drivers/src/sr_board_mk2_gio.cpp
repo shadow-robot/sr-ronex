@@ -41,6 +41,7 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 SrBoardMk2GIO::SrBoardMk2GIO() :
   EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
 {
+  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState>(node_, "state", 1));
 }
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
