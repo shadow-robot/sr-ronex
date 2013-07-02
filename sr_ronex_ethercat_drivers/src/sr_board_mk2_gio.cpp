@@ -41,6 +41,7 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 SrBoardMk2GIO::SrBoardMk2GIO() :
   EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
 {
+  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState>(node_, "state", 1));
 }
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -236,7 +237,6 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     general_io_->command_.digital_.resize(nb_digital_io);
     general_io_->command_.pwm_.resize(nb_pwm_modules);
 
-    std::stringstream pub_topic;
     //init the state message
     state_msg_.analogue.resize(nb_analogue_pub);
     state_msg_.digital.resize(nb_digital_io);
@@ -258,8 +258,11 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       }
 
       //publish
-      state_publisher_->msg_ = state_msg_;
-      state_publisher_->unlockAndPublish();
+      if( state_publisher_->trylock() )
+      {
+        state_publisher_->msg_ = state_msg_;
+        state_publisher_->unlockAndPublish();
+      }
 
       cycle_count_ = 0;
     }
