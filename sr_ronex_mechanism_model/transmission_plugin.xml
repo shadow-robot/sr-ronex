@@ -1,15 +1,9 @@
 <library path="lib/libronex_mechanism_model">
-  <class name="sr_ronex_mechanism_model/AnalogueToJointPosition"
-	 type="ronex::AnalogueToJointPosition" base_class_type="pr2_mechanism_model::Transmission">
+  <class name="sr_ronex_mechanism_model/RonexTransmission"
+	 type="ronex::RonexTransmission" base_class_type="pr2_mechanism_model::Transmission">
     <description>
-      This transmission is used to map one analogue pin from the RoNeX General IO board to a joint position in the robot urdf.
+      This transmission is used to map the RoNeX's pin to a joint in the robot urdf.
     </description>
   </class>
 
-  <class name="sr_ronex_mechanism_model/AnalogueToJointEffort"
-	 type="ronex::AnalogueToJointEffort" base_class_type="pr2_mechanism_model::Transmission">
-    <description>
-      This transmission is used to map one analogue pin from the RoNeX General IO board to a joint effort in the robot urdf.
-    </description>
-  </class>
 </library>

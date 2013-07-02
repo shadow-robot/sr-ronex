@@ -1,7 +1,6 @@
 /**
- * @file   analogue_to_joint_position.hpp
+ * @file   ronex_transmission.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @date   Mon Jul  1 08:09:07 2013
  *
 * Copyright 2011 Shadow Robot Company Ltd.
 *
@@ -18,14 +17,13 @@
 * You should have received a copy of the GNU General Public License along
 * with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
- * @brief  A transmission for mapping one analogue input pin from a general I/O
- *         RoNeX module to the position of the joint.
+ * @brief  A transmission for mapping RoNeXes to joints.
  *
  *
  */
 
-#ifndef _ANALOGUE_TO_JOINT_POSITION_H_
-#define _ANALOGUE_TO_JOINT_POSITION_H_
+#ifndef _RONEX_TRANSMISSION_H_
+#define _RONEX_TRANSMISSION_H_
 
 #include <pr2_mechanism_model/transmission.h>
 #include <pr2_mechanism_model/joint.h>
@@ -34,11 +32,11 @@
 
 namespace ronex
 {
-  class AnalogueToJointPosition : public pr2_mechanism_model::Transmission
+  class RonexTransmission : public pr2_mechanism_model::Transmission
   {
   public:
-    AnalogueToJointPosition() {};
-    virtual ~AnalogueToJointPosition() {};
+    RonexTransmission() {};
+    virtual ~RonexTransmission() {};
 
     bool initXml(TiXmlElement *elt, pr2_mechanism_model::Robot *robot);
     bool initXml(TiXmlElement *elt);
@@ -65,4 +63,4 @@ namespace ronex
    End:
 */
 
-#endif /* _ANALOGUE_TO_JOINT_POSITION_H_ */
+#endif /* _RONEX_TRANSMISSION_H_ */

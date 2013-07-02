@@ -25,15 +25,15 @@
  */
 
 #include <pr2_mechanism_model/robot.h>
-#include <sr_ronex_mechanism_model/analogue_to_joint_position.hpp>
+#include <sr_ronex_mechanism_model/ronex_transmission.hpp>
 #include "pluginlib/class_list_macros.h"
 #include <boost/lexical_cast.hpp>
 
-PLUGINLIB_EXPORT_CLASS( ronex::AnalogueToJointPosition, pr2_mechanism_model::Transmission)
+PLUGINLIB_EXPORT_CLASS( ronex::RonexTransmission, pr2_mechanism_model::Transmission)
 
 namespace ronex
 {
-  bool AnalogueToJointPosition::initXml(TiXmlElement *elt, pr2_mechanism_model::Robot *robot)
+  bool RonexTransmission::initXml(TiXmlElement *elt, pr2_mechanism_model::Robot *robot)
   {
     pin_out_of_bound_ = true;
 
@@ -45,7 +45,7 @@ namespace ronex
     const char *ronex_name = ronex_el ? ronex_el->Attribute("name") : NULL;
     if (!ronex_name)
     {
-      ROS_ERROR("AnalogueToJointPosition transmission did not specify the ronex name");
+      ROS_ERROR("RonexTransmission transmission did not specify the ronex name");
       return false;
     }
 
@@ -60,7 +60,7 @@ namespace ronex
     const char *ronex_pin = ronex_el ? ronex_el->Attribute("analogue_pin") : NULL;
     if (!ronex_pin)
     {
-      ROS_ERROR("AnalogueToJointPosition transmission did not specify the ronex pin.");
+      ROS_ERROR("RonexTransmission transmission did not specify the ronex pin.");
       return false;
     }
     //convert pin to size_t and check it's in the correct bounds
@@ -70,7 +70,7 @@ namespace ronex
     }
     catch( boost::bad_lexical_cast const& )
     {
-      ROS_ERROR("AnalogueToJointPosition: Couldn't parse pin to an int.");
+      ROS_ERROR("RonexTransmission: Couldn't parse pin to an int.");
     }
 
     //read joint name
@@ -78,14 +78,14 @@ namespace ronex
     const char *joint_name = jel ? jel->Attribute("name") : NULL;
     if (!joint_name)
     {
-      ROS_ERROR("AnalogueToJointPosition did not specify joint name");
+      ROS_ERROR("RonexTransmission did not specify joint name");
       return false;
     }
 
     const boost::shared_ptr<const urdf::Joint> joint = robot->robot_model_.getJoint(joint_name);
     if (!joint)
     {
-      ROS_ERROR("AnalogueToJointPosition could not find joint named \"%s\"", joint_name);
+      ROS_ERROR("RonexTransmission could not find joint named \"%s\"", joint_name);
       return false;
     }
     joint_names_.push_back(joint_name);
@@ -93,7 +93,7 @@ namespace ronex
     return true;
   }
 
-  bool AnalogueToJointPosition::initXml(TiXmlElement *elt)
+  bool RonexTransmission::initXml(TiXmlElement *elt)
   {
     pin_out_of_bound_ = true;
 
@@ -105,7 +105,7 @@ namespace ronex
     const char *ronex_name = ronex_el ? ronex_el->Attribute("name") : NULL;
     if (!ronex_name)
     {
-      ROS_ERROR("AnalogueToJointPosition transmission did not specify the ronex name");
+      ROS_ERROR("RonexTransmission transmission did not specify the ronex name");
       return false;
     }
 
@@ -113,7 +113,7 @@ namespace ronex
     const char *ronex_pin = ronex_el ? ronex_el->Attribute("analogue_pin") : NULL;
     if (!ronex_pin)
     {
-      ROS_ERROR("AnalogueToJointPosition transmission did not specify the ronex pin.");
+      ROS_ERROR("RonexTransmission transmission did not specify the ronex pin.");
       return false;
     }
     //convert pin to size_t and check it's in the correct bounds
@@ -123,7 +123,7 @@ namespace ronex
     }
     catch( boost::bad_lexical_cast const& )
     {
-      ROS_ERROR("AnalogueToJointPosition: Couldn't parse pin to an int.");
+      ROS_ERROR("RonexTransmission: Couldn't parse pin to an int.");
     }
     if( pin_index_ >= general_io_->state_.analogue_.size() )
     {
@@ -136,7 +136,7 @@ namespace ronex
     const char *joint_name = jel ? jel->Attribute("name") : NULL;
     if (!joint_name)
     {
-      ROS_ERROR("AnalogueToJointPosition did not specify joint name");
+      ROS_ERROR("RonexTransmission did not specify joint name");
       return false;
     }
     joint_names_.push_back(joint_name);
@@ -144,7 +144,7 @@ namespace ronex
     return true;
   }
 
-  void AnalogueToJointPosition::propagatePosition(std::vector<pr2_hardware_interface::Actuator*>& as,
+  void RonexTransmission::propagatePosition(std::vector<pr2_hardware_interface::Actuator*>& as,
                                                   std::vector<pr2_mechanism_model::JointState*>& js)
   {
     assert(js.size() == 1);
@@ -164,19 +164,19 @@ namespace ronex
     js[0]->position_ = general_io_->state_.analogue_[pin_index_];
   }
 
-  void AnalogueToJointPosition::propagatePositionBackwards(std::vector<pr2_mechanism_model::JointState*>& js,
+  void RonexTransmission::propagatePositionBackwards(std::vector<pr2_mechanism_model::JointState*>& js,
                                                            std::vector<pr2_hardware_interface::Actuator*>& as)
   {
     //not doing anything: this transmission only maps an analogue pin to the position of a given joint
   }
 
-  void AnalogueToJointPosition::propagateEffort(std::vector<pr2_mechanism_model::JointState*>& js,
+  void RonexTransmission::propagateEffort(std::vector<pr2_mechanism_model::JointState*>& js,
                                                 std::vector<pr2_hardware_interface::Actuator*>& as)
   {
     //not doing anything: this transmission only maps an analogue pin to the position of a given joint
   }
 
-  void AnalogueToJointPosition::propagateEffortBackwards(std::vector<pr2_hardware_interface::Actuator*>& js,
+  void RonexTransmission::propagateEffortBackwards(std::vector<pr2_hardware_interface::Actuator*>& js,
                                                          std::vector<pr2_mechanism_model::JointState*>& as)
   {
     //not doing anything: this transmission only maps an analogue pin to the position of a given joint
