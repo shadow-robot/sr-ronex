@@ -17,7 +17,7 @@
 * You should have received a copy of the GNU General Public License along
 * with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
- * @brief  Contains the data mapping one element of a RoNeX to a joint element.
+ * @brief  Base class, contains the data mapping one element of a RoNeX to a joint element.
  *
  *
  */
@@ -32,15 +32,13 @@ namespace ronex
   class RonexMapping
   {
   public:
-    RonexMapping(TiXmlElement* ronex_el);
-    RonexMapping(TiXmlElement* ronex_el, pr2_mechanism_model::Robot* robot);
+    RonexMapping() {};
+    RonexMapping(TiXmlElement* mapping_el);
+    RonexMapping(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot);
     virtual ~RonexMapping() {};
 
-    virtual void propagateFromRonex();
-    virtual void propagateToRonex();
-
-  protected:
-    std::string ronex_id_;
+    virtual void propagateFromRonex(std::vector<pr2_mechanism_model::JointState*>& js) = 0;
+    virtual void propagateToRonex(std::vector<pr2_mechanism_model::JointState*>& js) = 0;
   };
 }
 

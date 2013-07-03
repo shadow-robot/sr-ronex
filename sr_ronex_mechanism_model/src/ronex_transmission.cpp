@@ -27,7 +27,9 @@
 #include <pr2_mechanism_model/robot.h>
 #include <sr_ronex_mechanism_model/ronex_transmission.hpp>
 #include "pluginlib/class_list_macros.h"
-#include <boost/lexical_cast.hpp>
+#include <cstring>
+
+#include "sr_ronex_mechanism_model/mapping/general_io/analogue_to_position.hpp"
 
 PLUGINLIB_EXPORT_CLASS( ronex::RonexTransmission, pr2_mechanism_model::Transmission)
 
@@ -35,16 +37,45 @@ namespace ronex
 {
   bool RonexTransmission::initXml(TiXmlElement *elt, pr2_mechanism_model::Robot *robot)
   {
-    pin_out_of_bound_ = true;
-
     const char *name = elt->Attribute("name");
     name_ = name ? name : "";
+
+
+    //reading the joint name
+    TiXmlElement *jel = elt->FirstChildElement("joint");
+    const char *joint_name = jel ? jel->Attribute("name") : NULL;
+    if (!joint_name)
+    {
+      ROS_ERROR("RonexTransmission did not specify joint name");
+      return false;
+    }
+
+    const boost::shared_ptr<const urdf::Joint> joint = robot->robot_model_.getJoint(joint_name);
+    if (!joint)
+    {
+      ROS_ERROR("RonexTransmission could not find joint named \"%s\"", joint_name);
+      return false;
+    }
+    joint_names_.push_back(joint_name);
 
     //Extract all the mapping information from the transmission
     for( TiXmlElement *mapping_el = elt->FirstChildElement("mapping"); mapping_el;
          mapping_el = mapping_el->NextSiblingElement("mapping") )
     {
-//      ronex_mappings_.push_back( new RonexMapping(mapping_el, robot) );
+      const char *property = mapping_el ? mapping_el->Attribute("property") : NULL;
+      if (!property)
+      {
+        ROS_ERROR("RonexTransmission: no property defined for the mapping. Skipping the mapping.");
+      }
+      else
+      {
+        if( std::strcmp("position", property) == 0 )
+        {
+          ronex_mappings_.push_back( new mapping::general_io::AnalogueToPosition(mapping_el, robot) );
+        }
+        else
+          ROS_WARN_STREAM("Property not recognised: " << property);
+      }
     }
 
     return true;
@@ -52,45 +83,33 @@ namespace ronex
 
   bool RonexTransmission::initXml(TiXmlElement *elt)
   {
-    pin_out_of_bound_ = true;
-
     return true;
   }
 
   void RonexTransmission::propagatePosition(std::vector<pr2_hardware_interface::Actuator*>& as,
-                                                  std::vector<pr2_mechanism_model::JointState*>& js)
+                                            std::vector<pr2_mechanism_model::JointState*>& js)
   {
-    assert(js.size() == 1);
-
-    //we have to check here for the size otherwise the general io hasn't been updated.
-    if( pin_out_of_bound_ )
+    boost::ptr_vector<RonexMapping>::iterator iter;
+    for(iter = ronex_mappings_.begin(); iter != ronex_mappings_.end(); ++iter)
     {
-      if( pin_index_ >= general_io_->state_.analogue_.size() )
-      {
-        //size_t is always >= 0 so no need to check lower bound
-        ROS_ERROR_STREAM("Specified pin is out of bound: " << pin_index_ << " / max = " << general_io_->state_.analogue_.size() << ", not propagating the RoNeX data to the joint position.");
-        return;
-      }
+      iter->propagateFromRonex(js);
     }
-
-    //@todo calibrate here?
-    js[0]->position_ = general_io_->state_.analogue_[pin_index_];
   }
 
   void RonexTransmission::propagatePositionBackwards(std::vector<pr2_mechanism_model::JointState*>& js,
-                                                           std::vector<pr2_hardware_interface::Actuator*>& as)
+                                                     std::vector<pr2_hardware_interface::Actuator*>& as)
   {
     //not doing anything: this transmission only maps an analogue pin to the position of a given joint
   }
 
   void RonexTransmission::propagateEffort(std::vector<pr2_mechanism_model::JointState*>& js,
-                                                std::vector<pr2_hardware_interface::Actuator*>& as)
+                                          std::vector<pr2_hardware_interface::Actuator*>& as)
   {
     //not doing anything: this transmission only maps an analogue pin to the position of a given joint
   }
 
   void RonexTransmission::propagateEffortBackwards(std::vector<pr2_hardware_interface::Actuator*>& js,
-                                                         std::vector<pr2_mechanism_model::JointState*>& as)
+                                                   std::vector<pr2_mechanism_model::JointState*>& as)
   {
     //not doing anything: this transmission only maps an analogue pin to the position of a given joint
   }

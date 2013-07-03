@@ -30,7 +30,7 @@
 #include <pr2_mechanism_model/joint_calibration_simulator.h>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
-//#include "sr_ronex_mechanism_model/ronex_mapping.hpp"
+#include "sr_ronex_mechanism_model/mapping/ronex_mapping.hpp"
 
 namespace ronex
 {
@@ -53,11 +53,7 @@ namespace ronex
                                   std::vector<pr2_mechanism_model::JointState*>& js);
 
   protected:
-    ronex::GeneralIO* general_io_;
-    size_t pin_index_;
-    bool pin_out_of_bound_;
-
-    // boost::ptr_vector<RonexMapping> ronex_mappings_;
+    boost::ptr_vector<RonexMapping> ronex_mappings_;
   };
 }
 

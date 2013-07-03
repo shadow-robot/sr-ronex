@@ -26,6 +26,9 @@
 #ifndef _MK2_GIO_HARDWARE_INTERFACE_H_
 #define _MK2_GIO_HARDWARE_INTERFACE_H_
 
+#include <pr2_hardware_interface/hardware_interface.h>
+#include <vector>
+
 namespace ronex
 {
   class GeneralIOCommand
