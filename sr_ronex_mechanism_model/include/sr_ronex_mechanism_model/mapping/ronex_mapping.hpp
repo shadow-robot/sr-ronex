@@ -33,8 +33,8 @@ namespace ronex
   {
   public:
     RonexMapping() {};
-    RonexMapping(TiXmlElement* mapping_el);
-    RonexMapping(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot);
+    RonexMapping(TiXmlElement* mapping_el) {};
+    RonexMapping(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot) {};
     virtual ~RonexMapping() {};
 
     virtual void propagateFromRonex(std::vector<pr2_mechanism_model::JointState*>& js) = 0;

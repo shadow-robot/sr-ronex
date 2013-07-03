@@ -70,6 +70,7 @@ namespace ronex
       }
       else
       {
+        //@todo is there a better way of instantiating the correct type?
         if( std::strcmp("position", property) == 0 )
         {
           ronex_mappings_.push_back( new mapping::general_io::AnalogueToPosition(mapping_el, robot) );
