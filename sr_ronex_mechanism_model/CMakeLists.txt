@@ -22,9 +22,9 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_gensrv()
 
 #common commands for building c++ executables and libraries
-rosbuild_add_library(ronex_mechanism_model src/ronex_transmission.cpp)
-#target_link_libraries(${PROJECT_NAME} another_library)
-#rosbuild_add_boost_directories()
-#rosbuild_link_boost(${PROJECT_NAME} thread)
-#rosbuild_add_executable(example examples/example.cpp)
-#target_link_libraries(example ${PROJECT_NAME})
+rosbuild_add_library(ronex_mechanism_model src/ronex_transmission.cpp)# src/ronex_mapping.cpp)
+
+rosbuild_add_executable(test/test_ronex_transmission test/test_ronex_transmission.cpp)
+rosbuild_add_gtest_build_flags(test/test_ronex_transmission)
+target_link_libraries(test/test_ronex_transmission ronex_mechanism_model)
+rosbuild_add_rostest(test/test_ronex_transmission.test)

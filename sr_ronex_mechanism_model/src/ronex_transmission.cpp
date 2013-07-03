@@ -40,55 +40,12 @@ namespace ronex
     const char *name = elt->Attribute("name");
     name_ = name ? name : "";
 
-    //read ronex name from urdf
-    TiXmlElement *ronex_el = elt->FirstChildElement("ronex");
-    const char *ronex_name = ronex_el ? ronex_el->Attribute("name") : NULL;
-    if (!ronex_name)
+    //Extract all the mapping information from the transmission
+    for( TiXmlElement *mapping_el = elt->FirstChildElement("mapping"); mapping_el;
+         mapping_el = mapping_el->NextSiblingElement("mapping") )
     {
-      ROS_ERROR("RonexTransmission transmission did not specify the ronex name");
-      return false;
+//      ronex_mappings_.push_back( new RonexMapping(mapping_el, robot) );
     }
-
-    general_io_ = static_cast<ronex::GeneralIO*>( robot->hw_->getCustomHW(ronex_name) );
-    if(!general_io_)
-    {
-      ROS_ERROR_STREAM("The RoNeX: " << ronex_name << " was not found on the system.");
-      return false;
-    }
-
-    //read ronex pin from urdf
-    const char *ronex_pin = ronex_el ? ronex_el->Attribute("analogue_pin") : NULL;
-    if (!ronex_pin)
-    {
-      ROS_ERROR("RonexTransmission transmission did not specify the ronex pin.");
-      return false;
-    }
-    //convert pin to size_t and check it's in the correct bounds
-    try
-    {
-      pin_index_ = boost::lexical_cast<size_t>( ronex_pin );
-    }
-    catch( boost::bad_lexical_cast const& )
-    {
-      ROS_ERROR("RonexTransmission: Couldn't parse pin to an int.");
-    }
-
-    //read joint name
-    TiXmlElement *jel = elt->FirstChildElement("joint");
-    const char *joint_name = jel ? jel->Attribute("name") : NULL;
-    if (!joint_name)
-    {
-      ROS_ERROR("RonexTransmission did not specify joint name");
-      return false;
-    }
-
-    const boost::shared_ptr<const urdf::Joint> joint = robot->robot_model_.getJoint(joint_name);
-    if (!joint)
-    {
-      ROS_ERROR("RonexTransmission could not find joint named \"%s\"", joint_name);
-      return false;
-    }
-    joint_names_.push_back(joint_name);
 
     return true;
   }
@@ -96,50 +53,6 @@ namespace ronex
   bool RonexTransmission::initXml(TiXmlElement *elt)
   {
     pin_out_of_bound_ = true;
-
-    const char *name = elt->Attribute("name");
-    name_ = name ? name : "";
-
-    //read ronex name from urdf
-    TiXmlElement *ronex_el = elt->FirstChildElement("ronex");
-    const char *ronex_name = ronex_el ? ronex_el->Attribute("name") : NULL;
-    if (!ronex_name)
-    {
-      ROS_ERROR("RonexTransmission transmission did not specify the ronex name");
-      return false;
-    }
-
-    //read ronex pin from urdf
-    const char *ronex_pin = ronex_el ? ronex_el->Attribute("analogue_pin") : NULL;
-    if (!ronex_pin)
-    {
-      ROS_ERROR("RonexTransmission transmission did not specify the ronex pin.");
-      return false;
-    }
-    //convert pin to size_t and check it's in the correct bounds
-    try
-    {
-      pin_index_ = boost::lexical_cast<size_t>( ronex_pin );
-    }
-    catch( boost::bad_lexical_cast const& )
-    {
-      ROS_ERROR("RonexTransmission: Couldn't parse pin to an int.");
-    }
-    if( pin_index_ >= general_io_->state_.analogue_.size() )
-    {
-      //size_t is always >= 0 so no need to check lower bound
-      ROS_ERROR_STREAM("Specified pin is out of bound: " << pin_index_ << " / max = " << general_io_->state_.analogue_.size() << ".");
-    }
-
-    //read joint name
-    TiXmlElement *jel = elt->FirstChildElement("joint");
-    const char *joint_name = jel ? jel->Attribute("name") : NULL;
-    if (!joint_name)
-    {
-      ROS_ERROR("RonexTransmission did not specify joint name");
-      return false;
-    }
-    joint_names_.push_back(joint_name);
 
     return true;
   }
