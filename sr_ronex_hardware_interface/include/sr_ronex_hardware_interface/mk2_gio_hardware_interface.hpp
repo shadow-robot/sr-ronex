@@ -29,7 +29,6 @@
 namespace ronex
 {
   class GeneralIOCommand
-    : public pr2_hardware_interface::CustomHWCommand
   {
   public:
     std::vector<bool> digital_;
@@ -46,7 +45,6 @@ namespace ronex
   };
 
   class GeneralIOState
-    : public pr2_hardware_interface::CustomHWState
   {
   public:
     std::vector<bool> digital_;
