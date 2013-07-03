@@ -23,6 +23,7 @@
  */
 
 #include "sr_ronex_mechanism_model/ronex_transmission.hpp"
+#include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <ros/ros.h>
 #include <pr2_mechanism_model/robot.h>
 #include <gtest/gtest.h>
@@ -42,6 +43,13 @@ TEST(RonexTransmission, constructor)
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
   pr2_hardware_interface::HardwareInterface hw;
+
+  //add ronex
+  boost::shared_ptr<ronex::GeneralIO> general_io;
+  general_io.reset( new ronex::GeneralIO() );
+  general_io->name_ = "ronex_12_0";
+  hw.addCustomHW( general_io.get() );
+
   pr2_mechanism_model::Robot model(&hw);
   ASSERT_TRUE(model.initXml(root));
   pr2_mechanism_model::RobotState state(&model);

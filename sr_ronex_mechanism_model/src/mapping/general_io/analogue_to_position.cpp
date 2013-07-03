@@ -33,8 +33,6 @@ namespace ronex
     {
       AnalogueToPosition::AnalogueToPosition(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot)
       {
-        ROS_ERROR_STREAM("ADDING Analogue to position");
-
         const char *ronex_name = mapping_el ? mapping_el->Attribute("ronex") : NULL;
         if (!ronex_name)
         {

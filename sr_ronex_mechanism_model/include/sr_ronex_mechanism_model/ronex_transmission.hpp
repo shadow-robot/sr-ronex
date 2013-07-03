@@ -54,6 +54,7 @@ namespace ronex
 
   protected:
     boost::ptr_vector<RonexMapping> ronex_mappings_;
+    boost::ptr_vector<RonexMapping>::iterator ronex_iter_;
   };
 }
 

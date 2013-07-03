@@ -30,6 +30,7 @@
 #include <cstring>
 
 #include "sr_ronex_mechanism_model/mapping/general_io/analogue_to_position.hpp"
+#include "sr_ronex_mechanism_model/mapping/general_io/analogue_to_effort.hpp"
 
 PLUGINLIB_EXPORT_CLASS( ronex::RonexTransmission, pr2_mechanism_model::Transmission)
 
@@ -73,6 +74,10 @@ namespace ronex
         {
           ronex_mappings_.push_back( new mapping::general_io::AnalogueToPosition(mapping_el, robot) );
         }
+        else if( std::strcmp("effort", property) == 0 )
+        {
+          ronex_mappings_.push_back( new mapping::general_io::AnalogueToEffort(mapping_el, robot) );
+        }
         else
           ROS_WARN_STREAM("Property not recognised: " << property);
       }
@@ -89,10 +94,9 @@ namespace ronex
   void RonexTransmission::propagatePosition(std::vector<pr2_hardware_interface::Actuator*>& as,
                                             std::vector<pr2_mechanism_model::JointState*>& js)
   {
-    boost::ptr_vector<RonexMapping>::iterator iter;
-    for(iter = ronex_mappings_.begin(); iter != ronex_mappings_.end(); ++iter)
+    for(ronex_iter_ = ronex_mappings_.begin(); ronex_iter_ != ronex_mappings_.end(); ++ronex_iter_)
     {
-      iter->propagateFromRonex(js);
+      ronex_iter_->propagateFromRonex(js);
     }
   }
 
@@ -105,7 +109,10 @@ namespace ronex
   void RonexTransmission::propagateEffort(std::vector<pr2_mechanism_model::JointState*>& js,
                                           std::vector<pr2_hardware_interface::Actuator*>& as)
   {
-    //not doing anything: this transmission only maps an analogue pin to the position of a given joint
+    for(ronex_iter_ = ronex_mappings_.begin(); ronex_iter_ != ronex_mappings_.end(); ++ronex_iter_)
+    {
+      ronex_iter_->propagateFromRonex(js);
+    }
   }
 
   void RonexTransmission::propagateEffortBackwards(std::vector<pr2_hardware_interface::Actuator*>& js,
