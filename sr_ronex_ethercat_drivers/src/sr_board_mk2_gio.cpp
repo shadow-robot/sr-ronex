@@ -241,32 +241,6 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     state_msg_.analogue.resize(nb_analogue_pub);
     state_msg_.digital.resize(nb_digital_io);
 
-    //publishing at 100Hz
-    if(cycle_count_ == 9)
-    {
-      state_msg_.header.stamp = ros::Time::now();
-
-      //update state message
-      for(size_t i=0; i < general_io_->state_.analogue_.size(); ++i)
-      {
-        state_msg_.analogue[i] = general_io_->state_.analogue_[i];
-      }
-
-      for(size_t i=0; i < general_io_->state_.digital_.size(); ++i)
-      {
-        state_msg_.digital[i] = general_io_->state_.digital_[i];
-      }
-
-      //publish
-      if( state_publisher_->trylock() )
-      {
-        state_publisher_->msg_ = state_msg_;
-        state_publisher_->unlockAndPublish();
-      }
-
-      cycle_count_ = 0;
-    }
-    cycle_count_++;
   } //end first time, the sizes are properly initialised, simply fill in the data
 
   for(size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
@@ -279,6 +253,33 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     general_io_->state_.digital_[i] = ronex::check_bit(status_data->digital_in, i);
   }
 
+  //publishing at 100Hz
+  if(cycle_count_ > 9)
+  {
+    state_msg_.header.stamp = ros::Time::now();
+
+    //update state message
+    for(size_t i=0; i < general_io_->state_.analogue_.size(); ++i)
+    {
+      state_msg_.analogue[i] = general_io_->state_.analogue_[i];
+    }
+
+    for(size_t i=0; i < general_io_->state_.digital_.size(); ++i)
+    {
+      state_msg_.digital[i] = general_io_->state_.digital_[i];
+    }
+
+    //publish
+    if( state_publisher_->trylock() )
+    {
+      state_publisher_->msg_ = state_msg_;
+      state_publisher_->unlockAndPublish();
+    }
+  
+    cycle_count_ = 0;
+  }
+
+  cycle_count_++;
   return true;
 }
 
