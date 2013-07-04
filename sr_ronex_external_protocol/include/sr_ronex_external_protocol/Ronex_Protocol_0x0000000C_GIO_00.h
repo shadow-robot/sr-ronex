@@ -1,6 +1,8 @@
 //! EtherCAT protocol for RoNeX General I/O stacker, 01.
 //! Works on Node revision 01
 
+#ifndef RONEX_PROTOCOL_0x0000000C_GIO_H_INCLUDED
+#define RONEX_PROTOCOL_0x0000000C_GIO_H_INCLUDED
 
 #include "typedefs_shadow.h"
 
@@ -17,15 +19,21 @@
 #define RONEX_COMMAND_0000000C_ADC_SAMPLE_RATE_HZ               1000        //!< Maximum possible ADC sample rate. Don't send EtherCAT packets faster than this.
 #define NUM_ANALOGUE_INPUTS                                       12        
 #define ANALOGUE_INPUT_RESOLUTION                                 12        //!< 
-#define ANALOGUE_INPUT_JUSTIFICATION                            LEFT
+#define ANALOGUE_INPUT_JUSTIFICATION                           RIGHT
 #define NUM_ANALOGUE_OUTPUTS                                       0
 #define ANALOGUE_OUTPUT_RESOLUTION                                 0
-#define ANALOGUE_OUTPUT_JUSTIFICATION                           LEFT
+#define ANALOGUE_OUTPUT_JUSTIFICATION                          RIGHT
 #define NUM_DIGITAL_IO                                            12
 #define NUM_PWM_MODULES                            (NUM_DIGITAL_IO/2)
-#define PRODUCT_NAME                                   "general_IO"
+#define PRODUCT_NAME                                    "general_IO"
 #define PRODUCT_ID                                        0x0000000C
 #define MAXIMUM_NUM_STACKERS                                       1
+#define STACKER_TYPE                                               2            //!< range [1..13]
+
+#define RONEX_COMMAND_0000000C_COMMAND_TYPE_INVALID           0x0000        //!< COMMAND_TYPE values are sent by the host to tell the node
+#define RONEX_COMMAND_0000000C_COMMAND_TYPE_NORMAL            0x0001        //!  the type of data contained in the COMMAND struct.
+#define RONEX_COMMAND_0000000C_COMMAND_TYPE_ERROR             0x00FF        //!  Currently there is only one type available, NORMAL. The others
+                                                                            //!  are considered errors.
 
 #define RONEX_0000000C_FLAGS_STACKER_0_PRESENT                0x1000
 #define RONEX_0000000C_FLAGS_STACKER_1_PRESENT                0x2000
@@ -35,27 +43,30 @@
 #define RONEX_0000000C_FLAGS_STACKER_1_ERROR                  0x0200
 #define RONEX_0000000C_FLAGS_STACKER_2_ERROR                  0x0400
 #define RONEX_0000000C_FLAGS_STACKER_3_ERROR                  0x0800
+#define RONEX_0000000C_FLAGS_RESERVED_ERRORS                  0x00FC
+#define RONEX_0000000C_FLAGS_OVER_TEMPERATURE_ERROR           0x0002
+#define RONEX_0000000C_FLAGS_UNKNOWN_ERROR                    0x0001
 
-                                                                            //!< The divider for the PWM clock. By adjusting this divider, we have
-                                                                            //!  access to a much wider range of PWM frequencies, from 32MHz
-#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_64_MHZ       1           //!  right down to 1.9Hz. This feature was added so that people could
-#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_32_MHZ       2           //!  control RC servos, which require 50Hz control frequency.
-#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_16_MHZ       4           //!  For RC Servos, set Clock Speed = 2MHz, and PWM period to 39999. 
-#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_08_MHZ       8           //!  This gives 20ms period.
-#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_04_MHZ      16
-#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_02_MHZ      32
-#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ      64
-
-#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_500_KHZ    128
-#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_250_KHZ    256
-#define     RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_125_KHZ    512
-
+/*
+                                                                                //!< The divider for the PWM clock. By adjusting this divider, we have
+                                                                                //!  access to a much wider range of PWM frequencies, from 32MHz
+#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_64_MHZ              1            //!  right down to 1.9Hz. This feature was added so that people could
+#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_32_MHZ              2            //!  control RC servos, which require 50Hz control frequency.
+#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_16_MHZ              4            //!  For RC Servos, set Clock Speed = 2MHz, and PWM period to 39999. 
+#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_08_MHZ              8            //!  This gives 20ms period.
+#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_04_MHZ             16
+#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_02_MHZ             32
+#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ             64
+#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_500_KHZ           128
+#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_250_KHZ           256
+#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_125_KHZ           512
+*/
 
                                                                                 // EtherCAT Protocol
                                                                                 // =================
                                                                             
-#define PROTOCOL_TYPE   EC_BUFFERED                                             // Asynchronous communication
-//#define PROTOCOL_TYPE   EC_QUEUED                                             //  Synchronous communication
+//#define PROTOCOL_TYPE   EC_BUFFERED                                           // Asynchronous communication
+#define PROTOCOL_TYPE   EC_QUEUED                                               //  Synchronous communication
 
 #if PROTOCOL_TYPE == EC_BUFFERED
                                                                                 // Syncmanager Definitions
@@ -98,6 +109,7 @@ typedef struct                                                              //!<
 
 typedef struct                                                              //!< Status Structure
 {                                                                           //   ----------------
+    //int16u  command_type;                                                   // Copy of command_type from COMMAND struct (NOT USED YET)
     int16u  analogue_in[12];
     int16u  digital_in;                                                     //!< Bit n: Status of digital pin n.
     int16u  flags;
@@ -107,7 +119,7 @@ typedef struct                                                              //!<
 
 typedef struct                                                              //! Command structure
 {                                                                           //  -----------------
-    int16u                                  command_type;
+    int16u                                  command_type;                   // Sent by host
     RONEX_COMMAND_0000000C_PWM              pwm_module[NUM_PWM_MODULES];
     int32u                                  digital_out;                    //!< Bit 0: Direction of digital pin 0, 0=Output, 1=Input
                                                                             //!< Bit 1: Drive     of digital pin 0, 0=Low,    1=High
@@ -117,3 +129,4 @@ typedef struct                                                              //! 
     int16u                                  pwm_clock_speed;
 }__attribute__((packed)) RONEX_COMMAND_0000000C;
 
+#endif
