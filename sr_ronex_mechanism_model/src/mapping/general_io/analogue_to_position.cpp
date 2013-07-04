@@ -73,6 +73,15 @@ namespace ronex
       {
         assert(js.size() == 1);
 
+        if( check_pin_in_bound_() )
+        {
+          //@todo calibrate here
+          js[0]->position_ = general_io_->state_.analogue_[pin_index_];
+        }
+      }
+
+      bool AnalogueToPosition::check_pin_in_bound_()
+      {
         //we have to check here for the size otherwise the general io hasn't been updated.
         if( pin_out_of_bound_ )
         {
@@ -80,11 +89,11 @@ namespace ronex
           {
             //size_t is always >= 0 so no need to check lower bound
             ROS_ERROR_STREAM("Specified pin is out of bound: " << pin_index_ << " / max = " << general_io_->state_.analogue_.size() << ", not propagating the RoNeX data to the joint position.");
-            return;
+            return false;
           }
         }
-        //@todo calibrate here?
-        js[0]->position_ = general_io_->state_.analogue_[pin_index_];
+
+        return true;
       }
 
       void AnalogueToPosition::propagateToRonex(std::vector<pr2_mechanism_model::JointState*>& js)

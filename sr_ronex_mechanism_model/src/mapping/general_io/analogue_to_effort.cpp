@@ -44,18 +44,11 @@ namespace ronex
       {
         assert(js.size() == 1);
 
-        //we have to check here for the size otherwise the general io hasn't been updated.
-        if( pin_out_of_bound_ )
+        if( check_pin_in_bound_() )
         {
-          if( pin_index_ >= general_io_->state_.analogue_.size() )
-          {
-            //size_t is always >= 0 so no need to check lower bound
-            ROS_ERROR_STREAM("Specified pin is out of bound: " << pin_index_ << " / max = " << general_io_->state_.analogue_.size() << ", not propagating the RoNeX data to the joint effort.");
-            return;
-          }
+          //@todo calibrate here
+          js[0]->measured_effort_ = general_io_->state_.analogue_[pin_index_];
         }
-        //@todo calibrate here?
-        js[0]->measured_effort_ = general_io_->state_.analogue_[pin_index_];
       }
     }
   }
