@@ -54,7 +54,7 @@ namespace ronex
           ROS_ERROR("RonexTransmission transmission did not specify the ronex pin.");
           return;
         }
-        //convert pin to size_t and check it's in the correct bounds
+        //convert pin to size_t
         try
         {
           pin_index_ = boost::lexical_cast<size_t>( ronex_pin );
@@ -62,6 +62,43 @@ namespace ronex
         catch( boost::bad_lexical_cast const& )
         {
           ROS_ERROR("RonexTransmission: Couldn't parse pin to an int.");
+          return;
+        }
+
+        //read scale
+        const char *scale = mapping_el ? mapping_el->Attribute("scale") : NULL;
+        if (!ronex_pin)
+        {
+          ROS_WARN("RonexTransmission transmission did not specify the scale, using 1.0.");
+          scale = "1.0";
+        }
+        //convert scale to double
+        try
+        {
+          scale_ = boost::lexical_cast<double>( scale );
+        }
+        catch( boost::bad_lexical_cast const& )
+        {
+          ROS_WARN("RonexTransmission: Couldn't parse scale to a double, using 1.0.");
+          scale_ = 1.0;
+        }
+
+        //read offset
+        const char *offset = mapping_el ? mapping_el->Attribute("offset") : NULL;
+        if (!ronex_pin)
+        {
+          ROS_WARN("RonexTransmission transmission did not specify the offset, using 0.0.");
+          offset = "0.0";
+        }
+        //convert offset to double
+        try
+        {
+          offset_ = boost::lexical_cast<double>( offset );
+        }
+        catch( boost::bad_lexical_cast const& )
+        {
+          ROS_WARN("RonexTransmission: Couldn't parse offset to a double, using 0.0.");
+          offset_ = 0.0;
         }
       }
 
@@ -75,8 +112,7 @@ namespace ronex
 
         if( check_pin_in_bound_() )
         {
-          //@todo calibrate here
-          js[0]->position_ = general_io_->state_.analogue_[pin_index_];
+          js[0]->position_ = compute_scaled_data_();
         }
       }
 
@@ -94,6 +130,11 @@ namespace ronex
         }
 
         return true;
+      }
+
+      double AnalogueToPosition::compute_scaled_data_()
+      {
+        return general_io_->state_.analogue_[pin_index_]*scale_ + offset_;
       }
 
       void AnalogueToPosition::propagateToRonex(std::vector<pr2_mechanism_model::JointState*>& js)

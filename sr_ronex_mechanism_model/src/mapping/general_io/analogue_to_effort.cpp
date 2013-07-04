@@ -46,8 +46,7 @@ namespace ronex
 
         if( check_pin_in_bound_() )
         {
-          //@todo calibrate here
-          js[0]->measured_effort_ = general_io_->state_.analogue_[pin_index_];
+          js[0]->measured_effort_ = compute_scaled_data_();
         }
       }
     }
