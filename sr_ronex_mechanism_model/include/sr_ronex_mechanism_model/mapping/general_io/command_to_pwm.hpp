@@ -50,6 +50,10 @@ namespace ronex
         size_t pin_index_, pwm_module_;
         bool pin_out_of_bound_;
 
+        ///Those are used for computing the PWM on time / PWM period
+        unsigned long int ideal_period_;
+        unsigned short int clock_divider_, actual_period_, on_time_;
+
         bool check_pins_in_bound_();
       };
     }

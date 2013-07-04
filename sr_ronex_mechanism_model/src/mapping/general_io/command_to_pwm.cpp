@@ -25,6 +25,7 @@
 #include "sr_ronex_mechanism_model/mapping/general_io/command_to_pwm.hpp"
 #include <pr2_mechanism_model/robot.h>
 #include <boost/lexical_cast.hpp>
+#include <math.h>
 
 namespace ronex
 {
@@ -125,10 +126,17 @@ namespace ronex
 
         if( check_pins_in_bound_() )
         {
-          general_io_->command_.pwm_[pwm_module_].period = js[0]->commanded_effort_;
-          general_io_->command_.pwm_[pwm_module_].period = 0;
-          general_io_->command_.pwm_[pwm_module_].period = 0;
-        }
+          ideal_period_ = 64000000 / general_io_->command_.pwm_clock_speed_;
+          clock_divider_ = ceil( ideal_period_ / 65536);
+          actual_period_ = ideal_period_ / clock_divider_;
+
+          general_io_->command_.pwm_[pwm_module_].period = actual_period_;
+
+          if( pin_index_ == 0 )
+            general_io_->command_.pwm_[pwm_module_].on_time_0 = (actual_period_ * js[0]->commanded_effort_ ) / 100;
+          else
+            general_io_->command_.pwm_[pwm_module_].on_time_1 = (actual_period_ * js[0]->commanded_effort_ ) / 100;
+       }
       }
     }
   }
