@@ -31,6 +31,7 @@
 
 #include "sr_ronex_mechanism_model/mapping/general_io/analogue_to_position.hpp"
 #include "sr_ronex_mechanism_model/mapping/general_io/analogue_to_effort.hpp"
+#include "sr_ronex_mechanism_model/mapping/general_io/command_to_pwm.hpp"
 
 PLUGINLIB_EXPORT_CLASS( ronex::RonexTransmission, pr2_mechanism_model::Transmission)
 
@@ -78,6 +79,10 @@ namespace ronex
         else if( std::strcmp("effort", property) == 0 )
         {
           ronex_mappings_.push_back( new mapping::general_io::AnalogueToEffort(mapping_el, robot) );
+        }
+        else if( std::strcmp("command", property) == 0 )
+        {
+          ronex_mappings_.push_back( new mapping::general_io::CommandToPWM(mapping_el, robot) );
         }
         else
           ROS_WARN_STREAM("Property not recognised: " << property);

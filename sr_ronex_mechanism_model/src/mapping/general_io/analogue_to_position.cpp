@@ -1,5 +1,5 @@
 /**
- * @file   position.cpp
+ * @file   analogue_to_position.cpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
  *
 * Copyright 2011 Shadow Robot Company Ltd.
@@ -32,6 +32,7 @@ namespace ronex
     namespace general_io
     {
       AnalogueToPosition::AnalogueToPosition(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot)
+        : pin_out_of_bound_(true)
       {
         const char *ronex_name = mapping_el ? mapping_el->Attribute("ronex") : NULL;
         if (!ronex_name)
@@ -125,10 +126,13 @@ namespace ronex
           {
             //size_t is always >= 0 so no need to check lower bound
             ROS_ERROR_STREAM("Specified pin is out of bound: " << pin_index_ << " / max = " << general_io_->state_.analogue_.size() << ", not propagating the RoNeX data to the joint position.");
+
+            pin_out_of_bound_ = true;
             return false;
           }
         }
 
+        pin_out_of_bound_ = false;
         return true;
       }
 

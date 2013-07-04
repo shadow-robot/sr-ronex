@@ -22,7 +22,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_gensrv()
 
 #common commands for building c++ executables and libraries
-rosbuild_add_library(ronex_mechanism_model src/ronex_transmission.cpp src/mapping/general_io/analogue_to_position.cpp src/mapping/general_io/analogue_to_effort.cpp)
+rosbuild_add_library(ronex_mechanism_model src/ronex_transmission.cpp src/mapping/general_io/analogue_to_position.cpp src/mapping/general_io/analogue_to_effort.cpp src/mapping/general_io/command_to_pwm.cpp)
 
 rosbuild_add_executable(test/test_ronex_transmission test/test_ronex_transmission.cpp)
 rosbuild_add_gtest_build_flags(test/test_ronex_transmission)
