@@ -1,0 +1,13 @@
+<launch>
+  <!-- Loads the robot description -->
+  <include file="$(find sr_ronex_launch)/launch/sr_ronex_no_controllers.launch" />
+
+  <!-- loads the controllers param -->
+  <rosparam command="load" file="$(find sr_ronex_controllers)/config/general_io_passthrough_controller.yaml" />
+
+  <node name="ronex_ctrl_spawner"
+	pkg="pr2_controller_manager" type="spawner" output="screen"
+	args="ronex_12_0_passthrough" />
+
+</launch>
+

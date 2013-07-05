@@ -1,7 +1,6 @@
 /**
  * @file   mk2_gio_hardware_interface.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @date   Thu Jun 27 09:34:37 2013
  *
 * Copyright 2011 Shadow Robot Company Ltd.
 *
@@ -65,7 +64,6 @@ namespace ronex
     : public pr2_hardware_interface::CustomHW
   {
   public:
-    std::string name_;
     GeneralIOState state_;
     GeneralIOCommand command_;
   };

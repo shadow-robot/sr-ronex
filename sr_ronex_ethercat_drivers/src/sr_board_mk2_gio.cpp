@@ -1,7 +1,6 @@
 /**
  * @file   sr_board_mk2_gio.cpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @date   Tue Jun 11 11:56:43 2013
  *
  * Copyright 2012 Shadow Robot Company Ltd.
  *
@@ -45,11 +44,6 @@ SrBoardMk2GIO::SrBoardMk2GIO() :
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
 {
-  for(size_t i=0; i < digital_subscribers_.size(); ++i)
-  {
-    digital_subscribers_[i].shutdown();
-  }
-
   delete sh_->get_fmmu_config();
   delete sh_->get_pd_config();
 }
@@ -163,6 +157,8 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
   general_io_.reset( new ronex::GeneralIO() );
   general_io_->name_ = device_name_;
 
+  ROS_INFO_STREAM("Adding a GeneralIO RoNeX module to the hadware interface: " << device_name_);
+
   //reading the clock speed from the parameter server. Setting to 1MHz by default
   int tmp;
   node_.param("pwm_clock_speed", tmp, RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ);
@@ -212,13 +208,13 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 {
   RONEX_STATUS_0000000C* status_data = (RONEX_STATUS_0000000C *)(this_buffer+  command_size_);
 
-  if( analogue_publishers_.size() == 0)
+  if( general_io_->state_.analogue_.size() == 0)
   {
     size_t nb_analogue_pub, nb_digital_io, nb_pwm_modules;
     //The publishers haven't been initialised yet.
     // Checking if the stacker board is plugged in or not
     // to determine the number of publishers.
-    if (status_data->digital_in & RONEX_0000000C_FLAGS_STACKER_0_PRESENT)
+    if (status_data->flags & RONEX_0000000C_FLAGS_STACKER_0_PRESENT)
     {
       has_stacker_ = true;
       nb_analogue_pub = NUM_ANALOGUE_INPUTS;
@@ -238,42 +234,6 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     general_io_->state_.digital_.resize(nb_digital_io);
     general_io_->command_.digital_.resize(nb_digital_io);
     general_io_->command_.pwm_.resize(nb_pwm_modules);
-
-    std::stringstream pub_topic;
-    std::stringstream sub_topic;
-    for(size_t i=0; i < nb_analogue_pub; ++i)
-    {
-      pub_topic.str("");
-      pub_topic << device_name_ << "/state/analogue/" << i;
-      analogue_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::UInt16>(node_, pub_topic.str(), 1));
-    }
-
-    for(size_t i=0; i < nb_digital_io; ++i)
-    {
-      pub_topic.str("");
-      pub_topic << device_name_ << "/state/digital/" << i;
-      digital_publishers_.push_back(new realtime_tools::RealtimePublisher<std_msgs::Bool>(node_, pub_topic.str(), 1));
-
-      //adding the subscribers for receiving commands
-      sub_topic.str("");
-      sub_topic << device_name_ << "/command/digital/" << i;
-      digital_subscribers_.push_back(node_.subscribe<std_msgs::Bool>(sub_topic.str(), 1, boost::bind(&SrBoardMk2GIO::digital_commands_cb, this, _1,  i )));
-    }
-
-    for( size_t i = 0; i < nb_pwm_modules; ++i)
-    {
-      //initialising the PWM commands to 0s
-      RONEX_COMMAND_0000000C_PWM pwm;
-      pwm.pwm_period = 0;
-      pwm.pwm_on_time_0 = 0;
-      pwm.pwm_on_time_1 = 0;
-
-      pwm_commands_.push_back(pwm);
-
-      sub_topic.str("");
-      sub_topic << device_name_ << "/command/pwm/" << i;
-      pwm_subscribers_.push_back(node_.subscribe<sr_common_msgs::PWM>(sub_topic.str(), 1, boost::bind(&SrBoardMk2GIO::pwm_commands_cb, this, _1, i)));
-    }
   } //end first time, the sizes are properly initialised, simply fill in the data
 
   for(size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
@@ -286,50 +246,8 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     general_io_->state_.digital_[i] = ronex::check_bit(status_data->digital_in, i);
   }
 
-  if( cycle_count_ >= 9)
-  {
-    ROS_DEBUG_STREAM("Status size: " << sizeof(*status_data) << " " << sizeof(RONEX_COMMAND_0000000C) << "=" << sizeof(RONEX_COMMAND_0000000C_PWM) << "*" << NUM_PWM_MODULES << "+" << sizeof(int32u) << "+" << sizeof(int16u));
-
-    for(size_t i = 0; i < analogue_publishers_.size(); ++i)
-    {
-      if( analogue_publishers_[i].trylock() )
-      {
-        analogue_msg_.data = status_data->analogue_in[i];
-        analogue_publishers_[i].msg_ = analogue_msg_;
-        analogue_publishers_[i].unlockAndPublish();
-      }
-    }
-
-    for(size_t i = 0; i < digital_publishers_.size(); ++i)
-    {
-      if( digital_publishers_[i].trylock() )
-      {
-        digital_msg_.data = ronex::check_bit(status_data->digital_in, i);
-        digital_publishers_[i].msg_ = digital_msg_;
-        digital_publishers_[i].unlockAndPublish();
-      }
-    }
-
-    cycle_count_ = 0;
-  }
-  ++cycle_count_;
-
   return true;
 }
-
-void SrBoardMk2GIO::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
-{
-  general_io_->command_.digital_[index] = msg->data;
-}
-
-void SrBoardMk2GIO::pwm_commands_cb(const sr_common_msgs::PWMConstPtr& msg, int index)
-{
-
-  general_io_->command_.pwm_[index].period = msg->pwm_period;
-  general_io_->command_.pwm_[index].on_time_0 = msg->pwm_on_time_0;
-  general_io_->command_.pwm_[index].on_time_1 = msg->pwm_on_time_1;
-}
-
 
 void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer)
 {
