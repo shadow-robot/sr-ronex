@@ -162,7 +162,7 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
 
   //reading the clock speed from the parameter server. Setting to 1MHz by default
   int tmp;
-  node_.param("pwm_clock_divider", tmp, RONEX_COMMAND_0000000C_PWM_CLOCK_DIVIDER_01_MHZ);
+  node_.param("pwm_clock_divider", tmp, 20);
   general_io_->command_.pwm_clock_divider_ = static_cast<int16u>(tmp);
 
   hw->addCustomHW( general_io_.get() );
