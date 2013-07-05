@@ -1,7 +1,6 @@
 /**
  * @file   sr_board_mk2_gio.cpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @date   Tue Jun 11 11:56:43 2013
  *
  * Copyright 2012 Shadow Robot Company Ltd.
  *
@@ -159,7 +158,7 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
   general_io_.reset( new ronex::GeneralIO() );
   general_io_->name_ = device_name_;
 
-  ROS_ERROR_STREAM("Adding a GeneralIO RoNeX module to the hadware interface: " << device_name_);
+  ROS_INFO_STREAM("Adding a GeneralIO RoNeX module to the hadware interface: " << device_name_);
 
   //reading the clock speed from the parameter server. Setting to 1MHz by default
   int tmp;

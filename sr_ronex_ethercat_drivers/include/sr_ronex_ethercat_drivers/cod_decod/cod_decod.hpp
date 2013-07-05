@@ -1,7 +1,6 @@
 /**
  * @file   cod_decod.hpp
  * @author Toni Oliver <toni@shadowrobot.com>
- * @date   thu jul 19 11:14:18 2012
  *
 * Copyright 2011 Shadow Robot Company Ltd.
 *

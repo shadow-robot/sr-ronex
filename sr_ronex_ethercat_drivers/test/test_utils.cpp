@@ -1,7 +1,6 @@
 /**
  * @file   test_utils.cpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @date   Mon Jun 17 05:51:27 2013
  *
  * Copyright 2011 Shadow Robot Company Ltd.
  *
