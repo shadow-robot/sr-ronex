@@ -114,6 +114,6 @@ typedef struct                                                              //! 
                                                                             //!< Bit 2: Direction of digital pin 1, 0=Output, 1=Input
                                                                             //!< Bit 3: Drive     of digital pin 1, 0=Low,    1=High
                                                                             //!< etc ..
-    int16u                                  pwm_clock_speed;
+    int16u                                  pwm_clock_divider;
 }__attribute__((packed)) RONEX_COMMAND_0000000C;
 
