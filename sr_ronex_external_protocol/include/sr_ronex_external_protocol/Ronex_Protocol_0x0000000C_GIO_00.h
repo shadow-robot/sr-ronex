@@ -17,8 +17,8 @@
                                                                             // -------------------------
 #define RONEX_COMMAND_0000000C_MASTER_CLOCK_SPEED_HZ        64000000        //!< Master clock. This is divided down to create the PWM clock.
 #define RONEX_COMMAND_0000000C_ADC_SAMPLE_RATE_HZ               1000        //!< Maximum possible ADC sample rate. Don't send EtherCAT packets faster than this.
-#define NUM_ANALOGUE_INPUTS                                       12        
-#define ANALOGUE_INPUT_RESOLUTION                                 12        //!< 
+#define NUM_ANALOGUE_INPUTS                                       12
+#define ANALOGUE_INPUT_RESOLUTION                                 12        //!<
 #define ANALOGUE_INPUT_JUSTIFICATION                           RIGHT
 #define NUM_ANALOGUE_OUTPUTS                                       0
 #define ANALOGUE_OUTPUT_RESOLUTION                                 0
@@ -47,24 +47,9 @@
 #define RONEX_0000000C_FLAGS_OVER_TEMPERATURE_ERROR           0x0002
 #define RONEX_0000000C_FLAGS_UNKNOWN_ERROR                    0x0001
 
-/*
-                                                                                //!< The divider for the PWM clock. By adjusting this divider, we have
-                                                                                //!  access to a much wider range of PWM frequencies, from 32MHz
-#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_64_MHZ              1            //!  right down to 1.9Hz. This feature was added so that people could
-#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_32_MHZ              2            //!  control RC servos, which require 50Hz control frequency.
-#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_16_MHZ              4            //!  For RC Servos, set Clock Speed = 2MHz, and PWM period to 39999. 
-#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_08_MHZ              8            //!  This gives 20ms period.
-#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_04_MHZ             16
-#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_02_MHZ             32
-#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ             64
-#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_500_KHZ           128
-#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_250_KHZ           256
-#define RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_125_KHZ           512
-*/
-
                                                                                 // EtherCAT Protocol
                                                                                 // =================
-                                                                            
+
 //#define PROTOCOL_TYPE   EC_BUFFERED                                           // Asynchronous communication
 #define PROTOCOL_TYPE   EC_QUEUED                                               //  Synchronous communication
 
@@ -126,7 +111,7 @@ typedef struct                                                              //! 
                                                                             //!< Bit 2: Direction of digital pin 1, 0=Output, 1=Input
                                                                             //!< Bit 3: Drive     of digital pin 1, 0=Low,    1=High
                                                                             //!< etc ..
-    int16u                                  pwm_clock_speed;
+    int16u                                  pwm_clock_divider;
 }__attribute__((packed)) RONEX_COMMAND_0000000C;
 
 #endif
