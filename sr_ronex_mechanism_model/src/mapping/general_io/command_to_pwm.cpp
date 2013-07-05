@@ -123,7 +123,7 @@ namespace ronex
         if( check_pins_in_bound_() )
         {
           ideal_period_ = 64000000 / general_io_->command_.pwm_clock_speed_;
-          clock_divider_ = ceil( ideal_period_ / 65536);
+          clock_divider_ = static_cast<unsigned short int>( ceil( static_cast<double>(ideal_period_) / 65536.0 ) );
           actual_period_ = ideal_period_ / clock_divider_;
 
           general_io_->command_.pwm_[pwm_module_].period = actual_period_;

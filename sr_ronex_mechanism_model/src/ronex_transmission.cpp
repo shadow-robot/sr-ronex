@@ -119,7 +119,7 @@ namespace ronex
   {
     for(ronex_iter_ = ronex_mappings_.begin(); ronex_iter_ != ronex_mappings_.end(); ++ronex_iter_)
     {
-      ronex_iter_->propagateFromRonex(js);
+      ronex_iter_->propagateToRonex(js);
     }
   }
 
