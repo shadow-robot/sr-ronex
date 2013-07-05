@@ -28,13 +28,12 @@
 
 #include <ethercat_hardware/ethercat_device.h>
 #include <realtime_tools/realtime_publisher.h>
-#include <std_msgs/UInt16.h>
-#include <std_msgs/Bool.h>
-#include <sr_common_msgs/PWM.h>
+#include <sr_common_msgs/GeneralIOState.h>
 
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x0000000C_GIO_00.h>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 using namespace std;
 
@@ -87,6 +86,11 @@ protected:
   bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 
   void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
+
+  //publisher for the data.
+  boost::shared_ptr<realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState> > state_publisher_;
+  ///Temporary message
+  sr_common_msgs::GeneralIOState state_msg_;
 };
 
 /* For the emacs weenies in the crowd.
