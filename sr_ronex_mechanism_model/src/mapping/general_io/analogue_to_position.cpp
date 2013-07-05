@@ -140,9 +140,6 @@ namespace ronex
       {
         return general_io_->state_.analogue_[pin_index_]*scale_ + offset_;
       }
-
-      void AnalogueToPosition::propagateToRonex(std::vector<pr2_mechanism_model::JointState*>& js)
-      {}
     }
   }
 }

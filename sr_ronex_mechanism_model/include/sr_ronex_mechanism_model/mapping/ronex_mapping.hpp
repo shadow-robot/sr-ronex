@@ -37,7 +37,20 @@ namespace ronex
     RonexMapping(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot) {};
     virtual ~RonexMapping() {};
 
+    /**
+     * Propagating the data from the RoNeXes to the joint states. This function is
+     *  implemented in the different mappings.
+     *
+     * @param js Current joint states.
+     */
     virtual void propagateFromRonex(std::vector<pr2_mechanism_model::JointState*>& js) = 0;
+
+    /**
+     * Propagating the commands from joint states to the RoNeXes. This function is
+     *  implemented in the different mappings.
+     *
+     * @param js Current joint states.
+     */
     virtual void propagateToRonex(std::vector<pr2_mechanism_model::JointState*>& js) = 0;
   };
 }

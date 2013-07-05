@@ -41,17 +41,39 @@ namespace ronex
         AnalogueToPosition(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot);
         virtual ~AnalogueToPosition();
 
+        /**
+         * Propagating the specified analogue pin data to the given joint position.
+         *
+         * @param js joint_state of the joint specified in the transmission
+         */
         virtual void propagateFromRonex(std::vector<pr2_mechanism_model::JointState*>& js);
-        virtual void propagateToRonex(std::vector<pr2_mechanism_model::JointState*>& js);
+
+        /**
+         * This function is not doing anything as we're not propagating a command in this mapping.
+         */
+        virtual void propagateToRonex(std::vector<pr2_mechanism_model::JointState*>& js) {};
 
       protected:
+        ///Pointer to the GeneralIO module we specified in the transmission.
         GeneralIO* general_io_;
+        ///index of the analogue pin
         size_t pin_index_;
+        ///Is the pin inside the correct range?
         bool pin_out_of_bound_;
 
+        ///The user can apply a scaling and offset to the raw data.
         double scale_, offset_;
 
+        /**
+         * Computes the scaled data from the raw value.
+         * @return scaled data
+         */
         double compute_scaled_data_();
+
+        /**
+         * Check whether the pin is in the correct range.
+         * @return true if the pin is in the correct range
+         */
         bool check_pin_in_bound_();
       };
     }

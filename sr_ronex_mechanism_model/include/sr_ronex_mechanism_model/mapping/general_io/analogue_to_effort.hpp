@@ -41,6 +41,11 @@ namespace ronex
         AnalogueToEffort(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot);
         virtual ~AnalogueToEffort();
 
+        /**
+         * Propagating the specified analogue pin data to the given joint measured_effort.
+         *
+         * @param js joint_state of the joint specified in the transmission
+         */
         virtual void propagateFromRonex(std::vector<pr2_mechanism_model::JointState*>& js);
       };
     }

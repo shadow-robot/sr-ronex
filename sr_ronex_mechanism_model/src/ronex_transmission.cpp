@@ -94,6 +94,8 @@ namespace ronex
 
   bool RonexTransmission::initXml(TiXmlElement *elt)
   {
+    //not doing anything (used in simulation only)
+
     return true;
   }
 
@@ -109,7 +111,7 @@ namespace ronex
   void RonexTransmission::propagatePositionBackwards(std::vector<pr2_mechanism_model::JointState*>& js,
                                                      std::vector<pr2_hardware_interface::Actuator*>& as)
   {
-    //not doing anything: this transmission only maps an analogue pin to the position of a given joint
+    //not doing anything (used in simulation)
   }
 
   void RonexTransmission::propagateEffort(std::vector<pr2_mechanism_model::JointState*>& js,
@@ -124,7 +126,7 @@ namespace ronex
   void RonexTransmission::propagateEffortBackwards(std::vector<pr2_hardware_interface::Actuator*>& js,
                                                    std::vector<pr2_mechanism_model::JointState*>& as)
   {
-    //not doing anything: this transmission only maps an analogue pin to the position of a given joint
+    //not doing anything (used in simulation)
   }
 }
 

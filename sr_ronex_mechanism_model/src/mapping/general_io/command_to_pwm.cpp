@@ -91,10 +91,6 @@ namespace ronex
       {
       }
 
-      void CommandToPWM::propagateFromRonex(std::vector<pr2_mechanism_model::JointState*>& js)
-      {
-      }
-
       bool CommandToPWM::check_pins_in_bound_()
       {
         //we have to check here for the size otherwise the general io hasn't been updated.
