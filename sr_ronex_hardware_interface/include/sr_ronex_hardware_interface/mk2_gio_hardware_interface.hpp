@@ -44,7 +44,7 @@ namespace ronex
     };
 
     std::vector<PWM> pwm_;
-    unsigned short int pwm_clock_speed_;
+    unsigned short int pwm_clock_divider_;
   };
 
   class GeneralIOState
