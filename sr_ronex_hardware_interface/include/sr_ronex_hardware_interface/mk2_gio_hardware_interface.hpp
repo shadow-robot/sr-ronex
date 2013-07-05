@@ -58,7 +58,7 @@ namespace ronex
    *
    * The command and state are a slightly higher level representation
    *  of the definitions used in the protocol header:
-   *    sr_ronex_external_protocol/Ronex_Protocol_0x0000000C_GIO_00.h
+   *    sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h
    */
   class GeneralIO
     : public pr2_hardware_interface::CustomHW
