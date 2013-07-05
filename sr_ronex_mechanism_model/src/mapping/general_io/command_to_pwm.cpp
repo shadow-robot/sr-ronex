@@ -122,16 +122,10 @@ namespace ronex
 
         if( check_pins_in_bound_() )
         {
-          ideal_period_ = 64000000 / general_io_->command_.pwm_clock_speed_;
-          clock_divider_ = static_cast<unsigned short int>( ceil( static_cast<double>(ideal_period_) / 65536.0 ) );
-          actual_period_ = ideal_period_ / clock_divider_;
-
-          general_io_->command_.pwm_[pwm_module_].period = actual_period_;
-
           if( pin_index_ == 0 )
-            general_io_->command_.pwm_[pwm_module_].on_time_0 = (actual_period_ * js[0]->commanded_effort_ ) / 100;
+            general_io_->command_.pwm_[pwm_module_].on_time_0 = (general_io_->command_.pwm_[pwm_module_].period * js[0]->commanded_effort_ ) / 100;
           else
-            general_io_->command_.pwm_[pwm_module_].on_time_1 = (actual_period_ * js[0]->commanded_effort_ ) / 100;
+            general_io_->command_.pwm_[pwm_module_].on_time_1 = (general_io_->command_.pwm_[pwm_module_].period * js[0]->commanded_effort_ ) / 100;
        }
       }
     }

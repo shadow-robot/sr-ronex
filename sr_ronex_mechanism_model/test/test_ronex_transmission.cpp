@@ -87,11 +87,12 @@ TEST(RonexTransmission, propagateCommand)
 
   //setting effort for the joint
   state.joint_states_[0].commanded_effort_ = 5.1;
-  //propagating
+  general_io->command_.pwm_[1].period =  64000;  //setting period too
+
   state.propagateJointEffortToActuatorEffort();
   //reading the command from the RoNeX
   EXPECT_EQ(general_io->command_.pwm_[1].on_time_0, 3264);
-  EXPECT_EQ(general_io->command_.pwm_[1].period, 64000);
+
 }
 
 
