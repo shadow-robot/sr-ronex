@@ -55,6 +55,45 @@ TEST(RonexTransmission, constructor)
   pr2_mechanism_model::RobotState state(&model);
 }
 
+TEST(RonexTransmission, propagateCommand)
+{
+  //get urdf from param
+  ros::NodeHandle nh;
+  std::string xml_string;
+  ASSERT_TRUE( nh.getParam("robot_description", xml_string) );
+
+  TiXmlDocument urdf_xml;
+  urdf_xml.Parse(xml_string.c_str());
+
+  TiXmlElement *root = urdf_xml.FirstChildElement("robot");
+  ASSERT_TRUE(root != NULL);
+  pr2_hardware_interface::HardwareInterface hw;
+
+  //add ronex
+  boost::shared_ptr<ronex::GeneralIO> general_io;
+  general_io.reset( new ronex::GeneralIO() );
+  general_io->name_ = "ronex_12_0";
+  general_io->command_.pwm_clock_speed_ = 50;
+  general_io->command_.pwm_.resize(6);
+  general_io->state_.analogue_.resize(6);
+  general_io->state_.digital_.resize(6);
+  general_io->command_.pwm_.resize(6);
+
+  hw.addCustomHW( general_io.get() );
+
+  pr2_mechanism_model::Robot model(&hw);
+  ASSERT_TRUE(model.initXml(root));
+  pr2_mechanism_model::RobotState state(&model);
+
+  //setting effort for the joint
+  state.joint_states_[0].commanded_effort_ = 5.1;
+  //propagating
+  state.propagateJointEffortToActuatorEffort();
+  //reading the command from the RoNeX
+  EXPECT_EQ(general_io->command_.pwm_[1].on_time_0, 3264);
+  EXPECT_EQ(general_io->command_.pwm_[1].period, 64000);
+}
+
 int main(int argc, char **argv)
 {
     testing::InitGoogleTest(&argc, argv);
