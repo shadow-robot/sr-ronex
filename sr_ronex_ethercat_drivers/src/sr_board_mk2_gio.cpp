@@ -302,6 +302,19 @@ void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_ethercat_drivers::GeneralIOC
   ROS_INFO_STREAM("Reconfiguring driver: " << config.pwm_clock_divider);
 
   general_io_->command_.pwm_clock_speed_ = static_cast<int16u>(config.pwm_clock_divider);
+
+  if( general_io_->command_.pwm_.size() > 0 )
+    general_io_->command_.pwm_[0].period = static_cast<int16u>(config.pwm_period_0);
+  if( general_io_->command_.pwm_.size() > 1 )
+    general_io_->command_.pwm_[1].period = static_cast<int16u>(config.pwm_period_1);
+  if( general_io_->command_.pwm_.size() > 2 )
+    general_io_->command_.pwm_[2].period = static_cast<int16u>(config.pwm_period_2);
+  if( general_io_->command_.pwm_.size() > 3 )
+    general_io_->command_.pwm_[3].period = static_cast<int16u>(config.pwm_period_3);
+  if( general_io_->command_.pwm_.size() > 4 )
+    general_io_->command_.pwm_[4].period = static_cast<int16u>(config.pwm_period_4);
+  if( general_io_->command_.pwm_.size() > 5 )
+    general_io_->command_.pwm_[5].period = static_cast<int16u>(config.pwm_period_5);
 }
 
 /* For the emacs weenies in the crowd.
