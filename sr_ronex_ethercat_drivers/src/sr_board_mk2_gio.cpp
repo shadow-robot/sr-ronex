@@ -40,7 +40,12 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 SrBoardMk2GIO::SrBoardMk2GIO() :
   EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
 {
+  //state topic
   state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState>(node_, "state", 1));
+
+  //dynamic reconfigure server
+  function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
+  dynamic_reconfigure_server_.setCallback(function_cb_);
 }
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -160,10 +165,6 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
 
   ROS_INFO_STREAM("Adding a GeneralIO RoNeX module to the hadware interface: " << device_name_);
 
-  //reading the clock speed from the parameter server. Setting to 1MHz by default
-  int tmp;
-  node_.param("pwm_clock_speed", tmp, RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ);
-  general_io_->command_.pwm_clock_speed_ = static_cast<int16u>(tmp);
 
   hw->addCustomHW( general_io_.get() );
 
@@ -274,7 +275,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       state_publisher_->msg_ = state_msg_;
       state_publisher_->unlockAndPublish();
     }
-  
+
     cycle_count_ = 0;
   }
 
@@ -296,6 +297,12 @@ void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, 
 }
 
 
+void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_ethercat_drivers::GeneralIOConfig &config, uint32_t level)
+{
+  ROS_INFO_STREAM("Reconfiguring driver: " << config.pwm_clock_divider);
+
+  general_io_->command_.pwm_clock_speed_ = static_cast<int16u>(config.pwm_clock_divider);
+}
 
 /* For the emacs weenies in the crowd.
    Local Variables:

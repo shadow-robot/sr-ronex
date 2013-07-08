@@ -35,8 +35,11 @@
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
-using namespace std;
 
+#include <dynamic_reconfigure/server.h>
+#include "sr_ronex_ethercat_drivers/GeneralIOConfig.h"
+
+using namespace std;
 
 class SrBoardMk2GIO : public EthercatDevice
 {
@@ -47,6 +50,7 @@ public:
   SrBoardMk2GIO();
   virtual ~SrBoardMk2GIO();
 
+  void dynamic_reconfigure_cb(sr_ronex_ethercat_drivers::GeneralIOConfig &config, uint32_t level);
 
 protected:
   string reason_;
@@ -87,10 +91,15 @@ protected:
 
   void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
 
-  //publisher for the data.
+  ///publisher for the data.
   boost::shared_ptr<realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState> > state_publisher_;
   ///Temporary message
   sr_common_msgs::GeneralIOState state_msg_;
+
+  ///Dynamic reconfigure server for setting the parameters of the driver
+  dynamic_reconfigure::Server<sr_ronex_ethercat_drivers::GeneralIOConfig> dynamic_reconfigure_server_;
+
+  dynamic_reconfigure::Server<sr_ronex_ethercat_drivers::GeneralIOConfig>::CallbackType function_cb_;
 };
 
 /* For the emacs weenies in the crowd.
