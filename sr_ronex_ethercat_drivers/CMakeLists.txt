@@ -11,6 +11,11 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 rosbuild_add_boost_directories()
 #rosbuild_genmsg()
 
+#add dynamic reconfigure api
+rosbuild_find_ros_package(dynamic_reconfigure)
+include(${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake)
+gencfg()
+
 add_definitions(-Wall)
 rosbuild_add_library(
   sr_ronex_ethercat_drivers src/standard_ethercat_device.cpp src/sr_board_0x.cpp
