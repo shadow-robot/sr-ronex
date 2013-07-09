@@ -162,7 +162,7 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
 
   //reading the clock speed from the parameter server. Setting to 1MHz by default
   int tmp;
-  node_.param("pwm_clock_speed", tmp, RONEX_COMMAND_0000000C_PWM_CLOCK_SPEED_01_MHZ);
+  node_.param("pwm_clock_speed", tmp, 64);
   general_io_->command_.pwm_clock_speed_ = static_cast<int16u>(tmp);
 
   hw->addCustomHW( general_io_.get() );
@@ -183,7 +183,7 @@ int SrBoardMk2GIO::writeData(EthercatCom *com, EC_UINT address, void const *data
 
 void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
-  RONEX_COMMAND_0000000C* command = (RONEX_COMMAND_0000000C*)(buffer);
+  RONEX_COMMAND_02000001* command = (RONEX_COMMAND_02000001*)(buffer);
 
   //digital command
   for (size_t i = 0; i < general_io_->command_.digital_.size(); ++i)
@@ -207,7 +207,7 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
 
 bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
 {
-  RONEX_STATUS_0000000C* status_data = (RONEX_STATUS_0000000C *)(this_buffer+  command_size_);
+  RONEX_STATUS_02000001* status_data = (RONEX_STATUS_02000001 *)(this_buffer+  command_size_);
 
   if( general_io_->state_.analogue_.size() == 0)
   {
@@ -215,7 +215,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     //The publishers haven't been initialised yet.
     // Checking if the stacker board is plugged in or not
     // to determine the number of publishers.
-    if (status_data->flags & RONEX_0000000C_FLAGS_STACKER_0_PRESENT)
+    if (status_data->flags & RONEX_02000001_FLAGS_STACKER_0_PRESENT)
     {
       has_stacker_ = true;
       nb_analogue_pub = NUM_ANALOGUE_INPUTS;
@@ -274,7 +274,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       state_publisher_->msg_ = state_msg_;
       state_publisher_->unlockAndPublish();
     }
-  
+
     cycle_count_ = 0;
   }
 

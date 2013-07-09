@@ -24,7 +24,7 @@
  */
 
 
-#include <sr_ronex_external_protocol/Ronex_Protocol_0x0000000C_GIO_00.h>
+#include <sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h>
 #include <sr_ronex_ethercat_drivers/ronex_utils.hpp>
 #include <ros/ros.h>
 #include <gtest/gtest.h>

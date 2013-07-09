@@ -8,14 +8,24 @@
       SrBoard0X - Shadow Robot RoNeX Board
     </description>
   </class>
-  <class name="sr_ronex_ethercat_drivers/12" type="SrBoardMk2GIO" base_class_type="EthercatDevice">
+  <class name="sr_ronex_ethercat_drivers/33554433" type="SrBoardMk2GIO" base_class_type="EthercatDevice">
     <description>
-      RoNeX mk2 - General I/O board.
+      RoNeX mk2 - General I/O board. Product ID is 0x02000001.
+    </description>
+  </class>
+  <class name="sr_ronex_ethercat_drivers/33554432" type="StandardEthercatDevice" base_class_type="EthercatDevice">
+    <description>
+      RoNeX bridge - Product ID is 0x02000000.
     </description>
   </class>
   <class name="sr_ronex_ethercat_drivers/0" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
-      RoNeX bridge
+      RoNeX bridge - Kept for compatibility reason. To be removed once we've fixed RoNeX bridge issue.
+    </description>
+  </class>
+  <class name="sr_ronex_ethercat_drivers/7" type="StandardEthercatDevice" base_class_type="EthercatDevice">
+    <description>
+      RoNeX bridge - duplicated for backward compatibility issues.
     </description>
   </class>
 
