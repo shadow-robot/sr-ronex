@@ -14,4 +14,7 @@ rosbuild_add_boost_directories()
 add_definitions(-Wall)
 rosbuild_add_library(
   sr_ronex_ethercat_drivers src/standard_ethercat_device.cpp src/sr_board_0x.cpp
-  src/cod_decod/cod_decod_manager.cpp src/cod_decod/cod_decod.cpp src/cod_decod/cod_decod_std_io.cpp )
+  src/cod_decod/cod_decod_manager.cpp src/cod_decod/cod_decod.cpp src/cod_decod/cod_decod_std_io.cpp
+  src/sr_board_mk2_gio.cpp)
+
+rosbuild_add_gtest(test/test_utils test/test_utils.cpp)
