@@ -41,6 +41,7 @@ namespace ronex
           return;
         }
 
+        //@todo: when we have multiple available module types check the module type when casting
         general_io_ = static_cast<ronex::GeneralIO*>( robot->hw_->getCustomHW(ronex_name) );
         if(!general_io_)
         {
