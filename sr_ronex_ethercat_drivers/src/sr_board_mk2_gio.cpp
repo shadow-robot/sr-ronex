@@ -158,14 +158,8 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
   general_io_->name_ = device_name_;
 
   ROS_INFO_STREAM("Adding a GeneralIO RoNeX module to the hadware interface: " << device_name_);
-
   //Using the name of the ronex to prefix the state topic
   state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState>(node_, "/" + device_name_ + "/state", 1));
-
-  //reading the clock speed from the parameter server. Setting to 1MHz by default
-  int tmp;
-  node_.param("pwm_clock_divider", tmp, 20);
-  general_io_->command_.pwm_clock_divider_ = static_cast<int16u>(tmp);
 
   hw->addCustomHW( general_io_.get() );
 
@@ -242,6 +236,11 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     state_msg_.analogue.resize(nb_analogue_pub);
     state_msg_.digital.resize(nb_digital_io);
 
+    //dynamic reconfigure server is instantiated here
+    // as we need the different vectors to be initialised
+    // before running the first configuration.
+    function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
+    dynamic_reconfigure_server_.setCallback(function_cb_);
   } //end first time, the sizes are properly initialised, simply fill in the data
 
   for(size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
@@ -298,6 +297,23 @@ void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, 
 }
 
 
+void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_ethercat_drivers::GeneralIOConfig &config, uint32_t level)
+{
+  general_io_->command_.pwm_clock_divider_ = static_cast<int16u>(config.pwm_clock_divider);
+
+  if( general_io_->command_.pwm_.size() > 0 )
+    general_io_->command_.pwm_[0].period = static_cast<int16u>(config.pwm_period_0);
+  if( general_io_->command_.pwm_.size() > 1 )
+    general_io_->command_.pwm_[1].period = static_cast<int16u>(config.pwm_period_1);
+  if( general_io_->command_.pwm_.size() > 2 )
+    general_io_->command_.pwm_[2].period = static_cast<int16u>(config.pwm_period_2);
+  if( general_io_->command_.pwm_.size() > 3 )
+    general_io_->command_.pwm_[3].period = static_cast<int16u>(config.pwm_period_3);
+  if( general_io_->command_.pwm_.size() > 4 )
+    general_io_->command_.pwm_[4].period = static_cast<int16u>(config.pwm_period_4);
+  if( general_io_->command_.pwm_.size() > 5 )
+    general_io_->command_.pwm_[5].period = static_cast<int16u>(config.pwm_period_5);
+}
 
 /* For the emacs weenies in the crowd.
    Local Variables:
