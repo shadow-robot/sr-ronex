@@ -30,11 +30,6 @@
 #define MAXIMUM_NUM_STACKERS                                       1
 #define STACKER_TYPE                                               2            //!< range [1..13]
 
-#define RONEX_COMMAND_0000000C_COMMAND_TYPE_INVALID           0x0000        //!< COMMAND_TYPE values are sent by the host to tell the node
-#define RONEX_COMMAND_0000000C_COMMAND_TYPE_NORMAL            0x0001        //!  the type of data contained in the COMMAND struct.
-#define RONEX_COMMAND_0000000C_COMMAND_TYPE_ERROR             0x00FF        //!  Currently there is only one type available, NORMAL. The others
-                                                                            //!  are considered errors.
-
 #define RONEX_02000001_FLAGS_STACKER_0_PRESENT                0x1000
 #define RONEX_02000001_FLAGS_STACKER_1_PRESENT                0x2000
 #define RONEX_02000001_FLAGS_STACKER_2_PRESENT                0x4000
