@@ -47,7 +47,7 @@ TEST(RonexTransmission, constructor)
   //add ronex
   boost::shared_ptr<ronex::GeneralIO> general_io;
   general_io.reset( new ronex::GeneralIO() );
-  general_io->name_ = "ronex_12_0";
+  general_io->name_ = "ronex_33554433_0";
   hw.addCustomHW( general_io.get() );
 
   pr2_mechanism_model::Robot model(&hw);
@@ -72,7 +72,7 @@ TEST(RonexTransmission, propagateCommand)
   //add ronex
   boost::shared_ptr<ronex::GeneralIO> general_io;
   general_io.reset( new ronex::GeneralIO() );
-  general_io->name_ = "ronex_12_0";
+  general_io->name_ = "ronex_33554433_0";
   general_io->command_.pwm_clock_divider_ = 20;
   general_io->command_.pwm_.resize(6);
   general_io->state_.analogue_.resize(6);
@@ -113,7 +113,7 @@ TEST(RonexTransmission, propagateState)
   //add ronex
   boost::shared_ptr<ronex::GeneralIO> general_io;
   general_io.reset( new ronex::GeneralIO() );
-  general_io->name_ = "ronex_12_0";
+  general_io->name_ = "ronex_33554433_0";
   general_io->command_.pwm_.resize(6);
   general_io->state_.analogue_.resize(6);
   general_io->state_.digital_.resize(6);
