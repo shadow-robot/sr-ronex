@@ -40,7 +40,6 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 SrBoardMk2GIO::SrBoardMk2GIO() :
   EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
 {
-  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState>(node_, "state", 1));
 }
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -160,10 +159,13 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
 
   ROS_INFO_STREAM("Adding a GeneralIO RoNeX module to the hadware interface: " << device_name_);
 
+  //Using the name of the ronex to prefix the state topic
+  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState>(node_, "/" + device_name_ + "/state", 1));
+
   //reading the clock speed from the parameter server. Setting to 1MHz by default
   int tmp;
-  node_.param("pwm_clock_speed", tmp, 64);
-  general_io_->command_.pwm_clock_speed_ = static_cast<int16u>(tmp);
+  node_.param("pwm_clock_divider", tmp, 20);
+  general_io_->command_.pwm_clock_divider_ = static_cast<int16u>(tmp);
 
   hw->addCustomHW( general_io_.get() );
 
@@ -202,7 +204,7 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
     command->pwm_module[i].pwm_on_time_1 = general_io_->command_.pwm_[i].on_time_1;
   }
 
-  command->pwm_clock_speed = general_io_->command_.pwm_clock_speed_;
+  command->pwm_clock_divider = general_io_->command_.pwm_clock_divider_;
 }
 
 bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)

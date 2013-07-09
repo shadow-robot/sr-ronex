@@ -10,6 +10,7 @@
   <url>http://ros.org/wiki/sr_ronex_hardware_interface</url>
   <depend package="roscpp"/>
   <depend package="pr2_hardware_interface"/>
+  <depend package="sr_ronex_external_protocol"/>
   <export>
     <cpp cflags="-I${prefix}/include"/>
   </export>
