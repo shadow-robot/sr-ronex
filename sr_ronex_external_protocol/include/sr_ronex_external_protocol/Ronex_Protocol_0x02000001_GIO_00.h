@@ -36,21 +36,6 @@
 #define RONEX_02000001_FLAGS_STACKER_2_ERROR                  0x0400
 #define RONEX_02000001_FLAGS_STACKER_3_ERROR                  0x0800
 
-                                                                            //!< The divider for the PWM clock. By adjusting this divider, we have
-                                                                            //!  access to a much wider range of PWM frequencies, from 32MHz
-#define     RONEX_COMMAND_02000001_PWM_CLOCK_SPEED_64_MHZ       1           //!  right down to 1.9Hz. This feature was added so that people could
-#define     RONEX_COMMAND_02000001_PWM_CLOCK_SPEED_32_MHZ       2           //!  control RC servos, which require 50Hz control frequency.
-#define     RONEX_COMMAND_02000001_PWM_CLOCK_SPEED_16_MHZ       4           //!  For RC Servos, set Clock Speed = 2MHz, and PWM period to 39999.
-#define     RONEX_COMMAND_02000001_PWM_CLOCK_SPEED_08_MHZ       8           //!  This gives 20ms period.
-#define     RONEX_COMMAND_02000001_PWM_CLOCK_SPEED_04_MHZ      16
-#define     RONEX_COMMAND_02000001_PWM_CLOCK_SPEED_02_MHZ      32
-#define     RONEX_COMMAND_02000001_PWM_CLOCK_SPEED_01_MHZ      64
-
-#define     RONEX_COMMAND_02000001_PWM_CLOCK_SPEED_500_KHZ    128
-#define     RONEX_COMMAND_02000001_PWM_CLOCK_SPEED_250_KHZ    256
-#define     RONEX_COMMAND_02000001_PWM_CLOCK_SPEED_125_KHZ    512
-
-
                                                                                 // EtherCAT Protocol
                                                                                 // =================
 
