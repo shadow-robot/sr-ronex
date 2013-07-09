@@ -19,6 +19,7 @@
   <depend package="pluginlib" />
   <depend package="sr_ronex_external_protocol" />
   <depend package="sr_ronex_hardware_interface" />
+  <depend package="dynamic_reconfigure" />
 
   <rosdep name="tinyxml"/>
 
