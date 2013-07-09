@@ -18,6 +18,11 @@
       RoNeX bridge - Product ID is 0x02000000.
     </description>
   </class>
+  <class name="sr_ronex_ethercat_drivers/0" type="StandardEthercatDevice" base_class_type="EthercatDevice">
+    <description>
+      RoNeX bridge - Kept for compatibility reason. To be removed once we've fixed RoNeX bridge issue.
+    </description>
+  </class>
   <class name="sr_ronex_ethercat_drivers/7" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
       RoNeX bridge - duplicated for backward compatibility issues.
