@@ -236,8 +236,8 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     state_msg_.analogue.resize(nb_analogue_pub);
     state_msg_.digital.resize(nb_digital_io);
 
-    //dynamic reconfigure server is instantiated here 
-    // as we need the different vectors to be initialised 
+    //dynamic reconfigure server is instantiated here
+    // as we need the different vectors to be initialised
     // before running the first configuration.
     function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
     dynamic_reconfigure_server_.setCallback(function_cb_);
