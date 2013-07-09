@@ -1,0 +1,5 @@
+<launch>
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find sr_ronex_mechanism_model)/example/ronex.urdf'" />
+
+  <test test-name="test_ronex_transmission" pkg="sr_ronex_mechanism_model" type="test_ronex_transmission"/>
+</launch>

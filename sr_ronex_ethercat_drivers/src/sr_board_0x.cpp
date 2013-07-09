@@ -1,7 +1,6 @@
 /**
  * @file   sr_board_0x.cpp
  * @author Toni Oliver <toni@shadowrobot.com>
- * @date   Mon Jun 25 11:36:54 2012
  *
  * Copyright 2012 Shadow Robot Company Ltd.
  *
