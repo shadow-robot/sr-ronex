@@ -30,7 +30,7 @@
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_common_msgs/GeneralIOState.h>
 
-#include <sr_ronex_external_protocol/Ronex_Protocol_0x0000000C_GIO_00.h>
+#include <sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 
 #include <boost/ptr_container/ptr_vector.hpp>
