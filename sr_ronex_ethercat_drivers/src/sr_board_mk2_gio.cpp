@@ -42,10 +42,6 @@ SrBoardMk2GIO::SrBoardMk2GIO() :
 {
   //state topic
   state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState>(node_, "state", 1));
-
-  //dynamic reconfigure server
-  function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
-  dynamic_reconfigure_server_.setCallback(function_cb_);
 }
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -240,6 +236,11 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     state_msg_.analogue.resize(nb_analogue_pub);
     state_msg_.digital.resize(nb_digital_io);
 
+    //dynamic reconfigure server is instantiated here 
+    // as we need the different vectors to be initialised 
+    // before running the first configuration.
+    function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
+    dynamic_reconfigure_server_.setCallback(function_cb_);
   } //end first time, the sizes are properly initialised, simply fill in the data
 
   for(size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
@@ -298,8 +299,6 @@ void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, 
 
 void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_ethercat_drivers::GeneralIOConfig &config, uint32_t level)
 {
-  ROS_INFO_STREAM("Reconfiguring driver: " << config.pwm_clock_divider);
-
   general_io_->command_.pwm_clock_speed_ = static_cast<int16u>(config.pwm_clock_divider);
 
   if( general_io_->command_.pwm_.size() > 0 )
