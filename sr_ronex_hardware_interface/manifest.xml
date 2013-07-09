@@ -1,0 +1,19 @@
+<package>
+  <description brief="sr_ronex_hardware_interface">
+    This package contains the definition of the CustomHW to be
+    added to the pr2_hardware_interface CustomHWMap for the
+    RoNeX.
+  </description>
+  <author>Ugo Cupcic software@shadowrobot.com</author>
+  <license>GPL</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/sr_ronex_hardware_interface</url>
+  <depend package="roscpp"/>
+  <depend package="pr2_hardware_interface"/>
+  <depend package="sr_ronex_external_protocol"/>
+  <export>
+    <cpp cflags="-I${prefix}/include"/>
+  </export>
+</package>
+
+

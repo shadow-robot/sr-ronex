@@ -1,0 +1,15 @@
+<package>
+  <description brief="sr_ronex_external_protocol">
+     Contains the protocol to communicate between the driver and the ronex hardware.
+  </description>
+  <author>Ugo Cupcic</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/sr_ronex_external_protocol</url>
+
+  <export>
+    <cpp cflags="-I${prefix}/include"/>
+  </export>
+</package>
+
+
