@@ -91,7 +91,7 @@ typedef struct                                                              //!<
 {                                                                           //   --------------------------------
     int16u                          command_type;                         //!< Will be a copy of the value sent in the Command structure
     RONEX_COMMAND_02000001_PWM      pwm_module[NUM_PWM_MODULES];
-    int32u                          digital_out;                            //!< Bit 0: Direction of digital pin 0, 0=Output, 1=Input
+    uint32_t                        digital_out;                            //!< Bit 0: Direction of digital pin 0, 0=Output, 1=Input
                                                                             //!< Bit 1: Drive     of digital pin 0, 0=Low,    1=High
                                                                             //!< Bit 2: Direction of digital pin 1, 0=Output, 1=Input
                                                                             //!< Bit 3: Drive     of digital pin 1, 0=Low,    1=High
