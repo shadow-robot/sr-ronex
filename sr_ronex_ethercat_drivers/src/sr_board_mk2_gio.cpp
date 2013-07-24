@@ -72,11 +72,14 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   // This is for data going TO the board
   //
 
-  #if PROTOCOL_TYPE == EC_BUFFERED
+  if ( (PROTOCOL_TYPE) == (EC_BUFFERED) )
+  {
     ROS_INFO("Using EC_BUFFERED");
-  #elif PROTOCOL_TYPE == EC_QUEUED
+  }
+  else if ( (PROTOCOL_TYPE) == (EC_QUEUED) )
+  {
     ROS_INFO("Using EC_QUEUED");
-  #endif
+  }
 
   ROS_INFO("First FMMU (command) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", command_base_, command_size_,
            static_cast<int>(COMMAND_ADDRESS) );
