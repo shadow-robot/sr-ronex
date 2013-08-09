@@ -272,6 +272,8 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       state_msg_.digital[i] = general_io_->state_.digital_[i];
     }
 
+    state_msg_.pwm_clock_divider = general_io_->command_.pwm_clock_divider_;
+
     //publish
     if( state_publisher_->trylock() )
     {
