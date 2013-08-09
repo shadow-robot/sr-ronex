@@ -315,6 +315,8 @@ void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_ethercat_drivers::GeneralIOC
 {
   general_io_->command_.pwm_clock_divider_ = static_cast<int16u>(config.pwm_clock_divider);
 
+  input_mode_ = config.input_mode;
+
   if( general_io_->command_.pwm_.size() > 0 )
     general_io_->command_.pwm_[0].period = static_cast<int16u>(config.pwm_period_0);
   if( general_io_->command_.pwm_.size() > 1 )
