@@ -100,7 +100,7 @@ protected:
   sr_common_msgs::GeneralIOState state_msg_;
 
   ///Dynamic reconfigure server for setting the parameters of the driver
-  dynamic_reconfigure::Server<sr_ronex_ethercat_drivers::GeneralIOConfig> dynamic_reconfigure_server_;
+  boost::shared_ptr<dynamic_reconfigure::Server<sr_ronex_ethercat_drivers::GeneralIOConfig> > dynamic_reconfigure_server_;
 
   dynamic_reconfigure::Server<sr_ronex_ethercat_drivers::GeneralIOConfig>::CallbackType function_cb_;
 };
