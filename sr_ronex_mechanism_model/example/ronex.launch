@@ -9,5 +9,5 @@
 
   <node name="ronex_ctrl_spawner"
 	pkg="pr2_controller_manager" type="spawner" output="screen"
-	args="ronex_33554433_0_passthrough" />
+	args="ronex_33554433_0_passthrough ronex_33554433_1_passthrough" />
 </launch>
