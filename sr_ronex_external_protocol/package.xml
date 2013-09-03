@@ -1,0 +1,27 @@
+<package>
+  <name>sr_ronex_external_protocol</name>
+  <version>1.0.0</version>
+  <description>Contains the protocol to communicate between the driver and the ronex hardware.</description>
+  <maintainer email="">Ugo Cupcic</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://ros.org/wiki/sr_ronex_external_protocol</url>
+  <!-- <url type="bugtracker"></url> -->
+
+  <author>Ugo Cupcic</author>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+
+  <!-- Dependencies needed after this package is compiled. -->
+
+  <!-- Dependencies needed only for running tests. -->
+
+<export>
+    <cpp cflags="-I${prefix}/include"/>
+</export>
+
+</package>
