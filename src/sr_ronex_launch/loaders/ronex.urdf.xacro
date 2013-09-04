@@ -1,0 +1,31 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+       name="ronex">
+
+  <material name="Grey">
+    <color rgba="0.2 0.2 0.2 1.0"/>
+  </material>
+
+  <link name="ronex_box">
+    <inertial>
+      <mass value="0.010" />
+      <origin xyz="0 0 0" />
+      <inertia  ixx="0.1" ixy="0.0"  ixz="0.0"  iyy="0.1"  iyz="0.0" izz="0.0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry name="ronex_visual">
+        <box size="0.1 .08 .03"/>
+        <!-- mesh filename="package://sr_ronex_launch/loaders/ronex.dae" scale="0.001 0.001 0.001" /-->
+      </geometry>
+      <material name="Grey" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry name="ronex_collision_geom">
+        <box size="0.1 .08 .03"/>
+        <!-- mesh filename="package://sr_ronex_launch/loaders/ronex.dae" scale="0.001 0.001 0.001" /-->
+      </geometry>
+    </collision>
+  </link>
+
+</robot>

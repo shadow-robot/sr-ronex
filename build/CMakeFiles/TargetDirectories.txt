@@ -1,0 +1,6 @@
+/home/manos/Documents/shadow_workspaces/sr_ronex_ws/build/CMakeFiles/clean_test_results.dir
+/home/manos/Documents/shadow_workspaces/sr_ronex_ws/build/CMakeFiles/doxygen.dir
+/home/manos/Documents/shadow_workspaces/sr_ronex_ws/build/gtest/CMakeFiles/gtest.dir
+/home/manos/Documents/shadow_workspaces/sr_ronex_ws/build/gtest/CMakeFiles/gtest_main.dir
+/home/manos/Documents/shadow_workspaces/sr_ronex_ws/build/CMakeFiles/run_tests.dir
+/home/manos/Documents/shadow_workspaces/sr_ronex_ws/build/CMakeFiles/tests.dir
