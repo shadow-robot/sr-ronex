@@ -2,14 +2,14 @@
   <name>sr_ronex_launch</name>
   <version>1.0.0</version>
   <description>Contains the main launch files for the RoNeX system.</description>
-  <maintainer email="">Toni Oliver (software@shadowrobot.com)</maintainer>
+  <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
 
   <license>GPL</license>
 
   <url type="website">http://ros.org/wiki/sr_ronex_launch</url>
   <!-- <url type="bugtracker"></url> -->
 
-  <author>Toni Oliver (software@shadowrobot.com)</author>
+  <author>Toni Oliver</author>
 
   <!-- Dependencies which this package needs to build itself. -->
   <buildtool_depend>catkin</buildtool_depend>

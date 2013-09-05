@@ -2,7 +2,7 @@
   <name>sr_common_msgs</name>
   <version>1.0.0</version>
   <description>sr_common_msgs contains the messages for RoNeX.</description>
-  <maintainer email="">Toni Oliver</maintainer>
+  <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
 
   <license>GPL</license>
 
@@ -21,6 +21,7 @@
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>std_msgs</run_depend>
   <run_depend>sensor_msgs</run_depend>
+  <run_depend>message_runtime</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
   <!-- <test_depend>std_msgs</test_depend> -->
