@@ -29,10 +29,3 @@ link_directories(/opt/ros/hydro/lib)
 target_link_libraries(test_ronex_transmission tinyxml ${catkin_LIBRARIES} ${GTEST_LIBRARIES})
 add_dependencies(test_ronex_transmission pr2_mechanism_model tinyxml)
 
-#catkin_add_gtest(test_ronex_transmission test/test_ronex_transmission.cpp)
-#set_target_properties(test_ronex_transmission)
-
-#add_executable(test_ronex_transmission test/test_ronex_transmission.cpp)
-
-#add_dependencies(test_ronex_transmission ronex_mechanism_model pr2_mechanism_model roscpp rostest sr_ronex_hardware_interface tinyxml)
-#add_gtest(test_ronex_transmission test/test_ronex_transmission.test test/test_ronex_transmission.cpp)
