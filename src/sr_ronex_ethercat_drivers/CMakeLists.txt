@@ -7,7 +7,7 @@ project(sr_ronex_ethercat_drivers)
 # Load catkin and all dependencies required for this package
 find_package(catkin REQUIRED COMPONENTS std_msgs sr_common_msgs roscpp rostest diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure)
 
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS} )
 
 set(ROS_BUILD_TYPE Release)
 
@@ -25,6 +25,7 @@ add_library(
   sr_ronex_ethercat_drivers src/standard_ethercat_device.cpp src/sr_board_0x.cpp
   src/cod_decod/cod_decod_manager.cpp src/cod_decod/cod_decod.cpp src/cod_decod/cod_decod_std_io.cpp
   src/sr_board_mk2_gio.cpp)
+target_link_libraries(sr_ronex_ethercat_drivers ${catkin_LIBRARIES})
 
 add_dependencies(sr_ronex_ethercat_drivers sr_common_msgs_gencpp)
 
