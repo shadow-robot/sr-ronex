@@ -34,6 +34,8 @@ catkin_package(
     CATKIN_DEPENDS ${PROJECT_NAME}_gencfg pr2_msgs ethercat_hardware std_msgs sr_common_msgs pr2_hardware_interface eml roscpp rostest realtime_tools diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure tinyxml 
     INCLUDE_DIRS include
 )
+
+find_package( catkin REQUIRED COMPONENTS ethercat_hardware )
 add_rostest_gtest(test_ethercat_drivers test/test_ethercat_drivers.test test/test_ethercat_drivers.cpp)
-target_link_libraries(test_ethercat_drivers ${PROJECT_NAME} ${GTEST_LIBRARIES})
+target_link_libraries(test_ethercat_drivers sr_ronex_ethercat_drivers ${catkin_LIBRARIES} ${GTEST_LIBRARIES})
 

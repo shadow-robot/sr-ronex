@@ -36,7 +36,6 @@ TEST(RonexTransmission, constructor)
   ros::NodeHandle nh;
   std::string xml_string;
   ASSERT_TRUE( nh.getParam("robot_description", xml_string) );
-
   TiXmlDocument urdf_xml;
   urdf_xml.Parse(xml_string.c_str());
 
@@ -83,10 +82,12 @@ TEST(RonexTransmission, propagateCommand)
 
   pr2_mechanism_model::Robot model(&hw);
   ASSERT_TRUE(model.initXml(root));
+
   pr2_mechanism_model::RobotState state(&model);
 
   //setting effort for the joint
   state.joint_states_[0].commanded_effort_ = 5.1;
+
   general_io->command_.pwm_[1].period =  64000;  //setting period too
 
   state.propagateJointEffortToActuatorEffort();

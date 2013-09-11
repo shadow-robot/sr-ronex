@@ -25,7 +25,7 @@ catkin_package(
 )
 
 add_rostest_gtest(test_ronex_transmission test/test_ronex_transmission.test test/test_ronex_transmission.cpp)
-link_directories(/opt/ros/hydro/lib)
+find_package(catkin REQUIRED COMPONENTS roscpp rostest sr_ronex_hardware_interface pr2_mechanism_model)
 target_link_libraries(test_ronex_transmission tinyxml ${catkin_LIBRARIES} ${GTEST_LIBRARIES})
 add_dependencies(test_ronex_transmission pr2_mechanism_model tinyxml)
 
