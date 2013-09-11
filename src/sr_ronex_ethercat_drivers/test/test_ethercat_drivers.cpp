@@ -61,19 +61,16 @@ TEST(RonexUtils, set_bit)
 TEST(RonexUtils, build_name )
 {
   const EC_UDINT serial = 55662211;
-  EtherCAT_FMMU_Config *fmmu = new EtherCAT_FMMU_Config(0);
-  EtherCAT_PD_Config *pdcfg = new EtherCAT_PD_Config(0);
-  EtherCAT_SlaveHandler *sh = new EtherCAT_SlaveHandler( 0, 0, 0, serial, EC_FixedStationAddress( (EC_UINT) 0 ), fmmu, pdcfg, 0 );
+  boost::shared_ptr<EtherCAT_FMMU_Config> fmmu( new EtherCAT_FMMU_Config(0) );
+  boost::shared_ptr<EtherCAT_PD_Config> pdcfg( new EtherCAT_PD_Config(0) );
+  boost::shared_ptr<EtherCAT_SlaveHandler> sh( new EtherCAT_SlaveHandler( 0, 0, 0, serial,
+      EC_FixedStationAddress( (EC_UINT) 0 ), fmmu.get(), pdcfg.get(), 0 ) );
 
   ostringstream ostr;
   ostr << "ronex_0_" << serial;
-  string result = build_name(sh);
+  string result = build_name(sh.get());
 
   ASSERT_STREQ( result.c_str(), ostr.str().c_str() );
-
-  delete fmmu;
-  delete pdcfg;
-  delete sh;
 }
 
 int main(int argc, char **argv)
