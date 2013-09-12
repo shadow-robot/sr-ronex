@@ -37,6 +37,6 @@ catkin_package(
 
 link_directories(/opt/ros/hydro/lib)
 add_rostest_gtest( test_ethercat_drivers test/test_ethercat_drivers.test test/test_ethercat_drivers.cpp )
-target_link_libraries( test_ethercat_drivers eml rt ${catkin_LIBRARIES} ${GTEST_LIBRARIES} )
+target_link_libraries( test_ethercat_drivers sr_ronex_ethercat_drivers ethercat_hardware eml rt ${catkin_LIBRARIES} ${GTEST_LIBRARIES} )
 add_dependencies( test_ethercat_drivers pr2_ethercat_drivers eml ethercat_hardware )
 

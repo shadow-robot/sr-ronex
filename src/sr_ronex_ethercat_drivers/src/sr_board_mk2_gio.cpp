@@ -61,7 +61,6 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   command_size_  = COMMAND_ARRAY_SIZE_BYTES;
 
   start_address += command_size_;
-
   status_base_   = start_address;
   status_size_   = STATUS_ARRAY_SIZE_BYTES;
 
@@ -83,15 +82,15 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
   ROS_INFO("First FMMU (command) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", command_base_, command_size_,
            static_cast<int>(COMMAND_ADDRESS) );
-  EC_FMMU *commandFMMU = new EC_FMMU( command_base_,                                                  // Logical Start Address    (in ROS address space?)
+  EC_FMMU *commandFMMU = new EC_FMMU( command_base_,            // Logical Start Address    (in ROS address space?)
                                       command_size_,
-                                      0x00,                                                           // Logical Start Bit
-                                      0x07,                                                           // Logical End Bit
-                                      COMMAND_ADDRESS,                                  // Physical Start Address   (in ET1200 address space?)
-                                      0x00,                                                           // Physical Start Bit
-                                      false,                                                          // Read Enable
-                                      true,                                                           // Write Enable
-                                      true                                                            // Channel Enable
+                                      0x00,                   // Logical Start Bit
+                                      0x07,                   // Logical End Bit
+                                      COMMAND_ADDRESS,        // Physical Start Address   (in ET1200 address space?)
+                                      0x00,                   // Physical Start Bit
+                                      false,                   // Read Enable
+                                      true,                    // Write Enable
+                                      true                     // Channel Enable
     );
 
 
@@ -160,7 +159,7 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
   general_io_.reset( new ronex::GeneralIO() );
   general_io_->name_ = device_name_;
 
-  ROS_INFO_STREAM("Adding a GeneralIO RoNeX module to the hadware interface: " << device_name_);
+  ROS_INFO_STREAM("Adding a general_io RoNeX module to the hardware interface: " << device_name_);
   //Using the name of the ronex to prefix the state topic
   state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState>(node_, "/" + device_name_ + "/state", 1));
 
