@@ -2,20 +2,14 @@
  * @file   cod_decod_std_io.hpp
  * @author Toni Oliver <toni@shadowrobot.com>
  *
-* Copyright 2011 Shadow Robot Company Ltd.
+* Copyright 2013 Shadow Robot Company Ltd.
 *
-* This program is free software: you can redistribute it and/or modify it
-* under the terms of the GNU General Public License as published by the Free
-* Software Foundation, either version 2 of the License, or (at your option)
-* any later version.
+* This program is Proprietary software: you cannot redistribute it or modify it
 *
 * This program is distributed in the hope that it will be useful, but WITHOUT
 * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-* more details.
+* FITNESS FOR A PARTICULAR PURPOSE.
 *
-* You should have received a copy of the GNU General Public License along
-* with this program.  If not, see <http://www.gnu.org/licenses/>.
 *
  * @brief This is an intermediate CodDecod class for any ethercat slave device that only has digital and analog (16bit) inputs and outputs.
  * It decodes and encodes the status and commands, publishes the inputs of the device to a topic

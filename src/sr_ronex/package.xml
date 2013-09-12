@@ -5,7 +5,6 @@
   <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
 
   <license>Proprietary</license>
-  <license>Proprietary</license>
 
   <url type="website">http://ros.org/wiki/sr_ronex</url>
   <!-- <url type="bugtracker"></url> -->
@@ -28,11 +27,4 @@
   <run_depend>sr_ronex_external_protocol</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
-
-
-
-
-
-
-
 </package>
