@@ -1,3 +1,7 @@
 ronex_33554433_0_passthrough:
   type: sr_ronex_controllers/GeneralIOPassthroughController
   ronex: ronex_33554433_0
+
+ronex_33554433_1_passthrough:
+  type: sr_ronex_controllers/GeneralIOPassthroughController
+  ronex: ronex_33554433_1
