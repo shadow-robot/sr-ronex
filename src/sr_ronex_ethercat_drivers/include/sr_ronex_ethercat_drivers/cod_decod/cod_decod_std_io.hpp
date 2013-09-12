@@ -210,11 +210,11 @@ namespace sr_cod_decod
   protected:
     //This will be used for the moment. If we have inputs and outputs that don't fit this digital and analog i/o array model
     //then we'll have to change it and probably move this extract and publish stage to the different CodDecod children classes.
-    int n_digital_outputs_;
-    int n_analog_outputs_;
-    int n_digital_inputs_;
-    int n_analog_inputs_;
-    int n_PWM_outputs_;
+    unsigned n_digital_outputs_;
+    unsigned n_analog_outputs_;
+    unsigned n_digital_inputs_;
+    unsigned n_analog_inputs_;
+    unsigned n_PWM_outputs_;
 
     unsigned int command_size_;
     unsigned int status_size_;

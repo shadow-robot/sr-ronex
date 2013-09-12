@@ -38,6 +38,7 @@
 #define TYPEDEFS_SHADOW_H_INCLUDED
 
 #include <limits.h>
+#include <stdint.h>
 
 /*
 typedef enum _BOOL { FALSE = 0, TRUE } BOOL;  // Undefined size
@@ -56,14 +57,14 @@ typedef enum _BOOL { FALSE = 0, TRUE } BOOL;  // Undefined size
 // To Do:  We need to verify the sizes on each compiler.  These
 //         may be compiler specific, we should either move them
 //         to "compiler.h" or #ifdef them for compiler type.
-typedef signed char         int8s;
-typedef signed short int    int16s;
-typedef signed long int     int32s;
+typedef int8_t    int8s;
+typedef int16_t   int16s;
+typedef int32_t   int32s;
 //typedef signed long long    int64s;
 
-typedef unsigned char       int8u;
-typedef unsigned short int  int16u;
-typedef unsigned long int   int32u;  // other name for 32-bit integer
+typedef uint8_t   int8u;
+typedef uint16_t  int16u;
+typedef uint32_t  int32u;  // other name for 32-bit integer
 //typedef unsigned long long  int64u;
 
 

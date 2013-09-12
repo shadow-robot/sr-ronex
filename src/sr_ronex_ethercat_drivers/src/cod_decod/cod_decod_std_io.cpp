@@ -33,15 +33,15 @@ namespace sr_cod_decod
 {
   CodDecodStdIo::CodDecodStdIo()
     :CodDecod(),
-     digital_input_state_publisher_(NULL),
-     analog_input_state_publisher_(NULL),
      n_digital_outputs_(0),
      n_analog_outputs_(0),
      n_digital_inputs_(0),
      n_analog_inputs_(0),
      n_PWM_outputs_(0),
      command_size_(0),
-     status_size_(0)
+     status_size_(0),
+     digital_input_state_publisher_(NULL),
+     analog_input_state_publisher_(NULL)
   {
   }
 
@@ -71,7 +71,7 @@ namespace sr_cod_decod
     //Initialise digital outputs to 0
     boost::shared_ptr<sr_common_msgs::BoolArray> d_out_ptr(new sr_common_msgs::BoolArray());
     d_out_ptr->data.clear();
-    for (int i = 0; i < n_digital_outputs_; ++i)
+    for (unsigned i = 0; i < n_digital_outputs_; ++i)
     {
       d_out_ptr->data.push_back(false);
     }
@@ -80,7 +80,7 @@ namespace sr_cod_decod
     //Initialise analog outputs to 0
     boost::shared_ptr<std_msgs::UInt16MultiArray> a_out_ptr(new std_msgs::UInt16MultiArray());
     a_out_ptr->data.clear();
-    for (int i = 0; i < n_analog_outputs_; ++i)
+    for (unsigned i = 0; i < n_analog_outputs_; ++i)
     {
       a_out_ptr->data.push_back(0x0000);
     }
@@ -89,7 +89,7 @@ namespace sr_cod_decod
     //Initialise PWM outputs to 0
     boost::shared_ptr<std_msgs::UInt16MultiArray> PWM_out_ptr(new std_msgs::UInt16MultiArray());
     PWM_out_ptr->data.clear();
-    for (int i = 0; i < (n_PWM_outputs_ * 2); ++i)
+    for (unsigned i = 0; i < (n_PWM_outputs_ * 2); ++i)
     {
       PWM_out_ptr->data.push_back(0x0000);
     }
@@ -154,7 +154,7 @@ namespace sr_cod_decod
     d_in_.data.clear();
 
     //Read the digital inputs from the incoming buffer
-    for (int i = 0; i < n_digital_inputs_; i++)
+    for (unsigned i = 0; i < n_digital_inputs_; i++)
     {
       if(buff_ptr[0] & (0x01 << (i % 8)))         d_in_.data.push_back(true);
       else                                        d_in_.data.push_back(false);
@@ -176,7 +176,7 @@ namespace sr_cod_decod
     a_in_.data.clear();
 
     //Read the analog inputs from the incoming buffer
-    for (int i = 0; i < n_analog_inputs_; i++)
+    for (unsigned i = 0; i < n_analog_inputs_; i++)
     {
       a_in_.data.push_back(*((uint16_t *)buff_ptr));
 
@@ -221,7 +221,7 @@ namespace sr_cod_decod
     }
 
     //then we write the actual values (only the digital ones now) to the buffer
-    for (int i = 0; i < d_out_ptr->data.size(); i++)
+    for (size_t i = 0; i < d_out_ptr->data.size(); i++)
     {
       if (d_out_ptr->data.at(i)) (*((uint8_t *)buff_ptr)) |= (0x01 << (i % 8));
 
@@ -237,7 +237,7 @@ namespace sr_cod_decod
     PWM_output_.get(PWM_out_ptr);
 
     //we write the actual values to the buffer
-    for (int i = 0; i < PWM_out_ptr->data.size(); i++)
+    for (size_t i = 0; i < PWM_out_ptr->data.size(); i++)
     {
       *((uint16_t *)buff_ptr) = PWM_out_ptr->data.at(i);
       buff_ptr += 2;
@@ -252,7 +252,7 @@ namespace sr_cod_decod
     analog_output_.get(a_out_ptr);
 
     //we write the actual values to the buffer
-    for (int i = 0; i < a_out_ptr->data.size(); i++)
+    for (size_t i = 0; i < a_out_ptr->data.size(); i++)
     {
       *((uint16_t *)buff_ptr) = a_out_ptr->data.at(i);
       buff_ptr += 2;
