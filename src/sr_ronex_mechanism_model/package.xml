@@ -4,7 +4,7 @@
   <description>Contains the transmissions that can be used with the RoNeX driver. Using those transmissions makes it possible for the user to remap from the RoNeX to a joint based robot.</description>
   <maintainer email="software@shadowrobot.com">Ugo Cupcic </maintainer>
 
-  <license>GPL</license>
+  <license>Proprietary</license>
 
   <url type="website">http://ros.org/wiki/sr_ronex_mechanism_model</url>
   <!-- <url type="bugtracker"></url> -->

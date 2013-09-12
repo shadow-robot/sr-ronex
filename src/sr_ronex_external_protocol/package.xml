@@ -4,7 +4,7 @@
   <description>Contains the protocol to communicate between the driver and the ronex hardware.</description>
   <maintainer email="software@shadowrobot.com">Ugo Cupcic</maintainer>
 
-  <license>BSD</license>
+  <license>Proprietary</license>
 
   <url type="website">http://ros.org/wiki/sr_ronex_external_protocol</url>
   <!-- <url type="bugtracker"></url> -->

@@ -4,7 +4,7 @@
   <description>sr_common_msgs contains the messages for RoNeX.</description>
   <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
 
-  <license>GPL</license>
+  <license>Proprietary</license>
 
   <url type="website">http://ros.org/wiki/sr_common_msgs</url>
   <!-- <url type="bugtracker"></url> -->

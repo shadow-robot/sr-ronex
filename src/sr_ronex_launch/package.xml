@@ -4,7 +4,7 @@
   <description>Contains the main launch files for the RoNeX system.</description>
   <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
 
-  <license>GPL</license>
+  <license>Proprietary</license>
 
   <url type="website">http://ros.org/wiki/sr_ronex_launch</url>
   <!-- <url type="bugtracker"></url> -->

@@ -4,7 +4,7 @@
   <description>Package containing the driver for the RoNeX boards, and the CodDecod modules to map the inputs and outputs from every board to ROS topics and (optionally) to the HardwareInterface class.</description>
   <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
 
-  <license>BSD</license>
+  <license>Proprietary</license>
 
   <url type="website">http://ros.org/wiki/sr_ronex_ethercat_drivers</url>
   <!-- <url type="bugtracker"></url> -->

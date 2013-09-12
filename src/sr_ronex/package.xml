@@ -4,8 +4,8 @@
   <description>This stack contains the different packages related to the RoNeX (Robot Nervous System).</description>
   <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
 
-  <license>GPL</license>
-  <license>BSD</license>
+  <license>Proprietary</license>
+  <license>Proprietary</license>
 
   <url type="website">http://ros.org/wiki/sr_ronex</url>
   <!-- <url type="bugtracker"></url> -->
