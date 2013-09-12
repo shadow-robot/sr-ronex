@@ -1,0 +1,30 @@
+<package>
+  <name>sr_common_msgs</name>
+  <version>1.0.0</version>
+  <description>sr_common_msgs contains the messages for RoNeX.</description>
+  <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
+
+  <license>GPL</license>
+
+  <url type="website">http://ros.org/wiki/sr_common_msgs</url>
+  <!-- <url type="bugtracker"></url> -->
+
+  <author>Toni Oliver</author>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+  <build_depend>std_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+
+  <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>std_msgs</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>message_runtime</run_depend>
+
+  <!-- Dependencies needed only for running tests. -->
+  <!-- <test_depend>std_msgs</test_depend> -->
+  <!-- <test_depend>sensor_msgs</test_depend> -->
+
+</package>
