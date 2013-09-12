@@ -250,8 +250,9 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     //dynamic reconfigure server is instantiated here
     // as we need the different vectors to be initialised
     // before running the first configuration.
+    dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_ethercat_drivers::GeneralIOConfig>(ros::NodeHandle(device_name_)));
     function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
-    dynamic_reconfigure_server_.setCallback(function_cb_);
+    dynamic_reconfigure_server_->setCallback(function_cb_);
   } //end first time, the sizes are properly initialised, simply fill in the data
 
   for(size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
