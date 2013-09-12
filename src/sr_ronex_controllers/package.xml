@@ -1,0 +1,55 @@
+<package>
+  <name>sr_ronex_controllers</name>
+  <version>1.0.0</version>
+  <description>Contains different useful controllers to use with the RoNeX.</description>
+  <maintainer email="software@shadowrobot.com">Ugo Cupcic</maintainer>
+
+  <license>Proprietary</license>
+
+  <url type="website">http://ros.org/wiki/sr_ronex_controllers</url>
+  <!-- <url type="bugtracker"></url> -->
+
+  <author>Ugo Cupcic</author>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>sr_common_msgs</build_depend>
+  <build_depend>sr_ronex_hardware_interface</build_depend>
+  <build_depend>pr2_mechanism_controllers</build_depend>
+  <build_depend>pr2_controller_interface</build_depend>
+  <build_depend>pr2_mechanism_model</build_depend>
+  <build_depend>pluginlib</build_depend>
+
+  <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>roscpp</run_depend>
+  <run_depend>std_msgs</run_depend>
+  <run_depend>std_srvs</run_depend>
+  <run_depend>sr_common_msgs</run_depend>
+  <run_depend>sr_ronex_hardware_interface</run_depend>
+  <run_depend>pr2_mechanism_controllers</run_depend>
+  <run_depend>pr2_controller_interface</run_depend>
+  <run_depend>pr2_mechanism_model</run_depend>
+  <run_depend>pluginlib</run_depend>
+
+  <!-- Dependencies needed only for running tests. -->
+  <!-- <test_depend>roscpp</test_depend> -->
+  <!-- <test_depend>std_msgs</test_depend> -->
+  <!-- <test_depend>std_srvs</test_depend> -->
+  <!-- <test_depend>sr_common_msgs</test_depend> -->
+  <!-- <test_depend>sr_ronex_hardware_interface</test_depend> -->
+  <!-- <test_depend>pr2_mechanism_controllers</test_depend> -->
+  <!-- <test_depend>pr2_controller_interface</test_depend> -->
+  <!-- <test_depend>pr2_mechanism_model</test_depend> -->
+  <!-- <test_depend>pluginlib</test_depend> -->
+
+<export>
+    <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -llibronex_controllers" cflags="-I${prefix}/include"/>
+    <pr2_controller_interface plugin="${prefix}/controller_plugins.xml"/>
+</export>
+
+</package>
