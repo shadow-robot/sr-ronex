@@ -17,16 +17,13 @@
 //  | It is distributed in the hope that it will be useful,                  |
 //  | but WITHOUT ANY WARRANTY; without even the implied warranty of         |
 //  | MERCHANTABILITY or
-* This program is Proprietary software: you cannot redistribute it or modify it  See the          |
-//  | GNU General Public License for more details.                           |
-//  |                                                                        |
-//  | You should have received a copy of the GNU General Public License      |
-//  | along with this code repository. The text of the license can be found  |
-//  | in Pic32/License/gpl.txt. If not, see <http://www.gnu.org/licenses/>.  |
-//  +------------------------------------------------------------------------+
-//
-//
-//
+/* Copyright 2013 Shadow Robot Company Ltd.
+*
+* This program is Proprietary software: you cannot redistribute it or modify it
+*
+* This program is distributed in the hope that it will be useful, but WITHOUT
+* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+* FITNESS FOR A PARTICULAR PURPOSE.*/
 //
 //  Doxygen
 //  -------
