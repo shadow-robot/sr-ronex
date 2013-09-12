@@ -4,3 +4,5 @@ Header header
 # a stacker board is attached to the RoNeX or not.
 bool[] digital
 uint16[] analogue
+uint16 pwm_clock_divider
+bool input_mode

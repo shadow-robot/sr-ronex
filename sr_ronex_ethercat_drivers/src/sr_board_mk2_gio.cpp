@@ -38,7 +38,7 @@
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
+  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false), input_mode_(false)
 {
 }
 
@@ -187,8 +187,16 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
   //digital command
   for (size_t i = 0; i < general_io_->command_.digital_.size(); ++i)
   {
-    ronex::set_bit(digital_commands_, i*2, 0);
-    ronex::set_bit(digital_commands_, i*2+1, general_io_->command_.digital_[i]);
+    if (input_mode_)
+    {
+      // Just set the pin to input mode, gets read in the status
+      ronex::set_bit(digital_commands_, i*2, 1);
+    }
+    else
+    { // Output
+      ronex::set_bit(digital_commands_, i*2, 0);
+      ronex::set_bit(digital_commands_, i*2+1, general_io_->command_.digital_[i]);
+    }
   }
 
   command->digital_out = static_cast<int32u>(digital_commands_);
@@ -272,6 +280,9 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       state_msg_.digital[i] = general_io_->state_.digital_[i];
     }
 
+    state_msg_.pwm_clock_divider = general_io_->command_.pwm_clock_divider_;
+    state_msg_.input_mode = input_mode_;
+
     //publish
     if( state_publisher_->trylock() )
     {
@@ -303,6 +314,8 @@ void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, 
 void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_ethercat_drivers::GeneralIOConfig &config, uint32_t level)
 {
   general_io_->command_.pwm_clock_divider_ = static_cast<int16u>(config.pwm_clock_divider);
+
+  input_mode_ = config.input_mode;
 
   if( general_io_->command_.pwm_.size() > 0 )
     general_io_->command_.pwm_[0].period = static_cast<int16u>(config.pwm_period_0);
