@@ -2,7 +2,7 @@
   <name>sr_ronex</name>
   <version>1.0.0</version>
   <description>This stack contains the different packages related to the RoNeX (Robot Nervous System).</description>
-  <maintainer email="software@shadowrobot.com">Ugo Cupcic</maintainer>
+  <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
   <license>Proprietary</license>
 
