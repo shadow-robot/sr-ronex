@@ -4,7 +4,7 @@
 
   <!-- Loads the robot description -->
   <include file="$(find sr_ronex_launch)/launch/sr_ronex_no_controllers.launch">  
-    <arg name="eth_port"/>
+    <arg name="eth_port_passed" value="$(arg eth_port)"/>
   </include>
 
   <!-- loads the controllers param -->
