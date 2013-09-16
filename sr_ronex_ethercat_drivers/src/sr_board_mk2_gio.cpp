@@ -155,7 +155,7 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
 
   ROS_INFO_STREAM("Adding a general_io RoNeX module to the hardware interface: " << device_name_);
   //Using the name of the ronex to prefix the state topic
-  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState>(node_, "/" + device_name_ + "/state", 1));
+  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState>(node_, "/" + device_name_ + "/state", 1));
 
   hw->addCustomHW( general_io_.get() );
 

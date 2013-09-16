@@ -1,12 +1,12 @@
 <package>
-  <name>sr_common_msgs</name>
+  <name>sr_ronex_msgs</name>
   <version>1.0.0</version>
-  <description>sr_common_msgs contains the messages for RoNeX.</description>
+  <description>sr_ronex_msgs contains the messages for RoNeX.</description>
   <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
 
   <license>Proprietary</license>
 
-  <url type="website">http://ros.org/wiki/sr_common_msgs</url>
+  <url type="website">http://ros.org/wiki/sr_ronex_msgs</url>
   <!-- <url type="bugtracker"></url> -->
 
   <author>Toni Oliver</author>

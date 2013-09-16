@@ -2,7 +2,7 @@
 \mainpage
 \htmlinclude manifest.html
 
-\b sr_common_msgs contains the messages used for RoNeX.
+\b sr_ronex_msgs contains the messages used for RoNeX.
 
 <!--
 Provide an overview of your package.

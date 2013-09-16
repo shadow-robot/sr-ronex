@@ -62,7 +62,7 @@ namespace sr_cod_decod
     node_ = ros::NodeHandle();
 
     //Initialise digital outputs to 0
-    boost::shared_ptr<sr_common_msgs::BoolArray> d_out_ptr(new sr_common_msgs::BoolArray());
+    boost::shared_ptr<sr_ronex_msgs::BoolArray> d_out_ptr(new sr_ronex_msgs::BoolArray());
     d_out_ptr->data.clear();
     for (unsigned i = 0; i < n_digital_outputs_; ++i)
     {
@@ -96,7 +96,7 @@ namespace sr_cod_decod
             sh_->get_product_code(),
             sh_->get_serial());
     topic = buff;
-    sub_digital_output_command_ = node_.subscribe<sr_common_msgs::BoolArray>(topic, 1, &CodDecodStdIo::digitalOutputCommandCB, this);
+    sub_digital_output_command_ = node_.subscribe<sr_ronex_msgs::BoolArray>(topic, 1, &CodDecodStdIo::digitalOutputCommandCB, this);
 
 
     sprintf(buff, "device_0x%08X_0x%08X_analog_outputs_command",
@@ -116,7 +116,7 @@ namespace sr_cod_decod
             sh_->get_product_code(),
             sh_->get_serial());
     topic = buff;
-    digital_input_state_publisher_ = new realtime_tools::RealtimePublisher<sr_common_msgs::BoolArray>(node_, topic, 1);
+    digital_input_state_publisher_ = new realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray>(node_, topic, 1);
 
 
     sprintf(buff, "device_0x%08X_0x%08X_analog_inputs_state",
@@ -204,7 +204,7 @@ namespace sr_cod_decod
     buff_ptr = command_buffer;
 
     //Read the digital outputs from the digital_output_ realtime box and write them on the output buffer
-    boost::shared_ptr<const sr_common_msgs::BoolArray> d_out_ptr;
+    boost::shared_ptr<const sr_ronex_msgs::BoolArray> d_out_ptr;
     digital_output_.get(d_out_ptr);
 
     //first we set all the digital output bytes in the buffer to zero
@@ -269,11 +269,11 @@ namespace sr_cod_decod
 
   }
 
-  void CodDecodStdIo::digitalOutputCommandCB(const sr_common_msgs::BoolArrayConstPtr& msg)
+  void CodDecodStdIo::digitalOutputCommandCB(const sr_ronex_msgs::BoolArrayConstPtr& msg)
   {
     if(msg->data.size() == n_digital_outputs_)
     {
-      boost::shared_ptr<sr_common_msgs::BoolArray> d_out_ptr(new sr_common_msgs::BoolArray());
+      boost::shared_ptr<sr_ronex_msgs::BoolArray> d_out_ptr(new sr_ronex_msgs::BoolArray());
       d_out_ptr->data.clear();
       for (unsigned int i = 0; i < n_digital_outputs_; ++i)
       {
@@ -357,8 +357,8 @@ namespace sr_cod_decod
   void CodDecodStdIo::setPinAsDigitalInput(sr_cod_decod_std_io::DigitalIo pin)
   {
     //Read the digital outputs from the digital_output_ realtime box and set the right values to the digital_output_ realtime box again
-    boost::shared_ptr<sr_common_msgs::BoolArray> d_out_ptr(new sr_common_msgs::BoolArray());
-    boost::shared_ptr<const sr_common_msgs::BoolArray> current_d_out_ptr;
+    boost::shared_ptr<sr_ronex_msgs::BoolArray> d_out_ptr(new sr_ronex_msgs::BoolArray());
+    boost::shared_ptr<const sr_ronex_msgs::BoolArray> current_d_out_ptr;
     digital_output_.get(current_d_out_ptr);
     d_out_ptr->data = current_d_out_ptr->data;
     //set the pin as digital input
@@ -422,8 +422,8 @@ namespace sr_cod_decod
   void CodDecodStdIo::boolToDigitalOutput(sr_cod_decod_std_io::DigitalIo output_pin, bool value)
   {
     //Read the digital outputs from the digital_output_ realtime box and set the right values to the digital_output_ realtime box again
-    boost::shared_ptr<sr_common_msgs::BoolArray> d_out_ptr(new sr_common_msgs::BoolArray());
-    boost::shared_ptr<const sr_common_msgs::BoolArray> current_d_out_ptr;
+    boost::shared_ptr<sr_ronex_msgs::BoolArray> d_out_ptr(new sr_ronex_msgs::BoolArray());
+    boost::shared_ptr<const sr_ronex_msgs::BoolArray> current_d_out_ptr;
     digital_output_.get(current_d_out_ptr);
     d_out_ptr->data = current_d_out_ptr->data;
     //set the pin as digital output

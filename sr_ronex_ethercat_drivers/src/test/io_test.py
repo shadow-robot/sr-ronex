@@ -14,7 +14,7 @@ import rospy
 import sys, getopt
 
 from threading import Lock
-from sr_common_msgs.msg import BoolArray
+from sr_ronex_msgs.msg import BoolArray
 from std_msgs.msg import UInt16MultiArray
 
 PRODUCT_CODE = "0x05300424"

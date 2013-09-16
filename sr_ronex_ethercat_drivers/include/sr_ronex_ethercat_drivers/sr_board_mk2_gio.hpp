@@ -22,7 +22,7 @@
 
 #include <ethercat_hardware/ethercat_device.h>
 #include <realtime_tools/realtime_publisher.h>
-#include <sr_common_msgs/GeneralIOState.h>
+#include <sr_ronex_msgs/GeneralIOState.h>
 
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
@@ -89,9 +89,9 @@ protected:
   void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
 
   ///publisher for the data.
-  boost::shared_ptr<realtime_tools::RealtimePublisher<sr_common_msgs::GeneralIOState> > state_publisher_;
+  boost::shared_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState> > state_publisher_;
   ///Temporary message
-  sr_common_msgs::GeneralIOState state_msg_;
+  sr_ronex_msgs::GeneralIOState state_msg_;
 
   ///Dynamic reconfigure server for setting the parameters of the driver
   boost::shared_ptr<dynamic_reconfigure::Server<sr_ronex_ethercat_drivers::GeneralIOConfig> > dynamic_reconfigure_server_;

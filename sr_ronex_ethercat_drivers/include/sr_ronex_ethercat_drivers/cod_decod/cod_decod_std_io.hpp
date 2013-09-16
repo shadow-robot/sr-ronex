@@ -23,7 +23,7 @@
 #define _COD_DECOD_STD_IO_HPP_
 
 #include "sr_ronex_ethercat_drivers/cod_decod/cod_decod.hpp"
-#include <sr_common_msgs/BoolArray.h>
+#include <sr_ronex_msgs/BoolArray.h>
 #include <std_msgs/UInt16MultiArray.h>
 #include "realtime_tools/realtime_box.h"
 #include "realtime_tools/realtime_publisher.h"
@@ -213,19 +213,19 @@ namespace sr_cod_decod
     unsigned int command_size_;
     unsigned int status_size_;
 
-    void digitalOutputCommandCB(const sr_common_msgs::BoolArrayConstPtr& msg);
+    void digitalOutputCommandCB(const sr_ronex_msgs::BoolArrayConstPtr& msg);
     void analogOutputCommandCB(const std_msgs::UInt16MultiArrayConstPtr& msg);
     void PWMOutputCommandCB(const std_msgs::UInt16MultiArrayConstPtr& msg);
 
 
-    realtime_tools::RealtimePublisher<sr_common_msgs::BoolArray> *digital_input_state_publisher_;
+    realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray> *digital_input_state_publisher_;
     realtime_tools::RealtimePublisher<std_msgs::UInt16MultiArray> *analog_input_state_publisher_;
 
-    realtime_tools::RealtimeBox<boost::shared_ptr<const sr_common_msgs::BoolArray> > digital_output_;
+    realtime_tools::RealtimeBox<boost::shared_ptr<const sr_ronex_msgs::BoolArray> > digital_output_;
     realtime_tools::RealtimeBox<boost::shared_ptr<const std_msgs::UInt16MultiArray> > analog_output_;
     realtime_tools::RealtimeBox<boost::shared_ptr<const std_msgs::UInt16MultiArray> > PWM_output_;
 
-    sr_common_msgs::BoolArray d_in_;
+    sr_ronex_msgs::BoolArray d_in_;
     std_msgs::UInt16MultiArray a_in_;
 
     ros::Subscriber sub_digital_output_command_;
