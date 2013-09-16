@@ -2,7 +2,7 @@
 # Catkin CMake Standard: http://www.ros.org/doc/groovy/api/catkin/html/user_guide/standards.html
 
 cmake_minimum_required(VERSION 2.8.3)
-project(sr_ronex_mechanism_model)
+project(sr_ronex_transmissions)
 
 # Load catkin and all dependencies required for this package
 find_package(catkin REQUIRED COMPONENTS roscpp rostest sr_ronex_hardware_interface pr2_mechanism_model)

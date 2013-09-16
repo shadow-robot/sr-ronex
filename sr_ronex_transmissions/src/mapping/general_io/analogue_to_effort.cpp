@@ -15,7 +15,7 @@
  *
  */
 
-#include "sr_ronex_mechanism_model/mapping/general_io/analogue_to_effort.hpp"
+#include "sr_ronex_transmissions/mapping/general_io/analogue_to_effort.hpp"
 #include <pr2_mechanism_model/robot.h>
 #include <boost/lexical_cast.hpp>
 

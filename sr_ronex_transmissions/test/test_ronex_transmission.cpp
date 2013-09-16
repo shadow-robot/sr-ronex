@@ -16,7 +16,7 @@
  *
  */
 
-#include "sr_ronex_mechanism_model/ronex_transmission.hpp"
+#include "sr_ronex_transmissions/ronex_transmission.hpp"
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <ros/ros.h>
 #include <pr2_mechanism_model/robot.h>

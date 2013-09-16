@@ -16,7 +16,7 @@
  *
  */
 
-#include "sr_ronex_mechanism_model/mapping/general_io/command_to_pwm.hpp"
+#include "sr_ronex_transmissions/mapping/general_io/command_to_pwm.hpp"
 #include <pr2_mechanism_model/robot.h>
 #include <boost/lexical_cast.hpp>
 #include <math.h>

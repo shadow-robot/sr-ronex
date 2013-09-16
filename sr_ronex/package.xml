@@ -22,7 +22,7 @@
 
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>sr_ronex_launch</run_depend>
-  <run_depend>sr_ronex_mechanism_model</run_depend>
+  <run_depend>sr_ronex_transmissions</run_depend>
   <run_depend>sr_ronex_msgs</run_depend>
   <run_depend>sr_ronex_controllers</run_depend>
   <run_depend>sr_ronex_drivers</run_depend>

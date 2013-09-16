@@ -1,12 +1,12 @@
 <package>
-  <name>sr_ronex_mechanism_model</name>
+  <name>sr_ronex_transmissions</name>
   <version>1.0.0</version>
   <description>Contains the transmissions that can be used with the RoNeX driver. Using those transmissions makes it possible for the user to remap from the RoNeX to a joint based robot.</description>
   <maintainer email="software@shadowrobot.com">Ugo Cupcic </maintainer>
 
   <license>Proprietary</license>
 
-  <url type="website">http://ros.org/wiki/sr_ronex_mechanism_model</url>
+  <url type="website">http://ros.org/wiki/sr_ronex_transmissions</url>
   <!-- <url type="bugtracker"></url> -->
 
   <author email="software@shadowrobot.com">Ugo Cupcic </author>

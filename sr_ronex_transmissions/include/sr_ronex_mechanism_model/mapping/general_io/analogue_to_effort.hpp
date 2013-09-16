@@ -19,7 +19,7 @@
 #define SR_RONEX_GENERAL_IO_EFFORT_MAPPING_H_
 
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
-#include "sr_ronex_mechanism_model/mapping/general_io/analogue_to_position.hpp"
+#include "sr_ronex_transmissions/mapping/general_io/analogue_to_position.hpp"
 
 namespace ronex
 {

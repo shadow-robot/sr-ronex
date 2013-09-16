@@ -19,13 +19,13 @@
  */
 
 #include <pr2_mechanism_model/robot.h>
-#include <sr_ronex_mechanism_model/ronex_transmission.hpp>
+#include <sr_ronex_transmissions/ronex_transmission.hpp>
 #include "pluginlib/class_list_macros.h"
 #include <cstring>
 
-#include "sr_ronex_mechanism_model/mapping/general_io/analogue_to_position.hpp"
-#include "sr_ronex_mechanism_model/mapping/general_io/analogue_to_effort.hpp"
-#include "sr_ronex_mechanism_model/mapping/general_io/command_to_pwm.hpp"
+#include "sr_ronex_transmissions/mapping/general_io/analogue_to_position.hpp"
+#include "sr_ronex_transmissions/mapping/general_io/analogue_to_effort.hpp"
+#include "sr_ronex_transmissions/mapping/general_io/command_to_pwm.hpp"
 
 PLUGINLIB_EXPORT_CLASS( ronex::RonexTransmission, pr2_mechanism_model::Transmission)
 

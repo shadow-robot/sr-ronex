@@ -22,7 +22,7 @@
 #define SR_RONEX_GENERAL_IO_POSITION_MAPPING_H_
 
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
-#include "sr_ronex_mechanism_model/mapping/ronex_mapping.hpp"
+#include "sr_ronex_transmissions/mapping/ronex_mapping.hpp"
 
 namespace ronex
 {
