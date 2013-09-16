@@ -70,7 +70,7 @@ namespace ronex
     {
       sub_topic.str("");
       sub_topic << ronex_name << "/command/pwm/" << i;
-      pwm_subscribers_.push_back(node_.subscribe<sr_common_msgs::PWM>(sub_topic.str(), 1, boost::bind(&GeneralIOPassthroughController::pwm_commands_cb, this, _1, i)));
+      pwm_subscribers_.push_back(node_.subscribe<sr_ronex_msgs::PWM>(sub_topic.str(), 1, boost::bind(&GeneralIOPassthroughController::pwm_commands_cb, this, _1, i)));
     }
 
     return true;
@@ -98,7 +98,7 @@ namespace ronex
     general_io_->command_.digital_[index] = msg->data;
   }
 
-  void GeneralIOPassthroughController::pwm_commands_cb(const sr_common_msgs::PWMConstPtr& msg, int index)
+  void GeneralIOPassthroughController::pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index)
   {
 
     general_io_->command_.pwm_[index].period = msg->pwm_period;

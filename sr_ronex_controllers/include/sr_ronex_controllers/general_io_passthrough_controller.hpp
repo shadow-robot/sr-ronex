@@ -26,7 +26,7 @@
 #include <realtime_tools/realtime_publisher.h>
 
 #include <std_msgs/Bool.h>
-#include <sr_common_msgs/PWM.h>
+#include <sr_ronex_msgs/PWM.h>
 
 namespace ronex
 {
@@ -48,7 +48,7 @@ namespace ronex
 
     void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 
-    void pwm_commands_cb(const sr_common_msgs::PWMConstPtr& msg, int index);
+    void pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index);
 
   private:
     ros::NodeHandle node_;
