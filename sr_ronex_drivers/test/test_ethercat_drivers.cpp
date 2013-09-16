@@ -19,8 +19,8 @@
 #include <stdint.h>
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h>
 #include <al/ethercat_slave_handler.h>
-#include "sr_ronex_ethercat_drivers/ronex_utils.hpp"
-#include "sr_ronex_ethercat_drivers/sr_board_mk2_gio.hpp"
+#include "sr_ronex_drivers/ronex_utils.hpp"
+#include "sr_ronex_drivers/sr_board_mk2_gio.hpp"
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <ros/ros.h>
 #include <gtest/gtest.h>

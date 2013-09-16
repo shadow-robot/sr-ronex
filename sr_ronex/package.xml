@@ -25,7 +25,7 @@
   <run_depend>sr_ronex_mechanism_model</run_depend>
   <run_depend>sr_ronex_msgs</run_depend>
   <run_depend>sr_ronex_controllers</run_depend>
-  <run_depend>sr_ronex_ethercat_drivers</run_depend>
+  <run_depend>sr_ronex_drivers</run_depend>
   <run_depend>sr_ronex_hardware_interface</run_depend>
   <run_depend>sr_ronex_external_protocol</run_depend>
 

@@ -9,7 +9,7 @@
  FITNESS FOR A PARTICULAR PURPOSE.
 """
 
-import roslib; roslib.load_manifest('sr_ronex_ethercat_drivers')
+import roslib; roslib.load_manifest('sr_ronex_drivers')
 import rospy
 import sys, getopt
 

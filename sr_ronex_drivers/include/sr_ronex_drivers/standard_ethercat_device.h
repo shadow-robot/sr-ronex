@@ -24,7 +24,7 @@
 
 #include <ethercat_hardware/ethercat_device.h>
 #include "realtime_tools/realtime_publisher.h"
-#include "sr_ronex_ethercat_drivers/cod_decod/cod_decod_manager.hpp"
+#include "sr_ronex_drivers/cod_decod/cod_decod_manager.hpp"
 
 
 class StandardEthercatDevice : public EthercatDevice

@@ -22,7 +22,7 @@
 #ifndef SR_BOARD_0X_H
 #define SR_BOARD_0X_H
 
-#include <sr_ronex_ethercat_drivers/standard_ethercat_device.h>
+#include <sr_ronex_drivers/standard_ethercat_device.h>
 
 #include <vector>
 using namespace std;

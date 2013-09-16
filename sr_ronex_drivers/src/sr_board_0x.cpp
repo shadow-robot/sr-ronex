@@ -17,7 +17,7 @@
  *
  */
 
-#include <sr_ronex_ethercat_drivers/sr_board_0x.h>
+#include <sr_ronex_drivers/sr_board_0x.h>
 
 #include <dll/ethercat_dll.h>
 #include <al/ethercat_AL.h>

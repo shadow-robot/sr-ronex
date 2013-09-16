@@ -15,7 +15,7 @@
  *
  */
 
-#include <sr_ronex_ethercat_drivers/sr_board_mk2_gio.hpp>
+#include <sr_ronex_drivers/sr_board_mk2_gio.hpp>
 
 #include <dll/ethercat_dll.h>
 #include <al/ethercat_AL.h>
@@ -27,7 +27,7 @@
 #include <boost/foreach.hpp>
 #include <math.h>
 
-#include "sr_ronex_ethercat_drivers/ronex_utils.hpp"
+#include "sr_ronex_drivers/ronex_utils.hpp"
 
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
@@ -243,7 +243,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     //dynamic reconfigure server is instantiated here
     // as we need the different vectors to be initialised
     // before running the first configuration.
-    dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_ethercat_drivers::GeneralIOConfig>(ros::NodeHandle(device_name_)));
+    dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig>(ros::NodeHandle(device_name_)));
     function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
     dynamic_reconfigure_server_->setCallback(function_cb_);
   } //end first time, the sizes are properly initialised, simply fill in the data
@@ -305,7 +305,7 @@ void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, 
 }
 
 
-void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_ethercat_drivers::GeneralIOConfig &config, uint32_t level)
+void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_drivers::GeneralIOConfig &config, uint32_t level)
 {
   general_io_->command_.pwm_clock_divider_ = static_cast<int16u>(config.pwm_clock_divider);
 

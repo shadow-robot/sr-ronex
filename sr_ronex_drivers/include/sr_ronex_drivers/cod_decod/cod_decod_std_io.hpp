@@ -22,7 +22,7 @@
 #ifndef _COD_DECOD_STD_IO_HPP_
 #define _COD_DECOD_STD_IO_HPP_
 
-#include "sr_ronex_ethercat_drivers/cod_decod/cod_decod.hpp"
+#include "sr_ronex_drivers/cod_decod/cod_decod.hpp"
 #include <sr_ronex_msgs/BoolArray.h>
 #include <std_msgs/UInt16MultiArray.h>
 #include "realtime_tools/realtime_box.h"

@@ -18,8 +18,8 @@
  *
  */
 
-#include "sr_ronex_ethercat_drivers/cod_decod/cod_decod_manager.hpp"
-#include "sr_ronex_ethercat_drivers/cod_decod/cod_decod_std_io.hpp"
+#include "sr_ronex_drivers/cod_decod/cod_decod_manager.hpp"
+#include "sr_ronex_drivers/cod_decod/cod_decod_std_io.hpp"
 #include <boost/foreach.hpp>
 #include <boost/regex.hpp>
 
@@ -27,7 +27,7 @@ namespace sr_cod_decod
 {
 
   CodDecodManager::CodDecodManager(pr2_hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
-    :cod_decod_loader_("sr_ronex_ethercat_drivers", "sr_cod_decod::CodDecod")
+    :cod_decod_loader_("sr_ronex_drivers", "sr_cod_decod::CodDecod")
   {
     uint32_t product_code = sh->get_product_code();
     uint32_t serial = sh->get_serial();
@@ -95,7 +95,7 @@ namespace sr_cod_decod
       }
       ROS_INFO("Loading the deafult CodDecod plugin: CodDecodStdIo");
       try {
-        cod_decod_ = boost::shared_ptr<CodDecod>(cod_decod_loader_.createClassInstance("sr_ronex_ethercat_drivers/87032868_0"));
+        cod_decod_ = boost::shared_ptr<CodDecod>(cod_decod_loader_.createClassInstance("sr_ronex_drivers/87032868_0"));
       }
       catch (pluginlib::LibraryLoadException &e)
       {

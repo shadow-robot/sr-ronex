@@ -1,12 +1,12 @@
 <package>
-  <name>sr_ronex_ethercat_drivers</name>
+  <name>sr_ronex_drivers</name>
   <version>1.0.0</version>
   <description>Package containing the driver for the RoNeX boards, and the CodDecod modules to map the inputs and outputs from every board to ROS topics and (optionally) to the HardwareInterface class.</description>
   <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
 
   <license>Proprietary</license>
 
-  <url type="website">http://ros.org/wiki/sr_ronex_ethercat_drivers</url>
+  <url type="website">http://ros.org/wiki/sr_ronex_drivers</url>
   <!-- <url type="bugtracker"></url> -->
 
   <author>Toni Oliver</author>
@@ -47,7 +47,7 @@
   <run_depend>sr_ronex_external_protocol</run_depend>
   <run_depend>sr_ronex_hardware_interface</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
-  <run_depend>sr_ronex_ethercat_drivers_gencfg</run_depend>
+  <run_depend>sr_ronex_drivers_gencfg</run_depend>
   <run_depend>tinyxml</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
@@ -68,9 +68,9 @@
   <test_depend>gtest</test_depend>
 
 <export>
-    <cpp lflags="-L${prefix}/lib -lsr_ronex_ethercat_drivers -Wl,-rpath,${prefix}/lib" cflags="-I${prefix}/include"/>
+    <cpp lflags="-L${prefix}/lib -lsr_ronex_drivers -Wl,-rpath,${prefix}/lib" cflags="-I${prefix}/include"/>
     <ethercat_hardware plugin="${prefix}/ethercat_device_plugin.xml"/>
-    <sr_ronex_ethercat_drivers plugin="${prefix}/ethercat_device_plugin.xml"/>
+    <sr_ronex_drivers plugin="${prefix}/ethercat_device_plugin.xml"/>
 </export>
 
 </package>

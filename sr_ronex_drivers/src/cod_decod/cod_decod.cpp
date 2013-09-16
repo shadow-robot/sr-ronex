@@ -17,7 +17,7 @@
  *
  */
 
-#include "sr_ronex_ethercat_drivers/cod_decod/cod_decod.hpp"
+#include "sr_ronex_drivers/cod_decod/cod_decod.hpp"
 
 namespace sr_cod_decod
 {
