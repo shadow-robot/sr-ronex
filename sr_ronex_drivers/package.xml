@@ -47,7 +47,6 @@
   <run_depend>sr_ronex_external_protocol</run_depend>
   <run_depend>sr_ronex_hardware_interface</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
-  <run_depend>sr_ronex_drivers_gencfg</run_depend>
   <run_depend>tinyxml</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
