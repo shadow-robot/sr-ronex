@@ -62,7 +62,7 @@ TEST(RonexUtils, build_name )
   EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (EC_UINT) 0 ), &fmmu, &pdcfg, 0);
 
   ostringstream ostr;
-  ostr << "ronex_0_" << serial;
+  ostr << "/ronex/" << serial;
   string result = build_name(&sh);
 
   EXPECT_STREQ( result.c_str(), ostr.str().c_str() );

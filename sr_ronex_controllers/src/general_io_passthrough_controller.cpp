@@ -44,17 +44,38 @@ namespace ronex
     assert(robot);
     node_ = n;
 
-    std::string ronex_name;
-    if (!node_.getParam("ronex", ronex_name)) {
-      ROS_ERROR("No RoNeX given (namespace: %s)", node_.getNamespace().c_str());
+    std::string ronex_id;
+    if (!node_.getParam("ronex_id", ronex_id)) {
+      ROS_ERROR("No RoNeX ID given (namespace: %s)", node_.getNamespace().c_str());
       return false;
     }
 
-    general_io_ = static_cast<ronex::GeneralIO*>( robot->model_->hw_->getCustomHW(ronex_name) );
+    general_io_ = static_cast<ronex::GeneralIO*>( robot->model_->hw_->getCustomHW("/ronex/"+ronex_id) );
     if( general_io_ == NULL)
     {
-      ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_name << " not loading the controller");
+      ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");
       return false;
+    }
+
+    //get the path from the parameters
+    std::string path;
+    int parameter_id = get_ronex_param_id(ronex_id);
+    {
+      if( parameter_id == -1 )
+      {
+        ROS_ERROR_STREAM("Could not find the RoNeX id in the parameter server: " << ronex_id << " not loading the controller.");
+        return false;
+      }
+      else
+      {
+        std::stringstream ss;
+        ss << "/ronex/" << parameter_id << "/path";
+        if( !ros::param::get(ss.str(), path) )
+        {
+          ROS_ERROR_STREAM("Couldn't read the parameter " << ss.str() << " from the parameter server. Not loading the controller.");
+          return false;
+        }
+      }
     }
 
     //init the subscribers
@@ -62,14 +83,14 @@ namespace ronex
     for( size_t i=0; i < general_io_->command_.digital_.size(); ++i)
     {
       sub_topic.str("");
-      sub_topic << ronex_name << "/command/digital/" << i;
+      sub_topic << path << "/command/digital/" << i;
       digital_subscribers_.push_back(node_.subscribe<std_msgs::Bool>(sub_topic.str(), 1, boost::bind(&GeneralIOPassthroughController::digital_commands_cb, this, _1,  i )));
     }
 
     for( size_t i=0; i < general_io_->command_.pwm_.size(); ++i)
     {
       sub_topic.str("");
-      sub_topic << ronex_name << "/command/pwm/" << i;
+      sub_topic << path << "/command/pwm/" << i;
       pwm_subscribers_.push_back(node_.subscribe<sr_ronex_msgs::PWM>(sub_topic.str(), 1, boost::bind(&GeneralIOPassthroughController::pwm_commands_cb, this, _1, i)));
     }
 

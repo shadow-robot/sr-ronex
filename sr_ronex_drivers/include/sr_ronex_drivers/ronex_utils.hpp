@@ -39,25 +39,23 @@ namespace ronex
     return id.str();
   }
 
+  /**
+   * Building the name of the RoNeX, to be stored in the CustomHW map
+   *  of the Hardware Interface. The name used is /ronex/SERIAL_NUMBER
+   *
+   * example: /ronex/1234
+   *
+   * @param sh the EtherCAT SlaveHandler (used to read the serial number)
+   *
+   * @return a name to be used in the CustomHW map.
+   */
   static inline std::string build_name(EtherCAT_SlaveHandler *sh)
   {
     std::stringstream name;
 
-    name << "ronex_";
+    name << "/ronex/";
 
-    //lookup the product id in the list of human readable product ids
-    if(false)
-    {
-      //@todo read human name from param server
-    }
-    else
-    {
-      //we didn't find a human readable name for the product id, simply using the id
-      name << get_product_code(sh);
-    }
-    name << "_";
-
-    //add the serial number for unique identifier
+    //The serial number is unique accross all ronexes
     name << get_serial_number(sh);
 
     return name.str();
