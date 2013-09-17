@@ -114,9 +114,8 @@ namespace ronex
   {
     std::string param;
 
-    bool last_ronex = false;
     int ronex_parameter_id = 0;
-    while( !last_ronex )
+    while( true )
     {
       std::stringstream ss;
       ss << "/ronex/" << ronex_parameter_id << "/ronex_id";
