@@ -3,13 +3,13 @@
  * @author Ugo Cupcic <ugo@shadowrobot.com>
  *
  * Copyright 2013 Shadow Robot Company Ltd.
-*
-* This program is Proprietary software: you cannot redistribute it or modify it
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE.
-*
+ *
+ * This program is Proprietary software: you cannot redistribute it or modify it
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * @brief A set of useful functions for the RoNeX drivers.
  *
  *
