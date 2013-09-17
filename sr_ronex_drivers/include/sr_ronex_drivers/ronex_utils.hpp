@@ -2,7 +2,7 @@
  * @file   ronex_utils.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
  *
- /* Copyright 2013 Shadow Robot Company Ltd.
+ * Copyright 2013 Shadow Robot Company Ltd.
 *
 * This program is Proprietary software: you cannot redistribute it or modify it
 *
