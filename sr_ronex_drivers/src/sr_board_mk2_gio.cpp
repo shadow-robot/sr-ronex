@@ -40,6 +40,12 @@ SrBoardMk2GIO::SrBoardMk2GIO() :
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
 {
+  //remove parameters from server
+  std::stringstream param_path;
+  param_path << "/ronex/" << parameter_id_ ;
+  ros::param::del(param_path.str());
+
+
   delete sh_->get_fmmu_config();
   delete sh_->get_pd_config();
 }
@@ -334,21 +340,31 @@ void SrBoardMk2GIO::build_topics_()
   path << "/ronex/" << product_alias_ << "/";
 
   //get the alias from the parameter server if it exists
-  std::string path_to_alias, alias;
+  std::string path_to_alias, alias, ronex_id;
   path_to_alias = "/ronexes/mapping/" + serial_number_;
   if( ros::param::get(path_to_alias, alias))
   {
-    path << alias;
+    ronex_id = alias;
   }
   else
   {
     //no alias found, using the serial number directly.
-    path << serial_number_ ;
+    ronex_id = serial_number_ ;
   }
-  path << "/";
+  path << ronex_id << "/";
 
-  //@todo load everything to parameter server as described in #46
+  //loading everything into the parameter server
+  parameter_id_ = ronex::get_ronex_param_id("");
+  std::stringstream param_path, tmp_param;
+  param_path << "/ronex/" << parameter_id_ << "/";
+  tmp_param << ronex::get_product_code(sh_);
+  ros::param::set(param_path.str() + "product_id", tmp_param.str());
+  ros::param::set(param_path.str() + "product_name", product_alias_);
+  ros::param::set(param_path.str() + "ronex_id", ronex_id);
+  ros::param::set(param_path.str() + "path", path.str());
+  ros::param::set(param_path.str() + "serial", serial_number_);
 
+  //Advertising the realtime state publisher
   path << "state";
   state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState>(node_, path.str(), 1));
 }
