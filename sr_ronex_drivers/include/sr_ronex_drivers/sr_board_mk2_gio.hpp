@@ -47,6 +47,9 @@ public:
   void dynamic_reconfigure_cb(sr_ronex_drivers::GeneralIOConfig &config, uint32_t level);
 
 protected:
+  ///Replaces the product ID with a human readable product alias.
+  static const std::string product_alias_;
+
   string reason_;
   int level_;
 
@@ -97,6 +100,9 @@ protected:
   boost::shared_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig> > dynamic_reconfigure_server_;
 
   dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig>::CallbackType function_cb_;
+
+  ///building the topics for publishing the state.
+  void build_topics_();
 };
 
 /* For the emacs weenies in the crowd.
