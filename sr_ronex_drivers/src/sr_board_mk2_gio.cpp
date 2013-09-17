@@ -31,6 +31,8 @@
 
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
+const std::string SrBoardMk2GIO::product_alias_ = "general_io";
+
 SrBoardMk2GIO::SrBoardMk2GIO() :
   EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false), input_mode_(false)
 {
@@ -155,7 +157,6 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
 
   ROS_INFO_STREAM("Adding a general_io RoNeX module to the hardware interface: " << device_name_);
   //Using the name of the ronex to prefix the state topic
-  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState>(node_, "/" + device_name_ + "/state", 1));
 
   hw->addCustomHW( general_io_.get() );
 
@@ -323,6 +324,31 @@ void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_drivers::GeneralIOConfig &co
     general_io_->command_.pwm_[4].period = static_cast<int16u>(config.pwm_period_4);
   if( general_io_->command_.pwm_.size() > 5 )
     general_io_->command_.pwm_[5].period = static_cast<int16u>(config.pwm_period_5);
+}
+
+void SrBoardMk2GIO::build_topics_()
+{
+  std::stringstream path;
+  path << "/ronex/" << product_alias_ << "/";
+
+  //get the alias from the parameter server if it exists
+  std::string path_to_alias, alias;
+  path_to_alias = "/ronexes/mapping/" + serial_number_;
+  if( ros::param::get(path_to_alias, alias))
+  {
+    path << alias;
+  }
+  else
+  {
+    //no alias found, using the serial number directly.
+    path << serial_number_ ;
+  }
+  path << "/";
+
+  //@todo load everything to parameter server as described in #46
+
+  path << "state";
+  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState>(node_, path.str(), 1));
 }
 
 /* For the emacs weenies in the crowd.
