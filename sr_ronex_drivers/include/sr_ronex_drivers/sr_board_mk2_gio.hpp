@@ -103,6 +103,9 @@ protected:
 
   ///building the topics for publishing the state.
   void build_topics_();
+
+  ///Id of this ronex on the parameter server
+  int parameter_id_;
 };
 
 /* For the emacs weenies in the crowd.
