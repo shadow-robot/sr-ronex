@@ -40,6 +40,17 @@ SrBoardMk2GIO::SrBoardMk2GIO() :
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
 {
+  //remove parameters from server
+  //@todo should this be slightly cleaner? probably not necessary for now
+  std::stringstream param_path;
+  param_path << "/ronex/" << parameter_id_ << "/";
+  ros::param::del(param_path.str() + "product_id");
+  ros::param::del(param_path.str() + "product_name");
+  ros::param::del(param_path.str() + "ronex_id");
+  ros::param::del(param_path.str() + "path");
+  ros::param::del(param_path.str() + "serial");
+
+
   delete sh_->get_fmmu_config();
   delete sh_->get_pd_config();
 }
