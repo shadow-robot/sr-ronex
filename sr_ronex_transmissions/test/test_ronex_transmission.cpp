@@ -89,7 +89,7 @@ TEST(RonexTransmission, propagateCommand)
 
   //reading the command from the RoNeX
   EXPECT_EQ(general_io->command_.pwm_[1].on_time_0, 3264);
-
+  EXPECT_FALSE(general_io->command_.digital_[5]);  //Positive commanded effort should set direction pin to 0
 }
 
 
