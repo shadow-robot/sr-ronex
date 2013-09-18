@@ -52,7 +52,7 @@ TEST(RonexUtils, set_bit)
 TEST(RonexUtils, get_ronex_param_id)
 {
   //make sure we're running on a clean environment
-  ros::param::del("/ronex/0");
+  ros::param::del("/ronex");
   //nothing in the parameter server -> ronex param id = 0
   int ronex_param_id = get_ronex_param_id("");
   EXPECT_EQ(ronex_param_id, 0);

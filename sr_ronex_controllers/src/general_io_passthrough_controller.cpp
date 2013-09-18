@@ -50,13 +50,6 @@ namespace ronex
       return false;
     }
 
-    general_io_ = static_cast<ronex::GeneralIO*>( robot->model_->hw_->getCustomHW("/ronex/"+ronex_id) );
-    if( general_io_ == NULL)
-    {
-      ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");
-      return false;
-    }
-
     //get the path from the parameters
     std::string path;
     int parameter_id = get_ronex_param_id(ronex_id);
@@ -76,6 +69,13 @@ namespace ronex
           return false;
         }
       }
+    }
+
+    general_io_ = static_cast<ronex::GeneralIO*>( robot->model_->hw_->getCustomHW(path) );
+    if( general_io_ == NULL)
+    {
+      ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");
+      return false;
     }
 
     //init the subscribers

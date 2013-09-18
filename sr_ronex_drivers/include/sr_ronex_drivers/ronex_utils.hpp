@@ -51,17 +51,16 @@ namespace ronex
    * example: /ronex/1234
    *
    * @param sh the EtherCAT SlaveHandler (used to read the serial number)
+   * @param product_alias the human readable name for this RoNeX module
+   * @param ronex_id the unique id for the ronex (serial or alias)
    *
    * @return a name to be used in the CustomHW map.
    */
-  static inline std::string build_name(EtherCAT_SlaveHandler *sh)
+  static inline std::string build_name( const std::string product_alias,
+                                        std::string ronex_id)
   {
     std::stringstream name;
-
-    name << "/ronex/";
-
-    //The serial number is unique accross all ronexes
-    name << get_serial_number(sh);
+    name << "/ronex/" << product_alias << "/" << ronex_id;
 
     return name.str();
   }

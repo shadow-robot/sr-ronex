@@ -5,4 +5,4 @@ Header header
 bool[] digital
 uint16[] analogue
 uint16 pwm_clock_divider
-bool input_mode
+bool[] input_mode
