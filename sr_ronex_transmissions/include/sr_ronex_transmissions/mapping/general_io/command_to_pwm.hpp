@@ -52,8 +52,10 @@ namespace ronex
         ///Pointer to the GeneralIO module we specified in the transmission.
         GeneralIO* general_io_;
         ///PWM module index and PWM pin (0 or 1) as we have 2 pins per pwm_module_
-        size_t pwm_module_, pin_index_;
-        ///Are the pwm_module_ and pin_index_ in the correct ranges?
+        size_t pwm_module_, pwm_pin_index_;
+        ///digital pin index for the motor direction digital pin
+        size_t digital_pin_index_;
+        ///Are the pwm_module_, pwm_pin_index_ and digital_pin_index_ in the correct ranges?
         bool pin_out_of_bound_;
 
         ///Those are used for computing the PWM on time / PWM period

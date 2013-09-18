@@ -71,6 +71,7 @@ TEST(RonexTransmission, propagateCommand)
   general_io->state_.analogue_.resize(6);
   general_io->state_.digital_.resize(6);
   general_io->command_.pwm_.resize(6);
+  general_io->command_.digital_.resize(6);
 
   hw.addCustomHW( general_io.get() );
 
@@ -85,9 +86,10 @@ TEST(RonexTransmission, propagateCommand)
   general_io->command_.pwm_[1].period =  64000;  //setting period too
 
   state.propagateJointEffortToActuatorEffort();
+
   //reading the command from the RoNeX
   EXPECT_EQ(general_io->command_.pwm_[1].on_time_0, 3264);
-
+  EXPECT_FALSE(general_io->command_.digital_[5]);  //Positive commanded effort should set direction pin to 0
 }
 
 
