@@ -28,31 +28,6 @@
 using namespace std;
 using namespace ronex;
 
-TEST(RonexUtils, set_bit)
-{
-  int32u data = 0;
-  set_bit(data, 1, true);
-  EXPECT_EQ(data, 2);
-
-  set_bit(data, 1, false);
-  EXPECT_EQ(data, 0);
-
-  set_bit(data, 1, true);
-  set_bit(data, 2, true);
-  set_bit(data, 3, true);
-  EXPECT_EQ(data, 14);
-
-  for ( size_t i = 0; i < 32; ++i )
-    set_bit(data, i, true);
-  EXPECT_EQ(data, 4294967295);
-
-  set_bit(data, 1, true);
-  EXPECT_TRUE( check_bit(data, 1 ) );
-
-  set_bit(data, 4, false);
-  EXPECT_FALSE( check_bit(data, 4 ) );
-}
-
 TEST(RonexUtils, build_name )
 {
   const EC_UDINT serial = 55662211;
@@ -66,32 +41,6 @@ TEST(RonexUtils, build_name )
   string result = build_name(&sh);
 
   EXPECT_STREQ( result.c_str(), ostr.str().c_str() );
-}
-
-TEST(RonexUtils, get_ronex_param_id)
-{
-  //nothing in the parameter server -> ronex param id = 0
-  size_t ronex_param_id = get_ronex_param_id("");
-  EXPECT_EQ(ronex_param_id, 0);
-
-  //This serial number is not present on the param server -> returns -1
-  ronex_param_id = get_ronex_param_id("1234");
-  EXPECT_EQ( ronex_param_id, -1);
-
-  std::string param;
-  ros::param::set("/ronex/0/product_id", "0x20001");
-  ros::param::set("/ronex/0/product_name", "general_io");
-  ros::param::set("/ronex/0/ronex_id", "my_beautiful_ronex");
-  ros::param::set("/ronex/0/path", "/ronex/general_io/my_beautiful_ronex/");
-  ros::param::set("/ronex/0/serial", "1234");
-
-  //We now have a ronex with param id = 0 -> next free id is 1.
-  ronex_param_id = get_ronex_param_id("");
-  EXPECT_EQ(ronex_param_id, 1);
-
-  //This serial number is now present on the param server -> returns index = 0
-  ronex_param_id = get_ronex_param_id("my_beautiful_ronex");
-  EXPECT_EQ( ronex_param_id, 0);
 }
 
 TEST(RonexUtils, constructor )

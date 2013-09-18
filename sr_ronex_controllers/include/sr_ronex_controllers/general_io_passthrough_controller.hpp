@@ -24,68 +24,13 @@
 #include <pr2_controller_interface/controller.h>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
+#include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 
 #include <std_msgs/Bool.h>
 #include <sr_ronex_msgs/PWM.h>
 
 namespace ronex
 {
-  /**
-   * @todo: this is copied from ronex_utils.hpp - move to separate sr_ronex_utils package?
-   * Checks the ronexes already present on the parameter server and returns an id on which
-   *  the given ronex is stored on the parameter server.
-   *
-   * The parameter server contains:
-   *  /ronex/0/product_id = "0x200001"
-   *  /ronex/0/produc_name = "general_io"
-   *  /ronex/0/ronex_id = "my_beautiful_ronex" or serial if no alias
-   *  /ronex/0/path = "ronex/general_io/my_beautiful_ronex/"
-   *  /ronex/0/serial = "1234"
-   *
-   *  /ronex/1/...
-   *
-   * @param ronex_id Either the alias or the serial number if no alias is specified.
-   *                 If empty string given, then returns the first available id.
-   * @return the index of the ronex in the parameter server. -1 if not found.
-   *         or the next free index if ronex_id == ""
-   */
-  static inline int get_ronex_param_id(std::string ronex_id)
-  {
-    std::string param;
-
-    bool last_ronex = false;
-    int ronex_parameter_id = 0;
-    while( !last_ronex )
-    {
-      std::stringstream ss;
-      ss << "/ronex/" << ronex_parameter_id << "/ronex_id";
-
-      if(ros::param::get(ss.str(), param) )
-      {
-        if( ronex_id.compare("") != 0 )
-        {
-          if( ronex_id.compare(param) == 0)
-          {
-            return ronex_parameter_id;
-          }
-        }
-        ++ronex_parameter_id;
-      }
-      else
-      {
-        if( ronex_id.compare("") != 0)
-        {
-          //we were looking for a specific ronex and didn't find it -> return -1
-          return -1;
-        }
-
-        return ronex_parameter_id;
-      }
-    }
-
-    return -1;
-  }
-
   class GeneralIOPassthroughController
     : public pr2_controller_interface::Controller
   {
