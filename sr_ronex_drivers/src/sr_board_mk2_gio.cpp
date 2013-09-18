@@ -350,10 +350,6 @@ void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_drivers::GeneralIOConfig &co
 
 void SrBoardMk2GIO::build_topics_()
 {
-  std::stringstream path;
-  path << "/ronex/" << product_alias_ << "/";
-  path << ronex_id_;
-
   //loading everything into the parameter server
   parameter_id_ = ronex::get_ronex_param_id("");
   std::stringstream param_path, tmp_param;
@@ -362,12 +358,13 @@ void SrBoardMk2GIO::build_topics_()
   ros::param::set(param_path.str() + "product_id", tmp_param.str());
   ros::param::set(param_path.str() + "product_name", product_alias_);
   ros::param::set(param_path.str() + "ronex_id", ronex_id_);
-  ros::param::set(param_path.str() + "path", path.str());
+
+  //the device is stored using path as the key in the CustomHW map
+  ros::param::set(param_path.str() + "path", device_name_);
   ros::param::set(param_path.str() + "serial", serial_number_);
 
   //Advertising the realtime state publisher
-  path << "state";
-  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState>(node_, path.str(), 1));
+  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState>(node_, device_name_ + "/state", 1));
 }
 
 /* For the emacs weenies in the crowd.
