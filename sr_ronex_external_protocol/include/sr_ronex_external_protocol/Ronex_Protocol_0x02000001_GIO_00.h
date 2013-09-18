@@ -79,7 +79,7 @@ typedef struct                                                              //!<
 
 typedef struct                                                              //!< Status Structure
 {                                                                           //   ----------------
-    //int16u                          command_type;                           // Copy of command_type from COMMAND struct (NOT USED YET)
+    int16u                          command_type;                           // Copy of command_type from COMMAND struct (NOT USED YET)
     int16u                          analogue_in[12];
     int16u                          digital_in;                             //!< Bit n: Status of digital pin n.
     int16u                          flags;
