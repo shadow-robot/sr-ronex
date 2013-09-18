@@ -246,7 +246,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
     input_mode_.resize(nb_digital_io);
     for(size_t i=0; i < input_mode_.size(); ++i)
-      input_mode_[i] = false;
+      input_mode_[i] = true;
 
     //init the state message
     state_msg_.analogue.resize(nb_analogue_pub);
