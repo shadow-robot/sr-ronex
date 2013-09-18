@@ -81,7 +81,7 @@ protected:
   bool has_stacker_;
 
   ///False to run digital pins as output, True to run as input
-  bool input_mode_;
+  std::vector<bool> input_mode_;
 
   int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
   int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
