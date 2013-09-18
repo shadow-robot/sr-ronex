@@ -11,6 +11,7 @@
 
 import roslib; roslib.load_manifest('sr_ronex_controllers')
 import rospy
+from time import sleep
 
 from pr2_mechanism_msgs.srv import LoadController, ListControllers, SwitchController, SwitchControllerRequest
 
@@ -35,6 +36,16 @@ class LoadPassthroughControllers(object):
         ronex_ids = []
 
         #retreive all the ronex ids from the parameter server
+        #wait until there's one ronex
+        while True:
+            try:
+                rospy.get_param("/ronex/0/ronex_id")
+                sleep(0.1)
+            except:
+                rospy.loginfo("Waiting for the ronex to be loaded properly.")
+                pass
+            break
+
         ronex_param = rospy.get_param("/ronex")
         for key in ronex_param:
             ronex_ids.append(ronex_param[key]["ronex_id"])

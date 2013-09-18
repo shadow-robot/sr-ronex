@@ -11,8 +11,7 @@
   <rosparam command="load" file="$(find sr_ronex_controllers)/config/general_io_passthrough_controller.yaml" />
 
   <node name="ronex_ctrl_spawner"
-	pkg="pr2_controller_manager" type="spawner" output="screen"
-	args="ronex_33554433_0_passthrough" />
+	pkg="sr_ronex_controllers" type="load_passthrough_controllers.py" output="screen"/>
 
 </launch>
 
