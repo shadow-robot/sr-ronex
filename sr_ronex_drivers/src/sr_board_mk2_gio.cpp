@@ -52,6 +52,8 @@ SrBoardMk2GIO::~SrBoardMk2GIO()
 
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
+  serial_number_ = ronex::get_serial_number( sh );
+
   //get the alias from the parameter server if it exists
   std::string path_to_alias, alias;
   path_to_alias = "/ronexes/mapping/" + serial_number_;
@@ -66,7 +68,6 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   }
 
   device_name_ = ronex::build_name( product_alias_, ronex_id_ );
-  serial_number_ = ronex::get_serial_number( sh );
 
   EthercatDevice::construct(sh,start_address);
   sh->set_fmmu_config( new EtherCAT_FMMU_Config(0) );
@@ -351,7 +352,7 @@ void SrBoardMk2GIO::build_topics_()
 {
   std::stringstream path;
   path << "/ronex/" << product_alias_ << "/";
-  path << ronex_id_ << "/";
+  path << ronex_id_;
 
   //loading everything into the parameter server
   parameter_id_ = ronex::get_ronex_param_id("");
