@@ -74,7 +74,7 @@ namespace sr_cod_decod
       //ROS_WARN("Using driver class '%s' for device with product code %d",
       //         matching_class_name.c_str(), product_code);
       try {
-        cod_decod_ = boost::shared_ptr<CodDecod>(cod_decod_loader_.createClassInstance(matching_class_name));
+        cod_decod_ = cod_decod_loader_.createInstance( matching_class_name );
       }
       catch (pluginlib::LibraryLoadException &e)
       {
@@ -93,9 +93,9 @@ namespace sr_cod_decod
       {
         ROS_INFO("  %s", class_name.c_str());
       }
-      ROS_INFO("Loading the deafult CodDecod plugin: CodDecodStdIo");
+      ROS_INFO("Loading the default CodDecod plugin: CodDecodStdIo");
       try {
-        cod_decod_ = boost::shared_ptr<CodDecod>(cod_decod_loader_.createClassInstance("sr_ronex_drivers/87032868_0"));
+        cod_decod_ = cod_decod_loader_.createInstance( "sr_ronex_drivers/87032868_0" );
       }
       catch (pluginlib::LibraryLoadException &e)
       {

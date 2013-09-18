@@ -2,14 +2,14 @@
  * @file   ronex_utils.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
  *
-* Copyright 2013 Shadow Robot Company Ltd.
-*
-* This program is Proprietary software: you cannot redistribute it or modify it
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE.
-*
+ * Copyright 2013 Shadow Robot Company Ltd.
+ *
+ * This program is Proprietary software: you cannot redistribute it or modify it
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * @brief A set of useful functions for the RoNeX drivers.
  *
  *
@@ -112,9 +112,8 @@ namespace ronex
   {
     std::string param;
 
-    bool last_ronex = false;
     int ronex_parameter_id = 0;
-    while( !last_ronex )
+    while( true )
     {
       std::stringstream ss;
       ss << "/ronex/" << ronex_parameter_id << "/ronex_id";
