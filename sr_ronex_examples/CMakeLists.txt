@@ -59,12 +59,16 @@ catkin_package(
 ## Build ##
 ###########
 
+# add_definitions(-Wall)
+
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
-include_directories(
-  ${catkin_INCLUDE_DIRS}
-)
+include_directories(include 
+  ../sr_ronex_drivers/include 
+  ../sr_ronex_external_protocol/include
+  ../sr_ronex_hardware_interface/include
+  ${catkin_INCLUDE_DIRS})
 
 ## Declare a cpp library
 # add_library(sr_ronex_examples
@@ -72,16 +76,14 @@ include_directories(
 # )
 
 ## Declare a cpp executable
-# add_executable(sr_ronex_examples_node src/sr_ronex_examples_node.cpp)
+add_executable(sr_ronex_parse_parameter_servers src/sr_ronex_parse_parameter_servers.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(sr_ronex_examples_node sr_ronex_examples_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(sr_ronex_examples_node
-#   ${catkin_LIBRARIES}
-# )
+target_link_libraries(sr_ronex_parse_parameter_servers ${catkin_LIBRARIES})
 
 #############
 ## Install ##
