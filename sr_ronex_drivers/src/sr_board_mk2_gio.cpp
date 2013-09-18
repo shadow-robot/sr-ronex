@@ -34,9 +34,8 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 const std::string SrBoardMk2GIO::product_alias_ = "general_io";
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false), input_mode_(false)
-{
-}
+  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
+{}
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
 {
@@ -52,8 +51,22 @@ SrBoardMk2GIO::~SrBoardMk2GIO()
 
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
-  device_name_ = ronex::build_name( sh );
   serial_number_ = ronex::get_serial_number( sh );
+
+  //get the alias from the parameter server if it exists
+  std::string path_to_alias, alias;
+  path_to_alias = "/ronexes/mapping/" + serial_number_;
+  if( ros::param::get(path_to_alias, alias))
+  {
+    ronex_id_ = alias;
+  }
+  else
+  {
+    //no alias found, using the serial number directly.
+    ronex_id_ = serial_number_ ;
+  }
+
+  device_name_ = ronex::build_name( product_alias_, ronex_id_ );
 
   EthercatDevice::construct(sh,start_address);
   sh->set_fmmu_config( new EtherCAT_FMMU_Config(0) );
@@ -189,7 +202,7 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
   //digital command
   for (size_t i = 0; i < general_io_->command_.digital_.size(); ++i)
   {
-    if (input_mode_)
+    if (input_mode_[i])
     {
       // Just set the pin to input mode, gets read in the status
       ronex::set_bit(digital_commands_, i*2, 1);
@@ -245,9 +258,14 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     general_io_->command_.digital_.resize(nb_digital_io);
     general_io_->command_.pwm_.resize(nb_pwm_modules);
 
+    input_mode_.resize(nb_digital_io);
+    for(size_t i=0; i < input_mode_.size(); ++i)
+      input_mode_[i] = true;
+
     //init the state message
     state_msg_.analogue.resize(nb_analogue_pub);
     state_msg_.digital.resize(nb_digital_io);
+    state_msg_.input_mode.resize(nb_digital_io);
 
     //dynamic reconfigure server is instantiated here
     // as we need the different vectors to be initialised
@@ -281,10 +299,10 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
     for(size_t i=0; i < general_io_->state_.digital_.size(); ++i)
     {
       state_msg_.digital[i] = general_io_->state_.digital_[i];
+      state_msg_.input_mode[i] = input_mode_[i];
     }
 
     state_msg_.pwm_clock_divider = general_io_->command_.pwm_clock_divider_;
-    state_msg_.input_mode = input_mode_;
 
     //publish
     if( state_publisher_->trylock() )
@@ -318,7 +336,32 @@ void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_drivers::GeneralIOConfig &co
 {
   general_io_->command_.pwm_clock_divider_ = static_cast<int16u>(config.pwm_clock_divider);
 
-  input_mode_ = config.input_mode;
+  //not very pretty but I couldnt think of an easy way to set them up
+  // (dynamic reconfigure doesn't seem to support arrays)
+  if(general_io_->command_.digital_.size() > 0)
+    input_mode_[0] = config.input_mode_0;
+  if(general_io_->command_.digital_.size() > 1)
+    input_mode_[1] = config.input_mode_1;
+  if(general_io_->command_.digital_.size() > 2)
+    input_mode_[2] = config.input_mode_2;
+  if(general_io_->command_.digital_.size() > 3)
+    input_mode_[3] = config.input_mode_3;
+  if(general_io_->command_.digital_.size() > 4)
+    input_mode_[4] = config.input_mode_4;
+  if(general_io_->command_.digital_.size() > 5)
+    input_mode_[5] = config.input_mode_5;
+  if(general_io_->command_.digital_.size() > 6)
+    input_mode_[6] = config.input_mode_6;
+  if(general_io_->command_.digital_.size() > 7)
+    input_mode_[7] = config.input_mode_7;
+  if(general_io_->command_.digital_.size() > 8)
+    input_mode_[8] = config.input_mode_8;
+  if(general_io_->command_.digital_.size() > 9)
+    input_mode_[9] = config.input_mode_9;
+  if(general_io_->command_.digital_.size() > 10)
+    input_mode_[10] = config.input_mode_10;
+  if(general_io_->command_.digital_.size() > 11)
+    input_mode_[11] = config.input_mode_11;
 
   if( general_io_->command_.pwm_.size() > 0 )
     general_io_->command_.pwm_[0].period = static_cast<int16u>(config.pwm_period_0);
@@ -336,23 +379,6 @@ void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_drivers::GeneralIOConfig &co
 
 void SrBoardMk2GIO::build_topics_()
 {
-  std::stringstream path;
-  path << "/ronex/" << product_alias_ << "/";
-
-  //get the alias from the parameter server if it exists
-  std::string path_to_alias, alias, ronex_id;
-  path_to_alias = "/ronexes/mapping/" + serial_number_;
-  if( ros::param::get(path_to_alias, alias))
-  {
-    ronex_id = alias;
-  }
-  else
-  {
-    //no alias found, using the serial number directly.
-    ronex_id = serial_number_ ;
-  }
-  path << ronex_id << "/";
-
   //loading everything into the parameter server
   parameter_id_ = ronex::get_ronex_param_id("");
   std::stringstream param_path, tmp_param;
@@ -360,13 +386,14 @@ void SrBoardMk2GIO::build_topics_()
   tmp_param << ronex::get_product_code(sh_);
   ros::param::set(param_path.str() + "product_id", tmp_param.str());
   ros::param::set(param_path.str() + "product_name", product_alias_);
-  ros::param::set(param_path.str() + "ronex_id", ronex_id);
-  ros::param::set(param_path.str() + "path", path.str());
+  ros::param::set(param_path.str() + "ronex_id", ronex_id_);
+
+  //the device is stored using path as the key in the CustomHW map
+  ros::param::set(param_path.str() + "path", device_name_);
   ros::param::set(param_path.str() + "serial", serial_number_);
 
   //Advertising the realtime state publisher
-  path << "state";
-  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState>(node_, path.str(), 1));
+  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState>(node_, device_name_ + "/state", 1));
 }
 
 /* For the emacs weenies in the crowd.

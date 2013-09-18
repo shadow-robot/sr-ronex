@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_drivers)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS std_msgs sr_ronex_msgs roscpp rostest diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure)
+find_package(catkin REQUIRED COMPONENTS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp rostest diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure)
 
 include_directories(include ${catkin_INCLUDE_DIRS} )
 

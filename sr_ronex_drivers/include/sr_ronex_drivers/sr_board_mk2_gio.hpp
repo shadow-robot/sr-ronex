@@ -50,6 +50,9 @@ protected:
   ///Replaces the product ID with a human readable product alias.
   static const std::string product_alias_;
 
+  ///A unique identifier for the ronex (either serial number or alias if provided)
+  std::string ronex_id_;
+
   string reason_;
   int level_;
 
@@ -81,7 +84,7 @@ protected:
   bool has_stacker_;
 
   ///False to run digital pins as output, True to run as input
-  bool input_mode_;
+  std::vector<bool> input_mode_;
 
   int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
   int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
