@@ -32,7 +32,12 @@ class LoadPassthroughControllers(object):
 
         @return a list of ronex_ids
         """
-        ronex_ids = ["0"]
+        ronex_ids = []
+
+        #retreive all the ronex ids from the parameter server
+        ronex_param = rospy.get_param("/ronex")
+        for key in ronex_param:
+            ronex_ids.append(ronex_param[key]["ronex_id"])
 
         return ronex_ids
 
