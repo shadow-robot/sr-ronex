@@ -141,6 +141,7 @@ namespace ronex
 
         if( check_pins_in_bound_() )
         {
+          ROS_ERROR_STREAM("pin in bound");
           if( pwm_pin_index_ == 0 )
             general_io_->command_.pwm_[pwm_module_].on_time_0 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * js[0]->commanded_effort_ ) / 100);
           else
