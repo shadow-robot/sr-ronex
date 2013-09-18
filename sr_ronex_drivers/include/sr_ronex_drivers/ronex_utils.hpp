@@ -46,9 +46,9 @@ namespace ronex
 
   /**
    * Building the name of the RoNeX, to be stored in the CustomHW map
-   *  of the Hardware Interface. The name used is /ronex/SERIAL_NUMBER
+   *  of the Hardware Interface. The name used is /ronex/product_name/SERIAL_NUMBER
    *
-   * example: /ronex/1234
+   * example: /ronex/general_io/1234
    *
    * @param sh the EtherCAT SlaveHandler (used to read the serial number)
    * @param product_alias the human readable name for this RoNeX module

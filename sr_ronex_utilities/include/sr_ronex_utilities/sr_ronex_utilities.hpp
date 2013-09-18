@@ -61,7 +61,7 @@ namespace ronex
    *  /ronex/0/product_id = "0x200001"
    *  /ronex/0/produc_name = "general_io"
    *  /ronex/0/ronex_id = "my_beautiful_ronex" or serial if no alias
-   *  /ronex/0/path = "ronex/general_io/my_beautiful_ronex/"
+   *  /ronex/0/path = "/ronex/general_io/my_beautiful_ronex"
    *  /ronex/0/serial = "1234"
    *
    *  /ronex/1/...
