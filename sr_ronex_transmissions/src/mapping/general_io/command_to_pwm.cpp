@@ -72,11 +72,29 @@ namespace ronex
         //convert to size_t
         try
         {
-          pin_index_ = boost::lexical_cast<size_t>( pin );
+          pwm_pin_index_ = boost::lexical_cast<size_t>( pin );
         }
         catch( boost::bad_lexical_cast const& )
         {
           ROS_ERROR("RonexTransmission: Couldn't parse pwm_pin to a size_t.");
+          return;
+        }
+
+        //read motor direction pin index from urdf
+        const char *d_pin = mapping_el ? mapping_el->Attribute("direction_pin") : NULL;
+        if (!d_pin)
+        {
+          ROS_ERROR("RonexTransmission transmission did not specify the direction pin.");
+          return;
+        }
+        //convert to size_t
+        try
+        {
+          digital_pin_index_ = boost::lexical_cast<size_t>( d_pin );
+        }
+        catch( boost::bad_lexical_cast const& )
+        {
+          ROS_ERROR("RonexTransmission: Couldn't parse direction_pin to a size_t.");
           return;
         }
       }
@@ -93,14 +111,21 @@ namespace ronex
           if( pwm_module_ >= general_io_->command_.pwm_.size() )
           {
             //size_t is always >= 0 so no need to check lower bound
-            ROS_ERROR_STREAM("Specified PWM module index is out of bound: " << pin_index_ << " / max = " << general_io_->command_.pwm_.size() << ", not propagating the command to the RoNeX.");
+            ROS_ERROR_STREAM("Specified PWM module index is out of bound: " << pwm_pin_index_ << " / max = " << general_io_->command_.pwm_.size() << ", not propagating the command to the RoNeX.");
             pin_out_of_bound_ = true;
             return false;
           }
-          if( pin_index_ > 1 )
+          if( pwm_pin_index_ > 1 )
           {
             //size_t is always >= 0 so no need to check lower bound
-            ROS_ERROR_STREAM("Specified PWM pin is out of bound: " << pin_index_ << " / max = 1, not propagating the command to the RoNeX.");
+            ROS_ERROR_STREAM("Specified PWM pin is out of bound: " << pwm_pin_index_ << " / max = 1, not propagating the command to the RoNeX.");
+            pin_out_of_bound_ = true;
+            return false;
+          }
+          if( digital_pin_index_ > general_io_->command_.digital_.size() )
+          {
+            //size_t is always >= 0 so no need to check lower bound
+            ROS_ERROR_STREAM("Specified direction pin is out of bound: " << digital_pin_index_ << " / max = " << general_io_->command_.digital_.size() << " , not propagating the command to the RoNeX.");
             pin_out_of_bound_ = true;
             return false;
           }
@@ -116,10 +141,13 @@ namespace ronex
 
         if( check_pins_in_bound_() )
         {
-          if( pin_index_ == 0 )
-            general_io_->command_.pwm_[pwm_module_].on_time_0 = (general_io_->command_.pwm_[pwm_module_].period * js[0]->commanded_effort_ ) / 100;
+          if( pwm_pin_index_ == 0 )
+            general_io_->command_.pwm_[pwm_module_].on_time_0 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * js[0]->commanded_effort_ ) / 100);
           else
-            general_io_->command_.pwm_[pwm_module_].on_time_1 = (general_io_->command_.pwm_[pwm_module_].period * js[0]->commanded_effort_ ) / 100;
+            general_io_->command_.pwm_[pwm_module_].on_time_1 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * js[0]->commanded_effort_ ) / 100);
+
+          // This is assigned by convention: negative effort sets the direction pin to 1.
+          general_io_->command_.digital_[digital_pin_index_] = (js[0]->commanded_effort_ < 0.0);
        }
       }
     }
