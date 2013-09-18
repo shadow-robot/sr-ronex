@@ -12,7 +12,7 @@
 import roslib; roslib.load_manifest('sr_ronex_controllers')
 import rospy
 
-from pr2_mechanism_msgs.srv import LoadController, SwitchController, SwitchControllerRequest
+from pr2_mechanism_msgs.srv import LoadController, ListControllers, SwitchController, SwitchControllerRequest
 
 class LoadPassthroughControllers(object):
     """
@@ -58,16 +58,30 @@ class LoadPassthroughControllers(object):
             controllers_list.append("/ronex_"+ronex_id+"_passthrough")
 
         #calling the services to load and switch the controllers on
+        rospy.wait_for_service('/pr2_controller_manager/list_controllers')
         rospy.wait_for_service('/pr2_controller_manager/load_controller')
         rospy.wait_for_service('/pr2_controller_manager/switch_controller')
+
+        list_controllers = rospy.ServiceProxy('/pr2_controller_manager/list_controllers', ListControllers)
         load_controller = rospy.ServiceProxy('/pr2_controller_manager/load_controller', LoadController)
         switch_controller = rospy.ServiceProxy('/pr2_controller_manager/switch_controller', SwitchController)
-        for ctrl in controllers_list:
-            try:
-                resp1 = load_controller(ctrl)
-            except rospy.ServiceException, e:
-                print "Service did not process request: %s"%str(e)
 
+        #first list the available controllers
+        available_controllers = None
+        try:
+            available_controllers = list_controllers()
+        except rospy.ServiceException, e:
+            print "Service did not process request: %s"%str(e)
+
+        #load the ones that don't exist
+        for ctrl in controllers_list:
+            if ctrl not in available_controllers.controllers:
+                try:
+                    resp1 = load_controller(ctrl)
+                except rospy.ServiceException, e:
+                    print "Service did not process request: %s"%str(e)
+
+        #start the controllers
         switch_controller = rospy.ServiceProxy('/pr2_controller_manager/switch_controller', SwitchController)
         try:
             resp1 = switch_controller(controllers_list, [], SwitchControllerRequest.BEST_EFFORT)
