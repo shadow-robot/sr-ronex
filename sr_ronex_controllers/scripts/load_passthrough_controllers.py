@@ -71,16 +71,16 @@ class LoadPassthroughControllers(object):
         #building a list of controller names
         controllers_list = []
         for ronex_id in ronex_ids:
-            controllers_list.append("/ronex_"+ronex_id+"_passthrough")
+            controllers_list.append("ronex_"+ronex_id+"_passthrough")
 
         #calling the services to load and switch the controllers on
-        rospy.wait_for_service('/pr2_controller_manager/list_controllers')
-        rospy.wait_for_service('/pr2_controller_manager/load_controller')
-        rospy.wait_for_service('/pr2_controller_manager/switch_controller')
+        rospy.wait_for_service('pr2_controller_manager/list_controllers')
+        rospy.wait_for_service('pr2_controller_manager/load_controller')
+        rospy.wait_for_service('pr2_controller_manager/switch_controller')
 
-        list_controllers = rospy.ServiceProxy('/pr2_controller_manager/list_controllers', ListControllers)
-        load_controller = rospy.ServiceProxy('/pr2_controller_manager/load_controller', LoadController)
-        switch_controller = rospy.ServiceProxy('/pr2_controller_manager/switch_controller', SwitchController)
+        list_controllers = rospy.ServiceProxy('pr2_controller_manager/list_controllers', ListControllers)
+        load_controller = rospy.ServiceProxy('pr2_controller_manager/load_controller', LoadController)
+        switch_controller = rospy.ServiceProxy('pr2_controller_manager/switch_controller', SwitchController)
 
         #first list the available controllers
         available_controllers = None
@@ -98,7 +98,7 @@ class LoadPassthroughControllers(object):
                     print "Service did not process request: %s"%str(e)
 
         #start the controllers
-        switch_controller = rospy.ServiceProxy('/pr2_controller_manager/switch_controller', SwitchController)
+        switch_controller = rospy.ServiceProxy('pr2_controller_manager/switch_controller', SwitchController)
         try:
             resp1 = switch_controller(controllers_list, [], SwitchControllerRequest.BEST_EFFORT)
         except rospy.ServiceException, e:
