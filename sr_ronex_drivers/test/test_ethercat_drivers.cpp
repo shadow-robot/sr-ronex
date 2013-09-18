@@ -30,17 +30,11 @@ using namespace ronex;
 
 TEST(RonexUtils, build_name )
 {
-  const EC_UDINT serial = 55662211;
+  string expected = "/ronex/general_io/beautiful_ronex";
+  string result = build_name("general_io", "beautiful_ronex");
 
-  EtherCAT_FMMU_Config fmmu(0);
-  EtherCAT_PD_Config pdcfg(0);
-  EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (EC_UINT) 0 ), &fmmu, &pdcfg, 0);
 
-  ostringstream ostr;
-  ostr << "/ronex/" << serial;
-  string result = build_name(&sh);
-
-  EXPECT_STREQ( result.c_str(), ostr.str().c_str() );
+  EXPECT_STREQ( result.c_str(), expected.c_str() );
 }
 
 TEST(RonexUtils, constructor )

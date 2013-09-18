@@ -52,7 +52,20 @@ SrBoardMk2GIO::~SrBoardMk2GIO()
 
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
-  device_name_ = ronex::build_name( sh );
+  //get the alias from the parameter server if it exists
+  std::string path_to_alias, alias;
+  path_to_alias = "/ronexes/mapping/" + serial_number_;
+  if( ros::param::get(path_to_alias, alias))
+  {
+    ronex_id_ = alias;
+  }
+  else
+  {
+    //no alias found, using the serial number directly.
+    ronex_id_ = serial_number_ ;
+  }
+
+  device_name_ = ronex::build_name( product_alias_, ronex_id_ );
   serial_number_ = ronex::get_serial_number( sh );
 
   EthercatDevice::construct(sh,start_address);
@@ -338,20 +351,7 @@ void SrBoardMk2GIO::build_topics_()
 {
   std::stringstream path;
   path << "/ronex/" << product_alias_ << "/";
-
-  //get the alias from the parameter server if it exists
-  std::string path_to_alias, alias, ronex_id;
-  path_to_alias = "/ronexes/mapping/" + serial_number_;
-  if( ros::param::get(path_to_alias, alias))
-  {
-    ronex_id = alias;
-  }
-  else
-  {
-    //no alias found, using the serial number directly.
-    ronex_id = serial_number_ ;
-  }
-  path << ronex_id << "/";
+  path << ronex_id_ << "/";
 
   //loading everything into the parameter server
   parameter_id_ = ronex::get_ronex_param_id("");
@@ -360,7 +360,7 @@ void SrBoardMk2GIO::build_topics_()
   tmp_param << ronex::get_product_code(sh_);
   ros::param::set(param_path.str() + "product_id", tmp_param.str());
   ros::param::set(param_path.str() + "product_name", product_alias_);
-  ros::param::set(param_path.str() + "ronex_id", ronex_id);
+  ros::param::set(param_path.str() + "ronex_id", ronex_id_);
   ros::param::set(param_path.str() + "path", path.str());
   ros::param::set(param_path.str() + "serial", serial_number_);
 

@@ -50,6 +50,9 @@ protected:
   ///Replaces the product ID with a human readable product alias.
   static const std::string product_alias_;
 
+  ///A unique identifier for the ronex (either serial number or alias if provided)
+  std::string ronex_id_;
+
   string reason_;
   int level_;
 
