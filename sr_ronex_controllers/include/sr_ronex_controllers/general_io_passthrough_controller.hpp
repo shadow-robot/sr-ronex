@@ -24,6 +24,7 @@
 #include <pr2_controller_interface/controller.h>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
+#include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 
 #include <std_msgs/Bool.h>
 #include <sr_ronex_msgs/PWM.h>
