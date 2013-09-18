@@ -64,10 +64,8 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 # include_directories(include)
-include_directories(include 
-  ../sr_ronex_drivers/include 
-  ../sr_ronex_external_protocol/include
-  ../sr_ronex_hardware_interface/include
+include_directories(include/
+  ../sr_ronex_utilities/include/sr_ronex_utilities/ 
   ${catkin_INCLUDE_DIRS})
 
 ## Declare a cpp library

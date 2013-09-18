@@ -20,6 +20,8 @@
 #include <ros/console.h>
 #include <list>
 
+#include "sr_ronex_utilities.hpp"
+
 class SR_RONEX_Example
 {
 public:
@@ -37,6 +39,16 @@ public:
 private:
   void find_ronexes(void)
   {
+    /* 
+     * Checks the ronexes already present on the parameter server and returns 
+     * an id on which the given ronex is stored on the parameter server.
+     * The method returns the index of the ronex in the parameter server. 
+     * -1 if not found. Or the next free index if ronex_id == "".
+     */
+    std::string ronex_id("");
+    int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
+
+    /*
     ros::Rate loop_rate(10);
     std::string param;
     while ( _nh->getParam("/ronex/0/ronex_id", param ) == false ) {
@@ -50,6 +62,7 @@ private:
       int ronex_id;
       _ronex_ids.push_back(ronex_id);
     }
+    */
   }
 
   void set_param(void)
