@@ -4,7 +4,7 @@
   <description>This stack contains the different packages related to the RoNeX (Robot Nervous System).</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
-  <license>Proprietary</license>
+  <license>LGPLv3</license>
 
   <url type="website">http://www.shadowrobot.com/products/ronex</url>
   <url type="repository">https://github.com/shadow-robot/sr-ronex</url>
