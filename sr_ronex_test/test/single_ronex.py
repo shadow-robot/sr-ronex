@@ -9,14 +9,14 @@
  FITNESS FOR A PARTICULAR PURPOSE.
 """
 
-import roslib; roslib.load_manifest('sr_ronex_test')
-import rospy, sys, getopt, unittest
+#import roslib; roslib.load_manifest('sr_ronex_test')
+import rospy, sys, getopt, unittest, rostest
 
 from threading import Lock
 from sr_ronex_msgs.msg import BoolArray
 from std_msgs.msg import UInt16MultiArray
 
-PRODUCT_CODE = "0x05300424"
+PRODUCT_CODE = "0X02000000"
 DIGITAL_IO_WAIT = 0.5
 ANALOG_IO_WAIT = 0.1
 PWM_O_WAIT = 3.0
@@ -29,17 +29,17 @@ MIN_PWM_PERIOD = 0.005
 class IoTest(object):
     """
     A class used to test the Shadow Robot ethercat board HW.
-    For the PRODUCT_CODE = "0x05300424"
+    For the PRODUCT_CODE = "0X02000000"
     4 digital inputs/outputs/PWM outputs
-    4 analog inputs
-    2 analog outputs
+    4 analogue inputs
+    2 analogue outputs
 
     The digital outputs will be tested by turning on and off LEDs attached to them.
     The digital inputs will read back the value we set for the outputs.
     The PWM outputs will be set to their lower frequency, and the digital inputs used to check the on-off period
-    The analog output 0 will be wired to analog inputs 0 and 2, output 1 to inputs 1 and 3
+    The analogue output 0 will be wired to analogue inputs 0 and 2, output 1 to inputs 1 and 3
 
-    Keep in mind that the test is intended to be run with the LEDs attached to the digital I/Os and the correct wiring of the analog I and O
+    Keep in mind that the test is intended to be run with the LEDs attached to the digital I/Os and the correct wiring of the analogue I and O
     """
 #Example of existing topics for a certain device
 #/device_0x05300424_0x00000016_PWM_outputs_command
@@ -48,11 +48,10 @@ class IoTest(object):
 #/device_0x05300424_0x00000016_digital_inputs_state
 #/device_0x05300424_0x00000016_digital_outputs_command
 
-    def __init__(self, device_SN):
-        rospy.loginfo("Testing device. Product code: " + PRODUCT_CODE + " SN: " + device_SN)
+    def __init__(self):
+        rospy.loginfo("Testing device. Product code: " + PRODUCT_CODE )
         self.success = True
         self.PWM_testing = False
-        self.device_SN = device_SN
         self.a_state_lock = Lock()
         self.d_state_lock = Lock()
         self.analog_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN + "_analog_outputs_command", UInt16MultiArray, latch=True)
@@ -63,11 +62,11 @@ class IoTest(object):
 
         self.last_analog_state = None
         self.last_digital_state = None
-        self.last_period_start_time = [0.0, 0.0, 0.0, 0.0]
-        self.average_period = [0.0, 0.0, 0.0, 0.0]
+        self.last_period_start_time = 4*[0.0]
+        self.average_period = 4*[0.0]
 
-        #Initialize the PWM outputs to 0 to avoid interference with the digital output testing
-        command_msg = UInt16MultiArray(None, [0, 0, 0, 0, 0, 0, 0, 0])
+        #Initialise the PWM outputs to 0 to avoid interference with the digital output testing
+        command_msg = UInt16MultiArray(None, 8*[0])
         self.PWM_command_publisher.publish(command_msg)
         rospy.sleep(0.2)
 
@@ -99,7 +98,7 @@ class IoTest(object):
                             rospy.logerr("Wrong value in digital input " + str(i/2))
                             self.success = False
             else:
-                rospy.logerr("No digital input data recived from: " + self.device_SN)
+                rospy.logerr("No digital input data received")
                 self.success = False
 
     def test_digital_io_case(self, output_values):
@@ -127,15 +126,15 @@ class IoTest(object):
                     index = i
                     if (float(value) / float(self.last_analog_state.data[index])) > ANALOG_RATIO_UPPER or \
                        (float(value) / float(self.last_analog_state.data[index])) < ANALOG_RATIO_LOWER:
-                        rospy.logerr("Wrong value in analog input " + str(index) + " set: " + str(value) + " measured: " + str(self.last_analog_state.data[index]) + " ratio: " + str(float(value) / float(self.last_analog_state.data[index])))
+                        rospy.logerr("Wrong value in analogue input " + str(index) + " set: " + str(value) + " measured: " + str(self.last_analog_state.data[index]) + " ratio: " + str(float(value) / float(self.last_analog_state.data[index])))
                         self.success = False
                     index = i + 2
                     if (float(value) / float(self.last_analog_state.data[index])) > ANALOG_RATIO_UPPER or \
                        (float(value) / float(self.last_analog_state.data[index])) < ANALOG_RATIO_LOWER:
-                        rospy.logerr("Wrong value in analog input " + str(index) + " set: " + str(value) + " measured: " + str(self.last_analog_state.data[index]) + " ratio: " + str(float(value) / float(self.last_analog_state.data[index])))
+                        rospy.logerr("Wrong value in analogue input " + str(index) + " set: " + str(value) + " measured: " + str(self.last_analog_state.data[index]) + " ratio: " + str(float(value) / float(self.last_analog_state.data[index])))
                         self.success = False
             else:
-                rospy.logerr("No analog input data recived from: " + self.device_SN)
+                rospy.logerr("No analogue input data received from: " + self.device_SN)
                 self.success = False
 
 
@@ -146,7 +145,7 @@ class IoTest(object):
         rospy.sleep(ANALOG_IO_WAIT)
 
     def test_analog_ios(self):
-        rospy.loginfo("Testing analog I/O")
+        rospy.loginfo("Testing analogue I/O")
         rospy.sleep(0.1)
         self.test_analog_io_case([0x200, 0x200])
         self.test_analog_io_case([0x200, 0xFF00])
@@ -162,7 +161,7 @@ class IoTest(object):
         self.test_analog_io_case([0xE000, 0xE000])
         self.test_analog_io_case([0xF000, 0xF000])
         self.test_analog_io_case([0xFF00, 0xFF00])
-        rospy.loginfo("Analog I/O test ended")
+        rospy.loginfo("Analogue I/O test ended")
 
     def test_PWM_o_case(self, output_values):
         command_msg = UInt16MultiArray(None, output_values)
@@ -188,46 +187,38 @@ class IoTest(object):
             self.analog_command_publisher.publish(command_msg)
             rospy.sleep(0.03)
 
-
+"""
     def run_test(self):
         self.test_digital_ios()
         self.test_analog_ios()
         self.test_PWM_outputs()
-        #self.ramp()
+        
+        
+   
+        self.ramp()
         if self.success:
             rospy.loginfo("NO ERRORS DETECTED. Product code: " + PRODUCT_CODE + " SN: " + self.device_SN)
         else:
             rospy.logerr("TEST FAILED. ERRORS DETECTED!!!!!!!!!!!!!!!!!!!!!!!!!! Product code: " + PRODUCT_CODE + " SN: " + self.device_SN)
+"""
 
-def main(argv):
-    import rostest
-    try:
-        opts, args = getopt.getopt(argv,"h")
-    except getopt.GetoptError:
-        print 'single_ronex.py <SN_device_1> ... <SN_device_N>'
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt == '-h':
-            print 'single_ronex.py <SN_device_1> ... <SN_device_N>'
-            sys.exit()
+class TestContainer(unittest.TestCase):
+    def test_connected_ronex(self):
+        io_test = IoTest()
+        
+        io_test.test_digital_ios()
+        self.assertTrue( io_test.success, "digital I/O test failed" )
+        
+        io_test.test_analog_ios()
+        self.assertTrue( io_test.success, "analogue I/O test failed" )
+        
+        io_test.test_PWM_ios()
+        self.assertTrue( io_test.success, "PWM I/O test failed" )
+        
 
-    if len(args) == 0:
-       print 'single_ronex.py <SN_device_1> ... <SN_device_N>'
-       sys.exit(2)
-
-    # init the ros node
+if __name__ == '__main__':
+    
     rospy.init_node('single_ronex', anonymous=True)
     rospy.sleep(0.5)
 
-    for arg in args:
-        io_test = IoTest(arg)
-        io_test.run_test()
-
-    rospy.loginfo("I/O test ended")
-    # subscribe until interrupted
-    #rospy.spin()
-
-if __name__ == '__main__':
-    main(sys.argv[1:])
-
-
+    rostest.rosrun('sr_ronex_tests', 'single_ronex', TestContainer )
