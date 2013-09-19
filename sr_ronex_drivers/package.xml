@@ -1,25 +1,10 @@
-<!-- Copyright (c) 2013, Shadow Robot Company, All rights reserved.     -->
-<!--                                                                    -->
-<!-- This library is free software; you can redistribute it and/or      -->
-<!-- modify it under the terms of the GNU Lesser General Public         -->
-<!-- License as published by the Free Software Foundation; either       -->
-<!-- version 3.0 of the License, or (at your option) any later version. -->
-<!--                                                                    -->
-<!-- This library is distributed in the hope that it will be useful,    -->
-<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of     -->
-<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU   -->
-<!-- Lesser General Public License for more details.                    -->
-<!--                                                                    -->
-<!-- You should have received a copy of the GNU Lesser General Public   -->
-<!-- License along with this library.                                   -->
-
 <package>
   <name>sr_ronex_drivers</name>
   <version>1.0.0</version>
   <description>Package containing the driver for the RoNeX boards, and the CodDecod modules to map the inputs and outputs from every board to ROS topics and (optionally) to the HardwareInterface class.</description>
   <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
 
-  <license>Proprietary</license>
+  <license>LGPLv3</license>
 
   <url type="website">http://ros.org/wiki/sr_ronex_drivers</url>
   <!-- <url type="bugtracker"></url> -->
