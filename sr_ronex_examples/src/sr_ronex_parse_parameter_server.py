@@ -38,10 +38,10 @@ class SrRonexExample(object):
         while True:
             try:
                 rospy.get_param("/ronex/0/ronex_id")
-                sleep(0.1)
                 break
             except:
                 rospy.loginfo("Waiting for the ronex to be loaded properly.")
+                sleep(0.1)
 
         # Retreive all the ronex ids from the parameter server.
         ronex_param = rospy.get_param("/ronex")
