@@ -47,14 +47,14 @@ class LoadPassthroughControllers(object):
         #wait until there's one ronex
         while True:
             try:
-                rospy.get_param("/ronex/0/ronex_id")
+                rospy.get_param("/ronex/devices/0/ronex_id")
                 sleep(0.1)
             except:
                 rospy.loginfo("Waiting for the ronex to be loaded properly.")
                 pass
             break
 
-        ronex_param = rospy.get_param("/ronex")
+        ronex_param = rospy.get_param("/ronex/devices")
         for key in ronex_param:
             ronex_ids.append(ronex_param[key]["ronex_id"])
 

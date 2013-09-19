@@ -67,11 +67,11 @@ TEST(RonexUtils, get_ronex_param_id)
   EXPECT_EQ( ronex_param_id, -1);
 
   std::string param;
-  ros::param::set("/ronex/0/product_id", "0x20001");
-  ros::param::set("/ronex/0/product_name", "general_io");
-  ros::param::set("/ronex/0/ronex_id", "my_beautiful_ronex");
-  ros::param::set("/ronex/0/path", "/ronex/general_io/my_beautiful_ronex/");
-  ros::param::set("/ronex/0/serial", "1234");
+  ros::param::set("/ronex/devices/0/product_id", "0x20001");
+  ros::param::set("/ronex/devices/0/product_name", "general_io");
+  ros::param::set("/ronex/devices/0/ronex_id", "my_beautiful_ronex");
+  ros::param::set("/ronex/devices/0/path", "/ronex/general_io/my_beautiful_ronex/");
+  ros::param::set("/ronex/devices/0/serial", "1234");
 
   //We now have a ronex with param id = 0 -> next free id is 1.
   ronex_param_id = get_ronex_param_id("");
