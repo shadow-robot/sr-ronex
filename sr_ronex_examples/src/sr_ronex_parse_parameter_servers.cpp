@@ -40,8 +40,6 @@ public:
   }
 
 private:
-  ros::NodeHandle nh_;
-
   void find_ronexes_(void)
   {
     ros::Rate loop_rate(10);
