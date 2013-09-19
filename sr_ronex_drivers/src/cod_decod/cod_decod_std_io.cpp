@@ -1,21 +1,30 @@
+/*
+ * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ */
+
 /**
  * @file   cod_decod_01.cpp
  * @author Toni Oliver <toni@shadowrobot.com>
- *
-* Copyright 2013 Shadow Robot Company Ltd.
-*
-* This program is Proprietary software: you cannot redistribute it or modify it
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE.
-*
- * @brief This is and example implementation of an actual CodDecod class for a determined ethercat slave device.
- * The ethercat device will be determined by its product code and by its serial number.
- * The main functions are update, which decodes the data buffer coming from the ethercat device and updates the fields of the HardwareInterface,
- * and build_command, which encodes the command data for the ethercat device (reading from HardwareInterface) and writes it to the buffer.
- *
- */
+ * @brief  This is and example implementation of an actual CodDecod class for a determined 
+ *         ethercat slave device. The ethercat device will be determined by its product code 
+ *         and by its serial number. The main functions are update, which decodes the data 
+ *         buffer coming from the ethercat device and updates the fields of the HardwareInterface,
+ *         and build_command, which encodes the command data for the ethercat device (reading 
+ *         from HardwareInterface) and writes it to the buffer.
+ **/
 
 #include "sr_ronex_drivers/cod_decod/cod_decod_std_io.hpp"
 #include <sstream>
