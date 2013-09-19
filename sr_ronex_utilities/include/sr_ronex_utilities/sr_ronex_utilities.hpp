@@ -79,7 +79,7 @@ namespace ronex
     while( true )
     {
       std::stringstream ss;
-      ss << "/ronex/" << ronex_parameter_id << "/ronex_id";
+      ss << "/ronex/devices/" << ronex_parameter_id << "/ronex_id";
       if(ros::param::get(ss.str(), param) )
       {
         if( ronex_id.compare("") != 0 )

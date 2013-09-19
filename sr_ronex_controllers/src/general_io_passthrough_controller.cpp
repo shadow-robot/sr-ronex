@@ -62,7 +62,7 @@ namespace ronex
       else
       {
         std::stringstream ss;
-        ss << "/ronex/" << parameter_id << "/path";
+        ss << "/ronex/devices/" << parameter_id << "/path";
         if( !ros::param::get(ss.str(), path) )
         {
           ROS_ERROR_STREAM("Couldn't read the parameter " << ss.str() << " from the parameter server. Not loading the controller.");
