@@ -14,50 +14,42 @@ import roslib
 import rospy
 from time import sleep
 
-class SR_RONEX_Example(object):
+#--------------------------------------------------------------------------------
+
+class SrRonexExample(object):
 
     def __init__(self):
         """
         """
-        ronex_ids = self.find_ronexes()
-        self.set_param(ronex_ids)
+        self.find_ronexes()
         
     def find_ronexes(self):
         """
         Find the ronexes present on the system
-
-        @return a list of ronex_ids
         """
-        ronex_ids = []
-
-        #retreive all the ronex ids from the parameter server
-        #wait until there's one ronex
+        # Wait until there's one ronex.
         while True:
             try:
                 rospy.get_param("/ronex/0/ronex_id")
                 sleep(0.1)
+                break
             except:
                 rospy.loginfo("Waiting for the ronex to be loaded properly.")
-                pass
-            break
 
+        # Retreive all the ronex ids from the parameter server.
         ronex_param = rospy.get_param("/ronex")
         for key in ronex_param:
-            ronex_ids.append(ronex_param[key]["ronex_id"])
+            rospy.loginfo( "*** Ronex %d ***",  key );
+            rospy.loginfo( "product_id   = %s", ronex_param[key]["product_id"] );
+            rospy.loginfo( "product_name = %s", ronex_param[key]["product_name"] );
+            rospy.loginfo( "ronex_id     = %s", ronex_param[key]["ronex_id"] );
+            rospy.loginfo( "path         = %s", ronex_param[key]["path"]);
+            rospy.loginfo( "serial       = %s", ronex_param[key]["serial"] );
 
-        return ronex_ids
-
-    def set_param(self, ronex_ids):
-        """
-        Load the parameters for the present ronexes into the parameter server
-
-        @param ronex_ids the ids of the ronexes
-        """
-        for ronex_id in ronex_ids:
-            rospy.set_param("/ronex_"+ronex_id+"_passthrough/type", "sr_ronex_controllers/GeneralIOPassthroughController")
-            rospy.set_param("/ronex_"+ronex_id+"_passthrough/ronex_id", ronex_id)
-
+#--------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     rospy.init_node("sr_ronex_parse_parameter_servers")
-    SR_RONEX_Example()
+    SrRonexExample()
+
+#--------------------------------------------------------------------------------

@@ -72,27 +72,29 @@ private:
       std::string product_id;
       std::string product_id_key = get_key_( ronex_parameter_id, std::string("product_id") );
       ros::param::get( product_id_key, product_id );
-      ROS_INFO( "product_id = %s.", product_id.c_str() );
-
+     
       std::string product_name;
       std::string product_name_key = get_key_( ronex_parameter_id, std::string("product_name") );
       ros::param::get( product_name_key, product_name );
-      ROS_INFO( "product_name = %s.", product_name.c_str() );
-
+      
       std::string ronex_id;
       std::string ronex_id_key = get_key_( ronex_parameter_id, std::string("ronex_id") );
       ros::param::get( ronex_id_key, ronex_id );
-      ROS_INFO( "ronex_id = %s.", ronex_id.c_str() );
-
+      
       std::string path;
       std::string path_key = get_key_( ronex_parameter_id, std::string("path") );
       ros::param::get( path_key, path );
-      ROS_INFO( "path = %s.", path.c_str() );
-
+      
       std::string serial;
       std::string serial_key = get_key_( ronex_parameter_id, std::string("serial") );
       ros::param::get( serial_key, serial );
-      ROS_INFO( "serial = %s.", serial.c_str() );
+
+      ROS_INFO( "*** Ronex %d ***",  ronex_parameter_id );
+      ROS_INFO( "product_id   = %s", product_id.c_str() );
+      ROS_INFO( "product_name = %s", product_name.c_str() );
+      ROS_INFO( "ronex_id     = %s", ronex_id.c_str() );
+      ROS_INFO( "path         = %s", path.c_str() );
+      ROS_INFO( "serial       = %s", serial.c_str() );
     }
   }
 
