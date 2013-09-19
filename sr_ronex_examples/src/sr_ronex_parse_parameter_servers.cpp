@@ -42,6 +42,7 @@ public:
 private:
   void find_ronexes_(void)
   {
+    // Wait until ronexes are loaded.
     ros::Rate loop_rate(10);
     std::string param;
     while ( ros::param::get("/ronex/0/ronex_id", param ) == false )
@@ -50,23 +51,23 @@ private:
       loop_rate.sleep();
     }
 
-    /*
-     * Checks the ronexes already present on the parameter server and returns
-     * an id on which the given ronex is stored on the parameter server.
-     * The method returns the index of the ronex in the parameter server.
-     * -1 if not found. Or the next free index if ronex_id == "".
-     */
+    // ronex::get_ronex_param_id returns next free index, when ronex_id == "".
     std::string ronex_id("");
     int next_free_index = ronex::get_ronex_param_id(ronex_id);
+    // Iterate through all ronexes.
     for (int k = 0; k < next_free_index; k++)
     {
       ronex_id = to_string_(k);
+      // When -1 is returned, the ronex with the given id is not present on the parameter server.
       int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
       if ( ronex_parameter_id == -1 )
       {
         ROS_INFO( "Did not find the ronex with ronex_id %s.", ronex_id.c_str() );
         continue;
       }
+
+      // The ronex is present on the parameter server and ronex_parameter_id
+      // contains the id on which the given ronex is stored on the parameter server.
 
       std::string product_id;
       std::string product_id_key = get_key_( ronex_parameter_id, std::string("product_id") );
@@ -104,6 +105,7 @@ private:
     return s;
   }
 
+  // Construct key for ros::param::get.
   std::string get_key_(int ronex_parameter_id, std::string part)
   {
     std::string key("/ronex/");
