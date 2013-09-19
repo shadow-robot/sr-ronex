@@ -74,14 +74,14 @@ include_directories(include/
 # )
 
 ## Declare a cpp executable
-add_executable(sr_ronex_parse_parameter_servers src/sr_ronex_parse_parameter_servers.cpp)
+add_executable(sr_ronex_parse_parameter_server src/sr_ronex_parse_parameter_server.cpp)
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(sr_ronex_examples_node sr_ronex_examples_generate_messages_cpp)
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(sr_ronex_parse_parameter_servers ${catkin_LIBRARIES})
+target_link_libraries(sr_ronex_parse_parameter_server ${catkin_LIBRARIES})
 
 #############
 ## Install ##
