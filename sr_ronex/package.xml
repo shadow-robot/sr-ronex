@@ -28,6 +28,7 @@
   <run_depend>sr_ronex_drivers</run_depend>
   <run_depend>sr_ronex_hardware_interface</run_depend>
   <run_depend>sr_ronex_external_protocol</run_depend>
+  <run_depend>sr_ronex_examples</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
 </package>
