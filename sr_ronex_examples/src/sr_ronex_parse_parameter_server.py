@@ -17,22 +17,27 @@
 # License along with this library.
 # ####################################################################
 
-import roslib
+import roslib; roslib.load_manifest('sr_ronex_examples')
 import rospy
 from time import sleep
 
 #--------------------------------------------------------------------------------
 
+"""
+This class demonstate how to use the ronexes listed in the parameter server.
+For each ronex, the parameter server stores parameters such as
+its product_id, product_name, ronex_id, path, and serial.
+Note that the Python version is simpler than the C++ version, because params
+are stored as a dictionary in Python.
+"""
 class SrRonexExample(object):
 
     def __init__(self):
-        """
-        """
         self.find_ronexes()
         
     def find_ronexes(self):
         """
-        Find the ronexes present on the system
+        Find the ronexes present on the system.
         """
         # Wait until there's one ronex.
         while True:
@@ -46,6 +51,7 @@ class SrRonexExample(object):
         # Retreive all the ronex ids from the parameter server.
         ronex_param = rospy.get_param("/ronex/devices")
         for key in ronex_param:
+            # Retrieve the values of all parameters related to the current ronex.
             rospy.loginfo( "*** Ronex %s ***",  key );
             rospy.loginfo( "product_id   = %s", ronex_param[key]["product_id"] );
             rospy.loginfo( "product_name = %s", ronex_param[key]["product_name"] );
@@ -56,7 +62,7 @@ class SrRonexExample(object):
 #--------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    rospy.init_node("sr_ronex_parse_parameter_servers")
+    rospy.init_node("sr_ronex_parse_parameter_server")
     SrRonexExample()
 
 #--------------------------------------------------------------------------------

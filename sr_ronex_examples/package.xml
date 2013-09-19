@@ -3,7 +3,7 @@
   <name>sr_ronex_examples</name>
   <version>1.0.0</version>
   <description>Package containing examples for the RoNeX boards.</description>
-  <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
+  <maintainer email="software@shadowrobot.com">Ugo Cupcic</maintainer>
 
   <license>LGPLv3</license>
 

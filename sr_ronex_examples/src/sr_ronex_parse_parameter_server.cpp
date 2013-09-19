@@ -32,19 +32,29 @@
 
 //-------------------------------------------------------------------------------
 
+ /**
+  * This class demonstate how to use the ronexes listed in the parameter server.
+  * For each ronex, the parameter server stores parameters such as 
+  * its product_id, product_name, ronex_id, path, and serial.
+  **/
 class SrRonexExample
 {
 public:
-  SrRonexExample() {}
-  ~SrRonexExample() {}
-
-public:
-  void run(void)
+  SrRonexExample() 
   {
     find_ronexes_();
   }
-
+  
+  ~SrRonexExample() {}
+  
 private:
+
+ /**
+  * Find all ronexes listed in the parameter server.
+  * Note that the help method ronex::get_ronex_param_id checks 
+  * the ronexes already present on the parameter server and returns 
+  * an id on which the given ronex is stored on the parameter server.
+  **/
   void find_ronexes_(void)
   {
     // Wait until ronexes are loaded.
@@ -73,7 +83,8 @@ private:
 
       // The ronex is present on the parameter server and ronex_parameter_id
       // contains the id on which the given ronex is stored on the parameter server.
-
+            
+      // Retrieve the values of all parameters related to the current ronex.
       std::string product_id;
       std::string product_id_key = get_key_( ronex_parameter_id, std::string("product_id") );
       ros::param::get( product_id_key, product_id );
@@ -102,8 +113,13 @@ private:
       ROS_INFO( "serial       = %s", serial.c_str() );
     }
   }
-
-  // Convert integer d to string s.
+  
+  /**
+   * Convert the given integer into a string.
+   *
+   * @param d The integer to be converted.
+   * @return The integer as a string. 
+   **/
   std::string to_string_(int d)
   {
     std::stringstream ss;
@@ -111,8 +127,14 @@ private:
     std::string s(ss.str());
     return s;
   }
-
-  // Construct key for ros::param::get.
+  
+  /**
+   * Construct key for ros::param::get.
+   *
+   * @param ronex_parameter_id Part of the key.
+   * @param part Part of the key.
+   * @return The key.
+   **/
   std::string get_key_(int ronex_parameter_id, std::string part)
   {
     std::string key("/ronex/devices/");
@@ -127,12 +149,14 @@ private:
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "parse_parameter_servers");
+  // Initialize ROS with a unique node name.
+  ros::init(argc, argv, "sr_ronex_parse_parameter_server");
 
+  // Create a handle to this process' node. 
   ros::NodeHandle n;
 
+  // This class demonstate how to use the ronexes listed in the parameter server.
   SrRonexExample example;
-  example.run();
 
   return 0;
 }
