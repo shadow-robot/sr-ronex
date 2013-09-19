@@ -1,19 +1,25 @@
+/*
+ * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ */
+
 /**
  * @file   sr_board_mk2_gio.cpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- *
- * Copyright 2013 Shadow Robot Company Ltd.
-*
-* This program is Proprietary software: you cannot redistribute it or modify it
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE.
-*
- *
- * @brief Driver for the RoNeX mk2 General I/O module.
- *
- */
+ * @brief  Driver for the RoNeX mk2 General I/O module.
+ **/
 
 #include <sr_ronex_drivers/sr_board_mk2_gio.hpp>
 
@@ -41,7 +47,7 @@ SrBoardMk2GIO::~SrBoardMk2GIO()
 {
   //remove parameters from server
   std::stringstream param_path;
-  param_path << "/ronex/" << parameter_id_ ;
+  param_path << "/ronex/devices/" << parameter_id_ ;
   ros::param::del(param_path.str());
 
 
@@ -55,7 +61,7 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
   //get the alias from the parameter server if it exists
   std::string path_to_alias, alias;
-  path_to_alias = "/ronexes/mapping/" + serial_number_;
+  path_to_alias = "/ronex/mapping/" + serial_number_;
   if( ros::param::get(path_to_alias, alias))
   {
     ronex_id_ = alias;
@@ -382,7 +388,7 @@ void SrBoardMk2GIO::build_topics_()
   //loading everything into the parameter server
   parameter_id_ = ronex::get_ronex_param_id("");
   std::stringstream param_path, tmp_param;
-  param_path << "/ronex/" << parameter_id_ << "/";
+  param_path << "/ronex/devices/" << parameter_id_ << "/";
   tmp_param << ronex::get_product_code(sh_);
   ros::param::set(param_path.str() + "product_id", tmp_param.str());
   ros::param::set(param_path.str() + "product_name", product_alias_);
