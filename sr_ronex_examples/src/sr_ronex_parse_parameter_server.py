@@ -37,16 +37,16 @@ class SrRonexExample(object):
         # Wait until there's one ronex.
         while True:
             try:
-                rospy.get_param("/ronex/0/ronex_id")
+                rospy.get_param("/ronex/devices/0/ronex_id")
                 break
             except:
                 rospy.loginfo("Waiting for the ronex to be loaded properly.")
                 sleep(0.1)
 
         # Retreive all the ronex ids from the parameter server.
-        ronex_param = rospy.get_param("/ronex")
+        ronex_param = rospy.get_param("/ronex/devices")
         for key in ronex_param:
-            rospy.loginfo( "*** Ronex %d ***",  key );
+            rospy.loginfo( "*** Ronex %s ***",  key );
             rospy.loginfo( "product_id   = %s", ronex_param[key]["product_id"] );
             rospy.loginfo( "product_name = %s", ronex_param[key]["product_name"] );
             rospy.loginfo( "ronex_id     = %s", ronex_param[key]["ronex_id"] );

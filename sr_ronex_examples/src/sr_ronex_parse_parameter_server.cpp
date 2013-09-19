@@ -1,4 +1,3 @@
-
 /*
 * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
 * 
@@ -51,7 +50,7 @@ private:
     // Wait until ronexes are loaded.
     ros::Rate loop_rate(10);
     std::string param;
-    while ( ros::param::get("/ronex/0/ronex_id", param ) == false )
+    while ( ros::param::get("/ronex/devices/0/ronex_id", param ) == false )
     {
       ROS_INFO( "Waiting for the ronex to be loaded properly." );
       loop_rate.sleep();
@@ -63,7 +62,7 @@ private:
     // Iterate through all ronexes.
     for (int k = 0; k < next_free_index; k++)
     {
-      ronex_id = to_string_(k);
+      ronex_id = to_string_(k+1);
       // When -1 is returned, the ronex with the given id is not present on the parameter server.
       int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
       if ( ronex_parameter_id == -1 )
@@ -116,7 +115,7 @@ private:
   // Construct key for ros::param::get.
   std::string get_key_(int ronex_parameter_id, std::string part)
   {
-    std::string key("/ronex/");
+    std::string key("/ronex/devices/");
     key += to_string_(ronex_parameter_id);
     key += "/";
     key += part;
@@ -129,6 +128,8 @@ private:
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "parse_parameter_servers");
+
+  ros::NodeHandle n;
 
   SrRonexExample example;
   example.run();
