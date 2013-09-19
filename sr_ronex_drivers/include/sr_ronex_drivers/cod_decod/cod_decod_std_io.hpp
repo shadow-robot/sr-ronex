@@ -1,23 +1,31 @@
+/*
+ * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ */
+
 /**
  * @file   cod_decod_std_io.hpp
  * @author Toni Oliver <toni@shadowrobot.com>
- *
-* Copyright 2013 Shadow Robot Company Ltd.
-*
-* This program is Proprietary software: you cannot redistribute it or modify it
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE.
-*
-*
- * @brief This is an intermediate CodDecod class for any ethercat slave device that only has digital and analog (16bit) inputs and outputs.
- * It decodes and encodes the status and commands, publishes the inputs of the device to a topic
- * and reads commands from a topic to set the outputs of the device (this may be incompatible
- * with the system functionality and will probably have to be removed).
- * This object is not interacting in any way with the HardwareInterface. Its children (e.g. cod_decod_01) will.
- *
- */
+ * @brief  This is an intermediate CodDecod class for any ethercat slave device 
+ *         that only has digital and analog (16bit) inputs and outputs.
+ *         It decodes and encodes the status and commands, publishes the inputs 
+ *         of the device to a topic and reads commands from a topic to set the 
+ *         outputs of the device (this may be incompatible with the system functionality 
+ *         and will probably have to be removed). This object is not interacting in any 
+ *         way with the HardwareInterface. Its children (e.g. cod_decod_01) will.
+ **/
 
 #ifndef _COD_DECOD_STD_IO_HPP_
 #define _COD_DECOD_STD_IO_HPP_
