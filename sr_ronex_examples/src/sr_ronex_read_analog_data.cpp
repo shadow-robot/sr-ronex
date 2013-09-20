@@ -127,6 +127,9 @@ void generalIOState_callback(const sr_ronex_msgs::GeneralIOState::ConstPtr& msg)
 
 //-------------------------------------------------------------------------------
 
+/**
+ * This class demonstate how to read the analog data for a given ronex.
+ **/
 int main(int argc, char **argv)
 {
   // Initialize ROS with a unique node name.
