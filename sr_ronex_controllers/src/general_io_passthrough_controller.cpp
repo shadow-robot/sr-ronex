@@ -1,20 +1,26 @@
+/*
+ * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ */
+
 /**
  * @file   general_io_passthrough_controller.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- *
-* Copyright 2013 Shadow Robot Company Ltd.
-*
-* This program is Proprietary software: you cannot redistribute it or modify it
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE.
- *
- * @brief A passthrough for the General IO RoNeX module: simply sets the
- *        different pins to the value you want directly.
- *
- *
- */
+ * @brief  A passthrough for the General IO RoNeX module: simply sets the
+ *         different pins to the value you want directly.
+ **/
 
 #include "sr_ronex_controllers/general_io_passthrough_controller.hpp"
 #include "pluginlib/class_list_macros.h"
@@ -62,7 +68,7 @@ namespace ronex
       else
       {
         std::stringstream ss;
-        ss << "/ronex/" << parameter_id << "/path";
+        ss << "/ronex/devices/" << parameter_id << "/path";
         if( !ros::param::get(ss.str(), path) )
         {
           ROS_ERROR_STREAM("Couldn't read the parameter " << ss.str() << " from the parameter server. Not loading the controller.");

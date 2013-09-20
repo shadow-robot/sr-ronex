@@ -1,22 +1,27 @@
+/*
+ * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
+ */
+
 /**
  * @file   analogue_to_joint_position.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
  * @date   Mon Jul  1 08:09:07 2013
- *
-* Copyright 2013 Shadow Robot Company Ltd.
-*
-* This program is Proprietary software: you cannot redistribute it or modify it
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE.
-*
-*
  * @brief  A transmission for mapping one analogue input pin from a general I/O
  *         RoNeX module to the position of the joint.
- *
- *
- */
+ **/
 
 #include <pr2_mechanism_model/robot.h>
 #include <sr_ronex_transmissions/ronex_transmission.hpp>

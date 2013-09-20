@@ -4,7 +4,7 @@
   <description>This stack contains the different packages related to the RoNeX (Robot Nervous System).</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
-  <license>Proprietary</license>
+  <license>LGPLv3</license>
 
   <url type="website">http://www.shadowrobot.com/products/ronex</url>
   <url type="repository">https://github.com/shadow-robot/sr-ronex</url>
@@ -28,6 +28,7 @@
   <run_depend>sr_ronex_drivers</run_depend>
   <run_depend>sr_ronex_hardware_interface</run_depend>
   <run_depend>sr_ronex_external_protocol</run_depend>
+  <run_depend>sr_ronex_examples</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
 </package>

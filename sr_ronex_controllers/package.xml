@@ -4,7 +4,7 @@
   <description>Contains different useful controllers to use with the RoNeX.</description>
   <maintainer email="software@shadowrobot.com">Ugo Cupcic</maintainer>
 
-  <license>Proprietary</license>
+  <license>LGPLv3</license>
 
   <url type="website">http://ros.org/wiki/sr_ronex_controllers</url>
   <!-- <url type="bugtracker"></url> -->
