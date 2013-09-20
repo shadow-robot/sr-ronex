@@ -16,9 +16,9 @@
 */
 
 /**
- * @file   sr_ronex_parse_parameter_server.cpp
+ * @file   sr_ronex_read_analog_data.cpp
  * @author Yi Li <yi@shadowrobot.com>
- * @brief  Parse data from parameter server for ronexes.
+ * @brief  Read analog data from ronexes.
  **/
 
 //-------------------------------------------------------------------------------
@@ -28,7 +28,16 @@
 #include <string>
 #include <sstream>
 
+#include "sr_ronex_msgs/GeneralIOState.h"
+#include "sr_ronex_msgs/PWM.h"
 #include "sr_ronex_utilities/sr_ronex_utilities.hpp"
+
+//-------------------------------------------------------------------------------
+
+void generalIOStateCallback(const sr_ronex_msgs::GeneralIOState::ConstPtr& msg)
+{
+  ROS_INFO("I heard data");
+}
 
 //-------------------------------------------------------------------------------
 
@@ -150,14 +159,28 @@ private:
 int main(int argc, char **argv)
 {
   // Initialize ROS with a unique node name.
-  ros::init(argc, argv, "sr_ronex_parse_parameter_server");
+  ros::init(argc, argv, "sr_ronex_read_analog_data");
 
   // Create a handle to this process' node. 
   ros::NodeHandle n;
-
-  // This class demonstate how to use the ronexes listed in the parameter server.
-  SrRonexExample example;
-
+  
+  /**
+   * The subscribe() call is how you tell ROS that you want to receive messages
+   * on a given topic. Messages are passed to a callback function, here
+   * called chatterCallback. The second parameter to the subscribe() function is 
+   * the size of the message queue.
+   **/
+  ros::Subscriber sub = n.subscribe( "/ronex/general_io/1/state", 
+				     1000,
+				     generalIOStateCallback);
+  
+  /**
+   * ros::spin() will enter a loop, pumping callbacks.  With this version, all
+   * callbacks will be called from within this thread (the main one).  ros::spin()
+   * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
+   **/
+  ros::spin();
+  
   return 0;
 }
 
