@@ -135,6 +135,7 @@ int main(int argc, char **argv)
   // Create a handle to this process' node. 
   ros::NodeHandle n;
   
+  // Get the path of the ronex with the given ronex id (i.e., "1").
   SrRonexExample example;
   std::string ronex_id("1"), path;
   example.get_ronex_path_( ronex_id, path );
