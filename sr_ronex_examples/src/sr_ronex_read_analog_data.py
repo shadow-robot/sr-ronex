@@ -75,7 +75,7 @@ if __name__ == "__main__":
     path = example.get_ronex_path()
     
     if path != None:
-        # For example "/ronex/general_io/1" + "/state"
+        # For example "/ronex/general_io/1" + "/state".
         topic = path + "/state"
         rospy.Subscriber( topic, GeneralIOState, generalIOState_callback )
         rospy.spin()

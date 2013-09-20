@@ -25,7 +25,7 @@ from sr_ronex_msgs.msg import PWM
 #--------------------------------------------------------------------------------
 
 # Dim a LED light with PWM. It takes 10 seconds.
-def dimLED():
+def dimLED(topic):
     # Set the switching frequency to 100kHz.
     pwm_period = 320
     # Start with a 100% duty cycle.
@@ -33,12 +33,8 @@ def dimLED():
     # The second output is not used.
     pwm_on_time_1 = 0
 
-    pub = rospy.Publisher( 'chatter', PWM )
-    rospy.init_node('sr_ronex_dim_LED_with_PWM')
+    pub = rospy.Publisher( topic, PWM )
     while not rospy.is_shutdown():
-        str = "hello world %s" % rospy.get_time()
-        rospy.loginfo(str)
-
         # Dim the light...
         pwm_on_time_0 -= 3
         if pwm_on_time_0 < 0:
@@ -56,24 +52,52 @@ def dimLED():
 #--------------------------------------------------------------------------------
 
 """
+This class demonstate how to read the analog data for a given ronex.
+"""
+class SrRonexExample(object):
+
+    def __init__(self, ronex_id):
+        self.ronex_id = ronex_id
+        
+    def get_ronex_path(self):
+        """
+        Find the ronexes present on the system.
+        """
+        # Wait until there's one ronex.
+        while True:
+            try:
+                rospy.get_param("/ronex/devices/0/ronex_id")
+                break
+            except:
+                rospy.loginfo("Waiting for the ronex to be loaded properly.")
+                sleep(0.1)
+
+        # Retreive all the ronex ids from the parameter server.
+        ronex_param = rospy.get_param("/ronex/devices")
+        for key in ronex_param:
+            if self.ronex_id == ronex_param[key]["ronex_id"]:
+                path = ronex_param[key]["path"]
+                return path
+
+#--------------------------------------------------------------------------------
+
+"""
 This example demonstates how to dim a LED light with pulse-width modulation (PWM). 
 """
 if __name__ == "__main__":
-    try:
-        dimLED()
-    except rospy.ROSInterruptException:
-        pass
-
+    rospy.init_node('sr_ronex_dim_LED_with_PWM')
+    
     ronex_id = "1"
     example = SrRonexExample( ronex_id )
     path = example.get_ronex_path()
-    
+     
     if path != None:
-        # For example "/ronex/general_io/1" + "/state"
-        topic = path + "/state"
-        rospy.Subscriber( topic, GeneralIOState, generalIOState_callback )
-        rospy.spin()
-    else:
-        rospy.logerr( "Failed to find the ronex with the given ronex_id %s.", ronex_id )
+        # Use the first PWM output to dim the LED light.
+        # For example "/ronex/general_io/1" + "/command/0".
+        topic = path + "/command/0"
+        try:
+            dimLED(topic)
+        except rospy.ROSInterruptException:
+            pass
 
 #--------------------------------------------------------------------------------
