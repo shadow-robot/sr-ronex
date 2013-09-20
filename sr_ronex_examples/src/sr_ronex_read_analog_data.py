@@ -60,11 +60,13 @@ class SrRonexExample(object):
         for key in ronex_param:
             if self.ronex_id == ronex_param[key]["ronex_id"]:
                 path = ronex_param[key]["path"]
-                print "path pppppppppppppp", path
                 return path
 
 #--------------------------------------------------------------------------------
 
+"""
+This class demonstate how to read the analog data for a given ronex.
+"""
 if __name__ == "__main__":
     rospy.init_node("sr_ronex_read_analog_data")
 
