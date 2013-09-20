@@ -246,7 +246,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
   // module has not finished writing it to memory yet.
   if( status_data->command_type == RONEX_COMMAND_02000001_COMMAND_TYPE_NORMAL)
   {
-    if( general_io_->state_.analogue_.size() == 0)
+    if( general_io_->state_.analogue_.empty())
     {
       size_t nb_analogue_pub, nb_digital_io, nb_pwm_modules;
       //The publishers haven't been initialised yet.
@@ -273,9 +273,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
       general_io_->command_.digital_.resize(nb_digital_io);
       general_io_->command_.pwm_.resize(nb_pwm_modules);
 
-      input_mode_.resize(nb_digital_io);
-      for(size_t i=0; i < input_mode_.size(); ++i)
-        input_mode_[i] = true;
+      input_mode_.assign(nb_digital_io, true);
 
       //init the state message
       state_msg_.analogue.resize(nb_analogue_pub);
