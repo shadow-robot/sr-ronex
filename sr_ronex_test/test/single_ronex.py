@@ -9,9 +9,10 @@
  FITNESS FOR A PARTICULAR PURPOSE.
 """
 
-#import roslib; roslib.load_manifest('sr_ronex_test')
 import rospy, sys, getopt, unittest, rostest
 
+from time import sleep
+from string import Template
 from threading import Lock
 from sr_ronex_msgs.msg import BoolArray
 from std_msgs.msg import UInt16MultiArray
@@ -41,25 +42,22 @@ class IoTest(object):
 
     Keep in mind that the test is intended to be run with the LEDs attached to the digital I/Os and the correct wiring of the analogue I and O
     """
-#Example of existing topics for a certain device
-#/device_0x05300424_0x00000016_PWM_outputs_command
-#/device_0x05300424_0x00000016_analog_inputs_state
-#/device_0x05300424_0x00000016_analog_outputs_command
-#/device_0x05300424_0x00000016_digital_inputs_state
-#/device_0x05300424_0x00000016_digital_outputs_command
 
-    def __init__(self):
+    def __init__( self, devs ):
         rospy.loginfo("Testing device. Product code: " + PRODUCT_CODE )
         self.success = True
         self.PWM_testing = False
         self.a_state_lock = Lock()
         self.d_state_lock = Lock()
-        self.analog_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN + "_analog_outputs_command", UInt16MultiArray, latch=True)
-        self.digital_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN + "_digital_outputs_command", BoolArray, latch=True)
-        self.PWM_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN + "_PWM_outputs_command", UInt16MultiArray, latch=True)
-        self.analog_state_subscriber_ = rospy.Subscriber("/device_" + PRODUCT_CODE + "_" + device_SN + "_analog_inputs_state", UInt16MultiArray, self.analog_state_callback)
-        self.digital_state_subscriber_ = rospy.Subscriber("/device_" + PRODUCT_CODE + "_" + device_SN + "_digital_inputs_state", BoolArray, self.digital_state_callback)
-
+        
+        st = Template("/ronex/general_io/$sn/command/digital")
+        snA = devs['0']["serial"]
+        snB = devs['1']["serial"]
+        self.digital_publisher_A = rospy.Publisher( st.substitute( sn = snA ), BoolArray, latch = True )
+        self.digital_publisher_B = rospy.Publisher( st.substitute( sn = snB ) , BoolArray, latch = True )
+        self.digital_subscriber_A = rospy.Subscriber( st.substitute( sn = snA ), BoolArray, self.digital_state_callback )
+        self.digital_subscriber_B = rospy.Subscriber( st.substitute( sn = snB ), BoolArray, self.digital_state_callback )
+        
         self.last_analog_state = None
         self.last_digital_state = None
         self.last_period_start_time = 4*[0.0]
@@ -67,14 +65,8 @@ class IoTest(object):
 
         #Initialise the PWM outputs to 0 to avoid interference with the digital output testing
         command_msg = UInt16MultiArray(None, 8*[0])
-        self.PWM_command_publisher.publish(command_msg)
+        #self.PWM_command_publisher.publish(command_msg)
         rospy.sleep(0.2)
-
-
-
-    def analog_state_callback(self, msg):
-        with self.a_state_lock:
-            self.last_analog_state = msg
 
     def digital_state_callback(self, msg):
         with self.d_state_lock:
@@ -86,7 +78,6 @@ class IoTest(object):
                             self.average_period[i] = (1- PERIOD_ALPHA) * self.average_period[i] + PERIOD_ALPHA * (rospy.get_time() - self.last_period_start_time[i])
                         self.last_period_start_time[i] = rospy.get_time()
             self.last_digital_state = msg
-
 
     def check_digital_inputs(self, output_values):
         rospy.sleep(0.1)
@@ -103,7 +94,7 @@ class IoTest(object):
 
     def test_digital_io_case(self, output_values):
         command_msg = BoolArray(output_values)
-        self.digital_command_publisher.publish(command_msg)
+        self.digital_publisher_A.publish(command_msg)
         self.check_digital_inputs(output_values)
         rospy.sleep(DIGITAL_IO_WAIT)
 
@@ -117,6 +108,10 @@ class IoTest(object):
         self.test_digital_io_case([False, True, False, True, False, True, False, True])
         self.test_digital_io_case([False, False, False, False, False, False, False, False])
         rospy.loginfo("Digital I/O test ended")
+"""
+    def analog_state_callback(self, msg):
+        with self.a_state_lock:
+            self.last_analog_state = msg
 
     def check_analog_inputs(self, output_values):
         rospy.sleep(0.1)
@@ -136,7 +131,6 @@ class IoTest(object):
             else:
                 rospy.logerr("No analogue input data received from: " + self.device_SN)
                 self.success = False
-
 
     def test_analog_io_case(self, output_values):
         command_msg = UInt16MultiArray(None, output_values)
@@ -186,39 +180,37 @@ class IoTest(object):
             command_msg = UInt16MultiArray(None, [i, i])
             self.analog_command_publisher.publish(command_msg)
             rospy.sleep(0.03)
-
 """
-    def run_test(self):
-        self.test_digital_ios()
-        self.test_analog_ios()
-        self.test_PWM_outputs()
-        
-        
-   
-        self.ramp()
-        if self.success:
-            rospy.loginfo("NO ERRORS DETECTED. Product code: " + PRODUCT_CODE + " SN: " + self.device_SN)
-        else:
-            rospy.logerr("TEST FAILED. ERRORS DETECTED!!!!!!!!!!!!!!!!!!!!!!!!!! Product code: " + PRODUCT_CODE + " SN: " + self.device_SN)
-"""
-
 class TestContainer(unittest.TestCase):
     def test_connected_ronex(self):
-        io_test = IoTest()
+        ronex_devices = find_ronexes()
+        self.assertEqual( len(ronex_devices), 2, "Error. Connect a ronex bridge with 2 ronex devices" )
+            
+        io_test = IoTest( ronex_devices )
         
         io_test.test_digital_ios()
         self.assertTrue( io_test.success, "digital I/O test failed" )
         
-        io_test.test_analog_ios()
-        self.assertTrue( io_test.success, "analogue I/O test failed" )
+        #io_test.test_analog_ios()
+        #self.assertTrue( io_test.success, "analogue I/O test failed" )
         
-        io_test.test_PWM_ios()
-        self.assertTrue( io_test.success, "PWM I/O test failed" )
+        #io_test.test_PWM_ios()
+        #self.assertTrue(io_test.success, "PWM I/O test failed")
         
-
+def find_ronexes():
+    attempts = 50
+    while attempts:
+        try:
+            rospy.get_param("/ronex/devices/0/ronex_id")
+            break
+        except:
+            rospy.loginfo("Waiting for the ronex to be loaded properly.")
+            sleep(0.1)
+            attempts -= 1
+    return rospy.get_param("/ronex/devices")
+        
 if __name__ == '__main__':
-    
-    rospy.init_node('single_ronex', anonymous=True)
-    rospy.sleep(0.5)
 
+    rospy.init_node('single_ronex', anonymous=True)
+    sleep(0.5)
     rostest.rosrun('sr_ronex_tests', 'single_ronex', TestContainer )
