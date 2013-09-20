@@ -1,15 +1,23 @@
 #!/usr/bin/env python
 """
- Copyright 2013 Shadow Robot Company Ltd.
-
- This program is Proprietary software: you cannot redistribute it or modify it
-
- This program is distributed in the hope that it will be useful, but WITHOUT
- ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- FITNESS FOR A PARTICULAR PURPOSE.
+ * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
 """
 
 import rospy, sys, getopt, unittest, rostest
+import dynamic_reconfigure.client
 
 from time import sleep
 from string import Template
@@ -50,13 +58,19 @@ class IoTest(object):
         self.a_state_lock = Lock()
         self.d_state_lock = Lock()
         
-        st = Template("/ronex/general_io/$sn/command/digital")
+        sdt = Template("/ronex/general_io/$sn/command/digital")
         snA = devs['0']["serial"]
         snB = devs['1']["serial"]
-        self.digital_publisher_A = rospy.Publisher( st.substitute( sn = snA ), BoolArray, latch = True )
-        self.digital_publisher_B = rospy.Publisher( st.substitute( sn = snB ) , BoolArray, latch = True )
-        self.digital_subscriber_A = rospy.Subscriber( st.substitute( sn = snA ), BoolArray, self.digital_state_callback )
-        self.digital_subscriber_B = rospy.Subscriber( st.substitute( sn = snB ), BoolArray, self.digital_state_callback )
+        self.digital_publisher_A = rospy.Publisher( sdt.substitute( sn = snA ), BoolArray, latch = True )
+        self.digital_publisher_B = rospy.Publisher( sdt.substitute( sn = snB ) , BoolArray, latch = True )
+
+        
+        self.digital_subscriber_A = rospy.Subscriber( sdt.substitute( sn = snA ), BoolArray, self.digital_state_callback )
+        self.digital_subscriber_B = rospy.Subscriber( sdt.substitute( sn = snB ), BoolArray, self.digital_state_callback )
+        
+        sdt = Template("/ronex/general_io/$sn/command/digital")
+        self.analogue_subscriber_A = rospy.Subscriber( sdt.substitute( sn = snA ), BoolArray, self.digital_state_callback )
+        self.analogue_subscriber_B = rospy.Subscriber( sdt.substitute( sn = snB ), BoolArray, self.digital_state_callback )
         
         self.last_analog_state = None
         self.last_digital_state = None
@@ -211,6 +225,6 @@ def find_ronexes():
         
 if __name__ == '__main__':
 
-    rospy.init_node('single_ronex', anonymous=True)
+    rospy.init_node('single_ronex')
     sleep(0.5)
     rostest.rosrun('sr_ronex_tests', 'single_ronex', TestContainer )
