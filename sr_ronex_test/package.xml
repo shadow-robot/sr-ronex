@@ -16,7 +16,6 @@
   <!-- Dependencies needed to compile this package. -->
   <build_depend>rospy</build_depend>
   <build_depend>rostest</build_depend>
-  <build_depend>pr2_ethercat</build_depend>
 
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>rospy</run_depend>

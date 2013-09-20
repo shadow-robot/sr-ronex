@@ -39,16 +39,21 @@ class IoTest(object):
     """
     A class used to test the Shadow Robot ethercat board HW.
     For the PRODUCT_CODE = "0X02000000"
-    4 digital inputs/outputs/PWM outputs
-    4 analogue inputs
-    2 analogue outputs
+    
+    For the test to succeed 2 ronex modules are required
+    each with a stacker on it
+    The digital I/O of one module should be connected to the I/O of the other
+    The analogue I/O of one of the modules should be connected to a constant voltage source
+    
+    On each module
+    12 digital inputs/outputs
+    6 PWM outputs
+    12 analogue inputs
 
-    The digital outputs will be tested by turning on and off LEDs attached to them.
     The digital inputs will read back the value we set for the outputs.
+    Then all the I/O should switch roles from Input to Output and vice versa
     The PWM outputs will be set to their lower frequency, and the digital inputs used to check the on-off period
-    The analogue output 0 will be wired to analogue inputs 0 and 2, output 1 to inputs 1 and 3
-
-    Keep in mind that the test is intended to be run with the LEDs attached to the digital I/Os and the correct wiring of the analogue I and O
+    The analogue inputs should be wired to an appropriate constant voltage source
     """
 
     def __init__( self, devs ):
