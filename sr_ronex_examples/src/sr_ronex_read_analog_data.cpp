@@ -157,9 +157,10 @@ private:
 //-------------------------------------------------------------------------------
 
 int main(int argc, char **argv)
-{
+{ ROS_INFO( "asdfsdfasdf" );
   // Initialize ROS with a unique node name.
   ros::init(argc, argv, "sr_ronex_read_analog_data");
+  ROS_INFO( "asdfsdfasdf" );
 
   // Create a handle to this process' node. 
   ros::NodeHandle n;

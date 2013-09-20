@@ -50,19 +50,21 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 #   src/${PROJECT_NAME}/sr_ronex
 # )
 
+# catkin_package parameters
+# http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
+# You must invoke catkin_package() before adding any targets (libraries and executables).
+# The reason is because catkin_package() will change the location where the targets are built.
+# catkin_package(
+#  CATKIN_DEPENDS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp
+#  INCLUDE_DIRS include
+#)
+
 ## Declare a cpp executable
-add_executable(sr_ronex_parse_parameter_server src/sr_ronex_parse_parameter_server.cpp)
-add_executable(sr_ronex_read_analog_data src/sr_ronex_read_analog_data.cpp)
+add_executable(sr_ronex_parse_parameter_server ${PROJECT_SOURCE_DIR}/src/sr_ronex_parse_parameter_server.cpp)
+add_executable(sr_ronex_read_analog_data ${PROJECT_SOURCE_DIR}/src/sr_ronex_read_analog_data.cpp)
 
 ## Add cmake target dependencies of the executable/library
 add_dependencies(sr_ronex_read_analog_data sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
-
-# catkin_package parameters
-# http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
-catkin_package(
-  CATKIN_DEPENDS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp
-  INCLUDE_DIRS include
-)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(sr_ronex_parse_parameter_server ${catkin_LIBRARIES})
