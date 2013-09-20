@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_drivers)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp rostest diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure)
+find_package(catkin REQUIRED COMPONENTS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp rostest diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure realtime_tools ethercat_hardware)
 
 include_directories(include ${catkin_INCLUDE_DIRS} )
 
@@ -37,8 +37,12 @@ catkin_package(
 
 install(TARGETS sr_ronex_drivers LIBRARY DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-link_directories(/opt/ros/hydro/lib)
-add_rostest_gtest( test_ethercat_drivers test/test_ethercat_drivers.test test/test_ethercat_drivers.cpp )
-target_link_libraries( test_ethercat_drivers sr_ronex_drivers ethercat_hardware eml rt gcov ${catkin_LIBRARIES} ${GTEST_LIBRARIES} )
+#link_directories(/opt/ros/hydro/lib)
+include(CheckFunctionExists)
+CHECK_FUNCTION_EXISTS(add_rostest_gtest HAVE_GTEST)
+if(HAVE_GTEST)
+  add_rostest_gtest( test_ethercat_drivers test/test_ethercat_drivers.test test/test_ethercat_drivers.cpp )
+  target_link_libraries( test_ethercat_drivers sr_ronex_drivers ethercat_hardware eml rt gcov ${catkin_LIBRARIES} ${GTEST_LIBRARIES} )
+endif(HAVE_GTEST)
 
 
