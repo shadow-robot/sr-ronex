@@ -6,35 +6,6 @@ project(sr_ronex_examples)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp)
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
-
-## Uncomment this if the package has a setup.py. This macro ensures
-## modules and global scripts declared therein get installed
-## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
-
-#######################################
-## Declare ROS messages and services ##
-#######################################
-
-## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
-
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
-
-## Generate added messages and services with any dependencies listed here
-# generate_messages(DEPENDENCIES std_msgs)
-
 ###########
 ## Build ##
 ###########
@@ -62,10 +33,13 @@ catkin_package(
 ## Declare a cpp executable
 add_executable(sr_ronex_parse_parameter_server ${PROJECT_SOURCE_DIR}/src/sr_ronex_parse_parameter_server.cpp)
 add_executable(sr_ronex_read_analog_data ${PROJECT_SOURCE_DIR}/src/sr_ronex_read_analog_data.cpp)
+add_executable(sr_ronex_dim_LED_with_PWM ${PROJECT_SOURCE_DIR}/src/sr_ronex_dim_LED_with_PWM.cpp)
 
 ## Add cmake target dependencies of the executable/library
 add_dependencies(sr_ronex_read_analog_data sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
+add_dependencies(sr_ronex_dim_LED_with_PWM sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(sr_ronex_parse_parameter_server ${catkin_LIBRARIES})
 target_link_libraries(sr_ronex_read_analog_data ${catkin_LIBRARIES})
+target_link_libraries(sr_ronex_dim_LED_with_PWM ${catkin_LIBRARIES})
