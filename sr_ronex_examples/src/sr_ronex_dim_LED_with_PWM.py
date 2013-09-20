@@ -20,55 +20,49 @@
 import roslib; roslib.load_manifest('sr_ronex_examples')
 import rospy
 from time import sleep
-from sr_ronex_msgs.msg import GeneralIOState
+from sr_ronex_msgs.msg import PWM
 
 #--------------------------------------------------------------------------------
 
-"""
-The callback function given to the subscribe() call.
-"""
-def generalIOState_callback(data):
-    # Note that the type of data.analogue is tuple.
-    analogue = data.analogue 
-    rospy.loginfo( "analogue = %s", analogue )
+# Dim a LED light with PWM. It takes 10 seconds.
+def dimLED():
+    # Set the switching frequency to 100kHz.
+    pwm_period = 320
+    # Start with a 100% duty cycle.
+    pwm_on_time_0 = pwm_period
+    # The second output is not used.
+    pwm_on_time_1 = 0
 
-#--------------------------------------------------------------------------------
+    pub = rospy.Publisher( 'chatter', PWM )
+    rospy.init_node('sr_ronex_dim_LED_with_PWM')
+    while not rospy.is_shutdown():
+        str = "hello world %s" % rospy.get_time()
+        rospy.loginfo(str)
 
-"""
-This class demonstate how to read the analog data for a given ronex.
-"""
-class SrRonexExample(object):
+        # Dim the light...
+        pwm_on_time_0 -= 3
+        if pwm_on_time_0 < 0:
+            pwm_on_time_0 = pwm_period
 
-    def __init__(self, ronex_id):
-        self.ronex_id = ronex_id
+        # Set the PWM data.
+        pwm = PWM()
+        pwm.pwm_period    = pwm_period
+        pwm.pwm_on_time_0 = pwm_on_time_0
+        pwm.pwm_on_time_1 = pwm_on_time_1
         
-    def get_ronex_path(self):
-        """
-        Find the ronexes present on the system.
-        """
-        # Wait until there's one ronex.
-        while True:
-            try:
-                rospy.get_param("/ronex/devices/0/ronex_id")
-                break
-            except:
-                rospy.loginfo("Waiting for the ronex to be loaded properly.")
-                sleep(0.1)
-
-        # Retreive all the ronex ids from the parameter server.
-        ronex_param = rospy.get_param("/ronex/devices")
-        for key in ronex_param:
-            if self.ronex_id == ronex_param[key]["ronex_id"]:
-                path = ronex_param[key]["path"]
-                return path
+        pub.publish( pwm )
+        rospy.sleep( 0.1 )
 
 #--------------------------------------------------------------------------------
 
 """
-This example demonstates how to read the analog data for a given ronex.
+This example demonstates how to dim a LED light with pulse-width modulation (PWM). 
 """
 if __name__ == "__main__":
-    rospy.init_node("sr_ronex_read_analog_data")
+    try:
+        dimLED()
+    except rospy.ROSInterruptException:
+        pass
 
     ronex_id = "1"
     example = SrRonexExample( ronex_id )

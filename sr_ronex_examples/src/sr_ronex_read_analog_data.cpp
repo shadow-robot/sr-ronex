@@ -34,7 +34,7 @@
 //-------------------------------------------------------------------------------
 
 /**
- * This class demonstate how find a ronex listed in the parameter server,
+ * This class demonstates how to find a ronex listed in the parameter server,
  * and then get the information about its path.
  **/
 class SrRonexExample

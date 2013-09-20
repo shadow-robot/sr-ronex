@@ -33,7 +33,7 @@
 //-------------------------------------------------------------------------------
 
  /**
-  * This class demonstate how to use the ronexes listed in the parameter server.
+  * This class demonstates how to use the ronexes listed in the parameter server.
   * For each ronex, the parameter server stores parameters such as 
   * its product_id, product_name, ronex_id, path, and serial.
   **/
