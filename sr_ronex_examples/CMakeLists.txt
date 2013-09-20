@@ -54,10 +54,10 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 # http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 # You must invoke catkin_package() before adding any targets (libraries and executables).
 # The reason is because catkin_package() will change the location where the targets are built.
-# catkin_package(
-#  CATKIN_DEPENDS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp
-#  INCLUDE_DIRS include
-#)
+catkin_package(
+  CATKIN_DEPENDS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp
+  INCLUDE_DIRS include
+)
 
 ## Declare a cpp executable
 add_executable(sr_ronex_parse_parameter_server ${PROJECT_SOURCE_DIR}/src/sr_ronex_parse_parameter_server.cpp)
