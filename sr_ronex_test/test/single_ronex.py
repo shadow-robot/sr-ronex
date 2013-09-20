@@ -25,7 +25,6 @@ from threading import Lock
 from sr_ronex_msgs.msg import BoolArray
 from std_msgs.msg import UInt16MultiArray
 
-PRODUCT_CODE = "0X02000000"
 DIGITAL_IO_WAIT = 0.5
 ANALOG_IO_WAIT = 0.1
 PWM_O_WAIT = 3.0
@@ -38,7 +37,6 @@ MIN_PWM_PERIOD = 0.005
 class IoTest(object):
     """
     A class used to test the Shadow Robot ethercat board HW.
-    For the PRODUCT_CODE = "0X02000000"
     
     For the test to succeed 2 ronex modules are required
     each with a stacker on it
@@ -57,11 +55,13 @@ class IoTest(object):
     """
 
     def __init__( self, devs ):
-        rospy.loginfo("Testing device. Product code: " + PRODUCT_CODE )
+        rospy.loginfo("Creating test class")
         self.success = True
-        self.PWM_testing = False
         self.a_state_lock = Lock()
         self.d_state_lock = Lock()
+        self.client = dynamic_reconfigure.client.Client("ronex")
+        params = { 'my_string_parameter' : 'value', 'my_int_parameter' : 5 }
+        config = client.update_configuration(params)
         
         sdt = Template("/ronex/general_io/$sn/command/digital")
         snA = devs['0']["serial"]
@@ -69,15 +69,10 @@ class IoTest(object):
         self.digital_publisher_A = rospy.Publisher( sdt.substitute( sn = snA ), BoolArray, latch = True )
         self.digital_publisher_B = rospy.Publisher( sdt.substitute( sn = snB ) , BoolArray, latch = True )
 
-        
         self.digital_subscriber_A = rospy.Subscriber( sdt.substitute( sn = snA ), BoolArray, self.digital_state_callback )
         self.digital_subscriber_B = rospy.Subscriber( sdt.substitute( sn = snB ), BoolArray, self.digital_state_callback )
         
-        sdt = Template("/ronex/general_io/$sn/command/digital")
-        self.analogue_subscriber_A = rospy.Subscriber( sdt.substitute( sn = snA ), BoolArray, self.digital_state_callback )
-        self.analogue_subscriber_B = rospy.Subscriber( sdt.substitute( sn = snB ), BoolArray, self.digital_state_callback )
         
-        self.last_analog_state = None
         self.last_digital_state = None
         self.last_period_start_time = 4*[0.0]
         self.average_period = 4*[0.0]
@@ -127,79 +122,7 @@ class IoTest(object):
         self.test_digital_io_case([False, True, False, True, False, True, False, True])
         self.test_digital_io_case([False, False, False, False, False, False, False, False])
         rospy.loginfo("Digital I/O test ended")
-"""
-    def analog_state_callback(self, msg):
-        with self.a_state_lock:
-            self.last_analog_state = msg
 
-    def check_analog_inputs(self, output_values):
-        rospy.sleep(0.1)
-        with self.a_state_lock:
-            if self.last_analog_state != None:
-                for i, value in enumerate(output_values):
-                    index = i
-                    if (float(value) / float(self.last_analog_state.data[index])) > ANALOG_RATIO_UPPER or \
-                       (float(value) / float(self.last_analog_state.data[index])) < ANALOG_RATIO_LOWER:
-                        rospy.logerr("Wrong value in analogue input " + str(index) + " set: " + str(value) + " measured: " + str(self.last_analog_state.data[index]) + " ratio: " + str(float(value) / float(self.last_analog_state.data[index])))
-                        self.success = False
-                    index = i + 2
-                    if (float(value) / float(self.last_analog_state.data[index])) > ANALOG_RATIO_UPPER or \
-                       (float(value) / float(self.last_analog_state.data[index])) < ANALOG_RATIO_LOWER:
-                        rospy.logerr("Wrong value in analogue input " + str(index) + " set: " + str(value) + " measured: " + str(self.last_analog_state.data[index]) + " ratio: " + str(float(value) / float(self.last_analog_state.data[index])))
-                        self.success = False
-            else:
-                rospy.logerr("No analogue input data received from: " + self.device_SN)
-                self.success = False
-
-    def test_analog_io_case(self, output_values):
-        command_msg = UInt16MultiArray(None, output_values)
-        self.analog_command_publisher.publish(command_msg)
-        self.check_analog_inputs(output_values)
-        rospy.sleep(ANALOG_IO_WAIT)
-
-    def test_analog_ios(self):
-        rospy.loginfo("Testing analogue I/O")
-        rospy.sleep(0.1)
-        self.test_analog_io_case([0x200, 0x200])
-        self.test_analog_io_case([0x200, 0xFF00])
-        self.test_analog_io_case([0xFF00, 0x200])
-        self.test_analog_io_case([0x200, 0x200])
-        self.test_analog_io_case([0x300, 0x300])
-        self.test_analog_io_case([0x1000, 0x1000])
-        self.test_analog_io_case([0x5000, 0x5000])
-        self.test_analog_io_case([0x8000, 0x8000])
-        self.test_analog_io_case([0xA000, 0xA000])
-        self.test_analog_io_case([0xC000, 0xC000])
-        self.test_analog_io_case([0xD000, 0xD000])
-        self.test_analog_io_case([0xE000, 0xE000])
-        self.test_analog_io_case([0xF000, 0xF000])
-        self.test_analog_io_case([0xFF00, 0xFF00])
-        rospy.loginfo("Analogue I/O test ended")
-
-    def test_PWM_o_case(self, output_values):
-        command_msg = UInt16MultiArray(None, output_values)
-        self.PWM_testing = True
-        self.PWM_command_publisher.publish(command_msg)
-        #self.check_digital_inputs(output_values)
-        rospy.sleep(PWM_O_WAIT)
-        for i, value in enumerate(self.average_period):
-            if value > MAX_PWM_PERIOD or value < MIN_PWM_PERIOD:
-                rospy.logerr("Wrong period in PWM output " + str(i) + " measured period: " + str(value))
-                self.success = False
-        self.PWM_testing = False
-
-    def test_PWM_outputs(self):
-        rospy.loginfo("Testing PWM outputs")
-        self.test_PWM_o_case([0xFFFE, 0x8000, 0xFFFE, 0x8000, 0xFFFE, 0x8000, 0xFFFE, 0x8000])
-        rospy.loginfo("PWM outputs test ended")
-
-
-    def ramp(self):
-        for i in range(0, 65535, 0x100):
-            command_msg = UInt16MultiArray(None, [i, i])
-            self.analog_command_publisher.publish(command_msg)
-            rospy.sleep(0.03)
-"""
 class TestContainer(unittest.TestCase):
     def test_connected_ronex(self):
         ronex_devices = find_ronexes()
