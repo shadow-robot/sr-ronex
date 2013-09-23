@@ -16,7 +16,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 #common commands for building c++ executables and libraries
-add_library(sr_ronex_controllers src/general_io_passthrough_controller.cpp)
+add_library(sr_ronex_controllers src/general_io_passthrough_controller.cpp src/fake_calibration_controller.cpp)
 target_link_libraries(sr_ronex_controllers ${catkin_LIBRARIES})
 
 add_dependencies(sr_ronex_controllers sr_ronex_msgs_gencpp)

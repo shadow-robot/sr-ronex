@@ -31,6 +31,6 @@
     <joint name="head_swivel"/>
     <mapping ronex="/ronex/general_io/0" property="position" analogue_pin="6" scale="0.001" offset="0.0"/>
     <mapping ronex="/ronex/general_io/0" property="effort"   analogue_pin="7" scale="2.0" offset="1.0"/>
-    <mapping ronex="/ronex/general_io/0" property="command" pwm_module="1" pwm_pin="0" direction_pin="5"/>
+    <mapping ronex="/ronex/general_io/0" property="command" pwm_module="1" pwm_pin="0" direction_pin="0"/>
   </transmission>
 </robot>
