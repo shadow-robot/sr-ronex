@@ -46,12 +46,14 @@ public:
   /**
    * Find the path of the General I/O module with the given ronex_id.
    *
-   * @param ronex_id Select the General I/O module.
+   * @param ronex_id_as_int Select the General I/O module.
    * @param path The path of the module.
    * @return True if the module is found and the path is set. Otherwise, false.
-   **/
-  bool get_path_( const std::string& ronex_id, std::string& path )
+   **/ 
+  bool get_path_( const short unsigned int& ronex_id_as_int, std::string& path )
   {
+    std::string ronex_id = this->to_string_(ronex_id_as_int);
+
     // Wait until there's at least one General I/O module.
     ros::Rate loop_rate(10);
     std::string param;
@@ -137,32 +139,36 @@ int main(int argc, char **argv)
   
   // Create a handle to this process' node. 
   ros::NodeHandle n;
-  
-  // Get the path of the General I/O module with the given ronex id.
-  // Note that you may have to change the value of ronex_id,
-  // depending on which General I/O board the LED is connected to.
-  SrRonexFindGeneralIOModule findModule;
-  std::string ronex_id("2"), path;
-  findModule.get_path_( ronex_id, path );
-  
-  /**
-   * The subscribe() call is how you tell ROS that you want to receive messages
-   * on a given topic. Messages are passed to a callback function. The second
-   * parameter to the subscribe() function is the size of the message queue.
-   **/
-  // For example "/ronex/general_io/1" + "/state"
-  std::string topic = path + "/state"; 
-  ros::Subscriber sub = n.subscribe( topic.c_str(), 
-				     1000,
-				     generalIOState_callback);
 
-  /**
-   * ros::spin() will enter a loop, pumping callbacks.  With this version, all
-   * callbacks will be called from within this thread (the main one).  ros::spin()
-   * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
-   **/
-  ros::spin();
-  
+  // Get the path of the General I/O module with the given ronex id.
+  // Note that you may have to set the value of ronex_id,
+  // depending on which General I/O board the LED is connected to.
+  short unsigned int ronex_id; 
+  std::cout << "Please enter the ronex id: ";
+  std::cin >> ronex_id;
+  std::string path;
+  SrRonexFindGeneralIOModule findModule;
+  if ( findModule.get_path_( ronex_id, path ) )
+    {
+      /**
+       * The subscribe() call is how you tell ROS that you want to receive messages
+       * on a given topic. Messages are passed to a callback function. The second
+       * parameter to the subscribe() function is the size of the message queue.
+       **/
+      // For example "/ronex/general_io/1" + "/state"
+      std::string topic = path + "/state"; 
+      ros::Subscriber sub = n.subscribe( topic.c_str(), 
+					 1000,
+					 generalIOState_callback);
+      
+      /**
+       * ros::spin() will enter a loop, pumping callbacks.  With this version, all
+       * callbacks will be called from within this thread (the main one).  ros::spin()
+       * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
+       **/
+      ros::spin();
+    }
+
   return 0;
 }
 

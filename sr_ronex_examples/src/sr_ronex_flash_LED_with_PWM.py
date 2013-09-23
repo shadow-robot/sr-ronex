@@ -96,10 +96,10 @@ This example demonstrates how to flash a LED light with pulse-width modulation (
 if __name__ == "__main__":
     rospy.init_node('sr_ronex_flash_LED_with_PWM')
     
-    # Note that you may have to change the value of ronex_id,
+    # Note that you may have to set the value of ronex_id,
     # depending on which General I/O board the LED is connected to.
-    ronex_id = "2"
-    findModule = SrRonexFindGeneralIOModule( ronex_id )
+    ronex_id = raw_input( "Please enter the ronex id: " )
+    findModule = SrRonexFindGeneralIOModule( str(ronex_id) )
     path = findModule.get_path()
      
     if path != None:
