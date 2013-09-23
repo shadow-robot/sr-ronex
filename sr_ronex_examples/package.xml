@@ -1,17 +1,19 @@
 <?xml version="1.0"?>
 <package>
   <name>sr_ronex_examples</name>
-  <version>1.0.0</version>
+  <version>0.9.0</version>
   <description>Package containing examples for the RoNeX boards.</description>
-  <maintainer email="software@shadowrobot.com">Ugo Cupcic</maintainer>
+  <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
   <license>LGPLv3</license>
 
-  <!-- Url tags are optional, but mutiple are allowed, one per tag -->
-  <!-- Optional attribute type can be: website, bugtracker, or repository -->
-  <!-- Example: -->
-  <!-- <url type="website">http://ros.org/wiki/sr_ronex_examples</url> -->
+  <url type="website">http://www.shadowrobot.com/products/ronex</url>
+  <url type="repository">https://github.com/shadow-robot/sr-ronex</url>
+  <url type="bugtracker">https://github.com/shadow-robot/sr-ronex/issues</url>
 
+  <author>Ugo Cupcic</author>
+  <author>Toni Oliver</author>
+  <author>Mark Pitchless</author>
   <author>Yi Li</author>
 
   <!-- Dependencies which this package needs to build itself. -->
@@ -26,9 +28,15 @@
   
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>roscpp</run_depend>
-  <build_depend>rospy</build_depend>
+  <run_depend>rospy</run_depend>
   <run_depend>std_msgs</run_depend>
-  <run_depend>sr_ronex_msgs</run_depend>
-  <run_depend>sr_ronex_utilities</run_depend>
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+    <!-- You can specify that this package is a metapackage here: -->
+    <!-- <metapackage/> -->
+
+    <!-- Other tools can request additional information be placed here -->
+  </export>
 
 </package>
