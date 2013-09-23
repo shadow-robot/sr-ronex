@@ -49,19 +49,17 @@ class SrRonexParseParamExample(object):
                 rospy.loginfo("Waiting for the General I/O module to be loaded properly.")
                 sleep(0.1)
 
-        # Retrieve all the ronex parameter ids from the parameter server.
-        # If there are three General I/O modules, then ronex_param_ids is [0,1,2].
-        # Note that the id starts from zero. And the size of the returned variable
-        # is equal to the number of General I/O modules.
-        ronex_param_ids = rospy.get_param("/ronex/devices")
-        for key in ronex_param_ids:
+        # Retrieve all General I/O modules (stored in a dict) from the parameter server.
+        # Note that the dict's keyword is ronex_param_id, and it starts from zero.
+        devices = rospy.get_param("/ronex/devices")
+        for ronex_param_id in devices:
             # Retrieve the values of all parameters related to the current General I/O module.
-            rospy.loginfo( "*** General I/O Module %s ***",  key );
-            rospy.loginfo( "product_id   = %s", ronex_param_ids[key]["product_id"] );
-            rospy.loginfo( "product_name = %s", ronex_param_ids[key]["product_name"] );
-            rospy.loginfo( "ronex_id     = %s", ronex_param_ids[key]["ronex_id"] );
-            rospy.loginfo( "path         = %s", ronex_param_ids[key]["path"]);
-            rospy.loginfo( "serial       = %s", ronex_param_ids[key]["serial"] );
+            rospy.loginfo( "*** General I/O Module %s ***",  ronex_param_id );
+            rospy.loginfo( "product_id   = %s", ronex_param_ids[ronex_param_id]["product_id"] );
+            rospy.loginfo( "product_name = %s", ronex_param_ids[ronex_param_id]["product_name"] );
+            rospy.loginfo( "ronex_id     = %s", ronex_param_ids[ronex_param_id]["ronex_id"] );
+            rospy.loginfo( "path         = %s", ronex_param_ids[ronex_param_id]["path"]);
+            rospy.loginfo( "serial       = %s", ronex_param_ids[ronex_param_id]["serial"] );
 
 #--------------------------------------------------------------------------------
 
