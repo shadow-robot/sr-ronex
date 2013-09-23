@@ -24,21 +24,18 @@ from sr_ronex_msgs.msg import PWM
 
 #--------------------------------------------------------------------------------
 
-# Dim a LED light with PWM. It takes 10 seconds.
-def dimLED(topic):
-    # Set the switching frequency to 100kHz.
+# Flash a LED light with PWM.
+def flashLED(topic):
     pwm_period = 320
     # Start with a 100% duty cycle.
     pwm_on_time_0 = pwm_period
     # The second output is not used.
     pwm_on_time_1 = 0
 
-    print topic
-
     pub = rospy.Publisher( topic, PWM )
     while not rospy.is_shutdown():
-        # Dim the light...
-        pwm_on_time_0 -= 3
+        # Flash the light...
+        pwm_on_time_0 -= 10
         if pwm_on_time_0 < 0:
             pwm_on_time_0 = pwm_period
 
@@ -47,9 +44,9 @@ def dimLED(topic):
         pwm.pwm_period    = pwm_period
         pwm.pwm_on_time_0 = pwm_on_time_0
         pwm.pwm_on_time_1 = pwm_on_time_1
-        
+
         pub.publish( pwm )
-        rospy.sleep( 0.1 )
+        rospy.sleep( 0.01 )
 
 #--------------------------------------------------------------------------------
 
@@ -94,10 +91,10 @@ class SrRonexFindGeneralIOModule(object):
 
 """
 Assume that your RoNeX consists of a Bridge (IN) module, and one or multiple General I/O module(s).
-This example demonstrates how to dim a LED light with pulse-width modulation (PWM). 
+This example demonstrates how to flash a LED light with pulse-width modulation (PWM). 
 """
 if __name__ == "__main__":
-    rospy.init_node('sr_ronex_dim_LED_with_PWM')
+    rospy.init_node('sr_ronex_flash_LED_with_PWM')
     
     # Note that you may have to change the value of ronex_id,
     # depending on which General I/O board the LED is connected to.
@@ -106,11 +103,12 @@ if __name__ == "__main__":
     path = findModule.get_path()
      
     if path != None:
-        # Always use the first digital I/O channel to dim the LED light.
-        # For example "/ronex/general_io/1" + "/command/0".
-        topic = path + "/command/0"
+        # Always use the first digital I/O channel to flash the LED light.
+        # For example "/ronex/general_io/1" + "/command/pwm/0".
+        topic = path + "/command/pwm/0"
+        rospy.loginfo("topic = %s.", topic)
         try:
-            dimLED(topic)
+            flashLED(topic)
         except rospy.ROSInterruptException:
             pass
     else:

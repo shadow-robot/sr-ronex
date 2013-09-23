@@ -33,13 +33,13 @@ catkin_package(
 ## Declare a cpp executable
 add_executable(sr_ronex_parse_parameter_server ${PROJECT_SOURCE_DIR}/src/sr_ronex_parse_parameter_server.cpp)
 add_executable(sr_ronex_read_analog_data ${PROJECT_SOURCE_DIR}/src/sr_ronex_read_analog_data.cpp)
-add_executable(sr_ronex_dim_LED_with_PWM ${PROJECT_SOURCE_DIR}/src/sr_ronex_dim_LED_with_PWM.cpp)
+add_executable(sr_ronex_flash_LED_with_PWM ${PROJECT_SOURCE_DIR}/src/sr_ronex_flash_LED_with_PWM.cpp)
 
 ## Add cmake target dependencies of the executable/library
 add_dependencies(sr_ronex_read_analog_data sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
-add_dependencies(sr_ronex_dim_LED_with_PWM sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
+add_dependencies(sr_ronex_flash_LED_with_PWM sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(sr_ronex_parse_parameter_server ${catkin_LIBRARIES})
 target_link_libraries(sr_ronex_read_analog_data ${catkin_LIBRARIES})
-target_link_libraries(sr_ronex_dim_LED_with_PWM ${catkin_LIBRARIES})
+target_link_libraries(sr_ronex_flash_LED_with_PWM ${catkin_LIBRARIES})

@@ -16,9 +16,9 @@
 */
 
 /**
- * @file   sr_ronex_dim_LED_with_PWM.cpp
+ * @file   sr_ronex_flash_LED_with_PWM.cpp
  * @author Yi Li <yi@shadowrobot.com>
- * @brief  Demonstrate how to dim a LED light with RoNeX.
+ * @brief  Demonstrate how to flash a LED light with RoNeX.
  **/
 
 //-------------------------------------------------------------------------------
@@ -114,28 +114,26 @@ private:
 //-------------------------------------------------------------------------------
 
 /**
- * Dim a LED light with PWM. It takes 10 seconds.
+ * Flash a LED light with PWM. It takes 10 seconds.
  *
  * @param n A ROS node handle.
  * @param topic For example "/ronex/general_io/1/command/0".
  */
-void dimLED( ros::NodeHandle& n, const std::string& topic )
+void flash_LED( ros::NodeHandle& n, const std::string& topic )
 {
   ros::Publisher pub = n.advertise<sr_ronex_msgs::PWM>( topic, 1000 );
  
-  // Set the switching frequency to 100kHz.
   short unsigned int pwm_period = 320;
   // Start with a 100% duty cycle.
   short unsigned int pwm_on_time_0 = pwm_period;
   // The second output is not used.
   short unsigned int pwm_on_time_1 = 0;
   
-  // We want to run at 10Hz.
-  ros::Rate loop_rate(10); 
-  while (ros::ok())
+  ros::Rate loop_rate(100); 
+  while ( ros::ok() )
     {   
-      // Dim the light...
-      pwm_on_time_0 -= 3;
+      // Flash the light...
+      pwm_on_time_0 -= 10;
       if (pwm_on_time_0 == 0 || pwm_on_time_0 > pwm_period)
 	pwm_on_time_0 = pwm_period;
 	  
@@ -158,12 +156,12 @@ void dimLED( ros::NodeHandle& n, const std::string& topic )
 /**
  * Assume that your RoNeX consists of a Bridge (IN) module, and one 
  * or multiple General I/O module(s). This example demonstrates how 
- * to dim a LED light with pulse-width modulation (PWM). 
+ * to flash a LED light with pulse-width modulation (PWM). 
  **/
 int main(int argc, char **argv)
 {
   // Initialize ROS with a unique node name.
-  ros::init(argc, argv, "sr_ronex_dim_LED_with_PWM");
+  ros::init(argc, argv, "sr_ronex_flash_LED_with_PWM");
   
   // Create a handle to this process' node. 
   ros::NodeHandle n;
@@ -175,10 +173,11 @@ int main(int argc, char **argv)
   std::string ronex_id("2"), path;
   findModule.get_path_( ronex_id, path );
  
-  // Always use the first digital I/O channel to dim the LED light.
-  // For example "/ronex/general_io/1" + "/command/0".
-  std::string topic = path + "/command/0"; 
-  dimLED( n, topic );
+  // Always use the first digital I/O channel to flash the LED light.
+  // For example "/ronex/general_io/1" + "/command/pwm/0".
+  std::string topic = path + "/command/pwm/0"; 
+  ROS_INFO( "Topic = %s", topic.c_str() );
+  flash_LED( n, topic );
 
   return 0;
 }

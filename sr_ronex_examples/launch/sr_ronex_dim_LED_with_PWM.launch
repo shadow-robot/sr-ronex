@@ -1,3 +1,0 @@
-<launch>
-  <node name="sr_ronex_read_analog_data" pkg="sr_ronex_examples" type="sr_ronex_dim_LED_with_PWM" output="screen"/>
-</launch>
