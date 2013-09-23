@@ -35,14 +35,18 @@ def generalIOState_callback(data):
 #--------------------------------------------------------------------------------
 
 """
-This class demonstrates how to read the analog data for a given ronex.
+This class demonstrates how to find the General I/O module with the given ronex_id.
 """
-class SrRonexExample(object):
+class SrRonexFindGeneralIOModule(object):
 
     def __init__(self, ronex_id):
         self.ronex_id = ronex_id
         
-    def get_ronex_path(self):
+    """
+    Get the path of the General I/O module with the given ronex_id.
+    Note that None is returned if the module is not found.
+    """
+    def get_path(self):
         """
         Find the ronexes present on the system.
         """
@@ -55,22 +59,31 @@ class SrRonexExample(object):
                 rospy.loginfo("Waiting for the ronex to be loaded properly.")
                 sleep(0.1)
 
-        # Retreive all the ronex ids from the parameter server.
-        ronex_param = rospy.get_param("/ronex/devices")
-        for key in ronex_param:
-            if self.ronex_id == ronex_param[key]["ronex_id"]:
-                path = ronex_param[key]["path"]
+        """
+        Retrieve all the ronex parameter ids from the parameter server.
+        If there are three General I/O modules, then ronex_param_ids is [0,1,2].
+        Note that the id starts from zero. And the size of the returned variable
+        is equal to the number of General I/O modules.
+        """
+        ronex_param_ids = rospy.get_param("/ronex/devices")
+        for key in ronex_param_ids:
+            if self.ronex_id == ronex_param_ids[key]["ronex_id"]:
+                path = ronex_param_ids[key]["path"]
                 return path
 
 #--------------------------------------------------------------------------------
 
 """
-This example demonstrates how to read the analog data for a given ronex.
+Assume that your RoNeX consists of a Bridge (IN) module, and one 
+or multiple General I/O module(s). This example demonstrates how 
+to read analogue data with RoNeX.
 """
 if __name__ == "__main__":
     rospy.init_node("sr_ronex_read_analog_data")
 
-    ronex_id = "1"
+    # Note that you may have to change the value of ronex_id,
+    # depending on which General I/O board the LED is connected to.
+    ronex_id = "2"
     example = SrRonexExample( ronex_id )
     path = example.get_ronex_path()
     
@@ -80,6 +93,6 @@ if __name__ == "__main__":
         rospy.Subscriber( topic, GeneralIOState, generalIOState_callback )
         rospy.spin()
     else:
-        rospy.logerr( "Failed to find the ronex with the given ronex_id %s.", ronex_id )
+        rospy.loginfo("Failed to find the General I/O module with the given ronex_id %s.", ronex_id)
 
 #--------------------------------------------------------------------------------

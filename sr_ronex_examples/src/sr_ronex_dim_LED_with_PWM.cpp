@@ -168,7 +168,7 @@ int main(int argc, char **argv)
   // Create a handle to this process' node. 
   ros::NodeHandle n;
   
-  // Get the path of the ronex with the given ronex id.
+  // Get the path of the General I/O module with the given ronex id.
   // Note that you may have to change the value of ronex_id,
   // depending on which General I/O board the LED is connected to.
   SrRonexFindGeneralIOModule findModule;
