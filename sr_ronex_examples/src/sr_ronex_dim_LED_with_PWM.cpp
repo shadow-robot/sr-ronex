@@ -18,7 +18,7 @@
 /**
  * @file   sr_ronex_dim_LED_with_PWM.cpp
  * @author Yi Li <yi@shadowrobot.com>
- * @brief  Read analog data from ronexes.
+ * @brief  Demonstrate how to dim a LED light with RoNeX.
  **/
 
 //-------------------------------------------------------------------------------
@@ -34,44 +34,44 @@
 //-------------------------------------------------------------------------------
 
 /**
- * This class demonstrates how to find a ronex listed in the parameter server,
- * and then get the information about its path.
+ * This class demonstrates how to find the General I/O module with the given ronex_id.
  **/
-class SrRonexExample
+class SrRonexFindGeneralIOModule
 {
 public:
-  SrRonexExample() {}
-  ~SrRonexExample() {}
+  SrRonexFindGeneralIOModule() {}
+  ~SrRonexFindGeneralIOModule() {}
   
 public:
   /**
-   * Find the path of the ronex with the given ronex_id.
+   * Find the path of the General I/O module with the given ronex_id.
    *
-   * @param ronex_id Select the ronex.
-   * @param path The path of the ronex with the selected ronex.
-   * @return True if the ronex is found and the path is set. Otherwise, false.
+   * @param ronex_id Select the General I/O module.
+   * @param path The path of the module.
+   * @return True if the module is found and the path is set. Otherwise, false.
    **/
-  bool get_ronex_path_( const std::string& ronex_id, std::string& path )
+  bool get_path_( const std::string& ronex_id, std::string& path )
   {
-    // Wait until ronexes are loaded.
+    // Wait until there's at least one General I/O module.
     ros::Rate loop_rate(10);
     std::string param;
     while ( ros::param::get("/ronex/devices/0/ronex_id", param ) == false )
     {
-      ROS_INFO( "Waiting for the ronex to be loaded properly." );
+      ROS_INFO( "Waiting for General I/O module to be loaded properly." );
       loop_rate.sleep();
     }
 
-    // When -1 is returned, the ronex with the given id is not present on the parameter server.
+    // When -1 is returned, the module with the given id is not present on the parameter server. 
+    // Note that ronex parameter id starts from zero.
     int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
     if ( ronex_parameter_id == -1 )
       {
-        ROS_INFO( "Did not find the ronex with ronex_id %s.", ronex_id.c_str() );
+        ROS_INFO( "Did not find the General I/O module with ronex_id %s.", ronex_id.c_str() );
         return false; // Failed to set path.
       }
     
-    // The ronex is present on the parameter server and ronex_parameter_id
-    // contains the id on which the given ronex is stored on the parameter server.
+    // The module is present on the parameter server and ronex_parameter_id
+    // contains the id on which the module is stored on the parameter server.
 
     std::string path_key = get_key_( ronex_parameter_id, std::string("path") );
     ros::param::get( path_key, path );
@@ -156,7 +156,9 @@ void dimLED( ros::NodeHandle& n, const std::string& topic )
 //-------------------------------------------------------------------------------
 
 /**
- * This example demonstrates how to dim a LED light with pulse-width modulation (PWM). 
+ * Assume that your RoNeX consists of a Bridge (IN) module, and one 
+ * or multiple General I/O module(s). This example demonstrates how 
+ * to dim a LED light with pulse-width modulation (PWM). 
  **/
 int main(int argc, char **argv)
 {
@@ -166,12 +168,14 @@ int main(int argc, char **argv)
   // Create a handle to this process' node. 
   ros::NodeHandle n;
   
-  // Get the path of the ronex with the given ronex id (i.e., "1").
-  SrRonexExample example;
-  std::string ronex_id("1"), path;
-  example.get_ronex_path_( ronex_id, path );
+  // Get the path of the ronex with the given ronex id.
+  // Note that you may have to change the value of ronex_id,
+  // depending on which General I/O board the LED is connected to.
+  SrRonexFindGeneralIOModule findModule;
+  std::string ronex_id("2"), path;
+  findModule.get_path_( ronex_id, path );
  
-  // Use the first PWM output to dim the LED light.
+  // Always use the first digital I/O channel to dim the LED light.
   // For example "/ronex/general_io/1" + "/command/0".
   std::string topic = path + "/command/0"; 
   dimLED( n, topic );

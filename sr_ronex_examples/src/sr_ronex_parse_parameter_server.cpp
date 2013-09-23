@@ -33,47 +33,51 @@
 //-------------------------------------------------------------------------------
 
  /**
-  * This class demonstrates how to use the ronexes listed in the parameter server.
-  * For each ronex, the parameter server stores parameters such as 
-  * its product_id, product_name, ronex_id, path, and serial.
+  * Assume that your RoNeX consists of a Bridge (IN) module, and one or multiple
+  * General I/O module(s). This class demonstrates how to access the General I/O module(s)
+  * listed in the parameter server. For each General I/O module, the parameter server 
+  * stores parameters such as its product_id, product_name, ronex_id, path, and serial.
   **/
-class SrRonexExample
+class SrRonexParseParamExample
 {
 public:
-  SrRonexExample() 
+  SrRonexParseParamExample() 
   {
-    find_ronexes_();
+    find_general_io_modules_();
   }
   
-  ~SrRonexExample() {}
+  ~SrRonexParseParamExample() {}
   
 private:
 
  /**
-  * Find all ronexes listed in the parameter server.
+  * Find all General I/O modules listed in the parameter server.
   * Note that the help method ronex::get_ronex_param_id checks 
-  * the ronexes already present on the parameter server and returns 
-  * an id on which the given ronex is stored on the parameter server.
+  * the General I/O modules already present on the parameter server and returns 
+  * an id on which the given module is stored on the parameter server.
   **/
-  void find_ronexes_(void)
+  void find_general_io_modules_(void)
   {
-    // Wait until ronexes are loaded.
+    // Wait until there's at least one General I/O module.
     ros::Rate loop_rate(10);
     std::string param;
     while ( ros::param::get("/ronex/devices/0/ronex_id", param ) == false )
     {
-      ROS_INFO( "Waiting for the ronex to be loaded properly." );
+      ROS_INFO( "Waiting for General I/O module to be loaded properly." );
       loop_rate.sleep();
     }
 
-    // ronex::get_ronex_param_id returns next free index, when ronex_id == "".
+    // ronex::get_ronex_param_id returns next free ronext parameter id, 
+    // when ronex_id == "". Note that this id starts from zero.
     std::string ronex_id("");
-    int next_free_index = ronex::get_ronex_param_id(ronex_id);
+    int next_free_ronex_param_id = ronex::get_ronex_param_id(ronex_id);
     // Iterate through all ronexes.
-    for (int k = 0; k < next_free_index; k++)
+    for (int k = 0; k < next_free_ronex_param_id; k++)
     {
+      // Assume that alias has not been set, and hence ronex_id is equal to serial.
+      // Note that serial starts from 1.
       ronex_id = to_string_(k+1);
-      // When -1 is returned, the ronex with the given id is not present on the parameter server.
+      // When -1 is returned, the module with the given id is not present on the parameter server.
       int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
       if ( ronex_parameter_id == -1 )
       {
@@ -81,10 +85,10 @@ private:
         continue;
       }
 
-      // The ronex is present on the parameter server and ronex_parameter_id
-      // contains the id on which the given ronex is stored on the parameter server.
+      // The module is present on the parameter server and ronex_parameter_id
+      // contains the id on which the module is stored on the parameter server.
             
-      // Retrieve the values of all parameters related to the current ronex.
+      // Retrieve the values of all parameters related to the current module.
       std::string product_id;
       std::string product_id_key = get_key_( ronex_parameter_id, std::string("product_id") );
       ros::param::get( product_id_key, product_id );
@@ -105,7 +109,7 @@ private:
       std::string serial_key = get_key_( ronex_parameter_id, std::string("serial") );
       ros::param::get( serial_key, serial );
 
-      ROS_INFO( "*** Ronex %d ***",  ronex_parameter_id );
+      ROS_INFO( "*** General I/O module %d ***",  ronex_parameter_id );
       ROS_INFO( "product_id   = %s", product_id.c_str() );
       ROS_INFO( "product_name = %s", product_name.c_str() );
       ROS_INFO( "ronex_id     = %s", ronex_id.c_str() );
@@ -155,8 +159,9 @@ int main(int argc, char **argv)
   // Create a handle to this process' node. 
   ros::NodeHandle n;
 
-  // This class demonstrates how to use the ronexes listed in the parameter server.
-  SrRonexExample example;
+  // This class demonstrates how to access the General I/O module(s) 
+  // listed in the parameter server. 
+  SrRonexParseParamExample example;
 
   return 0;
 }
