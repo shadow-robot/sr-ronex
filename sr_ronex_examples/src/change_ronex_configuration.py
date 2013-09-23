@@ -19,6 +19,8 @@
 
 import roslib; roslib.load_manifest('sr_ronex_examples')
 import rospy
+import dynamic_reconfigure.client
+
 from time import sleep
 
 #--------------------------------------------------------------------------------
@@ -38,7 +40,7 @@ class ChangeRonexConfigurationExample(object):
         """
         Use the /ronex/general_io/1/set_parameters service
         """
-        
+        client = dynamic_reconfigure.client.Client(path)
 
 #--------------------------------------------------------------------------------
 
