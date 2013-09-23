@@ -84,9 +84,9 @@ if __name__ == "__main__":
     # Note that you may have to change the value of ronex_id,
     # depending on which General I/O board the LED is connected to.
     ronex_id = "2"
-    example = SrRonexExample( ronex_id )
-    path = example.get_ronex_path()
-    
+    findModule = SrRonexFindGeneralIOModule( ronex_id )
+    path = findModule.get_path()
+
     if path != None:
         # For example "/ronex/general_io/1" + "/state".
         topic = path + "/state"
