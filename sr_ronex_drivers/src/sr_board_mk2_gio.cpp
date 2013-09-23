@@ -205,6 +205,8 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_02000001* command = (RONEX_COMMAND_02000001*)(buffer);
 
+  command->command_type = RONEX_COMMAND_02000001_COMMAND_TYPE_NORMAL;
+
   //digital command
   for (size_t i = 0; i < general_io_->command_.digital_.size(); ++i)
   {
@@ -237,58 +239,64 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 {
   RONEX_STATUS_02000001* status_data = (RONEX_STATUS_02000001 *)(this_buffer+  command_size_);
 
-  if( general_io_->state_.analogue_.size() == 0)
+  // Checking that the received command type matches RONEX_COMMAND_02000001_COMMAND_TYPE_NORMAL
+  // (the one that was used in the command). The ronex firmware will answer with whatever command type we send.
+  // The purpose of this is to filter those status_data structures that come filled with zeros due to the jitter
+  // in the realtime loop. The jitter causes that the host tries to read the status when the microcontroller in the ronex
+  // module has not finished writing it to memory yet.
+  if( status_data->command_type == RONEX_COMMAND_02000001_COMMAND_TYPE_NORMAL)
   {
-    size_t nb_analogue_pub, nb_digital_io, nb_pwm_modules;
-    //The publishers haven't been initialised yet.
-    // Checking if the stacker board is plugged in or not
-    // to determine the number of publishers.
-    if (status_data->flags & RONEX_02000001_FLAGS_STACKER_0_PRESENT)
+    if( general_io_->state_.analogue_.empty())
     {
-      has_stacker_ = true;
-      nb_analogue_pub = NUM_ANALOGUE_INPUTS;
-      nb_digital_io = NUM_DIGITAL_IO;
-      nb_pwm_modules = NUM_PWM_MODULES;
-    }
-    else
+      size_t nb_analogue_pub, nb_digital_io, nb_pwm_modules;
+      //The publishers haven't been initialised yet.
+      // Checking if the stacker board is plugged in or not
+      // to determine the number of publishers.
+      if (status_data->flags & RONEX_02000001_FLAGS_STACKER_0_PRESENT)
+      {
+        has_stacker_ = true;
+        nb_analogue_pub = NUM_ANALOGUE_INPUTS;
+        nb_digital_io = NUM_DIGITAL_IO;
+        nb_pwm_modules = NUM_PWM_MODULES;
+      }
+      else
+      {
+        has_stacker_ = false;
+        nb_analogue_pub = NUM_ANALOGUE_INPUTS / 2;
+        nb_digital_io = NUM_DIGITAL_IO / 2;
+        nb_pwm_modules = NUM_PWM_MODULES / 2;
+      }
+
+      //resizing the GeneralIO in the HardwareInterface
+      general_io_->state_.analogue_.resize(nb_analogue_pub);
+      general_io_->state_.digital_.resize(nb_digital_io);
+      general_io_->command_.digital_.resize(nb_digital_io);
+      general_io_->command_.pwm_.resize(nb_pwm_modules);
+
+      input_mode_.assign(nb_digital_io, true);
+
+      //init the state message
+      state_msg_.analogue.resize(nb_analogue_pub);
+      state_msg_.digital.resize(nb_digital_io);
+      state_msg_.input_mode.resize(nb_digital_io);
+
+      //dynamic reconfigure server is instantiated here
+      // as we need the different vectors to be initialised
+      // before running the first configuration.
+      dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig>(ros::NodeHandle(device_name_)));
+      function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
+      dynamic_reconfigure_server_->setCallback(function_cb_);
+    } //end first time, the sizes are properly initialised, simply fill in the data
+
+    for(size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
     {
-      has_stacker_ = false;
-      nb_analogue_pub = NUM_ANALOGUE_INPUTS / 2;
-      nb_digital_io = NUM_DIGITAL_IO / 2;
-      nb_pwm_modules = NUM_PWM_MODULES / 2;
+      general_io_->state_.analogue_[i] = status_data->analogue_in[i];
     }
 
-    //resizing the GeneralIO in the HardwareInterface
-    general_io_->state_.analogue_.resize(nb_analogue_pub);
-    general_io_->state_.digital_.resize(nb_digital_io);
-    general_io_->command_.digital_.resize(nb_digital_io);
-    general_io_->command_.pwm_.resize(nb_pwm_modules);
-
-    input_mode_.resize(nb_digital_io);
-    for(size_t i=0; i < input_mode_.size(); ++i)
-      input_mode_[i] = true;
-
-    //init the state message
-    state_msg_.analogue.resize(nb_analogue_pub);
-    state_msg_.digital.resize(nb_digital_io);
-    state_msg_.input_mode.resize(nb_digital_io);
-
-    //dynamic reconfigure server is instantiated here
-    // as we need the different vectors to be initialised
-    // before running the first configuration.
-    dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig>(ros::NodeHandle(device_name_)));
-    function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
-    dynamic_reconfigure_server_->setCallback(function_cb_);
-  } //end first time, the sizes are properly initialised, simply fill in the data
-
-  for(size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
-  {
-    general_io_->state_.analogue_[i] = status_data->analogue_in[i];
-  }
-
-  for(size_t i = 0; i < general_io_->state_.digital_.size(); ++i )
-  {
-    general_io_->state_.digital_[i] = ronex::check_bit(status_data->digital_in, i);
+    for(size_t i = 0; i < general_io_->state_.digital_.size(); ++i )
+    {
+      general_io_->state_.digital_[i] = ronex::check_bit(status_data->digital_in, i);
+    }
   }
 
   //publishing at 100Hz

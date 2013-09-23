@@ -124,8 +124,10 @@ install(DIRECTORY include/${PROJECT_NAME}/
 #############
 
 ## Add gtest based cpp test target and link libraries
-add_rostest_gtest(test_ronex_utilities test/test_ronex_utilities.test test/test_sr_ronex_utilities.cpp)
-target_link_libraries(test_ronex_utilities ${catkin_LIBRARIES} ${GTEST_LIBRARIES})
+if(COMMAND add_rostest_gtest)
+  add_rostest_gtest(test_ronex_utilities test/test_ronex_utilities.test test/test_sr_ronex_utilities.cpp)
+  target_link_libraries(test_ronex_utilities ${catkin_LIBRARIES} ${GTEST_LIBRARIES})
+endif(COMMAND add_rostest_gtest)
 
 
 ## Add folders to be run by python nosetests
