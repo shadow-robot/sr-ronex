@@ -23,66 +23,8 @@ from time import sleep
 from string import Template
 from threading import Lock
 from sr_ronex_msgs.msg import BoolArray
+from sr_ronex_msgs.msg import GeneralIOState
 from std_msgs.msg import UInt16MultiArray
-
-class IoTest( object ):
-
-
-  def __init__( self, devs ):
-    rospy.loginfo( "Creating test class" )
-    self.success = True
-    self.a_state_lock = Lock()
-    self.d_state_lock = Lock()
-
-    self.last_digital_state = None
-    self.last_period_start_time = 4 * [0.0]
-    self.average_period = 4 * [0.0]
-
-    # Initialise the PWM outputs to 0 to avoid interference with the digital output testing
-    command_msg = UInt16MultiArray( None, 8 * [0] )
-    # self.PWM_command_publisher.publish(command_msg)
-    rospy.sleep( 0.2 )
-
-  def digital_state_callback( self, msg ):
-    with self.d_state_lock:
-      if self.PWM_testing:
-        for i, value in enumerate( self.last_digital_state.data ):
-          # detect the falling edge of the PWM signal
-          if value and not msg.data[i]:
-            if self.last_period_start_time[i] != 0.0:
-              self.average_period[i] = ( 1 - PERIOD_ALPHA ) * self.average_period[i] + PERIOD_ALPHA * ( rospy.get_time() - self.last_period_start_time[i] )
-            self.last_period_start_time[i] = rospy.get_time()
-      self.last_digital_state = msg
-
-  def check_digital_inputs( self, output_values ):
-    rospy.sleep( 0.1 )
-    with self.d_state_lock:
-      if self.last_digital_state != None:
-        for i, value in enumerate( output_values ):
-          if i & 1:
-            if self.last_digital_state.data[i / 2] != value:
-              rospy.logerr( "Wrong value in digital input " + str( i / 2 ) )
-              self.success = False
-      else:
-        rospy.logerr( "No digital input data received" )
-        self.success = False
-
-  def test_digital_io_case( self, output_values ):
-    command_msg = BoolArray( output_values )
-    self.digital_publisher_A.publish( command_msg )
-    self.check_digital_inputs( output_values )
-    rospy.sleep( DIGITAL_IO_WAIT )
-
-  def test_digital_ios( self ):
-    rospy.loginfo( "Testing digital I/O" )
-    self.test_digital_io_case( [False, False, False, False, False, False, False, False] )
-    self.test_digital_io_case( [False, True, False, False, False, False, False, False] )
-    self.test_digital_io_case( [False, False, False, True, False, False, False, False] )
-    self.test_digital_io_case( [False, False, False, False, False, True, False, False] )
-    self.test_digital_io_case( [False, False, False, False, False, False, False, True] )
-    self.test_digital_io_case( [False, True, False, True, False, True, False, True] )
-    self.test_digital_io_case( [False, False, False, False, False, False, False, False] )
-    rospy.loginfo( "Digital I/O test ended" )
 
 class TestContainer( unittest.TestCase ):
   """
@@ -105,56 +47,123 @@ class TestContainer( unittest.TestCase ):
   """
 
   def setUp( self ):
-    find_ronexes()
-    init_clients_publishers_subscribers()
-    init_string_names()
+    self.find_ronexes()
+    self.init_clients_publishers_subscribers()
+    self.state_lock = Lock()
 
-  def find_ronexes():
+    self.state = [ None, None ]
+    self.result = False
+
+  def find_ronexes( self ):
     attempts = 50
     while attempts:
       try:
         rospy.get_param( "/ronex/devices/0/ronex_id" )
         break
       except:
-        rospy.loginfo( "Waiting for the ronex to be loaded properly." )
+        if attempts == 50:
+          rospy.loginfo( "Waiting for the ronex to be loaded properly." )
         sleep( 0.1 )
         attempts -= 1
+    self.assertNotEqual( attempts, 0, "Failed to get ronex devices from parameter server" )
+
     self.ronex_devs = rospy.get_param( "/ronex/devices" )
     self.assertEqual( len( self.ronex_devs ), 2, "Error. Connect a ronex bridge with 2 ronex devices" )
 
-  def init_string_names( self ):
-    basic = Template( "/ronex/general_io/$sn" )
-    self.ron_a = basic.substitute( sn = self.ronex_devs['0']["serial"] )
-    self.ron_b = basic.substitute( sn = self.ronex_devs['1']["serial"] )
+  def init_clients_publishers_subscribers( self ):
+    basic = "/ronex/general_io/"
+    ron = [ basic + str( self.ronex_devs[str( i )]["serial"] ) for i in xrange( 2 ) ]
 
     com_dig = "/command/digital"
+    com_pwm = "/command/pwm"
+    sta = "/state"
 
+    self.clients = [ dynamic_reconfigure.client.Client( r ) for r in ron ]
+    self.digital_publishers = [ rospy.Publisher( r + com_dig, BoolArray, latch = True ) for r in ron ]
+    self.subscriber_0 = rospy.Subscriber( ron[0] + sta, GeneralIOState, self.state_callback_0 )
+    self.subscriber_1 = rospy.Subscriber( ron[1] + sta, GeneralIOState, self.state_callback_1 )
 
-  def init_clients_publishers_subscribers( self ):
-    self.client_a = dynamic_reconfigure.client.Client( self.ron_a )
-    self.client_b = dynamic_reconfigure.client.Client( self.ron_b )
+  def state_callback_0( self, msg ):
+    with self.state_lock:
+      self.state[0] = msg
 
-    params_a = { "input_mode_" + i, }
-    params = { sta : 'value', 'my_int_parameter' : 5 }
-    config = client.update_configuration( params )
+  def state_callback_1( self, msg ):
+    with self.state_lock:
+      self.state[1] = msg
 
+  def digital_test_case( self, outr, inr, message ):
+    self.result = False
+    self.set_ronex_io_state( outr, inr )
+    with self.state_lock:
+      self.digital_publishers[outr].publish( BoolArray( message ) )
+    rospy.sleep( 0.5 )
+    with self.state_lock:
+      self.result = ( self.state[inr].digital == message )
 
-    self.digital_publisher_A = rospy.Publisher( sta + scd, BoolArray, latch = True )
-    self.digital_publisher_B = rospy.Publisher( stb + scd, BoolArray, latch = True )
+  def set_ronex_io_state( self, outr, inr ):
+    with self.state_lock:
+      params_out = { "input_mode_" + str( i ) : False for i in xrange( 12 ) }
+      params_in = { "input_mode_" + str( i ) : True for i in xrange( 12 ) }
 
-    self.digital_subscriber_A = rospy.Subscriber( sdt.substitute( sn = snA ), BoolArray, self.digital_state_callback )
-    self.digital_subscriber_B = rospy.Subscriber( sdt.substitute( sn = snB ), BoolArray, self.digital_state_callback )
+      self.clients[ outr ].update_configuration( params_out )
+      self.clients[ inr ].update_configuration( params_in )
 
+      rospy.sleep( 1 )
 
+# the following tests will be performed
+  def test_change_state_one( self ):
+    self.set_ronex_io_state( 0, 1 )
+    params_0 = { "input_mode_" + str( i ) : False for i in xrange( 12 ) }
+    params_1 = { "input_mode_" + str( i ) : True for i in xrange( 12 ) }
 
-  def test_connected_ronex( self ):
+    config_0 = self.clients[0].get_configuration()
+    config_1 = self.clients[1].get_configuration()
 
+    for param, value in params_0.iteritems():
+      self.assertEqual( config_0[param], value, "Failed in first attempt to set digital I/O state" )
+    for param, value in params_1.iteritems():
+      self.assertEqual( config_1[param], value, "Failed in first attempt to set digital I/O state" )
 
-    io_test = IoTest( self.ronex_devs )
+  def test_change_state_two( self ):
+    self.set_ronex_io_state( 1, 0 )
+    params_0 = { "input_mode_" + str( i ) : True for i in xrange( 12 ) }
+    params_1 = { "input_mode_" + str( i ) : False for i in xrange( 12 ) }
 
-    io_test.test_digital_ios()
-    self.expectTrue( io_test.success, "digital I/O test failed" )
+    config_0 = self.clients[0].get_configuration()
+    config_1 = self.clients[1].get_configuration()
 
+    for param, value in params_0.iteritems():
+      self.assertEqual( config_0[param], value, "Failed in first attempt to set digital I/O state" )
+    for param, value in params_1.iteritems():
+      self.assertEqual( config_1[param], value, "Failed in first attempt to set digital I/O state" )
+
+  def test_digital_all_true( self ):
+    message = 12 * [True]
+    self.digital_test_case( 0, 1, message )
+    self.assertTrue( self.result, "digital i/o test failure" )
+    self.digital_test_case( 1, 0, message )
+    self.assertTrue( self.result, "digital i/o test failure" )
+
+  def test_digital_all_false( self ):
+    message = 12 * [False]
+    self.digital_test_case( 0, 1, message )
+    self.assertTrue( self.result, "digital i/o test failure" )
+    self.digital_test_case( 1, 0, message )
+    self.assertTrue( self.result, "digital i/o test failure" )
+
+  def test_digital_odd_true( self ):
+    message = 6 * [True, False]
+    self.digital_test_case( 0, 1, message )
+    self.assertTrue( self.result, "digital i/o test failure" )
+    self.digital_test_case( 1, 0, message )
+    self.assertTrue( self.result, "digital i/o test failure" )
+
+  def test_digital_even_true( self ):
+    message = 6 * [False, True]
+    self.digital_test_case( 0, 1, message )
+    self.assertTrue( self.result, "digital i/o test failure" )
+    self.digital_test_case( 1, 0, message )
+    self.assertTrue( self.result, "digital i/o test failure" )
 
 if __name__ == '__main__':
   rospy.init_node( 'single_ronex' )
