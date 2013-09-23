@@ -26,4 +26,11 @@
     <axis xyz="0 0 1"/>
     <origin xyz="0 0 0.3"/>
   </joint>
+
+  <transmission type="sr_ronex_transmissions/RonexTransmission" name="my_ronex_transmission">
+    <joint name="head_swivel"/>
+    <mapping ronex="/ronex/general_io/0" property="position" analogue_pin="6" scale="0.001" offset="0.0"/>
+    <mapping ronex="/ronex/general_io/0" property="effort"   analogue_pin="7" scale="2.0" offset="1.0"/>
+    <mapping ronex="/ronex/general_io/0" property="command" pwm_module="1" pwm_pin="0" direction_pin="5"/>
+  </transmission>
 </robot>
