@@ -1,15 +1,18 @@
 <package>
   <name>sr_ronex_external_protocol</name>
-  <version>1.0.0</version>
+  <version>0.9.0</version>
   <description>Contains the protocol to communicate between the driver and the ronex hardware.</description>
-  <maintainer email="software@shadowrobot.com">Ugo Cupcic</maintainer>
+  <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
   <license>LGPLv3</license>
 
-  <url type="website">http://ros.org/wiki/sr_ronex_external_protocol</url>
-  <!-- <url type="bugtracker"></url> -->
+  <url type="website">http://www.shadowrobot.com/products/ronex</url>
+  <url type="repository">https://github.com/shadow-robot/sr-ronex</url>
+  <url type="bugtracker">https://github.com/shadow-robot/sr-ronex/issues</url>
 
   <author>Ugo Cupcic</author>
+  <author>Toni Oliver</author>
+  <author>Mark Pitchless</author>
 
   <!-- Dependencies which this package needs to build itself. -->
   <buildtool_depend>catkin</buildtool_depend>
