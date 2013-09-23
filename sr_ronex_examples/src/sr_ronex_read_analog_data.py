@@ -35,7 +35,7 @@ def generalIOState_callback(data):
 #--------------------------------------------------------------------------------
 
 """
-This class demonstate how to read the analog data for a given ronex.
+This class demonstrates how to read the analog data for a given ronex.
 """
 class SrRonexExample(object):
 
@@ -65,7 +65,7 @@ class SrRonexExample(object):
 #--------------------------------------------------------------------------------
 
 """
-This example demonstates how to read the analog data for a given ronex.
+This example demonstrates how to read the analog data for a given ronex.
 """
 if __name__ == "__main__":
     rospy.init_node("sr_ronex_read_analog_data")

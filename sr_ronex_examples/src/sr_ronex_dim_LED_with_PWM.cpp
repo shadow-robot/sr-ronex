@@ -34,7 +34,7 @@
 //-------------------------------------------------------------------------------
 
 /**
- * This class demonstates how to find a ronex listed in the parameter server,
+ * This class demonstrates how to find a ronex listed in the parameter server,
  * and then get the information about its path.
  **/
 class SrRonexExample
@@ -156,7 +156,7 @@ void dimLED( ros::NodeHandle& n, const std::string& topic )
 //-------------------------------------------------------------------------------
 
 /**
- * This example demonstates how to dim a LED light with pulse-width modulation (PWM). 
+ * This example demonstrates how to dim a LED light with pulse-width modulation (PWM). 
  **/
 int main(int argc, char **argv)
 {

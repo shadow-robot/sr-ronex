@@ -52,7 +52,7 @@ def dimLED(topic):
 #--------------------------------------------------------------------------------
 
 """
-This class demonstate how to read the analog data for a given ronex.
+This class demonstrates how to read the analog data for a given ronex.
 """
 class SrRonexExample(object):
 
@@ -82,7 +82,7 @@ class SrRonexExample(object):
 #--------------------------------------------------------------------------------
 
 """
-This example demonstates how to dim a LED light with pulse-width modulation (PWM). 
+This example demonstrates how to dim a LED light with pulse-width modulation (PWM). 
 """
 if __name__ == "__main__":
     rospy.init_node('sr_ronex_dim_LED_with_PWM')

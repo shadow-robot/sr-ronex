@@ -34,7 +34,7 @@
 //-------------------------------------------------------------------------------
 
 /**
- * This class demonstates how to find a ronex listed in the parameter server,
+ * This class demonstrates how to find a ronex listed in the parameter server,
  * and then get the information about its path.
  **/
 class SrRonexExample
@@ -128,7 +128,7 @@ void generalIOState_callback(const sr_ronex_msgs::GeneralIOState::ConstPtr& msg)
 //-------------------------------------------------------------------------------
 
 /**
- * This class demonstate how to read the analog data for a given ronex.
+ * This class demonstrates how to read the analog data for a given ronex.
  **/
 int main(int argc, char **argv)
 {
