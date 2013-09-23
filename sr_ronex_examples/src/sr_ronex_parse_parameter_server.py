@@ -34,7 +34,7 @@ are stored as a dictionary in Python.
 class SrRonexParseParamExample(object):
 
     def __init__(self):
-        self.find_ronexes()
+        self.find_general_io_modules()
         
     def find_general_io_modules(self):
         """

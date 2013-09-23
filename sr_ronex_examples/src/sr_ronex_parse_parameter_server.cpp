@@ -66,56 +66,51 @@ private:
       ROS_INFO( "Waiting for General I/O module to be loaded properly." );
       loop_rate.sleep();
     }
-
-    // ronex::get_ronex_param_id returns next free ronext parameter id, 
-    // when ronex_id == "". Note that this id starts from zero.
-    std::string ronex_id("");
-    int next_free_ronex_param_id = ronex::get_ronex_param_id(ronex_id);
-    // Iterate through all ronexes.
-    for (int k = 0; k < next_free_ronex_param_id; k++)
-    {
-      // Assume that alias has not been set, and hence ronex_id is equal to serial.
-      // Note that serial starts from 1.
-      ronex_id = to_string_(k+1);
-      // When -1 is returned, the module with the given id is not present on the parameter server.
-      int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
-      if ( ronex_parameter_id == -1 )
+    
+    // The maximum number of General I/O modules is 5.
+    for (int k = 1; k <= 5; k++)
       {
-        ROS_INFO( "Did not find the ronex with ronex_id %s.", ronex_id.c_str() );
-        continue;
+	// Assume that alias has not been set, and hence ronex_id is equal to serial.
+	// Note that serial starts from 1.
+	std::string curr_ronex_id = to_string_(k);
+
+	// When -1 is returned, the module with the given id is not present on the parameter server.
+	int ronex_parameter_id = ronex::get_ronex_param_id(curr_ronex_id);
+	if ( ronex_parameter_id == -1 )
+	  continue;
+	
+	// The module is present on the parameter server and ronex_parameter_id
+	// contains the id on which the module is stored on the parameter server.
+	
+	// Retrieve the values of all parameters related to the current module.
+	std::string product_id;
+	std::string product_id_key = get_key_( ronex_parameter_id, std::string("product_id") );
+	ros::param::get( product_id_key, product_id );
+	
+	std::string product_name;
+	std::string product_name_key = get_key_( ronex_parameter_id, std::string("product_name") );
+	ros::param::get( product_name_key, product_name );
+	
+	// Note that ronex_id is equal to curr_ronex_id.
+	std::string ronex_id;
+	std::string ronex_id_key = get_key_( ronex_parameter_id, std::string("ronex_id") );
+	ros::param::get( ronex_id_key, ronex_id );
+	
+	std::string path;
+	std::string path_key = get_key_( ronex_parameter_id, std::string("path") );
+	ros::param::get( path_key, path );
+	
+	std::string serial;
+	std::string serial_key = get_key_( ronex_parameter_id, std::string("serial") );
+	ros::param::get( serial_key, serial );
+	
+	ROS_INFO( "*** General I/O module %d ***",  ronex_parameter_id );
+	ROS_INFO( "product_id   = %s", product_id.c_str() );
+	ROS_INFO( "product_name = %s", product_name.c_str() );
+	ROS_INFO( "ronex_id     = %s", ronex_id.c_str() );
+	ROS_INFO( "path         = %s", path.c_str() );
+	ROS_INFO( "serial       = %s", serial.c_str() );
       }
-
-      // The module is present on the parameter server and ronex_parameter_id
-      // contains the id on which the module is stored on the parameter server.
-            
-      // Retrieve the values of all parameters related to the current module.
-      std::string product_id;
-      std::string product_id_key = get_key_( ronex_parameter_id, std::string("product_id") );
-      ros::param::get( product_id_key, product_id );
-     
-      std::string product_name;
-      std::string product_name_key = get_key_( ronex_parameter_id, std::string("product_name") );
-      ros::param::get( product_name_key, product_name );
-      
-      std::string ronex_id;
-      std::string ronex_id_key = get_key_( ronex_parameter_id, std::string("ronex_id") );
-      ros::param::get( ronex_id_key, ronex_id );
-      
-      std::string path;
-      std::string path_key = get_key_( ronex_parameter_id, std::string("path") );
-      ros::param::get( path_key, path );
-      
-      std::string serial;
-      std::string serial_key = get_key_( ronex_parameter_id, std::string("serial") );
-      ros::param::get( serial_key, serial );
-
-      ROS_INFO( "*** General I/O module %d ***",  ronex_parameter_id );
-      ROS_INFO( "product_id   = %s", product_id.c_str() );
-      ROS_INFO( "product_name = %s", product_name.c_str() );
-      ROS_INFO( "ronex_id     = %s", ronex_id.c_str() );
-      ROS_INFO( "path         = %s", path.c_str() );
-      ROS_INFO( "serial       = %s", serial.c_str() );
-    }
   }
   
   /**
