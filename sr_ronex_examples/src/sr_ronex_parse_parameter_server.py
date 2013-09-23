@@ -55,11 +55,11 @@ class SrRonexParseParamExample(object):
         for ronex_param_id in devices:
             # Retrieve the values of all parameters related to the current General I/O module.
             rospy.loginfo( "*** General I/O Module %s ***",  ronex_param_id );
-            rospy.loginfo( "product_id   = %s", ronex_param_ids[ronex_param_id]["product_id"] );
-            rospy.loginfo( "product_name = %s", ronex_param_ids[ronex_param_id]["product_name"] );
-            rospy.loginfo( "ronex_id     = %s", ronex_param_ids[ronex_param_id]["ronex_id"] );
-            rospy.loginfo( "path         = %s", ronex_param_ids[ronex_param_id]["path"]);
-            rospy.loginfo( "serial       = %s", ronex_param_ids[ronex_param_id]["serial"] );
+            rospy.loginfo( "product_id   = %s", devices[ronex_param_id]["product_id"] );
+            rospy.loginfo( "product_name = %s", devices[ronex_param_id]["product_name"] );
+            rospy.loginfo( "ronex_id     = %s", devices[ronex_param_id]["ronex_id"] );
+            rospy.loginfo( "path         = %s", devices[ronex_param_id]["path"]);
+            rospy.loginfo( "serial       = %s", devices[ronex_param_id]["serial"] );
 
 #--------------------------------------------------------------------------------
 
