@@ -1,15 +1,18 @@
 <package>
   <name>sr_ronex_drivers</name>
-  <version>1.0.0</version>
-  <description>Package containing the driver for the RoNeX boards, and the CodDecod modules to map the inputs and outputs from every board to ROS topics and (optionally) to the HardwareInterface class.</description>
-  <maintainer email="software@shadowrobot.com">Toni Oliver</maintainer>
+  <version>0.9.0</version>
+  <description>Package containing the driver for the RoNeX boards.</description>
+  <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
   <license>LGPLv3</license>
 
-  <url type="website">http://ros.org/wiki/sr_ronex_drivers</url>
-  <!-- <url type="bugtracker"></url> -->
+  <url type="website">http://www.shadowrobot.com/products/ronex</url>
+  <url type="repository">https://github.com/shadow-robot/sr-ronex</url>
+  <url type="bugtracker">https://github.com/shadow-robot/sr-ronex/issues</url>
 
+  <author>Ugo Cupcic</author>
   <author>Toni Oliver</author>
+  <author>Mark Pitchless</author>
 
   <!-- Dependencies which this package needs to build itself. -->
   <buildtool_depend>catkin</buildtool_depend>
