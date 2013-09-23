@@ -1,0 +1,13 @@
+<launch>
+  <!-- Load the robot description -->
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find sr_ronex_examples)/model/ronex.urdf'" />
+
+  <!-- Allows to specify the ethernet interface to be used. It defaults to the value of the env var ETHERCAT_PORT -->
+  <arg name="ethercat_port" default="$(optenv ETHERCAT_PORT eth0)" />
+
+  <!-- Start the ronex driver -->
+  <node name="ronex" pkg="pr2_ethercat" type="pr2_ethercat" args="-i $(arg ethercat_port) -r /robot_description" output="screen"  launch-prefix="nice -n -20" />
+
+  <!-- publishes tf from joint states to be able to view in rviz -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+</launch>
