@@ -1,5 +1,5 @@
 <launch>
-  <param name="robot_description" command="$(find xacro)/xacro.py '$(find sr_ronex_transmissions)/example/ronex.urdf'" />
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find sr_ronex_transmissions)/test/ronex.urdf'" />
 
   <test test-name="test_ronex_transmission" pkg="sr_ronex_transmissions" type="test_ronex_transmission"/>
 </launch>
