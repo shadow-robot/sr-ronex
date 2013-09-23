@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <robot name="flexible">
+  <!-- standard urdf -->
   <link name="base_link">
     <visual>
       <geometry>
@@ -27,6 +28,10 @@
     <origin xyz="0 0 0.3"/>
   </joint>
 
+  <!-- This is the only RoNeX specific part of the urdf.
+       We define the mapping between different pins of a RoNeX to different properties of the joint.
+
+       Note: each mapping line is optional (e.g. if you don't have an effort sensor, then remove the effort line) -->
   <transmission type="sr_ronex_transmissions/RonexTransmission" name="my_ronex_transmission">
     <joint name="head_swivel"/>
     <mapping ronex="/ronex/general_io/0" property="position" analogue_pin="6" scale="0.001" offset="0.0"/>
