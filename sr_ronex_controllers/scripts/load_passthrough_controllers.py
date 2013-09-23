@@ -33,7 +33,7 @@ class LoadPassthroughControllers(object):
         """
         ronex_ids = self.find_ronexes()
         if len(ronex_ids) > 0:
-            self.set_param(ronex_id)
+            self.set_param(ronex_ids)
             self.load_and_start_ctrl(ronex_ids)
         else:
             rospy.loginfo( "Failed to find ronex devices in parameter server" )
