@@ -4,7 +4,7 @@ project(sr_ronex_examples)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp)
+find_package(catkin REQUIRED COMPONENTS std_msgs sr_ronex_msgs sr_ronex_utilities dynamic_reconfigure roscpp rospy )
 
 ###########
 ## Build ##
@@ -34,6 +34,7 @@ catkin_package(
 add_executable(sr_ronex_parse_parameter_server ${PROJECT_SOURCE_DIR}/src/sr_ronex_parse_parameter_server.cpp)
 add_executable(sr_ronex_read_analog_data ${PROJECT_SOURCE_DIR}/src/sr_ronex_read_analog_data.cpp)
 add_executable(sr_ronex_flash_LED_with_PWM ${PROJECT_SOURCE_DIR}/src/sr_ronex_flash_LED_with_PWM.cpp)
+add_executable(change_ronex_configuration src/change_ronex_configuration.cpp)
 
 ## Add cmake target dependencies of the executable/library
 add_dependencies(sr_ronex_read_analog_data sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
@@ -43,3 +44,5 @@ add_dependencies(sr_ronex_flash_LED_with_PWM sr_ronex_msgs_gencpp ${PROJECT_NAME
 target_link_libraries(sr_ronex_parse_parameter_server ${catkin_LIBRARIES})
 target_link_libraries(sr_ronex_read_analog_data ${catkin_LIBRARIES})
 target_link_libraries(sr_ronex_flash_LED_with_PWM ${catkin_LIBRARIES})
+target_link_libraries(change_ronex_configuration ${catkin_LIBRARIES})
+
