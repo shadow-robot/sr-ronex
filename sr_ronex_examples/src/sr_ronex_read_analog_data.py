@@ -82,7 +82,7 @@ if __name__ == "__main__":
     rospy.init_node("sr_ronex_read_analog_data")
 
     # Note that you may have to set the value of ronex_id,
-    # depending on which General I/O board the LED is connected to.
+    # depending on which General I/O board the input device is connected to.
     ronex_id = raw_input( "Please enter the ronex id: " )
     findModule = SrRonexFindGeneralIOModule( str(ronex_id) )
     path = findModule.get_path()
