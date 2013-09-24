@@ -34,9 +34,7 @@
 //-------------------------------------------------------------------------------
 
 /**
- * This class demonstate how to use the ronexes listed in the parameter server.
- * For each ronex, the parameter server stores parameters such as
- * its product_id, product_name, ronex_id, path, and serial.
+ * This class demonstrate how to change the configuration parameters of a running ronex module.
  **/
 class ChangeRonexConfigurationExample
 {
@@ -52,6 +50,7 @@ public:
 
   /**
    * Configuration of the ronex module is done by calling the /ronex/general_io/X/set_parameters service
+   * where X is the ronex_id of the module to be configured.
    **/
   void configureRonex(std::string path)
   {
