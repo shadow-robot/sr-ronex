@@ -63,7 +63,7 @@ private:
     std::string param;
     while ( ros::param::get("/ronex/devices/0/ronex_id", param ) == false )
     {
-      ROS_INFO( "Waiting for General I/O module to be loaded properly." );
+      ROS_INFO_STREAM( "Waiting for General I/O module to be loaded properly.\n" );
       loop_rate.sleep();
     }
     
@@ -104,12 +104,12 @@ private:
       std::string serial_key = get_key_( ronex_parameter_id, std::string("serial") );
       ros::param::get( serial_key, serial );
       
-      ROS_INFO( "*** General I/O module %d ***",  ronex_parameter_id );
-      ROS_INFO( "product_id   = %s", product_id.c_str() );
-      ROS_INFO( "product_name = %s", product_name.c_str() );
-      ROS_INFO( "ronex_id     = %s", ronex_id.c_str() );
-      ROS_INFO( "path         = %s", path.c_str() );
-      ROS_INFO( "serial       = %s", serial.c_str() );
+      ROS_INFO_STREAM( "*** General I/O module " << ronex_parameter_id << " ***\n" );
+      ROS_INFO_STREAM( "product_id   = " << product_id << "\n" );
+      ROS_INFO_STREAM( "product_name = " << product_name << "\n"  );
+      ROS_INFO_STREAM( "ronex_id     = " << ronex_id << "\n"  );
+      ROS_INFO_STREAM( "path         = " << path << "\n"  );
+      ROS_INFO_STREAM( "serial       = " << serial << "\n"  );
     }
   }
   

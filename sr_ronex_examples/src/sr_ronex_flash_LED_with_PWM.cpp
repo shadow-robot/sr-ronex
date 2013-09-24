@@ -59,7 +59,7 @@ public:
     std::string param;
     while ( ros::param::get("/ronex/devices/0/ronex_id", param ) == false )
     {
-      ROS_INFO( "Waiting for General I/O module to be loaded properly." );
+      ROS_INFO_STREAM( "Waiting for General I/O module to be loaded properly.\n" );
       loop_rate.sleep();
     }
     
@@ -68,7 +68,7 @@ public:
     int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
     if ( ronex_parameter_id == -1 )
     {
-      ROS_INFO( "Did not find the General I/O module with ronex_id %s.", ronex_id.c_str() );
+      ROS_INFO_STREAM( "Did not find the General I/O module with ronex_id " << ronex_id << ".\n" );
       return false; // Failed to set path.
     }
     
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
     // Always use the first digital I/O channel to flash the LED light.
     // For example "/ronex/general_io/1" + "/command/pwm/0".
     std::string topic = path + "/command/pwm/0"; 
-    ROS_INFO( "Topic = %s", topic.c_str() );
+    ROS_INFO_STREAM( "Topic = " << topic << "\n" );
     flash_LED( n, topic );
   }
   

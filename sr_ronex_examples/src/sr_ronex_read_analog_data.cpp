@@ -59,7 +59,7 @@ public:
     std::string param;
     while ( ros::param::get("/ronex/devices/0/ronex_id", param ) == false )
     {
-      ROS_INFO( "Waiting for General I/O module to be loaded properly." );
+      ROS_INFO_STREAM( "Waiting for General I/O module to be loaded properly.\n" );
       loop_rate.sleep();
     }
 
@@ -68,7 +68,7 @@ public:
     int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
     if ( ronex_parameter_id == -1 )
     {
-      ROS_INFO( "Did not find the General I/O module with ronex_id %s.", ronex_id.c_str() );
+      ROS_INFO_STREAM( "Did not find the General I/O module with ronex_id " << ronex_id << ".\n" );
       return false; // Failed to set path.
     }
     
@@ -117,15 +117,15 @@ private:
 
 /**
  * The callback function given to the subscribe() call.
+ *
+ * @param msg A const pointer to a message of type sr_ronex_msgs::GeneralIOState.
  **/
 void generalIOState_callback(const sr_ronex_msgs::GeneralIOState::ConstPtr& msg)
 {
   const std::vector<short unsigned int> &analogue = msg->analogue;
-  const unsigned len = analogue.size();
-  for (unsigned k = 0; k < len; k++) 
-  {
-    ROS_INFO( "analogue[%d] = %d ", k, analogue[k] );
-  }
+  const size_t len = analogue.size();
+  for (size_t k = 0; k < len; k++)
+    ROS_INFO_STREAM( "analogue[" << k << "] = " << analogue[k] << "\n" );
 }
 
 //-------------------------------------------------------------------------------
