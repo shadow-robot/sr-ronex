@@ -32,7 +32,7 @@ class ChangeRonexConfigurationExample(object):
 
     def __init__(self):
         #Define the ronex id of the module to be configured
-        ronex_id = "1"
+        ronex_id = "test_ronex"
         ronex_path = "/ronex/general_io/" + ronex_id + "/"
         self.configure_ronex(ronex_path)
         
