@@ -24,7 +24,7 @@ from string import Template
 from threading import Lock
 from sr_ronex_msgs.msg import GeneralIOState
 from std_msgs.msg import Bool
-from pr2_mechanism_msgs.srv import ListControllers, UnloadController
+from pr2_mechanism_msgs.srv import ListControllers
 
 class TestContainer( unittest.TestCase ):
   '''
@@ -61,11 +61,6 @@ class TestContainer( unittest.TestCase ):
 
     self.controllers_list = [ "ronex_" + ronex_id + "_passthrough" for ronex_id in self.ronex_ids ]
 
-#   def tearDown( self ):
-#     unload_controller = rospy.ServiceProxy( 'pr2_controller_manager/unload_controller', UnloadController )
-#     for ctrl in self.controllers_list:
-#       self.assertTrue( unload_controller( ctrl ) )
-
   def find_ronexes( self ):
     attempts = 50
     while attempts and not rospy.has_param( '/ronex/devices/0/ronex_id' ):
@@ -94,8 +89,11 @@ class TestContainer( unittest.TestCase ):
 
     self.clients = [ dynamic_reconfigure.client.Client( r ) for r in ron ]
     self.digital_publishers = [ [ rospy.Publisher( r + com_dig + str( i ), Bool, latch = True ) for i in xrange( 12 ) ] for r in ron ]
+    self.pwm_publishers = [ [ rospy.Publisher( r + com_pwm + str( i ), Bool, latch = True ) for i in xrange( 6 ) ] for r in ron ]
+
     self.subscriber_0 = rospy.Subscriber( ron[0] + sta, GeneralIOState, self.state_callback_0 )
     self.subscriber_1 = rospy.Subscriber( ron[1] + sta, GeneralIOState, self.state_callback_1 )
+
 
   def state_callback_0( self, msg ):
     with self.state_lock:
@@ -188,6 +186,18 @@ class TestContainer( unittest.TestCase ):
 
       for ind, value in enumerate( self.expected_analogue_values ):
         self.assertAlmostEqual( value, analogue[ind], delta = 10 )
+
+  def test_pwm_outputs( self ):
+    self.result = False
+    self.set_ronex_io_state( 0, 1 )
+
+    for i, bool in enumerate( message ):
+      self.pwm_publishers[0][i].publish( bool )
+    rospy.sleep( 0.05 )
+
+    with self.state_lock:
+      self.result = ( self.state[inr].digital == message )
+      self.assertTrue( self.result, 'digital i/o test failure' )
 
 if __name__ == '__main__':
   rospy.init_node( 'sr_ronex_test' )
