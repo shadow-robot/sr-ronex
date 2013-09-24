@@ -103,12 +103,12 @@ private:
       std::string serial_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("serial") );
       ros::param::get( serial_key, serial );
       
-      ROS_INFO_STREAM( "*** General I/O module " << ronex_parameter_id << " ***\n" );
-      ROS_INFO_STREAM( "product_id   = " << product_id << "\n" );
-      ROS_INFO_STREAM( "product_name = " << product_name << "\n"  );
-      ROS_INFO_STREAM( "ronex_id     = " << ronex_id << "\n"  );
-      ROS_INFO_STREAM( "path         = " << path << "\n"  );
-      ROS_INFO_STREAM( "serial       = " << serial << "\n"  );
+      ROS_INFO_STREAM( "*** General I/O module " << ronex_parameter_id << " ***" );
+      ROS_INFO_STREAM( "product_id   = " << product_id );
+      ROS_INFO_STREAM( "product_name = " << product_name );
+      ROS_INFO_STREAM( "ronex_id     = " << ronex_id );
+      ROS_INFO_STREAM( "path         = " << path );
+      ROS_INFO_STREAM( "serial       = " << serial );
     }
   }
   
