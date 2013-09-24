@@ -24,45 +24,52 @@ from time import sleep
 #--------------------------------------------------------------------------------
 
 """
-This class demonstate how to use the ronexes listed in the parameter server.
-For each ronex, the parameter server stores parameters such as
-its product_id, product_name, ronex_id, path, and serial.
-Note that the Python version is simpler than the C++ version, because params
+Assume that your RoNeX consists of a Bridge (IN) module, and one or multiple
+General I/O module(s). This class demonstrates how to access the General I/O module(s)
+listed in the parameter server. For each General I/O module, the parameter server 
+stores parameters such as its product_id, product_name, ronex_id, path, and serial.
+Note that the Python version is simpler than the C++ version, because parameters
 are stored as a dictionary in Python.
 """
-class SrRonexExample(object):
+class SrRonexParseParamExample(object):
 
     def __init__(self):
-        self.find_ronexes()
+        self.find_general_io_modules()
         
-    def find_ronexes(self):
+    def find_general_io_modules(self):
         """
-        Find the ronexes present on the system.
+        Find the General I/O modules present on the system.
         """
-        # Wait until there's one ronex.
+        # Wait until there's at least one General I/O module.
         while True:
             try:
                 rospy.get_param("/ronex/devices/0/ronex_id")
                 break
             except:
-                rospy.loginfo("Waiting for the ronex to be loaded properly.")
+                rospy.loginfo("Waiting for the General I/O module to be loaded properly.")
                 sleep(0.1)
 
-        # Retreive all the ronex ids from the parameter server.
-        ronex_param = rospy.get_param("/ronex/devices")
-        for key in ronex_param:
-            # Retrieve the values of all parameters related to the current ronex.
-            rospy.loginfo( "*** Ronex %s ***",  key );
-            rospy.loginfo( "product_id   = %s", ronex_param[key]["product_id"] );
-            rospy.loginfo( "product_name = %s", ronex_param[key]["product_name"] );
-            rospy.loginfo( "ronex_id     = %s", ronex_param[key]["ronex_id"] );
-            rospy.loginfo( "path         = %s", ronex_param[key]["path"]);
-            rospy.loginfo( "serial       = %s", ronex_param[key]["serial"] );
+        # Retrieve all General I/O modules (stored in a dict) from the parameter server.
+        # Note that the dict's keyword is ronex_param_id, and it starts from zero.
+        devices = rospy.get_param("/ronex/devices")
+        for ronex_param_id in devices:
+            # Retrieve the values of all parameters related to the current General I/O module.
+            # Path looks like "/ronex/general_io/2", where 2 is a ronex_id.
+            rospy.loginfo( "*** General I/O Module %s ***",  ronex_param_id );
+            rospy.loginfo( "product_id   = %s", devices[ronex_param_id]["product_id"] );
+            rospy.loginfo( "product_name = %s", devices[ronex_param_id]["product_name"] );
+            rospy.loginfo( "ronex_id     = %s", devices[ronex_param_id]["ronex_id"] );
+            rospy.loginfo( "path         = %s", devices[ronex_param_id]["path"]);
+            rospy.loginfo( "serial       = %s", devices[ronex_param_id]["serial"] );
 
 #--------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    rospy.init_node("sr_ronex_parse_parameter_server")
-    SrRonexExample()
+
+    rospy.init_node("sr_ronex_parse_parameter_server") 
+
+    # This class demonstrates how to access the General I/O module(s) 
+    # listed in the parameter server. 
+    SrRonexParseParamExample()
 
 #--------------------------------------------------------------------------------

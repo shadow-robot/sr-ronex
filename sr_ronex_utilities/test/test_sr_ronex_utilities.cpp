@@ -86,6 +86,17 @@ TEST(RonexUtils, get_ronex_param_id)
   EXPECT_EQ( ronex_param_id, -1);
 }
 
+TEST(RonexUtils, get_ronex_devices_string)
+{
+  std::string keyA( "/ronex/devices/3/product_name" );
+  
+  int ronex_parameter_id = 3;
+  std::string part("product_name");
+  std::string keyB = get_ronex_devices_string( ronex_parameter_id, part );
+  
+  EXPECT_EQ(keyA, keyB);
+}
+
 int main(int argc, char **argv)
 {
   testing::InitGoogleTest(&argc, argv);

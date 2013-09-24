@@ -27,6 +27,7 @@
 #include <sstream>
 #include <bitset>
 #include <ros/ros.h>
+#include <boost/lexical_cast.hpp>
 
 namespace ronex
 {
@@ -59,7 +60,7 @@ namespace ronex
     data = static_cast<uint32_t>(tmp.to_ulong());
   }
 
-  /**
+   /**
    * Checks the ronexes already present on the parameter server and returns an id on which
    *  the given ronex is stored on the parameter server.
    *
@@ -109,7 +110,23 @@ namespace ronex
     }
 
     return -1;
-  }
+  } 
+ 
+  /**
+   * Construct a string for e.g., ros::param::get as the key.
+   *
+   * @param ronex_parameter_id Part of the key (e.g., 2).
+   * @param part Part of the key (e.g., "product_name").
+   * @return The key (e.g., "/ronex/devices/2/product_name").
+   **/
+   static inline std::string get_ronex_devices_string(int ronex_parameter_id, std::string part)
+   {
+     std::string key("/ronex/devices/");
+     key += boost::lexical_cast<std::string>(ronex_parameter_id);
+     key += "/";
+     key += part;
+     return key;
+   }
 }
 
 /* For the emacs weenies in the crowd.
