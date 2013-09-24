@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 
   // Get the path of the General I/O module with the given ronex id.
   // Note that you may have to set the value of ronex_id,
-  // depending on which General I/O board the LED is connected to.
+  // depending on which General I/O board the input device is connected to.
   short unsigned int ronex_id; 
   std::cout << "Please enter the ronex id: ";
   std::cin >> ronex_id;
