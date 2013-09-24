@@ -33,9 +33,8 @@
 
        Note: each mapping line is optional (e.g. if you don't have an effort sensor, then remove the effort line) -->
   <transmission type="sr_ronex_transmissions/RonexTransmission" name="my_ronex_transmission">
-    <joint name="head_swivel"/>
-    <mapping ronex="/ronex/general_io/0" property="position" analogue_pin="6" scale="0.001" offset="0.0"/>
-    <mapping ronex="/ronex/general_io/0" property="effort"   analogue_pin="7" scale="2.0" offset="1.0"/>
-    <mapping ronex="/ronex/general_io/0" property="command" pwm_module="1" pwm_pin="0" direction_pin="0"/>
+    <joint name="head_swivel"/> <mapping ronex="/ronex/general_io/test_ronex" property="position" analogue_pin="6" scale="0.001" offset="0.0"/>
+    <mapping ronex="/ronex/general_io/test_ronex" property="effort"   analogue_pin="7" scale="2.0" offset="1.0"/>
+    <mapping ronex="/ronex/general_io/test_ronex" property="command" pwm_module="1" pwm_pin="0" direction_pin="0"/>
   </transmission>
 </robot>

@@ -24,9 +24,9 @@
 
   <!-- setting the corresponding pins to output mode on the RoNeX -->
   <node pkg="dynamic_reconfigure" type="dynparam" name="dynparam_i2"
-	args="set /ronex/general_io/0 input_mode_2 false" />
+	args="set /ronex/general_io/test_ronex input_mode_2 false" />
   <node pkg="dynamic_reconfigure" type="dynparam" name="dynparam_i5"
-	args="set /ronex/general_io/0 input_mode_5 false" />
+	args="set /ronex/general_io/test_ronex input_mode_5 false" />
 
   <!-- publishes tf from joint states to be able to view in rviz -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
