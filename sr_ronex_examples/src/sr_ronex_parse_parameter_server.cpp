@@ -94,6 +94,7 @@ private:
       std::string product_name_key = get_key_( ronex_parameter_id, std::string("product_name") );
       ros::param::get( product_name_key, product_name );
 
+      // Path looks like "/ronex/general_io/2", where 2 is a ronex_id.
       std::string path;
       std::string path_key = get_key_( ronex_parameter_id, std::string("path") );
       ros::param::get( path_key, path );

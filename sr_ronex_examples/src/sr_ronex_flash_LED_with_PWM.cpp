@@ -68,7 +68,7 @@ public:
     int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
     if ( ronex_parameter_id == -1 )
     {
-      ROS_INFO_STREAM( "Did not find the General I/O module with ronex_id " << ronex_id << ".\n" );
+      ROS_ERROR_STREAM( "Did not find the General I/O module with ronex_id " << ronex_id << ".\n" );
       return false; // Failed to set path.
     }
     
