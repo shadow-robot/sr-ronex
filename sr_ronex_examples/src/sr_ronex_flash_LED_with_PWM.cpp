@@ -53,7 +53,7 @@ public:
   bool get_path_( const short unsigned int& ronex_id_as_int, std::string& path )
   {
     std::string ronex_id = this->to_string_(ronex_id_as_int);
-
+    
     // Wait until there's at least one General I/O module.
     ros::Rate loop_rate(10);
     std::string param;
@@ -62,22 +62,22 @@ public:
       ROS_INFO( "Waiting for General I/O module to be loaded properly." );
       loop_rate.sleep();
     }
-
+    
     // When -1 is returned, the module with the given id is not present on the parameter server. 
     // Note that ronex parameter id starts from zero.
     int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
     if ( ronex_parameter_id == -1 )
-      {
-        ROS_INFO( "Did not find the General I/O module with ronex_id %s.", ronex_id.c_str() );
-        return false; // Failed to set path.
-      }
+    {
+      ROS_INFO( "Did not find the General I/O module with ronex_id %s.", ronex_id.c_str() );
+      return false; // Failed to set path.
+    }
     
     // The module is present on the parameter server and ronex_parameter_id
     // contains the id on which the module is stored on the parameter server.
-
+    
     std::string path_key = get_key_( ronex_parameter_id, std::string("path") );
     ros::param::get( path_key, path );
-
+    
     return true; // Path is set.
   }
   
@@ -124,7 +124,7 @@ private:
 void flash_LED( ros::NodeHandle& n, const std::string& topic )
 {
   ros::Publisher pub = n.advertise<sr_ronex_msgs::PWM>( topic, 1000 );
- 
+  
   short unsigned int pwm_period = 320;
   // Start with a 100% duty cycle.
   short unsigned int pwm_on_time_0 = pwm_period;
@@ -133,24 +133,24 @@ void flash_LED( ros::NodeHandle& n, const std::string& topic )
   
   ros::Rate loop_rate(100); 
   while ( ros::ok() )
-    {   
-      // Flash the light...
-      pwm_on_time_0 -= 10;
-      if (pwm_on_time_0 == 0 || pwm_on_time_0 > pwm_period)
-	pwm_on_time_0 = pwm_period;
-	  
-      sr_ronex_msgs::PWM msg;
-      msg.pwm_period    = pwm_period;
-      msg.pwm_on_time_0 = pwm_on_time_0;
-      msg.pwm_on_time_1 = pwm_on_time_1;
-      
-      // The publish() function sends the message. 
-      // The parameter is the message object.
-      pub.publish(msg);
-      
-      ros::spinOnce();
-      loop_rate.sleep();
-    }
+  {   
+    // Flash the light...
+    pwm_on_time_0 -= 10;
+    if (pwm_on_time_0 == 0 || pwm_on_time_0 > pwm_period)
+      pwm_on_time_0 = pwm_period;
+    
+    sr_ronex_msgs::PWM msg;
+    msg.pwm_period    = pwm_period;
+    msg.pwm_on_time_0 = pwm_on_time_0;
+    msg.pwm_on_time_1 = pwm_on_time_1;
+    
+    // The publish() function sends the message. 
+    // The parameter is the message object.
+    pub.publish(msg);
+    
+    ros::spinOnce();
+    loop_rate.sleep();
+  }
 }
 
 //-------------------------------------------------------------------------------
@@ -177,13 +177,13 @@ int main(int argc, char **argv)
   std::string path;
   SrRonexFindGeneralIOModule findModule;
   if ( findModule.get_path_( ronex_id, path ) ) 
-    {
-      // Always use the first digital I/O channel to flash the LED light.
-      // For example "/ronex/general_io/1" + "/command/pwm/0".
-      std::string topic = path + "/command/pwm/0"; 
-      ROS_INFO( "Topic = %s", topic.c_str() );
-      flash_LED( n, topic );
-    }
+  {
+    // Always use the first digital I/O channel to flash the LED light.
+    // For example "/ronex/general_io/1" + "/command/pwm/0".
+    std::string topic = path + "/command/pwm/0"; 
+    ROS_INFO( "Topic = %s", topic.c_str() );
+    flash_LED( n, topic );
+  }
   
   return 0;
 }

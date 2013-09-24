@@ -53,7 +53,7 @@ public:
   bool get_path_( const short unsigned int& ronex_id_as_int, std::string& path )
   {
     std::string ronex_id = this->to_string_(ronex_id_as_int);
-
+    
     // Wait until there's at least one General I/O module.
     ros::Rate loop_rate(10);
     std::string param;
@@ -67,14 +67,14 @@ public:
     // Note that ronex parameter id starts from zero.
     int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
     if ( ronex_parameter_id == -1 )
-      {
-        ROS_INFO( "Did not find the General I/O module with ronex_id %s.", ronex_id.c_str() );
-        return false; // Failed to set path.
-      }
+    {
+      ROS_INFO( "Did not find the General I/O module with ronex_id %s.", ronex_id.c_str() );
+      return false; // Failed to set path.
+    }
     
     // The module is present on the parameter server and ronex_parameter_id
     // contains the id on which the module is stored on the parameter server.
-
+    
     std::string path_key = get_key_( ronex_parameter_id, std::string("path") );
     ros::param::get( path_key, path );
 
@@ -122,7 +122,8 @@ void generalIOState_callback(const sr_ronex_msgs::GeneralIOState::ConstPtr& msg)
 {
   const std::vector<short unsigned int> &analogue = msg->analogue;
   const unsigned len = analogue.size();
-  for (unsigned k = 0; k < len; k++) {
+  for (unsigned k = 0; k < len; k++) 
+  {
     ROS_INFO( "analogue[%d] = %d ", k, analogue[k] );
   }
 }
@@ -149,26 +150,26 @@ int main(int argc, char **argv)
   std::string path;
   SrRonexFindGeneralIOModule findModule;
   if ( findModule.get_path_( ronex_id, path ) )
-    {
-      /**
-       * The subscribe() call is how you tell ROS that you want to receive messages
-       * on a given topic. Messages are passed to a callback function. The second
-       * parameter to the subscribe() function is the size of the message queue.
-       **/
-      // For example "/ronex/general_io/1" + "/state"
-      std::string topic = path + "/state"; 
-      ros::Subscriber sub = n.subscribe( topic.c_str(), 
-					 1000,
-					 generalIOState_callback);
-      
-      /**
-       * ros::spin() will enter a loop, pumping callbacks.  With this version, all
-       * callbacks will be called from within this thread (the main one).  ros::spin()
-       * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
-       **/
-      ros::spin();
-    }
-
+  {
+    /**
+     * The subscribe() call is how you tell ROS that you want to receive messages
+     * on a given topic. Messages are passed to a callback function. The second
+     * parameter to the subscribe() function is the size of the message queue.
+     **/
+    // For example "/ronex/general_io/1" + "/state"
+    std::string topic = path + "/state"; 
+    ros::Subscriber sub = n.subscribe( topic.c_str(), 
+                                       1000,
+                                       generalIOState_callback);
+    
+    /**
+     * ros::spin() will enter a loop, pumping callbacks.  With this version, all
+     * callbacks will be called from within this thread (the main one).  ros::spin()
+     * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
+     **/
+    ros::spin();
+  }
+  
   return 0;
 }
 
