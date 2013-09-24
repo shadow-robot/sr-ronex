@@ -97,7 +97,7 @@ private:
 //-------------------------------------------------------------------------------
 
 /**
- * Flash a LED light with PWM. It takes 10 seconds.
+ * Flash a LED light with PWM.
  *
  * @param n A ROS node handle.
  * @param topic For example "/ronex/general_io/1/command/0".
