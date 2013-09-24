@@ -34,18 +34,26 @@ class ChangeRonexConfigurationExample(object):
         #Define the ronex id of the module to be configured
         ronex_id = "1"
         ronex_path = "/ronex/general_io/" + ronex_id + "/"
-        self.configure_module(ronex_path)
+        self.configure_ronex(ronex_path)
         
-    def configure_module(self, path):
+    def configure_ronex(self, path):
         """
-        Use the /ronex/general_io/1/set_parameters service
+        In this example we are using the dynamic_reconfigure.client.
+        It could also be done by calling the /ronex/general_io/X/set_parameters service directly (as in the c++ example)
         """
         client = dynamic_reconfigure.client.Client(path)
+        
+        # calling update_configuration with a dictionary of changes to make
+        params = { 'input_mode_0' : False, 'input_mode_1' : False, 'pwm_period_0' : 200 , 'pwm_clock_divider' : 3000}
+        config = client.update_configuration(params)
+        
+        # config now contains the full configuration of the node after the parameter update
+
 
 #--------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    rospy.init_node("change_ronex_configuration")
+    rospy.init_node("change_ronex_configuration_py")
     ChangeRonexConfigurationExample()
 
 #--------------------------------------------------------------------------------

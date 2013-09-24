@@ -28,7 +28,7 @@
 #include <string>
 #include <sstream>
 
-#include "sr_ronex_utilities.hpp"
+#include "sr_ronex_utilities/sr_ronex_utilities.hpp"
 
 //-------------------------------------------------------------------------------
 
