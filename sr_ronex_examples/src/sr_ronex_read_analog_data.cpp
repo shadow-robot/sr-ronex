@@ -75,7 +75,7 @@ public:
     // The module is present on the parameter server and ronex_parameter_id
     // contains the id on which the module is stored on the parameter server.
     
-    std::string path_key = ronex::get_ronex_devices_string_( ronex_parameter_id, std::string("path") );
+    std::string path_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("path") );
     ros::param::get( path_key, path );
 
     return true; // Path is set.

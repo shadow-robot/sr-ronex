@@ -119,7 +119,7 @@ namespace ronex
    * @param part Part of the key (e.g., "product_name").
    * @return The key (e.g., "/ronex/devices/2/product_name").
    **/
-   static inline std::string get_ronex_devices_string_(int ronex_parameter_id, std::string part)
+   static inline std::string get_ronex_devices_string(int ronex_parameter_id, std::string part)
    {
      std::string key("/ronex/devices/");
      key += boost::lexical_cast<std::string>(ronex_parameter_id);

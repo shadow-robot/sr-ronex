@@ -75,7 +75,7 @@ private:
          ronex_parameter_id++)
     { 
       std::string ronex_id;
-      std::string ronex_id_key = ronex::get_ronex_devices_string_( ronex_parameter_id, std::string("ronex_id") );
+      std::string ronex_id_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("ronex_id") );
       ros::param::get( ronex_id_key, ronex_id );
       
       // When -1 is returned, the module with the given id is not present on the parameter server.
@@ -87,20 +87,20 @@ private:
       
       // Retrieve the values of all parameters related to the current module.
       std::string product_id;
-      std::string product_id_key = ronex::get_ronex_devices_string_( ronex_parameter_id, std::string("product_id") );
+      std::string product_id_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("product_id") );
       ros::param::get( product_id_key, product_id );
       
       std::string product_name;
-      std::string product_name_key = ronex::get_ronex_devices_string_( ronex_parameter_id, std::string("product_name") );
+      std::string product_name_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("product_name") );
       ros::param::get( product_name_key, product_name );
 
       // Path looks like "/ronex/general_io/2", where 2 is a ronex_id.
       std::string path;
-      std::string path_key = ronex::get_ronex_devices_string_( ronex_parameter_id, std::string("path") );
+      std::string path_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("path") );
       ros::param::get( path_key, path );
       
       std::string serial;
-      std::string serial_key = ronex::get_ronex_devices_string_( ronex_parameter_id, std::string("serial") );
+      std::string serial_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("serial") );
       ros::param::get( serial_key, serial );
       
       ROS_INFO_STREAM( "*** General I/O module " << ronex_parameter_id << " ***\n" );
