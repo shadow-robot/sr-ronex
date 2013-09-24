@@ -70,21 +70,11 @@ private:
     std::string empty_ronex_id("");
     int next_ronex_parameter_id = ronex::get_ronex_param_id(empty_ronex_id);
     
+    // ronex_parameter_id contains the id on which the module is stored on the parameter server.
     for (int ronex_parameter_id = 0; 
          ronex_parameter_id < next_ronex_parameter_id;
          ronex_parameter_id++)
-    { 
-      std::string ronex_id;
-      std::string ronex_id_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("ronex_id") );
-      ros::param::get( ronex_id_key, ronex_id );
-      
-      // When -1 is returned, the module with the given id is not present on the parameter server.
-      if ( ronex::get_ronex_param_id(ronex_id) == -1 )
-        continue;
-      
-      // The module is present on the parameter server and ronex_parameter_id
-      // contains the id on which the module is stored on the parameter server.
-      
+    {  
       // Retrieve the values of all parameters related to the current module.
       std::string product_id;
       std::string product_id_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("product_id") );
@@ -99,6 +89,10 @@ private:
       std::string path_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("path") );
       ros::param::get( path_key, path );
       
+      std::string ronex_id;
+      std::string ronex_id_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("ronex_id") );
+      ros::param::get( ronex_id_key, ronex_id );
+
       std::string serial;
       std::string serial_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("serial") );
       ros::param::get( serial_key, serial );
