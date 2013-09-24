@@ -67,16 +67,19 @@ private:
       loop_rate.sleep();
     }
     
-    // The maximum number of General I/O modules is 5.
-    for (int k = 1; k <= 5; k++)
-    {
-      // Assume that alias has not been set, and hence ronex_id is equal to serial.
-      // Note that serial starts from 1.
-      std::string curr_ronex_id = to_string_(k);
+    std::string empty_ronex_id("");
+    int next_ronex_parameter_id = ronex::get_ronex_param_id(empty_ronex_id);
+    
+    for (int ronex_parameter_id = 0; 
+         ronex_parameter_id < next_ronex_parameter_id;
+         ronex_parameter_id++)
+    { 
+      std::string ronex_id;
+      std::string ronex_id_key = get_key_( ronex_parameter_id, std::string("ronex_id") );
+      ros::param::get( ronex_id_key, ronex_id );
       
       // When -1 is returned, the module with the given id is not present on the parameter server.
-      int ronex_parameter_id = ronex::get_ronex_param_id(curr_ronex_id);
-      if ( ronex_parameter_id == -1 )
+      if ( ronex::get_ronex_param_id(ronex_id) == -1 )
         continue;
       
       // The module is present on the parameter server and ronex_parameter_id
@@ -90,12 +93,7 @@ private:
       std::string product_name;
       std::string product_name_key = get_key_( ronex_parameter_id, std::string("product_name") );
       ros::param::get( product_name_key, product_name );
-      
-      // Note that ronex_id is equal to curr_ronex_id.
-      std::string ronex_id;
-      std::string ronex_id_key = get_key_( ronex_parameter_id, std::string("ronex_id") );
-      ros::param::get( ronex_id_key, ronex_id );
-      
+
       std::string path;
       std::string path_key = get_key_( ronex_parameter_id, std::string("path") );
       ros::param::get( path_key, path );
