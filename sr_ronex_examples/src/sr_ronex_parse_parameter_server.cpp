@@ -18,99 +18,91 @@
 /**
  * @file   sr_ronex_parse_parameter_server.cpp
  * @author Yi Li <yi@shadowrobot.com>
- * @brief  Parse parameter servers for ronexes.
+ * @brief  Parse data from parameter server for ronexes.
  **/
 
 //-------------------------------------------------------------------------------
 
+#include <string>
 #include <ros/ros.h>
 #include <ros/console.h>
-#include <string>
-#include <sstream>
+#include <boost/lexical_cast.hpp>
 
-#include "sr_ronex_utilities.hpp"
+#include "sr_ronex_utilities/sr_ronex_utilities.hpp"
 
 //-------------------------------------------------------------------------------
 
  /**
-  * This class demonstate how to use the ronexes listed in the parameter server.
-  * For each ronex, the parameter server stores parameters such as 
-  * its product_id, product_name, ronex_id, path, and serial.
+  * Assume that your RoNeX consists of a Bridge (IN) module, and one or multiple
+  * General I/O module(s). This class demonstrates how to access the General I/O module(s)
+  * listed in the parameter server. For each General I/O module, the parameter server 
+  * stores parameters such as its product_id, product_name, ronex_id, path, and serial.
   **/
-class SrRonexExample
+class SrRonexParseParamExample
 {
 public:
-  SrRonexExample() 
+  SrRonexParseParamExample() 
   {
-    find_ronexes_();
+    find_general_io_modules_();
   }
   
-  ~SrRonexExample() {}
+  ~SrRonexParseParamExample() {}
   
 private:
 
  /**
-  * Find all ronexes listed in the parameter server.
+  * Find all General I/O modules listed in the parameter server.
   * Note that the help method ronex::get_ronex_param_id checks 
-  * the ronexes already present on the parameter server and returns 
-  * an id on which the given ronex is stored on the parameter server.
+  * the General I/O modules already present on the parameter server and returns 
+  * an id on which the given module is stored on the parameter server.
   **/
-  void find_ronexes_(void)
+  void find_general_io_modules_(void)
   {
-    // Wait until ronexes are loaded.
+    // Wait until there's at least one General I/O module.
     ros::Rate loop_rate(10);
     std::string param;
     while ( ros::param::get("/ronex/devices/0/ronex_id", param ) == false )
     {
-      ROS_INFO( "Waiting for the ronex to be loaded properly." );
+      ROS_INFO_STREAM( "Waiting for General I/O module to be loaded properly.\n" );
       loop_rate.sleep();
     }
-
-    // ronex::get_ronex_param_id returns next free index, when ronex_id == "".
-    std::string ronex_id("");
-    int next_free_index = ronex::get_ronex_param_id(ronex_id);
-    // Iterate through all ronexes.
-    for (int k = 0; k < next_free_index; k++)
-    {
-      ronex_id = to_string_(k+1);
-      // When -1 is returned, the ronex with the given id is not present on the parameter server.
-      int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
-      if ( ronex_parameter_id == -1 )
-      {
-        ROS_INFO( "Did not find the ronex with ronex_id %s.", ronex_id.c_str() );
-        continue;
-      }
-
-      // The ronex is present on the parameter server and ronex_parameter_id
-      // contains the id on which the given ronex is stored on the parameter server.
-            
-      // Retrieve the values of all parameters related to the current ronex.
+    
+    std::string empty_ronex_id("");
+    int next_ronex_parameter_id = ronex::get_ronex_param_id(empty_ronex_id);
+    
+    // ronex_parameter_id contains the id on which the module is stored on the parameter server.
+    for (int ronex_parameter_id = 0; 
+         ronex_parameter_id < next_ronex_parameter_id;
+         ronex_parameter_id++)
+    {  
+      // Retrieve the values of all parameters related to the current module.
       std::string product_id;
-      std::string product_id_key = get_key_( ronex_parameter_id, std::string("product_id") );
+      std::string product_id_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("product_id") );
       ros::param::get( product_id_key, product_id );
-     
+      
       std::string product_name;
-      std::string product_name_key = get_key_( ronex_parameter_id, std::string("product_name") );
+      std::string product_name_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("product_name") );
       ros::param::get( product_name_key, product_name );
-      
-      std::string ronex_id;
-      std::string ronex_id_key = get_key_( ronex_parameter_id, std::string("ronex_id") );
-      ros::param::get( ronex_id_key, ronex_id );
-      
+
+      // Path looks like "/ronex/general_io/2", where 2 is a ronex_id.
       std::string path;
-      std::string path_key = get_key_( ronex_parameter_id, std::string("path") );
+      std::string path_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("path") );
       ros::param::get( path_key, path );
       
-      std::string serial;
-      std::string serial_key = get_key_( ronex_parameter_id, std::string("serial") );
-      ros::param::get( serial_key, serial );
+      std::string ronex_id;
+      std::string ronex_id_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("ronex_id") );
+      ros::param::get( ronex_id_key, ronex_id );
 
-      ROS_INFO( "*** Ronex %d ***",  ronex_parameter_id );
-      ROS_INFO( "product_id   = %s", product_id.c_str() );
-      ROS_INFO( "product_name = %s", product_name.c_str() );
-      ROS_INFO( "ronex_id     = %s", ronex_id.c_str() );
-      ROS_INFO( "path         = %s", path.c_str() );
-      ROS_INFO( "serial       = %s", serial.c_str() );
+      std::string serial;
+      std::string serial_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("serial") );
+      ros::param::get( serial_key, serial );
+      
+      ROS_INFO_STREAM( "*** General I/O module " << ronex_parameter_id << " ***" );
+      ROS_INFO_STREAM( "product_id   = " << product_id );
+      ROS_INFO_STREAM( "product_name = " << product_name );
+      ROS_INFO_STREAM( "ronex_id     = " << ronex_id );
+      ROS_INFO_STREAM( "path         = " << path );
+      ROS_INFO_STREAM( "serial       = " << serial );
     }
   }
   
@@ -122,26 +114,7 @@ private:
    **/
   std::string to_string_(int d)
   {
-    std::stringstream ss;
-    ss << d;
-    std::string s(ss.str());
-    return s;
-  }
-  
-  /**
-   * Construct key for ros::param::get.
-   *
-   * @param ronex_parameter_id Part of the key.
-   * @param part Part of the key.
-   * @return The key.
-   **/
-  std::string get_key_(int ronex_parameter_id, std::string part)
-  {
-    std::string key("/ronex/devices/");
-    key += to_string_(ronex_parameter_id);
-    key += "/";
-    key += part;
-    return key;
+    return boost::lexical_cast<std::string>(d);
   }
 };
 
@@ -151,13 +124,14 @@ int main(int argc, char **argv)
 {
   // Initialize ROS with a unique node name.
   ros::init(argc, argv, "sr_ronex_parse_parameter_server");
-
+  
   // Create a handle to this process' node. 
   ros::NodeHandle n;
-
-  // This class demonstate how to use the ronexes listed in the parameter server.
-  SrRonexExample example;
-
+  
+  // This class demonstrates how to access the General I/O module(s) 
+  // listed in the parameter server. 
+  SrRonexParseParamExample example;
+  
   return 0;
 }
 

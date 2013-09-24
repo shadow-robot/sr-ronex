@@ -1,28 +1,19 @@
 <?xml version="1.0"?>
 <package>
   <name>sr_ronex_utilities</name>
-  <version>0.0.0</version>
+  <version>0.9.0</version>
   <description>Package containing a header library with useful inline functions for working with the RoNeX.</description>
+  <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
-  <!-- One maintainer tag required, multiple allowed, one person per tag -->
-  <!-- Example:  -->
-  <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="software@shadowrobot.com">Ugo Cupcic</maintainer>
-
-  <!-- One license tag required, multiple allowed, one license per tag -->
-  <!-- Commonly used license strings: -->
-  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
   <license>LGPLv3</license>
 
-  <!-- Url tags are optional, but mutiple are allowed, one per tag -->
-  <!-- Optional attribute type can be: website, bugtracker, or repository -->
-  <!-- Example: -->
-  <!-- <url type="website">http://ros.org/wiki/sr_ronex_utilities</url> -->
+  <url type="website">http://www.shadowrobot.com/products/ronex</url>
+  <url type="repository">https://github.com/shadow-robot/sr-ronex</url>
+  <url type="bugtracker">https://github.com/shadow-robot/sr-ronex/issues</url>
 
-  <!-- Author tags are optional, mutiple are allowed, one per tag -->
-  <!-- Authors do not have to be maintianers, but could be -->
-  <!-- Example: -->
-  <author email="ugo@shadowrobot.com">Ugo Cupcic</author>
+  <author>Ugo Cupcic</author>
+  <author>Toni Oliver</author>
+  <author>Mark Pitchless</author>
 
   <!-- The *_depend tags are used to specify dependencies -->
   <!-- Dependencies can be catkin packages or system dependencies -->

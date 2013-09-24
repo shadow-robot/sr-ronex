@@ -4,129 +4,42 @@ project(sr_ronex_examples)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs)
-
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
-
-
-## Uncomment this if the package has a setup.py. This macro ensures
-## modules and global scripts declared therein get installed
-## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
-
-#######################################
-## Declare ROS messages and services ##
-#######################################
-
-## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
-
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
-
-## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
-
-###################################
-## catkin specific configuration ##
-###################################
-## The catkin_package macro generates cmake config files for your package
-## Declare things to be passed to dependent projects
-## INCLUDE_DIRS: uncomment this if you package contains header files
-## LIBRARIES: libraries you create in this project that dependent projects also need
-## CATKIN_DEPENDS: catkin_packages dependent projects also need
-## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES sr_ronex_examples
-#  CATKIN_DEPENDS roscpp rospy std_msgs
-#  DEPENDS system_lib
-)
+find_package(catkin REQUIRED COMPONENTS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp)
 
 ###########
 ## Build ##
 ###########
 
-# add_definitions(-Wall)
+add_definitions(-Wall)
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-# include_directories(include)
-include_directories(include/
-  ../sr_ronex_utilities/include/sr_ronex_utilities/ 
-  ${catkin_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS})
 
 ## Declare a cpp library
 # add_library(sr_ronex_examples
-#   src/${PROJECT_NAME}/sr_ronex_examples.cpp
+#   src/${PROJECT_NAME}/sr_ronex
 # )
 
+# catkin_package parameters
+# http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
+# You must invoke catkin_package() before adding any targets (libraries and executables).
+# The reason is because catkin_package() will change the location where the targets are built.
+catkin_package(
+  CATKIN_DEPENDS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp
+  INCLUDE_DIRS include
+)
+
 ## Declare a cpp executable
-add_executable(sr_ronex_parse_parameter_server src/sr_ronex_parse_parameter_server.cpp)
+add_executable(sr_ronex_parse_parameter_server ${PROJECT_SOURCE_DIR}/src/sr_ronex_parse_parameter_server.cpp)
+add_executable(sr_ronex_read_analog_data ${PROJECT_SOURCE_DIR}/src/sr_ronex_read_analog_data.cpp)
+add_executable(sr_ronex_flash_LED_with_PWM ${PROJECT_SOURCE_DIR}/src/sr_ronex_flash_LED_with_PWM.cpp)
 
 ## Add cmake target dependencies of the executable/library
-## as an example, message headers may need to be generated before nodes
-# add_dependencies(sr_ronex_examples_node sr_ronex_examples_generate_messages_cpp)
+add_dependencies(sr_ronex_read_analog_data sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
+add_dependencies(sr_ronex_flash_LED_with_PWM sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(sr_ronex_parse_parameter_server ${catkin_LIBRARIES})
-
-#############
-## Install ##
-#############
-
-# all install targets should use catkin DESTINATION variables
-# See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
-
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
-## Mark executables and/or libraries for installation
-# install(TARGETS sr_ronex_examples sr_ronex_examples_node
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
-
-## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
-
-## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
-
-#############
-## Testing ##
-#############
-
-## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_sr_ronex_examples.cpp)
-# if(TARGET ${PROJECT_NAME}-test)
-#   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
-# endif()
-
-## Add folders to be run by python nosetests
-# catkin_add_nosetests(test)
+target_link_libraries(sr_ronex_read_analog_data ${catkin_LIBRARIES})
+target_link_libraries(sr_ronex_flash_LED_with_PWM ${catkin_LIBRARIES})

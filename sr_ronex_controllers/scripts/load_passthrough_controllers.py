@@ -32,8 +32,11 @@ class LoadPassthroughControllers(object):
         """
         """
         ronex_ids = self.find_ronexes()
-        self.set_param(ronex_ids)
-        self.load_and_start_ctrl(ronex_ids)
+        if len(ronex_ids) > 0:
+            self.set_param(ronex_ids)
+            self.load_and_start_ctrl(ronex_ids)
+        else:
+            rospy.loginfo( "Failed to find ronex devices in parameter server" )
 
     def find_ronexes(self):
         """
@@ -45,18 +48,21 @@ class LoadPassthroughControllers(object):
 
         #retreive all the ronex ids from the parameter server
         #wait until there's one ronex
-        while True:
+        attempts = 50
+        while attempts:
             try:
-                rospy.get_param("/ronex/devices/0/ronex_id")
-                sleep(0.1)
+                rospy.get_param( "/ronex/devices/0/ronex_id" )
+                break
             except:
-                rospy.loginfo("Waiting for the ronex to be loaded properly.")
-                pass
-            break
-
-        ronex_param = rospy.get_param("/ronex/devices")
-        for key in ronex_param:
-            ronex_ids.append(ronex_param[key]["ronex_id"])
+                if attempts == 50:
+                    rospy.loginfo( "Waiting for the ronex to be loaded properly." )
+                sleep( 0.1 )
+                attempts -= 1
+                
+        if attempts > 0:
+            ronex_param = rospy.get_param("/ronex/devices")
+            for key in ronex_param:
+                ronex_ids.append(ronex_param[key]["ronex_id"])
 
         return ronex_ids
 
