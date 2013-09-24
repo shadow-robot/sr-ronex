@@ -75,7 +75,7 @@ public:
     // The module is present on the parameter server and ronex_parameter_id
     // contains the id on which the module is stored on the parameter server.
     
-    std::string path_key = get_key_( ronex_parameter_id, std::string("path") );
+    std::string path_key = ronex::get_ronex_devices_string_( ronex_parameter_id, std::string("path") );
     ros::param::get( path_key, path );
 
     return true; // Path is set.
@@ -91,22 +91,6 @@ private:
   std::string to_string_(int d)
   {
     return boost::lexical_cast<std::string>(d);
-  }
-  
-  /**
-   * Construct key for ros::param::get.
-   *
-   * @param ronex_parameter_id Part of the key.
-   * @param part Part of the key.
-   * @return The key.
-   **/
-  std::string get_key_(int ronex_parameter_id, std::string part)
-  {
-    std::string key("/ronex/devices/");
-    key += to_string_(ronex_parameter_id);
-    key += "/";
-    key += part;
-    return key;
   }
 };
 
