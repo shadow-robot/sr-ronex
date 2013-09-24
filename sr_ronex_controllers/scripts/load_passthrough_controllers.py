@@ -50,16 +50,11 @@ class LoadPassthroughControllers( object ):
         # retrieve all the ronex ids from the parameter server
         # wait until there's one ronex
         attempts = 50
-
-        while attempts:
-            try:
-                rospy.get_param( "/ronex/devices/0/ronex_id" )
-                break
-            except:
-                if attempts == 50:
-                    rospy.loginfo( "Waiting for the ronex to be loaded properly." )
-                sleep( 0.1 )
-                attempts -= 1
+        while attempts and not rospy.has_param( "/ronex/devices/0/ronex_id" ):
+            if attempts == 50:
+                rospy.loginfo( "Waiting for the ronex to be loaded properly." )
+            sleep( 0.1 )
+            attempts -= 1
 
         if attempts > 0:
             ronex_param = rospy.get_param( "/ronex/devices" )
