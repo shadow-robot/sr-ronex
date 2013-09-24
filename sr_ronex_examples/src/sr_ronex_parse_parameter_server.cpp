@@ -23,10 +23,10 @@
 
 //-------------------------------------------------------------------------------
 
+#include <string>
 #include <ros/ros.h>
 #include <ros/console.h>
-#include <string>
-#include <sstream>
+#include <boost/lexical_cast.hpp>
 
 #include "sr_ronex_utilities/sr_ronex_utilities.hpp"
 
@@ -119,10 +119,7 @@ private:
    **/
   std::string to_string_(int d)
   {
-    std::stringstream ss;
-    ss << d;
-    std::string s(ss.str());
-    return s;
+    return boost::lexical_cast<std::string>(d);
   }
   
   /**
