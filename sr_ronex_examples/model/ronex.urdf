@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot name="flexible">
+  <!-- standard urdf -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.6" radius="0.2"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 .8 1"/>
+      </material>
+    </visual>
+  </link>
+
+  <link name="head">
+    <visual>
+      <geometry>
+        <sphere radius="0.2"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+  </link>
+
+  <joint name="head_swivel" type="continuous">
+    <parent link="base_link"/>
+    <child link="head"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0 0 0.3"/>
+  </joint>
+
+  <!-- This is the only RoNeX specific part of the urdf.
+       We define the mapping between different pins of a RoNeX to different properties of the joint.
+
+       Note: each mapping line is optional (e.g. if you don't have an effort sensor, then remove the effort line) -->
+  <transmission type="sr_ronex_transmissions/RonexTransmission" name="my_ronex_transmission">
+    <joint name="head_swivel"/> <mapping ronex="/ronex/general_io/test_ronex" property="position" analogue_pin="6" scale="0.001" offset="0.0"/>
+    <mapping ronex="/ronex/general_io/test_ronex" property="effort"   analogue_pin="7" scale="2.0" offset="1.0"/>
+    <mapping ronex="/ronex/general_io/test_ronex" property="command" pwm_module="1" pwm_pin="0" direction_pin="0"/>
+  </transmission>
+</robot>

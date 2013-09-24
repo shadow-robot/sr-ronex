@@ -1,0 +1,14 @@
+#Specifying the joint we want to be set to calibrated = true
+head_swivel_fake_calib:
+  type: sr_ronex_controllers/FakeCalibrationController
+  joint: head_swivel
+
+#Settings for a simple joint position controller
+head_swivel_controller:
+  type: robot_mechanism_controllers/JointPositionController
+  joint: head_swivel
+  pid: &head_swivel_gains
+    p: 1000.0
+    d: 0.0
+    i: 0.0
+    i_clamp: 0.0
