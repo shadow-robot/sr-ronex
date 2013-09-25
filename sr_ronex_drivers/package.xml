@@ -72,7 +72,6 @@
   <test_depend>gtest</test_depend>
 
 <export>
-    <cpp lflags="-L${prefix}/lib -lsr_ronex_drivers -Wl,-rpath,${prefix}/lib" cflags="-I${prefix}/include"/>
     <ethercat_hardware plugin="${prefix}/ethercat_device_plugin.xml"/>
     <sr_ronex_drivers plugin="${prefix}/ethercat_device_plugin.xml"/>
 </export>
