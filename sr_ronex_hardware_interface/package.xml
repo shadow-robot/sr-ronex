@@ -34,8 +34,4 @@
   <!-- <test_depend>pr2_hardware_interface</test_depend> -->
   <!-- <test_depend>sr_ronex_external_protocol</test_depend> -->
 
-<export>
-    <cpp cflags="-I${prefix}/include"/>
-</export>
-
 </package>
