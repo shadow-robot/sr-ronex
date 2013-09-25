@@ -30,5 +30,7 @@
   <run_depend>sr_ronex_external_protocol</run_depend>
   <run_depend>sr_ronex_examples</run_depend>
 
-  <!-- Dependencies needed only for running tests. -->
+  <export>
+    <metapackage/>
+  </export>
 </package>
