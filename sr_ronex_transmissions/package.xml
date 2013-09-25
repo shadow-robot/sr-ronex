@@ -36,7 +36,6 @@
   <test_depend>gtest</test_depend>
 
 <export>
-    <cpp lflags="-L${prefix}/lib -lronex_mechanism_model -Wl,-rpath,${prefix}/lib" cflags="-I${prefix}/include"/>
     <pr2_mechanism_model plugin="${prefix}/transmission_plugin.xml"/>
 </export>
 

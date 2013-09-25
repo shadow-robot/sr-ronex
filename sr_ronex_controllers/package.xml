@@ -54,7 +54,6 @@
   <!-- <test_depend>pluginlib</test_depend> -->
 
 <export>
-    <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -llibronex_controllers" cflags="-I${prefix}/include"/>
     <pr2_controller_interface plugin="${prefix}/controller_plugins.xml"/>
 </export>
 
