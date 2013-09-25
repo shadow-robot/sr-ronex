@@ -60,7 +60,7 @@ class TestRonexWithHardware(unittest.TestCase):
 
     self.controllers_list = [ "ronex_" + ronex_id + "_passthrough" for ronex_id in self.ronex_ids ]
 
-    rospy.sleep(0.1)  # wait for self.state to be updated for the first time
+    rospy.sleep(0.08)  # wait for self.state to be updated for the first time
 
   def tearDown(self):
     pwm = PWM()
@@ -126,7 +126,7 @@ class TestRonexWithHardware(unittest.TestCase):
     self.clients[outr].update_configuration(self.params_o)
     self.clients[inr].update_configuration(self.params_i)
 
-    rospy.sleep(0.35)
+    rospy.sleep(0.32)
 
 
 
@@ -198,35 +198,37 @@ class TestRonexWithHardware(unittest.TestCase):
     message = 12 * [False]
     self.digital_test_case(0, 1, message)
 
-    params = { 'pwm_period_' + str(i) : 25600 for i in xrange(6) }
+    params = { 'pwm_period_' + str(i) : 1600 for i in xrange(6) }
     params['pwm_clock_divider'] = 6400
 
-    self.clients[ 0 ].update_configuration(params)
-    self.clients[ 1 ].update_configuration(params)
+    self.clients[0].update_configuration(params)
+    self.clients[1].update_configuration(params)
 
-    rospy.sleep(0.5)
+    rospy.sleep(0.4)
 
     pwm = PWM()
-    pwm.pwm_period = 25600
-    pwm.pwm_on_time_0 = 30000
-    pwm.pwm_on_time_1 = 30000
+    pwm.pwm_period = 249
+    pwm.pwm_on_time_0 = pwm.pwm_period / 2
+    pwm.pwm_on_time_1 = pwm.pwm_period / 2
+
+    # create a fast pwm and sample the input for some time
+    # then check that some samples are True and some False
+    num_of_samples = 120
+    samples = 4 * [num_of_samples * [False]]
 
     self.pwm_publishers[0][0].publish(pwm)
     self.pwm_publishers[0][5].publish(pwm)
 
-    with self.state_lock:
-      self.assertFalse(self.state[1].digital[0])
-      self.assertFalse(self.state[1].digital[1])
-      self.assertFalse(self.state[1].digital[10])
-      self.assertFalse(self.state[1].digital[11])
+    for i in xrange(num_of_samples):
+      samples[0][i] = self.state[1].digital[0]
+      samples[1][i] = self.state[1].digital[1]
+      samples[2][i] = self.state[1].digital[10]
+      samples[3][i] = self.state[1].digital[11]
+      rospy.sleep(0.09)
 
-    rospy.sleep(0.9)
+    for sample in samples:
+      self.assertAlmostEqual(sample.count(True), num_of_samples / 2, delta = num_of_samples / 3)
 
-    with self.state_lock:
-      self.assertTrue(self.state[1].digital[0])
-      self.assertTrue(self.state[1].digital[1])
-      self.assertTrue(self.state[1].digital[10])
-      self.assertTrue(self.state[1].digital[11])
 
 ############################################
 # TEST END
