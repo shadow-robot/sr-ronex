@@ -19,18 +19,13 @@
 import rospy, sys, getopt, unittest, rostest, os
 import dynamic_reconfigure.client
 
-from time import sleep
-from string import Template
+# from time import sleep
 from threading import Lock
 from sr_ronex_msgs.msg import GeneralIOState, PWM
 from std_msgs.msg import Bool
 from pr2_mechanism_msgs.srv import ListControllers
 
-class EmptyTest( unittest.TestCase ):
-  def test( self ):
-    self.assertTrue( True )
-
-class TestContainer( unittest.TestCase ):
+class TestRonexWithHardware(unittest.TestCase):
   '''
   A class used to test the Shadow Robot ethercat board HW.
   
@@ -50,7 +45,7 @@ class TestContainer( unittest.TestCase ):
   Six of the analogue inputs should be wired to an appropriate constant voltage source
   '''
 
-  def setUp( self ):
+  def setUp(self):
     self.find_ronexes()
     self.init_clients_publishers_subscribers()
     self.state_lock = Lock()
@@ -58,79 +53,80 @@ class TestContainer( unittest.TestCase ):
     self.state = [ None, None ]
     self.result = False
 
-    self.params_i = { 'input_mode_' + str( i ) : True for i in xrange( 12 ) }
-    self.params_o = { 'input_mode_' + str( i ) : False for i in xrange( 12 ) }
+    self.params_i = { 'input_mode_' + str(i) : True for i in xrange(12) }
+    self.params_o = { 'input_mode_' + str(i) : False for i in xrange(12) }
 
     self.expected_analogue_values = [2928, 1432, 849, 478, 211, 91] + 6 * [0]
 
     self.controllers_list = [ "ronex_" + ronex_id + "_passthrough" for ronex_id in self.ronex_ids ]
 
-  def tearDown( self ):
+    rospy.sleep(0.1)  # wait for self.state to be updated for the first time
+
+  def tearDown(self):
     pwm = PWM()
     pwm.pwm_period = 25600
     pwm.pwm_on_time_0 = 0
     pwm.pwm_on_time_1 = 0
-    for p in xrange( 6 ):
-      self.pwm_publishers[0][p].publish( pwm )
+    for p in xrange(6):
+      self.pwm_publishers[0][p].publish(pwm)
 
-  def find_ronexes( self ):
+  def find_ronexes(self):
     attempts = 50
-    while attempts and not rospy.has_param( '/ronex/devices/0/ronex_id' ):
-      if attempts == 50:
-          rospy.loginfo( 'Waiting for the ronex to be loaded properly.' )
-      sleep( 0.1 )
+    rospy.loginfo('Waiting for the ronex to be loaded properly.')
+    while attempts and not rospy.has_param('/ronex/devices/0/ronex_id'):
+      rospy.sleep(0.1)
       attempts -= 1
 
-    self.assertNotEqual( attempts, 0, 'Failed to get ronex devices from parameter server' )
+    self.assertNotEqual(attempts, 0, 'Failed to get ronex devices from parameter server')
 
-    self.ronex_devs = rospy.get_param( '/ronex/devices' )
-    self.assertEqual( len( self.ronex_devs ), 2, 'Error. Connect a ronex bridge with 2 ronex devices' )
+    self.ronex_devs = rospy.get_param('/ronex/devices')
+    self.assertEqual(len(self.ronex_devs), 2, 'Error. Connect a ronex bridge with 2 ronex devices')
 
-  def init_clients_publishers_subscribers( self ):
+  def init_clients_publishers_subscribers(self):
     basic = '/ronex/general_io/'
-    self.ronex_ids = [ self.ronex_devs[str( i )]['ronex_id'] for i in xrange( 2 ) ]
-    ron = [ basic + str( id ) for id in self.ronex_ids ]
+    self.ronex_ids = [ self.ronex_devs[str(i)]['ronex_id'] for i in xrange(2) ]
+    ron = [ basic + str(id) for id in self.ronex_ids ]
 
     com_dig = '/command/digital/'
     com_pwm = '/command/pwm/'
     sta = '/state'
 
     topics_list = rospy.get_published_topics()
-    self.assertTrue( [ ron[0] + sta, 'sr_ronex_msgs/GeneralIOState' ] in topics_list )
-    self.assertTrue( [ ron[1] + sta, 'sr_ronex_msgs/GeneralIOState' ] in topics_list )
+    self.assertTrue([ ron[0] + sta, 'sr_ronex_msgs/GeneralIOState' ] in topics_list)
+    self.assertTrue([ ron[1] + sta, 'sr_ronex_msgs/GeneralIOState' ] in topics_list)
 
-    self.clients = [ dynamic_reconfigure.client.Client( r ) for r in ron ]
-    self.digital_publishers = [ [ rospy.Publisher( r + com_dig + str( i ), Bool, latch = True ) for i in xrange( 12 ) ] for r in ron ]
-    self.pwm_publishers = [ [ rospy.Publisher( r + com_pwm + str( i ), PWM, latch = True ) for i in xrange( 6 ) ] for r in ron ]
+    self.clients = [ dynamic_reconfigure.client.Client(r) for r in ron ]
+    self.digital_publishers = [ [ rospy.Publisher(r + com_dig + str(i), Bool, latch = True) for i in xrange(12) ] for r in ron ]
+    self.pwm_publishers = [ [ rospy.Publisher(r + com_pwm + str(i), PWM, latch = True) for i in xrange(6) ] for r in ron ]
 
-    self.subscriber_0 = rospy.Subscriber( ron[0] + sta, GeneralIOState, self.state_callback_0 )
-    self.subscriber_1 = rospy.Subscriber( ron[1] + sta, GeneralIOState, self.state_callback_1 )
+    self.subscriber_0 = rospy.Subscriber(ron[0] + sta, GeneralIOState, self.state_callback_0)
+    self.subscriber_1 = rospy.Subscriber(ron[1] + sta, GeneralIOState, self.state_callback_1)
 
 
-  def state_callback_0( self, msg ):
+  def state_callback_0(self, msg):
     with self.state_lock:
       self.state[0] = msg
 
-  def state_callback_1( self, msg ):
+  def state_callback_1(self, msg):
     with self.state_lock:
       self.state[1] = msg
 
-  def digital_test_case( self, outr, inr, message ):
+  def digital_test_case(self, outr, inr, message):
     self.result = False
-    self.set_ronex_io_state( outr, inr )
-    for i, bool in enumerate( message ):
-      self.digital_publishers[outr][i].publish( bool )
-    rospy.sleep( 0.08 )
+    self.set_ronex_io_state(outr, inr)
+    for i, bool in enumerate(message):
+      self.digital_publishers[outr][i].publish(bool)
+    rospy.sleep(0.08)
 
     with self.state_lock:
-      self.result = ( self.state[inr].digital == message )
-      self.assertTrue( self.result, 'digital i/o test failure' )
+      self.result = (self.state[inr].digital == message)
+      self.assertTrue(self.result, 'digital i/o test failure')
 
-  def set_ronex_io_state( self, outr, inr ):
-    self.clients[ outr ].update_configuration( self.params_o )
-    self.clients[ inr ].update_configuration( self.params_i )
+  def set_ronex_io_state(self, outr, inr):
+    self.clients[outr].update_configuration(self.params_o)
+    self.clients[inr].update_configuration(self.params_i)
 
-    rospy.sleep( 0.35 )
+    rospy.sleep(0.35)
 
 
 
@@ -139,54 +135,54 @@ class TestContainer( unittest.TestCase ):
 # TEST START
 ############################################
 
-  def test_if_controllers_are_loaded( self ):
-    list_controllers = rospy.ServiceProxy( 'pr2_controller_manager/list_controllers', ListControllers )
+  def test_if_controllers_are_loaded(self):
+    list_controllers = rospy.ServiceProxy('pr2_controller_manager/list_controllers', ListControllers)
     available_controllers = list_controllers()
     for ctrl in self.controllers_list:
-      self.assertTrue( ctrl in available_controllers.controllers )
+      self.assertTrue(ctrl in available_controllers.controllers)
 
-  def test_change_state_one( self ):
-    self.set_ronex_io_state( 0, 1 )
+  def test_change_state_one(self):
+    self.set_ronex_io_state(0, 1)
 
     config_0 = self.clients[0].get_configuration()
     config_1 = self.clients[1].get_configuration()
 
     for param, value in self.params_o.iteritems():
-      self.assertEqual( config_0[param], value, 'Failed in first attempt to set digital I/O state' )
+      self.assertEqual(config_0[param], value, 'Failed in first attempt to set digital I/O state')
     for param, value in self.params_i.iteritems():
-      self.assertEqual( config_1[param], value, 'Failed in first attempt to set digital I/O state' )
+      self.assertEqual(config_1[param], value, 'Failed in first attempt to set digital I/O state')
 
-  def test_change_state_two( self ):
-    self.set_ronex_io_state( 1, 0 )
+  def test_change_state_two(self):
+    self.set_ronex_io_state(1, 0)
 
     config_0 = self.clients[0].get_configuration()
     config_1 = self.clients[1].get_configuration()
 
     for param, value in self.params_i.iteritems():
-      self.assertEqual( config_0[param], value, 'Failed in second attempt to set digital I/O state' )
+      self.assertEqual(config_0[param], value, 'Failed in second attempt to set digital I/O state')
     for param, value in self.params_o.iteritems():
-      self.assertEqual( config_1[param], value, 'Failed in second attempt to set digital I/O state' )
+      self.assertEqual(config_1[param], value, 'Failed in second attempt to set digital I/O state')
 
-  def test_digital_all_true( self ):
+  def test_digital_all_true(self):
     message = 12 * [True]
-    self.digital_test_case( 0, 1, message )
-    self.digital_test_case( 1, 0, message )
+    self.digital_test_case(0, 1, message)
+    self.digital_test_case(1, 0, message)
 
-  def test_digital_all_false( self ):
+  def test_digital_all_false(self):
     message = 12 * [False]
-    self.digital_test_case( 0, 1, message )
-    self.digital_test_case( 1, 0, message )
+    self.digital_test_case(0, 1, message)
+    self.digital_test_case(1, 0, message)
 
-  def test_digital_odd_true( self ):
+  # the following 2 tests will check patterns of True and False at the outputs instead of just all True or False
+  def test_digital_odd_true(self):
     message = 6 * [True, False]
-    self.digital_test_case( 0, 1, message )
+    self.digital_test_case(0, 1, message)
 
-  def test_digital_even_true( self ):
+  def test_digital_even_true(self):
     message = 6 * [False, True]
-    self.digital_test_case( 0, 1, message )
+    self.digital_test_case(0, 1, message)
 
-  def test_analogue( self ):
-    rospy.sleep( 0.5 )
+  def test_analogue(self):
     with self.state_lock:
       result_0, result_1 = True, True
       if self.state[0].analogue[0] > 0:
@@ -194,54 +190,48 @@ class TestContainer( unittest.TestCase ):
       else:
         analogue = self.state[1].analogue
 
-      for ind, value in enumerate( self.expected_analogue_values ):
-        self.assertAlmostEqual( value, analogue[ind], delta = 10 )
+      for ind, value in enumerate(self.expected_analogue_values):
+        self.assertAlmostEqual(value, analogue[ind], delta = 10)
 
-  def test_pwm_outputs( self ):
+  def test_pwm_outputs(self):
 
     message = 12 * [False]
-    self.digital_test_case( 0, 1, message )
+    self.digital_test_case(0, 1, message)
 
-    params = { 'pwm_period_' + str( i ) : 25600 for i in xrange( 6 ) }
+    params = { 'pwm_period_' + str(i) : 25600 for i in xrange(6) }
     params['pwm_clock_divider'] = 6400
 
-    self.clients[ 0 ].update_configuration( params )
-    self.clients[ 1 ].update_configuration( params )
+    self.clients[ 0 ].update_configuration(params)
+    self.clients[ 1 ].update_configuration(params)
 
-    rospy.sleep( 0.5 )
+    rospy.sleep(0.5)
 
     pwm = PWM()
     pwm.pwm_period = 25600
     pwm.pwm_on_time_0 = 30000
     pwm.pwm_on_time_1 = 30000
 
-    self.pwm_publishers[0][0].publish( pwm )
-    self.pwm_publishers[0][5].publish( pwm )
+    self.pwm_publishers[0][0].publish(pwm)
+    self.pwm_publishers[0][5].publish(pwm)
 
     with self.state_lock:
-      self.assertFalse( self.state[1].digital[0] )
-      self.assertFalse( self.state[1].digital[1] )
-      self.assertFalse( self.state[1].digital[10] )
-      self.assertFalse( self.state[1].digital[11] )
+      self.assertFalse(self.state[1].digital[0])
+      self.assertFalse(self.state[1].digital[1])
+      self.assertFalse(self.state[1].digital[10])
+      self.assertFalse(self.state[1].digital[11])
 
-    rospy.sleep( 0.9 )
+    rospy.sleep(0.9)
 
     with self.state_lock:
-      self.assertTrue( self.state[1].digital[0] )
-      self.assertTrue( self.state[1].digital[1] )
-      self.assertTrue( self.state[1].digital[10] )
-      self.assertTrue( self.state[1].digital[11] )
+      self.assertTrue(self.state[1].digital[0])
+      self.assertTrue(self.state[1].digital[1])
+      self.assertTrue(self.state[1].digital[10])
+      self.assertTrue(self.state[1].digital[11])
 
 ############################################
 # TEST END
 ############################################
 
 if __name__ == '__main__':
-  do_test = os.environ.get( 'RONEX_TESTS_WITH_HARDWARE' )
-  if do_test == 'yes':
-    rospy.init_node( 'sr_ronex_test' )
-    rostest.rosrun( 'sr_ronex_test', 'sr_ronex', TestContainer )
-  else:
-    rospy.init_node( 'sr_ronex_test' )
-    sleep( 0.5 )
-    rostest.rosrun( 'sr_ronex_test', 'sr_ronex', EmptyTest )
+    rospy.init_node('sr_ronex_test')
+    rostest.rosrun('sr_ronex_test', 'sr_ronex_test', TestRonexWithHardware)
