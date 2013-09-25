@@ -33,8 +33,4 @@
   <build_depend>rostest</build_depend>
   <test_depend>gtest</test_depend>
 
-  <!-- The export tag contains other, unspecified, tags -->
-  <export>
-    <cpp cflags="-I${prefix}/include"/>
-  </export>
 </package>
