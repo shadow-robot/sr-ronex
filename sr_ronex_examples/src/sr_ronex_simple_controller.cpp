@@ -48,6 +48,7 @@ SrRoNeXSimpleController::~SrRoNeXSimpleController()
 bool SrRoNeXSimpleController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
 {
   assert(robot);
+  robot_ = robot;
   node_ = n;
 
   std::string ronex_id;
@@ -134,16 +135,8 @@ void SrRoNeXSimpleController::digital_commands_cb(const std_msgs::BoolConstPtr& 
 
 void SrRoNeXSimpleController::pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index)
 {
-
   general_io_->command_.pwm_[index].period = msg->pwm_period;
   general_io_->command_.pwm_[index].on_time_0 = msg->pwm_on_time_0;
   general_io_->command_.pwm_[index].on_time_1 = msg->pwm_on_time_1;
 }
 
-}
-
-/* For the emacs weenies in the crowd.
-   Local Variables:
-   c-basic-offset: 2
-   End:
-*/
