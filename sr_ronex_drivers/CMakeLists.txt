@@ -35,11 +35,26 @@ catkin_package(
     INCLUDE_DIRS include
 )
 
-install(TARGETS sr_ronex_drivers LIBRARY DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 if(COMMAND add_rostest_gtest)
   link_directories(/opt/ros/hydro/lib)
   add_rostest_gtest( test_ethercat_drivers test/test_ethercat_drivers.test test/test_ethercat_drivers.cpp )
   target_link_libraries( test_ethercat_drivers sr_ronex_drivers ethercat_hardware eml rt gcov ${catkin_LIBRARIES} ${GTEST_LIBRARIES} )
 endif(COMMAND add_rostest_gtest)
+
+
+install(TARGETS sr_ronex_drivers
+   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
+
+install(DIRECTORY include/${PROJECT_NAME}/
+   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+install(FILES ethercat_device_plugin.xml
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+install(DIRECTORY cfg/
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/cfg)
+
 
