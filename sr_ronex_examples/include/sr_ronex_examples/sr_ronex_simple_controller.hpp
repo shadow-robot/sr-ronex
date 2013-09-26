@@ -60,8 +60,6 @@ namespace ronex
     void pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index);
 
   private:
-    pr2_mechanism_model::RobotState* robot_;
-    
     ros::NodeHandle node_;
 
     int loop_count_;

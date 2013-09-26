@@ -48,7 +48,6 @@ SrRoNeXSimpleController::~SrRoNeXSimpleController()
 bool SrRoNeXSimpleController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
 {
   assert(robot);
-  robot_ = robot;
   node_ = n;
 
   std::string ronex_id;
@@ -120,7 +119,7 @@ void SrRoNeXSimpleController::update()
     loop_count_++;
   */
 
-  // double position = robot_->model_->getCustomHW("Ronex/Product_id/Serial").analogue[0];
+  double position = general_io_->state_.analogue_[0];
 }
 
 void SrRoNeXSimpleController::stopping() 
@@ -138,5 +137,7 @@ void SrRoNeXSimpleController::pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& 
   general_io_->command_.pwm_[index].period = msg->pwm_period;
   general_io_->command_.pwm_[index].on_time_0 = msg->pwm_on_time_0;
   general_io_->command_.pwm_[index].on_time_1 = msg->pwm_on_time_1;
+}
+
 }
 
