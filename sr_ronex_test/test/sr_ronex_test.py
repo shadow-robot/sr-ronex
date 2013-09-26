@@ -186,7 +186,8 @@ class TestRonexWithHardware(unittest.TestCase):
   def test_analogue(self):
     with self.state_lock:
       result_0, result_1 = True, True
-      non_zero_analogue_input = [self.state[0].analogue[0], self.state[0].analogue[6], self.state[1].analogue[0], self.state[1].analogue[6]]
+
+      analogue, expected = [0], [50]
 
       if self.state[0].analogue[0] > 0:
         analogue = self.state[0].analogue
