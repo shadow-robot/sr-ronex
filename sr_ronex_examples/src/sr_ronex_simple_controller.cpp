@@ -30,7 +30,8 @@ namespace ronex
 {
 SrRoNeXSimpleController::SrRoNeXSimpleController()
   : loop_count_(0)
-{}
+{
+}
 
 SrRoNeXSimpleController::~SrRoNeXSimpleController()
 {

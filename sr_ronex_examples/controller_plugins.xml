@@ -1,4 +1,4 @@
-<library path="lib/libsr_ronex_example_controller">
+<library path="lib/libsr_ronex_simple_controller">
   
   <class name="sr_ronex_examples/SrRoNeXSimpleController"
          type="ronex::SrRoNeXSimpleController"

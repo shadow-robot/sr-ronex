@@ -3,7 +3,7 @@
   <param name="robot_description" command="$(find xacro)/xacro.py '$(find sr_ronex_examples)/model/simple_robot.urdf'" />
 
   <!-- Allows to specify the ethernet interface to be used. It defaults to the value of the env var ETHERCAT_PORT -->
-  <arg name="ethercat_port" default="$(optenv ETHERCAT_PORT eth0)" />
+  <arg name="ethercat_port" default="$(optenv ETHERCAT_PORT eth1)" />
 
   <!-- Start the ronex driver -->
   <node name="ronex" pkg="pr2_ethercat" type="pr2_ethercat" args="-i $(arg ethercat_port) -r /robot_description" output="screen"  launch-prefix="nice -n -20"/> 
@@ -11,17 +11,8 @@
   <!-- Loads the controller parameter -->
   <rosparam command="load" file="$(find sr_ronex_examples)/config/data_access_controller.yaml" />
 
-  <!-- spawn fake calibration controller: the pr2 controllers need the joints
-       to be set to calibrated = true to work -->
-  <node name="fake_calib_controllers_spawner"
-        pkg="pr2_controller_manager" type="spawner" output="screen"
-        args="head_swivel_fake_calib" />
-
   <!-- spawning traditional joint controllers -->
   <node name="simple_controllers_spawner"
         pkg="pr2_controller_manager" type="spawner" output="screen"
-        args="--wait-for=calibrated head_swivel_controller" />
-  
-  <!-- publishes tf from joint states to be able to view in rviz -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+        args="super_simple_controller" />
 </launch>
