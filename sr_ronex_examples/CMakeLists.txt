@@ -26,7 +26,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 # You must invoke catkin_package() before adding any targets (libraries and executables).
 # The reason is because catkin_package() will change the location where the targets are built.
 catkin_package(
-  CATKIN_DEPENDS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp
+  CATKIN_DEPENDS std_msgs sr_ronex_msgs sr_ronex_utilities dynamic_reconfigure roscpp rospy
   INCLUDE_DIRS include
 )
 

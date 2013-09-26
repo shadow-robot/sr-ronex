@@ -23,10 +23,9 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
-
-  <build_depend>dynamic_reconfigure</build_depend>
   <build_depend>sr_ronex_msgs</build_depend>
   <build_depend>sr_ronex_utilities</build_depend>
+  <build_depend>dynamic_reconfigure</build_depend>
 
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>roscpp</run_depend>
