@@ -56,7 +56,8 @@ class TestRonexWithHardware(unittest.TestCase):
     self.params_i = { 'input_mode_' + str(i) : True for i in xrange(12) }
     self.params_o = { 'input_mode_' + str(i) : False for i in xrange(12) }
 
-    self.expected_analogue_values = [2928, 1432, 849, 478, 211, 91] + 6 * [0]
+    self.expected_analogue_values_a = [2928, 1432, 849, 478, 211, 91] + 6 * [0]
+    self.expected_analogue_values_b = 6 * [0] + [2928, 1432, 849, 478, 211, 91]
 
     self.controllers_list = [ "ronex_" + ronex_id + "_passthrough" for ronex_id in self.ronex_ids ]
 
@@ -185,13 +186,23 @@ class TestRonexWithHardware(unittest.TestCase):
   def test_analogue(self):
     with self.state_lock:
       result_0, result_1 = True, True
+      non_zero_analogue_input = [self.state[0].analogue[0], self.state[0].analogue[6], self.state[1].analogue[0], self.state[1].analogue[6]]
+
       if self.state[0].analogue[0] > 0:
         analogue = self.state[0].analogue
-      else:
+        expected = self.expected_analogue_values_a
+      elif self.state[0].analogue[6] > 0:
+        analogue = self.state[0].analogue
+        expected = self.expected_analogue_values_b
+      elif self.state[1].analogue[0] > 0:
         analogue = self.state[1].analogue
+        expected = self.expected_analogue_values_a
+      elif self.state[1].analogue[6] > 0:
+        analogue = self.state[1].analogue
+        expected = self.expected_analogue_values_b
 
-      for ind, value in enumerate(self.expected_analogue_values):
-        self.assertAlmostEqual(value, analogue[ind], delta = 10)
+      for ind, value in enumerate(expected):
+        self.assertAlmostEqual(value, analogue[ind], delta = 30)
 
   def test_pwm_outputs(self):
 
