@@ -35,6 +35,7 @@ SrRoNeXSimpleController::SrRoNeXSimpleController()
 
 SrRoNeXSimpleController::~SrRoNeXSimpleController()
 {
+  /*
   for(size_t i=0; i < digital_subscribers_.size(); ++i)
   {
     digital_subscribers_[i].shutdown();
@@ -43,6 +44,7 @@ SrRoNeXSimpleController::~SrRoNeXSimpleController()
   {
     pwm_subscribers_[i].shutdown();
   }
+  */
 }
 
 bool SrRoNeXSimpleController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
@@ -83,7 +85,8 @@ bool SrRoNeXSimpleController::init(pr2_mechanism_model::RobotState* robot, ros::
     ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");
     return false;
   }
-
+  
+  /*
   //init the subscribers
   std::stringstream sub_topic;
   for( size_t i=0; i < general_io_->command_.digital_.size(); ++i)
@@ -99,6 +102,7 @@ bool SrRoNeXSimpleController::init(pr2_mechanism_model::RobotState* robot, ros::
     sub_topic << path << "/command/pwm/" << i;
     pwm_subscribers_.push_back(node_.subscribe<sr_ronex_msgs::PWM>(sub_topic.str(), 1, boost::bind(&SrRoNeXSimpleController::pwm_commands_cb, this, _1, i)));
   }
+  */
 
   return true;
 }
@@ -127,6 +131,7 @@ void SrRoNeXSimpleController::stopping()
   // Do nothing.
 } 
 
+/*
 void SrRoNeXSimpleController::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
 {
   general_io_->command_.digital_[index] = msg->data;
@@ -138,6 +143,7 @@ void SrRoNeXSimpleController::pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& 
   general_io_->command_.pwm_[index].on_time_0 = msg->pwm_on_time_0;
   general_io_->command_.pwm_[index].on_time_1 = msg->pwm_on_time_1;
 }
+*/
 
 }
 

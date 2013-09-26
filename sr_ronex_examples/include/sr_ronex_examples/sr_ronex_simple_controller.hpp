@@ -55,9 +55,9 @@ namespace ronex
 
     virtual void stopping();
 
-    void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
+    // void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 
-    void pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index);
+    // void pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index);
 
   private:
     ros::NodeHandle node_;
@@ -67,16 +67,10 @@ namespace ronex
     ronex::GeneralIO* general_io_;
 
     ///send commands to the RoNeX's digital I/O
-    std::vector<ros::Subscriber> digital_subscribers_;
+    // std::vector<ros::Subscriber> digital_subscribers_;
     ///send PWM commands to the RoNeX's
-    std::vector<ros::Subscriber> pwm_subscribers_;
+    // std::vector<ros::Subscriber> pwm_subscribers_;
   };
 }
-
-/* For the emacs weenies in the crowd.
-Local Variables:
-   c-basic-offset: 2
-End:
-*/
 
 #endif /* _ACCESS_RONEX_DATA_HPP_ */
