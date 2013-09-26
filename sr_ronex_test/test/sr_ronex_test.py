@@ -210,8 +210,7 @@ class TestRonexWithHardware(unittest.TestCase):
     message = 12 * [False]
     self.digital_test_case(0, 1, message)
 
-    params = { 'pwm_period_' + str(i) : 1600 for i in xrange(6) }
-    params['pwm_clock_divider'] = 6400
+    params = { 'pwm_clock_divider' : 6400 }
 
     self.clients[0].update_configuration(params)
     self.clients[1].update_configuration(params)
