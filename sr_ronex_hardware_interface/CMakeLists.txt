@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_hardware_interface)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS roscpp sr_ronex_external_protocol)
+find_package(catkin REQUIRED COMPONENTS roscpp pr2_hardware_interface sr_ronex_external_protocol )
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
@@ -20,3 +20,7 @@ catkin_package(
     CATKIN_DEPENDS roscpp pr2_hardware_interface sr_ronex_external_protocol
     INCLUDE_DIRS include
 )
+
+
+install(DIRECTORY include/${PROJECT_NAME}/
+   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})

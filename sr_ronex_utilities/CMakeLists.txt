@@ -130,5 +130,5 @@ if(COMMAND add_rostest_gtest)
 endif(COMMAND add_rostest_gtest)
 
 
-## Add folders to be run by python nosetests
-# catkin_add_nosetests(test)
+
+
