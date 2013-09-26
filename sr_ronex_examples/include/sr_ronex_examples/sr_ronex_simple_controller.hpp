@@ -53,6 +53,8 @@ namespace ronex
      */
     virtual void update();
 
+    virtual void stopping();
+
     void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 
     void pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index);

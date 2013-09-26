@@ -122,6 +122,11 @@ void SrRoNeXSimpleController::update()
   // double position = robot_->model_->getCustomHW("Ronex/Product_id/Serial").analogue[0];
 }
 
+void SrRoNeXSimpleController::stopping() 
+{
+  // Do nothing.
+} 
+
 void SrRoNeXSimpleController::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
 {
   general_io_->command_.digital_[index] = msg->data;
