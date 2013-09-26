@@ -58,4 +58,4 @@ namespace ronex
   };
 }
 
-#endif /* _ACCESS_RONEX_DATA_HPP_ */
+#endif /* _SR_RONEX_SIMPLE_CONTROLLER_ */
