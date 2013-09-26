@@ -18,8 +18,7 @@
 /**
  * @file   sr_ronex_simple_controller.hpp
  * @author Yi Li <yi@shadowrobot.com>
- * @brief  A passthrough for the General IO RoNeX module: simply sets 
- *         the different pins to the value you want directly.
+ * @brief  Access RoNeX data directly from the controller.
  **/
 
 #ifndef _SR_RONEX_SIMPLE_CONTROLLER_
@@ -48,28 +47,14 @@ namespace ronex
 
     virtual void starting();
 
-    /*!
-     * \brief Issues commands to the joint. Should be called at regular intervals
-     */
     virtual void update();
 
     virtual void stopping();
 
-    // void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
-
-    // void pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index);
-
   private:
-    ros::NodeHandle node_;
-
     int loop_count_;
 
     ronex::GeneralIO* general_io_;
-
-    ///send commands to the RoNeX's digital I/O
-    // std::vector<ros::Subscriber> digital_subscribers_;
-    ///send PWM commands to the RoNeX's
-    // std::vector<ros::Subscriber> pwm_subscribers_;
   };
 }
 

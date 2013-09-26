@@ -17,9 +17,8 @@
 
 /**
  * @file   sr_ronex_simple_controller.cpp
- * @author Yi Li <ugo@shadowrobot.com>
- * @brief  A passthrough for the General IO RoNeX module: simply sets the
- *         different pins to the value you want directly.
+ * @author Yi Li <yi@shadowrobot.com>
+ * @brief  Access RoNeX data directly from the controller.
  **/
 
 #include "sr_ronex_examples/sr_ronex_simple_controller.hpp"
@@ -35,115 +34,42 @@ SrRoNeXSimpleController::SrRoNeXSimpleController()
 
 SrRoNeXSimpleController::~SrRoNeXSimpleController()
 {
-  /*
-  for(size_t i=0; i < digital_subscribers_.size(); ++i)
-  {
-    digital_subscribers_[i].shutdown();
-  }
-  for(size_t i=0; i < pwm_subscribers_.size(); ++i)
-  {
-    pwm_subscribers_[i].shutdown();
-  }
-  */
 }
 
 bool SrRoNeXSimpleController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
 {
-  assert(robot);
-  node_ = n;
-
-  std::string ronex_id;
-  if (!node_.getParam("ronex_id", ronex_id)) {
-    ROS_ERROR("No RoNeX ID given (namespace: %s)", node_.getNamespace().c_str());
-    return false;
-  }
-
-  //get the path from the parameters
-  std::string path;
-  int parameter_id = get_ronex_param_id(ronex_id);
-  {
-    if( parameter_id == -1 )
-    {
-      ROS_ERROR_STREAM("Could not find the RoNeX id in the parameter server: " << ronex_id << " not loading the controller.");
-      return false;
-    }
-    else
-    {
-      std::stringstream ss;
-      ss << "/ronex/devices/" << parameter_id << "/path";
-      if( !ros::param::get(ss.str(), path) )
-      {
-        ROS_ERROR_STREAM("Couldn't read the parameter " << ss.str() << " from the parameter server. Not loading the controller.");
-        return false;
-      }
-    }
-  }
-
+  assert (robot);
+  
+  std::string path("/ronex/general_io/test_ronex");
   general_io_ = static_cast<ronex::GeneralIO*>( robot->model_->hw_->getCustomHW(path) );
   if( general_io_ == NULL)
   {
-    ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");
+    ROS_ERROR_STREAM("Could not find RoNeX module (i.e., test_ronex). The controller is not loaded.");
     return false;
   }
   
-  /*
-  //init the subscribers
-  std::stringstream sub_topic;
-  for( size_t i=0; i < general_io_->command_.digital_.size(); ++i)
-  {
-    sub_topic.str("");
-    sub_topic << path << "/command/digital/" << i;
-    digital_subscribers_.push_back(node_.subscribe<std_msgs::Bool>(sub_topic.str(), 1, boost::bind(&SrRoNeXSimpleController::digital_commands_cb, this, _1,  i )));
-  }
-
-  for( size_t i=0; i < general_io_->command_.pwm_.size(); ++i)
-  {
-    sub_topic.str("");
-    sub_topic << path << "/command/pwm/" << i;
-    pwm_subscribers_.push_back(node_.subscribe<sr_ronex_msgs::PWM>(sub_topic.str(), 1, boost::bind(&SrRoNeXSimpleController::pwm_commands_cb, this, _1, i)));
-  }
-  */
-
   return true;
 }
 
 void SrRoNeXSimpleController::starting()
-{}
+{
+  // Do nothing.
+}
 
-/*!
- * \brief Issues commands to the joint. Should be called at regular intervals
- */
 void SrRoNeXSimpleController::update()
 {
-  /*
-    if(loop_count_ % 10 == 0)
-    {
-    loop_count_ = 0;
-    }
-    loop_count_++;
-  */
-
   double position = general_io_->state_.analogue_[0];
+  if (loop_count_++ % 100 == 0)
+  {
+    ROS_INFO_STREAM( "Position = " << position );
+    loop_count_ = 0;
+  }
 }
 
 void SrRoNeXSimpleController::stopping() 
 {
   // Do nothing.
 } 
-
-/*
-void SrRoNeXSimpleController::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
-{
-  general_io_->command_.digital_[index] = msg->data;
-}
-
-void SrRoNeXSimpleController::pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index)
-{
-  general_io_->command_.pwm_[index].period = msg->pwm_period;
-  general_io_->command_.pwm_[index].on_time_0 = msg->pwm_on_time_0;
-  general_io_->command_.pwm_[index].on_time_1 = msg->pwm_on_time_1;
-}
-*/
 
 }
 
