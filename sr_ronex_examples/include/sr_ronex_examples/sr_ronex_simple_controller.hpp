@@ -21,8 +21,8 @@
  * @brief  Access RoNeX data directly from the controller.
  **/
 
-#ifndef _SR_RONEX_SIMPLE_CONTROLLER_
-#define _SR_RONEX_SIMPLE_CONTROLLER_
+#ifndef _SR_RONEX_SIMPLE_CONTROLLER_HPP_
+#define _SR_RONEX_SIMPLE_CONTROLLER_HPP_
 
 #include <ros/node_handle.h>
 
@@ -58,4 +58,4 @@ namespace ronex
   };
 }
 
-#endif /* _SR_RONEX_SIMPLE_CONTROLLER_ */
+#endif /* _SR_RONEX_SIMPLE_CONTROLLER_HPP_ */
