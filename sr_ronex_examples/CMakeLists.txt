@@ -49,3 +49,25 @@ target_link_libraries(sr_ronex_flash_LED_with_PWM ${catkin_LIBRARIES})
 target_link_libraries(change_ronex_configuration ${catkin_LIBRARIES})
 target_link_libraries(sr_ronex_simple_controller ${catkin_LIBRARIES})
 
+
+install(TARGETS sr_ronex_parse_parameter_server sr_ronex_read_analog_data sr_ronex_flash_LED_with_PWM change_ronex_configuration
+   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+file(GLOB PYTHON_SCRIPTS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" 
+   "${CMAKE_CURRENT_SOURCE_DIR}/src/*.py")
+install(PROGRAMS ${PYTHON_SCRIPTS}
+   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+
+#install(DIRECTORY include/${PROJECT_NAME}/
+#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+install(DIRECTORY launch/
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
+
+install(DIRECTORY config/
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config)
+
+install(DIRECTORY model/
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/model)
+
