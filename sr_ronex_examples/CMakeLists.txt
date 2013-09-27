@@ -14,7 +14,7 @@ add_definitions(-Wall)
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(${catkin_INCLUDE_DIRS})
 
 ## Declare a cpp library
 # add_library(sr_ronex_examples
@@ -27,7 +27,6 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 # The reason is because catkin_package() will change the location where the targets are built.
 catkin_package(
   CATKIN_DEPENDS std_msgs sr_ronex_msgs sr_ronex_utilities dynamic_reconfigure roscpp rospy
-  INCLUDE_DIRS include
 )
 
 ## Declare a cpp executable
