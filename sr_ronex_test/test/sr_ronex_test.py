@@ -61,6 +61,13 @@ class TestRonexWithHardware(unittest.TestCase):
 
     self.controllers_list = [ "ronex_" + ronex_id + "_passthrough" for ronex_id in self.ronex_ids ]
 
+    pwm = PWM()
+    pwm.pwm_period = 25600
+    pwm.pwm_on_time_0 = 0
+    pwm.pwm_on_time_1 = 0
+    for p in xrange(6):
+      self.pwm_publishers[0][p].publish(pwm)
+
     rospy.sleep(0.1)  # wait for self.state to be updated for the first time
 
   def tearDown(self):
@@ -117,7 +124,7 @@ class TestRonexWithHardware(unittest.TestCase):
     self.set_ronex_io_state(outr, inr)
     for i, bool in enumerate(message):
       self.digital_publishers[outr][i].publish(bool)
-    rospy.sleep(0.1)
+    rospy.sleep(0.2)
 
     with self.state_lock:
       self.result = (self.state[inr].digital == message)
@@ -181,7 +188,7 @@ class TestRonexWithHardware(unittest.TestCase):
 
   def test_digital_even_true(self):
     message = 6 * [False, True]
-    self.digital_test_case(0, 1, message)
+    self.digital_test_case(1, 0, message)
 
   def test_analogue(self):
     with self.state_lock:
