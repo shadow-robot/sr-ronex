@@ -83,6 +83,8 @@ class LoadPassthroughControllers(object):
         for ronex_id in ronex_ids:
             controllers_list.append("ronex_" + ronex_id + "_passthrough")
 
+        rospy.loginfo("Starting controllers: " + str(controllers_list))
+
         # calling the services to load and switch the controllers on
         rospy.wait_for_service('pr2_controller_manager/list_controllers')
         rospy.wait_for_service('pr2_controller_manager/load_controller')
@@ -116,5 +118,6 @@ class LoadPassthroughControllers(object):
 
 
 if __name__ == "__main__":
+    rospy.sleep(2.5)
     rospy.init_node("load_passthrough_controllers")
     load_passthrough = LoadPassthroughControllers()

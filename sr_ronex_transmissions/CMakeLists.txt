@@ -30,3 +30,16 @@ if(COMMAND add_rostest_gtest)
   add_dependencies(test_ronex_transmission pr2_mechanism_model tinyxml)
 endif(COMMAND add_rostest_gtest)
 
+
+install(TARGETS ronex_mechanism_model
+   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
+
+install(DIRECTORY include/${PROJECT_NAME}/
+   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
+
+install(FILES transmission_plugin.xml
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+

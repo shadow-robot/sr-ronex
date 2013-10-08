@@ -17,3 +17,10 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 catkin_package(
     CATKIN_DEPENDS pr2_ethercat
 )
+
+install(DIRECTORY launch/
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)
+
+install(DIRECTORY loaders/
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/loaders)
+
