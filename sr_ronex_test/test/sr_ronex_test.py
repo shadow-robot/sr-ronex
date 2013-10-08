@@ -61,7 +61,7 @@ class TestRonexWithHardware(unittest.TestCase):
 
     self.controllers_list = [ "ronex_" + ronex_id + "_passthrough" for ronex_id in self.ronex_ids ]
 
-    rospy.sleep(0.08)  # wait for self.state to be updated for the first time
+    rospy.sleep(0.1)  # wait for self.state to be updated for the first time
 
   def tearDown(self):
     pwm = PWM()
@@ -117,7 +117,7 @@ class TestRonexWithHardware(unittest.TestCase):
     self.set_ronex_io_state(outr, inr)
     for i, bool in enumerate(message):
       self.digital_publishers[outr][i].publish(bool)
-    rospy.sleep(0.08)
+    rospy.sleep(0.1)
 
     with self.state_lock:
       self.result = (self.state[inr].digital == message)
@@ -127,7 +127,7 @@ class TestRonexWithHardware(unittest.TestCase):
     self.clients[outr].update_configuration(self.params_o)
     self.clients[inr].update_configuration(self.params_i)
 
-    rospy.sleep(0.32)
+    rospy.sleep(0.4)
 
 
 
@@ -235,7 +235,7 @@ class TestRonexWithHardware(unittest.TestCase):
       samples[1][i] = self.state[1].digital[1]
       samples[2][i] = self.state[1].digital[10]
       samples[3][i] = self.state[1].digital[11]
-      rospy.sleep(0.09)
+      rospy.sleep(0.2)
 
     for sample in samples:
       self.assertAlmostEqual(sample.count(True), num_of_samples / 2, delta = num_of_samples / 3)
