@@ -68,7 +68,7 @@ class TestRonexWithHardware(unittest.TestCase):
     for p in xrange(6):
       self.pwm_publishers[0][p].publish(pwm)
 
-    rospy.sleep(0.1)  # wait for self.state to be updated for the first time
+    rospy.sleep(0.2)  # wait for self.state to be updated for the first time
 
   def tearDown(self):
     pwm = PWM()
