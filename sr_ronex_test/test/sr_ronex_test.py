@@ -68,7 +68,7 @@ class TestRonexWithHardware(unittest.TestCase):
     for p in xrange(6):
       self.pwm_publishers[0][p].publish(pwm)
 
-    rospy.sleep(0.2)  # wait for self.state to be updated for the first time
+    rospy.sleep(0.4)  # wait for self.state to be updated for the first time
 
   def tearDown(self):
     pwm = PWM()
@@ -124,7 +124,7 @@ class TestRonexWithHardware(unittest.TestCase):
     self.set_ronex_io_state(outr, inr)
     for i, bool in enumerate(message):
       self.digital_publishers[outr][i].publish(bool)
-    rospy.sleep(0.2)
+    rospy.sleep(0.3)
 
     with self.state_lock:
       self.result = (self.state[inr].digital == message)
@@ -174,11 +174,9 @@ class TestRonexWithHardware(unittest.TestCase):
   def test_digital_all_true(self):
     message = 12 * [True]
     self.digital_test_case(0, 1, message)
-    self.digital_test_case(1, 0, message)
 
   def test_digital_all_false(self):
     message = 12 * [False]
-    self.digital_test_case(0, 1, message)
     self.digital_test_case(1, 0, message)
 
   # the following 2 tests will check patterns of True and False at the outputs instead of just all True or False
@@ -222,7 +220,7 @@ class TestRonexWithHardware(unittest.TestCase):
     self.clients[0].update_configuration(params)
     self.clients[1].update_configuration(params)
 
-    rospy.sleep(0.4)
+    rospy.sleep(0.5)
 
     pwm = PWM()
     pwm.pwm_period = 249
