@@ -1,4 +1,4 @@
-<library path="lib/libronex_mechanism_model">
+<library path="lib/libsr_ronex_transmissions">
   <class name="sr_ronex_transmissions/RonexTransmission"
 	 type="ronex::RonexTransmission" base_class_type="pr2_mechanism_model::Transmission">
     <description>
