@@ -16,7 +16,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 #common commands for building c++ executables and libraries
-add_library(ronex_mechanism_model src/ronex_transmission.cpp src/mapping/general_io/analogue_to_position.cpp src/mapping/general_io/analogue_to_effort.cpp src/mapping/general_io/command_to_pwm.cpp)
+add_library(sr_ronex_transmissions src/ronex_transmission.cpp src/mapping/general_io/analogue_to_position.cpp src/mapping/general_io/analogue_to_effort.cpp src/mapping/general_io/command_to_pwm.cpp)
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
@@ -30,8 +30,7 @@ if(COMMAND add_rostest_gtest)
   add_dependencies(test_ronex_transmission pr2_mechanism_model tinyxml)
 endif(COMMAND add_rostest_gtest)
 
-
-install(TARGETS ronex_mechanism_model
+install(TARGETS sr_ronex_transmissions
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
@@ -41,5 +40,3 @@ install(DIRECTORY include/${PROJECT_NAME}/
 
 install(FILES transmission_plugin.xml
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-
-
