@@ -23,6 +23,11 @@
       RoNeX bridge - duplicated for backward compatibility issues.
     </description>
   </class>
+  <class name="sr_ronex_drivers/73946162" type="StandardEthercatDevice" base_class_type="EthercatDevice">
+    <description>
+      Beckhoff CU1128 bridge - Product ID is 73946162 (0x4685432).
+    </description>
+  </class>
 
   <!--
       The following definitions are CodDecod plugins (they encode decode information from a certain (unique) ethercat slave device, determined by its product code and serial number)
