@@ -32,7 +32,7 @@ namespace ronex
     namespace general_io
     {
       AnalogueToPosition::AnalogueToPosition(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot)
-        : pin_out_of_bound_(true)
+        : RonexMapping(), pin_out_of_bound_(true)
       {
         const char *ronex_name = mapping_el ? mapping_el->Attribute("ronex") : NULL;
         if (!ronex_name)
@@ -120,6 +120,14 @@ namespace ronex
 
       bool AnalogueToPosition::check_pin_in_bound_()
       {
+        //we ignore the first iteration as the array is not yet initialised.
+        if( first_iteration_ )
+        {
+          pin_out_of_bound_ = true;
+          first_iteration_ = false;
+          return false;
+        }
+
         //we have to check here for the size otherwise the general io hasn't been updated.
         if( pin_out_of_bound_ )
         {
