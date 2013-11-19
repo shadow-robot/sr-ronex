@@ -1,25 +1,25 @@
 /*
- * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
- * 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3.0 of the License, or (at your option) any later version.
- * 
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- * 
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library.
- */
+* Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+*
+* This library is free software; you can redistribute it and/or
+* modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either
+* version 3.0 of the License, or (at your option) any later version.
+*
+* This library is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+* Lesser General Public License for more details.
+*
+* You should have received a copy of the GNU Lesser General Public
+* License along with this library.
+*/
 
 /**
- * @file   command_to_pwm.hpp
- * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @brief  Contains the data mapping one joint command to a pwm module.
- **/
+* @file command_to_pwm.hpp
+* @author Ugo Cupcic <ugo@shadowrobot.com>
+* @brief Contains the data mapping one joint command to a pwm module.
+**/
 
 #include "sr_ronex_transmissions/mapping/general_io/command_to_pwm.hpp"
 #include <pr2_mechanism_model/robot.h>
@@ -33,7 +33,7 @@ namespace ronex
     namespace general_io
     {
       CommandToPWM::CommandToPWM(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot)
-        : pin_out_of_bound_(true)
+        : RonexMapping(), pin_out_of_bound_(true)
       {
         const char *ronex_name = mapping_el ? mapping_el->Attribute("ronex") : NULL;
         if (!ronex_name)
@@ -110,6 +110,14 @@ namespace ronex
 
       bool CommandToPWM::check_pins_in_bound_()
       {
+        //we ignore the first iteration as the array is not yet initialised.
+        if( first_iteration_ )
+        {
+          pin_out_of_bound_ = true;
+          first_iteration_ = false;
+          return false;
+        }
+
         //we have to check here for the size otherwise the general io hasn't been updated.
         if( pin_out_of_bound_ )
         {
@@ -159,7 +167,7 @@ namespace ronex
   }
 }
 /* For the emacs weenies in the crowd.
-   Local Variables:
-   c-basic-offset: 2
-   End:
+Local Variables:
+c-basic-offset: 2
+End:
 */

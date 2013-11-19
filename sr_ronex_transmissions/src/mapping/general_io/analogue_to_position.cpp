@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
@@ -32,7 +32,7 @@ namespace ronex
     namespace general_io
     {
       AnalogueToPosition::AnalogueToPosition(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot)
-        : pin_out_of_bound_(true)
+        : RonexMapping(), pin_out_of_bound_(true)
       {
         const char *ronex_name = mapping_el ? mapping_el->Attribute("ronex") : NULL;
         if (!ronex_name)
@@ -69,7 +69,7 @@ namespace ronex
 
         //read scale
         const char *scale = mapping_el ? mapping_el->Attribute("scale") : NULL;
-        if (!ronex_pin)
+        if (!scale)
         {
           ROS_WARN("RonexTransmission transmission did not specify the scale, using 1.0.");
           scale = "1.0";
@@ -87,7 +87,7 @@ namespace ronex
 
         //read offset
         const char *offset = mapping_el ? mapping_el->Attribute("offset") : NULL;
-        if (!ronex_pin)
+        if (!offset)
         {
           ROS_WARN("RonexTransmission transmission did not specify the offset, using 0.0.");
           offset = "0.0";
@@ -120,6 +120,14 @@ namespace ronex
 
       bool AnalogueToPosition::check_pin_in_bound_()
       {
+        //we ignore the first iteration as the array is not yet initialised.
+        if( first_iteration_ )
+        {
+          pin_out_of_bound_ = true;
+          first_iteration_ = false;
+          return false;
+        }
+
         //we have to check here for the size otherwise the general io hasn't been updated.
         if( pin_out_of_bound_ )
         {

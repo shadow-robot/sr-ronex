@@ -12,7 +12,7 @@
   <transmission type="sr_ronex_transmissions/RonexTransmission" name="my_ronex_transmission">
     <joint name="joint1"/>
     <mapping ronex="/ronex/general_io/0" property="position" analogue_pin="0" scale="1.0" offset="0.0"/>
-    <mapping ronex="/ronex/general_io/0" property="effort"   analogue_pin="1" scale="2.0" offset="1.0"/>
+    <mapping ronex="/ronex/general_io/0" property="effort" analogue_pin="1" scale="2.0" offset="1.0"/>
     <mapping ronex="/ronex/general_io/0" property="command" pwm_module="1" pwm_pin="0" direction_pin="5"/>
   </transmission>
 </robot>
