@@ -2,6 +2,9 @@
 Changelog for package sr_ronex
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.9.4 (2013-11-20)
+------------------
+
 0.9.3 (2013-09-25)
 ------------------
 * metapackage defined the right way
