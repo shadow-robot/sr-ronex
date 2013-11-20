@@ -31,7 +31,7 @@
 
 #define PRODUCT_NAME                                          "spi"
 #define PRODUCT_ID                                            0x02000002
-
+ 
 //! Command Types
 //! -------------
 //! COMMAND_TYPE values are sent by the host to tell the node
@@ -40,25 +40,42 @@
 //! The node will always return the same command_type in its status
 //! packet.
 //!
-#define RONEX_COMMAND_02000002_COMMAND_TYPE_INVALID           0x0000        //!< Zeros imply a failed EtherCAT packet, so this it taken to be invalid.
-#define RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL            0x0001        //!< This is for normal operation.
-#define RONEX_COMMAND_02000002_COMMAND_TYPE_CONFIG_INFO       0x0002        //!< This requests a CONFIG_INFO_02000002 block from the node.
-#define RONEX_COMMAND_02000002_COMMAND_TYPE_ERROR             0x00FF        //!< If this is returned from the node, then some kind of error has happened.
+#define RONEX_COMMAND_02000002_COMMAND_TYPE_INVALID         0x0000      //!< Zeros imply a failed EtherCAT packet, so this it taken to be invalid.
+#define RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL          0x0001      //!< This is for normal operation.
+#define RONEX_COMMAND_02000002_COMMAND_TYPE_CONFIG_INFO     0x0002      //!< This requests a CONFIG_INFO_02000002 block from the node.
+#define RONEX_COMMAND_02000002_COMMAND_TYPE_ERROR           0x00FF      //!< If this is returned from the node, then some kind of error has happened.
 
-#define SPI_MODE_00           0x00
-#define SPI_MODE_01           0x01
-#define SPI_MODE_10           0x02
-#define SPI_MODE_11           0x03
+
+
+//! SPI Configuration
+//! -----------------
+//!
+//!
+//!
+#define SPI_CONFIG_MODE_00                                  0x0000
+#define SPI_CONFIG_MODE_01                                  0x0001
+#define SPI_CONFIG_MODE_10                                  0x0002
+#define SPI_CONFIG_MODE_11                                  0x0003
+#define SPI_CONFIG_INPUT_TRIGGER_NONE                       0x0000
+#define SPI_CONFIG_INPUT_TRIGGER_D0                         0x0004
+#define SPI_CONFIG_INPUT_TRIGGER_D1                         0x0005
+#define SPI_CONFIG_INPUT_TRIGGER_D2                         0x0006
+#define SPI_CONFIG_INPUT_TRIGGER_D3                         0x0007
+#define SPI_CONFIG_INPUT_TRIGGER_D4                         0x0008
+#define SPI_CONFIG_INPUT_TRIGGER_D5                         0x0009
+#define SPI_CONFIG_MOSI_SOMI_DIFFERENT_PIN                  0x0000
+#define SPI_CONFIG_MOSI_SOMI_SAME_PIN                       0x0010
+
 
 
 //! Implemented features
 //! --------------------
 //! Due to the complexity of the requirements for this module, and the need to
-//! have something working very quickly, not all of the features will be
-//! implemented immediately. Essential features will be implemented first,
-//! with less important ones coming later.
-//!
-//! You can ask the node which features are implemented using the
+//! have something working very quickly, not all of the features will be 
+//! implemented immediately. Essential features will be implemented first, 
+//! with less important ones coming later. 
+//! 
+//! You can ask the node which features are implemented using the 
 //! RONEX_COMMAND_02000002_COMMAND_TYPE_CONFIG_INFO. The returned
 //! CONFIG_INFO_02000002 contains the implemented_features word.
 //!
@@ -77,24 +94,13 @@
 
 
 
-//! SPI_Modes
-//! ---------
-//! Four SPI modes are available.
-//!
-#define SPI_MODE_00    0x00
-#define SPI_MODE_01    0x01
-#define SPI_MODE_10    0x02
-#define SPI_MODE_11    0x03
-
-
-
 //! Pin output states
 //! -----------------
-//!
+//! 
 //! The CS pins and the Digital I/O pins can be controlled by the host.
 //! The states can be set before and after the transaction.
 //! The CS pins are always outputs
-
+//! 
 #define PIN_OUTPUT_STATE_DIO_0                0x0001
 #define PIN_OUTPUT_DIRECTION_DIO_0            0x0002
 #define PIN_OUTPUT_STATE_DIO_1                0x0004
@@ -112,10 +118,31 @@
 #define PIN_OUTPUT_STATE_CS_2                 0x4000
 #define PIN_OUTPUT_STATE_CS_3                 0x8000
 
+
+
+//! Pin input states
+//! ----------------
+//! 
+//! The Digital I/O and MOSI pins are sampled by the PSoC at four
+//! points during the SPI transaction. All Digital I/O are sampled
+//! even if they are set as outputs.
+//! 
+#define PIN_INPUT_STATE_DIO_0                 0x0001
+#define PIN_INPUT_STATE_DIO_1                 0x0002
+#define PIN_INPUT_STATE_DIO_2                 0x0004
+#define PIN_INPUT_STATE_DIO_3                 0x0008
+#define PIN_INPUT_STATE_DIO_4                 0x0010
+#define PIN_INPUT_STATE_DIO_5                 0x0020
+#define PIN_INPUT_STATE_MOSI_0                0x0001
+#define PIN_INPUT_STATE_MOSI_1                0x0002
+#define PIN_INPUT_STATE_MOSI_2                0x0004
+#define PIN_INPUT_STATE_MOSI_3                0x0008
+
+
 typedef struct
 {
     int16u    clock_divider;
-    int8u     SPI_mode;
+    int16u    SPI_config;
     int8u     inter_byte_gap;
     int8u     data[32];
 }__attribute__((packed)) SPI_PACKET_OUT;
@@ -140,15 +167,13 @@ typedef struct
 
 typedef struct
 {
-    int8u     pin_input_states_0;
-    int8u     pin_input_states_1;
-    int8u     pin_input_states_2;
-    int8u     pin_input_states_3;
+    int8u     pin_input_states_DIO_[4];
+    int8u     pin_input_states_MOSI_[4];
 
     SPI_PACKET_IN spi_in_0;
     SPI_PACKET_IN spi_in_1;
     SPI_PACKET_IN spi_in_2;
-    SPI_PACKET_IN spi_in_3;
+    SPI_PACKET_IN spi_in_3;    
 }STATUS_DATA_02000002;
 
 typedef struct
