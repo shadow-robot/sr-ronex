@@ -29,6 +29,9 @@
 #endif
 
 
+#define PRODUCT_NAME                                          "spi"
+#define PRODUCT_ID                                            0x02000002
+
 //! Command Types
 //! -------------
 //! COMMAND_TYPE values are sent by the host to tell the node
@@ -36,7 +39,7 @@
 //! request specific info from the node.
 //! The node will always return the same command_type in its status
 //! packet.
-//! 
+//!
 #define RONEX_COMMAND_02000002_COMMAND_TYPE_INVALID           0x0000        //!< Zeros imply a failed EtherCAT packet, so this it taken to be invalid.
 #define RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL            0x0001        //!< This is for normal operation.
 #define RONEX_COMMAND_02000002_COMMAND_TYPE_CONFIG_INFO       0x0002        //!< This requests a CONFIG_INFO_02000002 block from the node.
@@ -51,11 +54,11 @@
 //! Implemented features
 //! --------------------
 //! Due to the complexity of the requirements for this module, and the need to
-//! have something working very quickly, not all of the features will be 
-//! implemented immediately. Essential features will be implemented first, 
-//! with less important ones coming later. 
-//! 
-//! You can ask the node which features are implemented using the 
+//! have something working very quickly, not all of the features will be
+//! implemented immediately. Essential features will be implemented first,
+//! with less important ones coming later.
+//!
+//! You can ask the node which features are implemented using the
 //! RONEX_COMMAND_02000002_COMMAND_TYPE_CONFIG_INFO. The returned
 //! CONFIG_INFO_02000002 contains the implemented_features word.
 //!
@@ -77,7 +80,7 @@
 //! SPI_Modes
 //! ---------
 //! Four SPI modes are available.
-//! 
+//!
 #define SPI_MODE_00    0x00
 #define SPI_MODE_01    0x01
 #define SPI_MODE_10    0x02
@@ -87,7 +90,7 @@
 
 //! Pin output states
 //! -----------------
-//! 
+//!
 //! The CS pins and the Digital I/O pins can be controlled by the host.
 //! The states can be set before and after the transaction.
 //! The CS pins are always outputs
@@ -109,7 +112,7 @@
 #define PIN_OUTPUT_STATE_CS_2                 0x4000
 #define PIN_OUTPUT_STATE_CS_3                 0x8000
 
-typedef struct  
+typedef struct
 {
     int16u    clock_divider;
     int8u     SPI_mode;
@@ -118,7 +121,7 @@ typedef struct
 }__attribute__((packed)) SPI_PACKET_OUT;
 
 
-typedef struct  
+typedef struct
 {
     int16u     command_type;
 
@@ -145,7 +148,7 @@ typedef struct
     SPI_PACKET_IN spi_in_0;
     SPI_PACKET_IN spi_in_1;
     SPI_PACKET_IN spi_in_2;
-    SPI_PACKET_IN spi_in_3;    
+    SPI_PACKET_IN spi_in_3;
 }STATUS_DATA_02000002;
 
 typedef struct
@@ -154,7 +157,7 @@ typedef struct
     int8u     padding[sizeof(STATUS_02000002_DATA)-4];
 }CONFIG_INFO_02000002;
 
-typedef struct  
+typedef struct
 {
     int8u     data[32];
 }__attribute__((packed)) SPI_PACKET_IN;
