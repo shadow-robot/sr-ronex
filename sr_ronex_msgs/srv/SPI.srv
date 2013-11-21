@@ -1,0 +1,3 @@
+sr_ronex_msgs/SPICommand command
+---
+sr_ronex_msgs/SPIState state
