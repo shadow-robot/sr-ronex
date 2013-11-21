@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>sr_ronex_examples</name>
-  <version>0.9.3</version>
+  <version>0.9.4</version>
   <description>Package containing examples for the RoNeX boards.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
@@ -23,24 +23,32 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_depend>sr_ronex_msgs</build_depend>
-  <build_depend>sr_ronex_utilities</build_depend>
+  <build_depend>std_srvs</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
+  <build_depend>sr_ronex_msgs</build_depend>
+  <build_depend>sr_ronex_hardware_interface</build_depend>
+  <build_depend>sr_ronex_utilities</build_depend>
+  <build_depend>pr2_mechanism_controllers</build_depend>
+  <build_depend>pr2_controller_interface</build_depend>
+  <build_depend>pr2_mechanism_model</build_depend>
+  <build_depend>pluginlib</build_depend>
 
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>roscpp</run_depend>
   <run_depend>rospy</run_depend>
   <run_depend>std_msgs</run_depend>
-  <run_depend>sr_ronex_msgs</run_depend>
-  <run_depend>sr_ronex_utilities</run_depend>
+  <run_depend>std_srvs</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
-
-  <!-- The export tag contains other, unspecified, tags -->
+  <run_depend>sr_ronex_msgs</run_depend>
+  <run_depend>sr_ronex_hardware_interface</run_depend>
+  <run_depend>sr_ronex_utilities</run_depend>
+  <run_depend>pr2_mechanism_controllers</run_depend>
+  <run_depend>pr2_controller_interface</run_depend>
+  <run_depend>pr2_mechanism_model</run_depend>
+  <run_depend>pluginlib</run_depend>
+  
   <export>
-    <!-- You can specify that this package is a metapackage here: -->
-    <!-- <metapackage/> -->
-
-    <!-- Other tools can request additional information be placed here -->
+    <pr2_controller_interface plugin="${prefix}/controller_plugins.xml"/>
   </export>
-
+  
 </package>

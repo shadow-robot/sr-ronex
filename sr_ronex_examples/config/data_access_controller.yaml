@@ -1,0 +1,3 @@
+# Settings for a super simple controller
+super_simple_controller:
+  type: sr_ronex_examples/SrRoNeXSimpleController
