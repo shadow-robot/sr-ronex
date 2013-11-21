@@ -144,6 +144,7 @@ typedef struct
     int16u    clock_divider;
     int16u    SPI_config;
     int8u     inter_byte_gap;
+    int8u     num_bytes;
     int8u     data[32];
 }__attribute__((packed)) SPI_PACKET_OUT;
 
