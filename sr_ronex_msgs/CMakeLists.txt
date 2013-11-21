@@ -14,7 +14,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 #uncomment if you have defined messages
-add_message_files(FILES BoolArray.msg GeneralIOState.msg PWM.msg SPICommand.msg SPIPacketIn.msg SPIPacketOut.msg SPIState.msg)
+add_message_files(FILES BoolArray.msg GeneralIOState.msg PWM.msg SPIPacketIn.msg SPIState.msg)
 add_service_files(FILES SPI.srv)
 
 ## Generate added messages and services with any dependencies listed here

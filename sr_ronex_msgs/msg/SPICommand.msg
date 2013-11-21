@@ -1,6 +1,0 @@
-uint16 command_type
-uint16 pin_output_directions_pre
-uint16 pin_output_states_pre
-uint16 pin_output_directions_post
-uint16 pin_output_states_post
-sr_ronex_msgs/SPIPacketOut[4] spi_out
