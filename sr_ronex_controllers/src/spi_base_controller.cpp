@@ -86,6 +86,12 @@ namespace ronex
   void SPIBaseController::update()
   {
     ROS_ERROR("@TODO: implement update");
+
+    //if no available command then send the NULL command
+    if( command_queue_.empty() )
+    {
+      spi_->nullify_command_();
+    }
   }
 }
 

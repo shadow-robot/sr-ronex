@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
@@ -58,6 +58,21 @@ namespace ronex
     std::bitset<sizeof(uint32_t)*8> tmp(data);
     tmp.set(index, value);
     data = static_cast<uint32_t>(tmp.to_ulong());
+  }
+
+  /**
+   * Sets the given bit to the given value.
+   *
+   * @param data The var containing the different bits.
+   * @param index The index for which we're setting the bit.
+   * @param value The value we want the bit to take
+   */
+  static inline void set_bit(uint16_t &data, size_t index, bool value)
+  {
+    //x8 because sizeof returns size in bytes not bits
+    std::bitset<sizeof(uint16_t)*8> tmp(data);
+    tmp.set(index, value);
+    data = static_cast<uint16_t>(tmp.to_ulong());
   }
 
    /**
@@ -110,8 +125,8 @@ namespace ronex
     }
 
     return -1;
-  } 
- 
+  }
+
   /**
    * Construct a string for e.g., ros::param::get as the key.
    *
@@ -134,4 +149,3 @@ namespace ronex
    c-basic-offset: 2
    End:
 */
-

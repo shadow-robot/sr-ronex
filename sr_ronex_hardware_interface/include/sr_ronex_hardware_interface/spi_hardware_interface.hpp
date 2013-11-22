@@ -28,6 +28,7 @@
 #include <pr2_hardware_interface/hardware_interface.h>
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x02000002_SPI_00.h>
 #include <vector>
+#include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 
 namespace ronex
 {
@@ -47,6 +48,28 @@ namespace ronex
   public:
     RONEX_STATUS_02000002 state_;
     RONEX_COMMAND_02000002 command_;
+
+    inline void nullify_command_()
+    {
+      command_.command_type = RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL;
+
+      //set allocated CS pins to high (pre and post)
+      command_.pin_output_states_pre |= 1 <<  PIN_OUTPUT_STATE_CS_0;
+      command_.pin_output_states_pre |= 1 <<  PIN_OUTPUT_STATE_CS_1;
+      command_.pin_output_states_pre |= 1 <<  PIN_OUTPUT_STATE_CS_2;
+      command_.pin_output_states_pre |= 1 <<  PIN_OUTPUT_STATE_CS_3;
+
+      command_.pin_output_states_post |= 1 <<  PIN_OUTPUT_STATE_CS_0;
+      command_.pin_output_states_post |= 1 <<  PIN_OUTPUT_STATE_CS_1;
+      command_.pin_output_states_post |= 1 <<  PIN_OUTPUT_STATE_CS_2;
+      command_.pin_output_states_post |= 1 <<  PIN_OUTPUT_STATE_CS_3;
+
+      //setting num bytes to 0 for each SPI outputs
+      command_.spi_out_0.num_bytes = 0;
+      command_.spi_out_1.num_bytes = 0;
+      command_.spi_out_2.num_bytes = 0;
+      command_.spi_out_3.num_bytes = 0;
+    };
   };
 }
 /* For the emacs weenies in the crowd.

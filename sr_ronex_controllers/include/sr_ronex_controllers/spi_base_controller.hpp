@@ -30,6 +30,7 @@
 #include <sr_ronex_hardware_interface/spi_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
+#include <queue>
 
 namespace ronex
 {
@@ -49,12 +50,15 @@ namespace ronex
      */
     virtual void update();
 
-  private:
+  protected:
     ros::NodeHandle node_;
 
     int loop_count_;
 
     ronex::SPI* spi_;
+
+    std::queue<RONEX_COMMAND_02000002*> command_queue_;
+    std::queue<std::pair<RONEX_COMMAND_02000002*,RONEX_STATUS_02000002*> > status_queue_;
   };
 }
 
