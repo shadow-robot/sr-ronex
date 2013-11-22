@@ -178,7 +178,7 @@ typedef struct
     int16u    SPI_config;
     int8u     inter_byte_gap;
     int8u     num_bytes;
-    int8u     data[32];
+    int8u     data_bytes[32];
 }__attribute__((packed)) SPI_PACKET_OUT;
 
 
@@ -201,7 +201,7 @@ typedef struct
 
 typedef struct
 {
-    int8u     data[32];
+    int8u     data_bytes[32];
 }__attribute__((packed)) SPI_PACKET_IN;
 
 typedef struct
@@ -214,7 +214,7 @@ typedef struct
     SPI_PACKET_IN spi_in_2;
     SPI_PACKET_IN spi_in_3;
     
-    analogue_in[6];
+    int16u    analogue_in[6];
 }STATUS_DATA_02000002;
 
 typedef struct
