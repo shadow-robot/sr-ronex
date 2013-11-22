@@ -37,11 +37,11 @@
 #define ANALOGUE_OUTPUT_RESOLUTION                                 0
 #define ANALOGUE_OUTPUT_JUSTIFICATION                          RIGHT
 #define NUM_DIGITAL_IO                                             6
+#define NUM_SPI_OUTPUTS                                            4
 #define PRODUCT_NAME                                           "spi"
 #define PRODUCT_ID                                        0x02000002
 #define MAXIMUM_NUM_STACKERS                                       2
 #define STACKER_TYPE                                               2            //!< range [1..13]
-#define NB_SPI_OUTPUTS                                             4
 
 
 
