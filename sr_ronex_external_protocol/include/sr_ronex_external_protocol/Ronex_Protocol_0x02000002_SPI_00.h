@@ -31,7 +31,7 @@
 
 #define PRODUCT_NAME                                          "spi"
 #define PRODUCT_ID                                            0x02000002
- 
+
 //! Command Types
 //! -------------
 //! COMMAND_TYPE values are sent by the host to tell the node
@@ -71,11 +71,11 @@
 //! Implemented features
 //! --------------------
 //! Due to the complexity of the requirements for this module, and the need to
-//! have something working very quickly, not all of the features will be 
-//! implemented immediately. Essential features will be implemented first, 
-//! with less important ones coming later. 
-//! 
-//! You can ask the node which features are implemented using the 
+//! have something working very quickly, not all of the features will be
+//! implemented immediately. Essential features will be implemented first,
+//! with less important ones coming later.
+//!
+//! You can ask the node which features are implemented using the
 //! RONEX_COMMAND_02000002_COMMAND_TYPE_CONFIG_INFO. The returned
 //! CONFIG_INFO_02000002 contains the implemented_features word.
 //!
@@ -96,11 +96,11 @@
 
 //! Pin output states
 //! -----------------
-//! 
+//!
 //! The CS pins and the Digital I/O pins can be controlled by the host.
 //! The states can be set before and after the transaction.
 //! The CS pins are always outputs
-//! 
+//!
 #define PIN_OUTPUT_STATE_DIO_0                0x0001
 #define PIN_OUTPUT_DIRECTION_DIO_0            0x0002
 #define PIN_OUTPUT_STATE_DIO_1                0x0004
@@ -122,11 +122,11 @@
 
 //! Pin input states
 //! ----------------
-//! 
+//!
 //! The Digital I/O and MOSI pins are sampled by the PSoC at four
 //! points during the SPI transaction. All Digital I/O are sampled
 //! even if they are set as outputs.
-//! 
+//!
 #define PIN_INPUT_STATE_DIO_0                 0x0001
 #define PIN_INPUT_STATE_DIO_1                 0x0002
 #define PIN_INPUT_STATE_DIO_2                 0x0004
@@ -168,25 +168,25 @@ typedef struct
 
 typedef struct
 {
+    int8u     data[32];
+}__attribute__((packed)) SPI_PACKET_IN;
+
+typedef struct
+{
     int8u     pin_input_states_DIO_[4];
     int8u     pin_input_states_MOSI_[4];
 
     SPI_PACKET_IN spi_in_0;
     SPI_PACKET_IN spi_in_1;
     SPI_PACKET_IN spi_in_2;
-    SPI_PACKET_IN spi_in_3;    
+    SPI_PACKET_IN spi_in_3;
 }STATUS_DATA_02000002;
 
 typedef struct
 {
     int32u    implemented_features;
-    int8u     padding[sizeof(STATUS_02000002_DATA)-4];
+    int8u     padding[sizeof(STATUS_DATA_02000002)-4];
 }CONFIG_INFO_02000002;
-
-typedef struct
-{
-    int8u     data[32];
-}__attribute__((packed)) SPI_PACKET_IN;
 
 typedef struct
 {
@@ -196,9 +196,21 @@ typedef struct
     {
         STATUS_DATA_02000002  status_data;
         CONFIG_INFO_02000002  config_info;
-    }
+    };
 }__attribute__((packed)) RONEX_STATUS_02000002;
 
 
+#define COMMAND_ARRAY_SIZE_BYTES    (sizeof(RONEX_COMMAND_02000002))
+#define COMMAND_ARRAY_SIZE_WORDS    (sizeof(RONEX_COMMAND_02000002)/2)
+#define STATUS_ARRAY_SIZE_BYTES     (sizeof(RONEX_STATUS_02000002))
+#define STATUS_ARRAY_SIZE_WORDS     (sizeof(RONEX_STATUS_02000002)/2)
+
+
+                                                                            // Queued (Mailbox)
+                                                                            // Syncmanager Definitions
+                                                                            // -----------------------
+#define PROTOCOL_TYPE   EC_QUEUED                                           //  Synchronous communication
+#define COMMAND_ADDRESS 0x1000                                              //!< ET1200 address containing the Command Structure
+#define STATUS_ADDRESS  (COMMAND_ADDRESS+sizeof(RONEX_COMMAND_02000002) *4) //!< ET1200 address containing the Status  Structure
 
 #endif
