@@ -232,7 +232,7 @@ typedef struct
     {
         STATUS_DATA_02000002  status_data;
         CONFIG_INFO_02000002  config_info;
-    };
+    }info_type;
 }__attribute__((packed)) RONEX_STATUS_02000002;
 
 
