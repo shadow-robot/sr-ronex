@@ -28,6 +28,7 @@
 #include <ros/node_handle.h>
 
 #include "sr_ronex_controllers/spi_base_controller.hpp"
+#include <sr_ronex_msgs/SPI.h>
 
 namespace ronex
 {
@@ -38,7 +39,12 @@ namespace ronex
     SPIPassthroughController();
     virtual ~SPIPassthroughController();
 
+    bool command_srv_cb( sr_ronex_msgs::SPI::Request &req,
+                         sr_ronex_msgs::SPI::Response &res,
+                         size_t spi_out_index );
+
   private:
+    ros::ServiceServer command_srv_;
   };
 }
 

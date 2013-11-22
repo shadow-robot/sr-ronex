@@ -32,6 +32,8 @@
 #define PRODUCT_NAME                                          "spi"
 #define PRODUCT_ID                                            0x02000002
 
+#define NB_SPI_OUTPUTS                                        4
+
 //! Command Types
 //! -------------
 //! COMMAND_TYPE values are sent by the host to tell the node

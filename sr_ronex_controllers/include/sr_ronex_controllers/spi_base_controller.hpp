@@ -53,6 +53,9 @@ namespace ronex
   protected:
     ros::NodeHandle node_;
 
+    ///prefix used for creating topics / services
+    std::string topic_prefix_;
+
     int loop_count_;
 
     ronex::SPI* spi_;

@@ -32,11 +32,23 @@ namespace ronex
   SPIPassthroughController::SPIPassthroughController()
     : SPIBaseController()
   {
-    ROS_ERROR("TODO: add service");
+    for(size_t i = 0; i < NB_SPI_OUTPUTS; ++i)
+    {
+      std::stringstream service_path;
+      service_path << topic_prefix_ << "/command/passthrough/"<<i;
+      command_srv_ = node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i));
+    }
   }
 
   SPIPassthroughController::~SPIPassthroughController()
   {}
+
+  bool SPIPassthroughController::command_srv_cb( sr_ronex_msgs::SPI::Request &req,
+                                                 sr_ronex_msgs::SPI::Response &res,
+                                                 size_t spi_out_index )
+  {
+    ROS_ERROR("TODO");
+  }
 }
 
 /* For the emacs weenies in the crowd.

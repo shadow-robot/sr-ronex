@@ -65,6 +65,8 @@ namespace ronex
       }
     }
 
+    topic_prefix_ = path;
+
     spi_ = static_cast<ronex::SPI*>( robot->model_->hw_->getCustomHW(path) );
     if( spi_ == NULL)
     {
