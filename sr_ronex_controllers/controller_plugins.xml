@@ -8,4 +8,8 @@
          type="ronex::FakeCalibrationController"
          base_class_type="pr2_controller_interface::Controller" />
 
+  <class name="sr_ronex_controllers/SPIPassthroughController"
+         type="ronex::SPIPassthroughController"
+         base_class_type="pr2_controller_interface::Controller" />
+
 </library>
