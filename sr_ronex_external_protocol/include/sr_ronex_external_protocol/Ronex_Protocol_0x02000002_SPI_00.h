@@ -28,11 +28,22 @@
     #define __attribute__(x)
 #endif
 
+#define RONEX_COMMAND_02000002_MASTER_CLOCK_SPEED_HZ        64000000        //!< Master clock. This is divided down to create the PWM clock.
+#define RONEX_COMMAND_02000002_ADC_SAMPLE_RATE_HZ               1000        //!< Maximum possible ADC sample rate. Don't send EtherCAT packets faster than this.
+#define NUM_ANALOGUE_INPUTS                                        6        
+#define ANALOGUE_INPUT_RESOLUTION                                 12        //!< 
+#define ANALOGUE_INPUT_JUSTIFICATION                           RIGHT
+#define NUM_ANALOGUE_OUTPUTS                                       0
+#define ANALOGUE_OUTPUT_RESOLUTION                                 0
+#define ANALOGUE_OUTPUT_JUSTIFICATION                          RIGHT
+#define NUM_DIGITAL_IO                                             6
+#define PRODUCT_NAME                                           "spi"
+#define PRODUCT_ID                                        0x02000002
+#define MAXIMUM_NUM_STACKERS                                       2
+#define STACKER_TYPE                                               2            //!< range [1..13]
+#define NB_SPI_OUTPUTS                                             4
 
-#define PRODUCT_NAME                                          "spi"
-#define PRODUCT_ID                                            0x02000002
 
-#define NB_SPI_OUTPUTS                                        4
 
 //! Command Types
 //! -------------
@@ -46,6 +57,26 @@
 #define RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL          0x0001      //!< This is for normal operation.
 #define RONEX_COMMAND_02000002_COMMAND_TYPE_CONFIG_INFO     0x0002      //!< This requests a CONFIG_INFO_02000002 block from the node.
 #define RONEX_COMMAND_02000002_COMMAND_TYPE_ERROR           0x00FF      //!< If this is returned from the node, then some kind of error has happened.
+
+
+
+//! Flags
+//! -----
+//! Available in RONEX_STATUS_02000002.config_info.flags
+//! To receive this information, use RONEX_COMMAND_02000002_COMMAND_TYPE_CONFIG_INFO
+//! in the RONEX_COMMAND_02000002 struct
+//!
+#define RONEX_02000002_FLAGS_STACKER_0_PRESENT                0x1000
+#define RONEX_02000002_FLAGS_STACKER_1_PRESENT                0x2000
+#define RONEX_02000002_FLAGS_STACKER_2_PRESENT                0x4000
+#define RONEX_02000002_FLAGS_STACKER_3_PRESENT                0x8000
+#define RONEX_02000002_FLAGS_STACKER_0_ERROR                  0x0100
+#define RONEX_02000002_FLAGS_STACKER_1_ERROR                  0x0200
+#define RONEX_02000002_FLAGS_STACKER_2_ERROR                  0x0400
+#define RONEX_02000002_FLAGS_STACKER_3_ERROR                  0x0800
+#define RONEX_02000002_FLAGS_RESERVED_ERRORS                  0x00FC
+#define RONEX_02000002_FLAGS_OVER_TEMPERATURE_ERROR           0x0002
+#define RONEX_02000002_FLAGS_UNKNOWN_ERROR                    0x0001
 
 
 
@@ -189,7 +220,8 @@ typedef struct
 typedef struct
 {
     int32u    implemented_features;
-    int8u     padding[sizeof(STATUS_DATA_02000002)-4];
+    int16u    flags;
+    int8u     padding[sizeof(STATUS_DATA_02000002)-6];
 }CONFIG_INFO_02000002;
 
 typedef struct
