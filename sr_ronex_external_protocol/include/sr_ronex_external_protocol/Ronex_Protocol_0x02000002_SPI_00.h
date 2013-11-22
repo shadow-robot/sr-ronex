@@ -182,6 +182,8 @@ typedef struct
     SPI_PACKET_IN spi_in_1;
     SPI_PACKET_IN spi_in_2;
     SPI_PACKET_IN spi_in_3;
+    
+    analogue_in[6];
 }STATUS_DATA_02000002;
 
 typedef struct
