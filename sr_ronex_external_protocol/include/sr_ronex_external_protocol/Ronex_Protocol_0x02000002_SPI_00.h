@@ -28,7 +28,7 @@
     #define __attribute__(x)
 #endif
 
-#define RONEX_COMMAND_02000002_MASTER_CLOCK_SPEED_HZ        64000000        //!< Master clock. This is divided down to create the PWM clock.
+#define RONEX_COMMAND_02000002_MASTER_CLOCK_SPEED_HZ        64000000        //!< Master clock. This is divided down to create the SPI clock.
 #define RONEX_COMMAND_02000002_ADC_SAMPLE_RATE_HZ               1000        //!< Maximum possible ADC sample rate. Don't send EtherCAT packets faster than this.
 #define NUM_ANALOGUE_INPUTS                                        6        
 #define ANALOGUE_INPUT_RESOLUTION                                 12        //!< 
@@ -42,7 +42,7 @@
 #define PRODUCT_ID                                        0x02000002
 #define MAXIMUM_NUM_STACKERS                                       2
 #define STACKER_TYPE                                               2            //!< range [1..13]
-
+#define SPI_TRANSACTION_MAX_SIZE                                  32
 
 
 //! Command Types
@@ -178,7 +178,7 @@ typedef struct
     int16u    SPI_config;
     int8u     inter_byte_gap;
     int8u     num_bytes;
-    int8u     data_bytes[32];
+    int8u     data_bytes[SPI_TRANSACTION_MAX_SIZE];
 }__attribute__((packed)) SPI_PACKET_OUT;
 
 
@@ -189,10 +189,8 @@ typedef struct
     int16u     pin_output_states_pre;
     int16u     pin_output_states_post;
 
-    SPI_PACKET_OUT spi_out_0;
-    SPI_PACKET_OUT spi_out_1;
-    SPI_PACKET_OUT spi_out_2;
-    SPI_PACKET_OUT spi_out_3;
+    SPI_PACKET_OUT spi_out[NUM_SPI_OUTPUTS];
+
 }__attribute__((packed)) RONEX_COMMAND_02000002;
 
 
@@ -201,19 +199,18 @@ typedef struct
 
 typedef struct
 {
-    int8u     data_bytes[32];
+    int8u     data_bytes[SPI_TRANSACTION_MAX_SIZE];
 }__attribute__((packed)) SPI_PACKET_IN;
 
 typedef struct
 {
-    int8u     pin_input_states_DIO_[4];
-    int8u     pin_input_states_MOSI_[4];
+    int16u     command_type;
 
-    SPI_PACKET_IN spi_in_0;
-    SPI_PACKET_IN spi_in_1;
-    SPI_PACKET_IN spi_in_2;
-    SPI_PACKET_IN spi_in_3;
-    
+    int8u     pin_input_states_DIO[4];
+    int8u     pin_input_states_SOMI[4];
+
+    SPI_PACKET_IN spi_in[NUM_SPI_OUTPUTS];
+
     int16u    analogue_in[6];
 }STATUS_DATA_02000002;
 
@@ -233,6 +230,7 @@ typedef struct
         STATUS_DATA_02000002  status_data;
         CONFIG_INFO_02000002  config_info;
     }info_type;
+    
 }__attribute__((packed)) RONEX_STATUS_02000002;
 
 
@@ -248,5 +246,8 @@ typedef struct
 #define PROTOCOL_TYPE   EC_QUEUED                                           //  Synchronous communication
 #define COMMAND_ADDRESS 0x1000                                              //!< ET1200 address containing the Command Structure
 #define STATUS_ADDRESS  (COMMAND_ADDRESS+sizeof(RONEX_COMMAND_02000002) *4) //!< ET1200 address containing the Status  Structure
+
+#define RONEX_COMMAND_STRUCT        RONEX_COMMAND_02000002                  //!< Required for et1200_interface.h to be generic
+#define RONEX_STATUS_STRUCT         RONEX_STATUS_02000002                   //!< Required for et1200_interface.h to be generic
 
 #endif
