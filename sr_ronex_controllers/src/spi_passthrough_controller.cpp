@@ -32,7 +32,7 @@ namespace ronex
   SPIPassthroughController::SPIPassthroughController()
     : SPIBaseController()
   {
-    for(size_t i = 0; i < NB_SPI_OUTPUTS; ++i)
+    for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
     {
       std::stringstream service_path;
       service_path << topic_prefix_ << "/command/passthrough/"<<i;

@@ -60,7 +60,7 @@ namespace ronex
 
     ronex::SPI* spi_;
 
-    std::queue<RONEX_COMMAND_02000002*> command_queue_;
+    std::vector<std::queue<RONEX_COMMAND_02000002*> > command_queue_;
     std::queue<std::pair<RONEX_COMMAND_02000002*,RONEX_STATUS_02000002*> > status_queue_;
   };
 }

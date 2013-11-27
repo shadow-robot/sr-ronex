@@ -28,7 +28,9 @@ namespace ronex
 {
   SPIBaseController::SPIBaseController()
     : loop_count_(0)
-  {}
+  {
+    command_queue_.resize(NUM_SPI_OUTPUTS);
+  }
 
   SPIBaseController::~SPIBaseController()
   {}
@@ -90,9 +92,12 @@ namespace ronex
     ROS_ERROR("@TODO: implement update");
 
     //if no available command then send the NULL command
-    if( command_queue_.empty() )
+    for (size_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
     {
-      spi_->nullify_command_();
+      if( command_queue_[spi_index].empty() )
+      {
+        spi_->nullify_command_(spi_index);
+      }
     }
   }
 }
