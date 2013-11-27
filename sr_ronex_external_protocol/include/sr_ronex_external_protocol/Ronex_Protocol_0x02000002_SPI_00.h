@@ -125,6 +125,8 @@
 #define IMPLEMENTED_FEATURE_INPUT_TRIGGERING                  0x0100
 #define IMPLEMENTED_FEATURE_MOSI_SOMI_SAME_PIN                0x0200
 
+#define IMPLEMENTED_FEATURE_ANALOGUE_INPUTS                   0x0400
+
 
 
 //! Pin output states
@@ -204,8 +206,6 @@ typedef struct
 
 typedef struct
 {
-    int16u     command_type;
-
     int8u     pin_input_states_DIO[4];
     int8u     pin_input_states_SOMI[4];
 
