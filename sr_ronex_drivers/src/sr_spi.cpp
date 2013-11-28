@@ -218,6 +218,11 @@ void SrSPI::packCommand(unsigned char *buffer, bool halt, bool reset)
 
     for( size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i )
       command->spi_out[spi_index].data_bytes[i] = spi_->command_->spi_out[spi_index].data_bytes[i];
+
+    if( command->spi_out[spi_index].num_bytes != 0)
+      {
+	ROS_ERROR_STREAM("SPI out ["<<spi_index<<"]: Sending non null command("<<static_cast<unsigned int>(command->spi_out[spi_index].num_bytes)<<"): -> " << static_cast<int>(command->spi_out[spi_index].data_bytes[0]) << "," << static_cast<int>(command->spi_out[spi_index].data_bytes[1])<< "," <<static_cast<int>(command->spi_out[spi_index].data_bytes[2]) << ","<<static_cast<int>(command->spi_out[spi_index].data_bytes[3]) );
+      }
   }
 }
 

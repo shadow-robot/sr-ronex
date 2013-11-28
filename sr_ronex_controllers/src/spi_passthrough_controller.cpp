@@ -50,15 +50,24 @@ namespace ronex
                                                  size_t spi_out_index )
   {
     //transmitting the bytes we received
-    standard_commands_[spi_out_index]->num_bytes = req.data.size();
+    standard_commands_[spi_out_index]->packet.num_bytes = static_cast<int8u>(req.data.size());
 
+    ROS_ERROR_STREAM("From passthrough: received "<< req.data.size()<<"bytes: ");
     for(size_t i = 0; i < req.data.size(); ++i)
-      standard_commands_[spi_out_index]->packet.data_bytes[i] = static_cast<int16u>(req.data[i]);
+    {
+      ROS_ERROR_STREAM("    ["<<i<<"] -> " << static_cast<int>(req.data[i]) );
+      standard_commands_[spi_out_index]->packet.data_bytes[i] = static_cast<int8u>(req.data[i]);
+    }
 
     //pushing to the command queue to be sent through etherCAT
     command_queue_[spi_out_index].push(standard_commands_[spi_out_index]);
 
     ROS_ERROR("TODO wait for response and send it back");
+
+    for(size_t i = 0; i < req.data.size(); ++i)
+      res.data.push_back(req.data[i]);
+
+    return true;
   }
 }
 
