@@ -37,6 +37,8 @@ namespace ronex
       std::stringstream service_path;
       service_path << topic_prefix_ << "/command/passthrough/"<<i;
       command_srv_ = node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i));
+
+      standard_commands_.push_back(boost::shared_ptr<SplittedSPICommand>(new SplittedSPICommand()));
     }
   }
 
@@ -47,11 +49,16 @@ namespace ronex
                                                  sr_ronex_msgs::SPI::Response &res,
                                                  size_t spi_out_index )
   {
-    ROS_ERROR("IS THIS BLOCKING");
+    //transmitting the bytes we received
+    standard_commands_[spi_out_index]->num_bytes = req.data.size();
 
-    sleep(10.0);
+    for(size_t i = 0; i < req.data.size(); ++i)
+      standard_commands_[spi_out_index]->packet.data_bytes[i] = static_cast<int16u>(req.data[i]);
 
-    ROS_ERROR("DONE");
+    //pushing to the command queue to be sent through etherCAT
+    command_queue_[spi_out_index].push(standard_commands_[spi_out_index]);
+
+    ROS_ERROR("TODO wait for response and send it back");
   }
 }
 

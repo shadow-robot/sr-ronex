@@ -45,6 +45,11 @@ namespace ronex
 
   private:
     ros::ServiceServer command_srv_;
+
+    //vector containing one command per spi output.
+    // Some parameters of these commands are updated through the dynamic reconfigure interface
+    // The data packet is updated from the service.
+    std::vector<boost::shared_ptr<SplittedSPICommand> > standard_commands_;
   };
 }
 
