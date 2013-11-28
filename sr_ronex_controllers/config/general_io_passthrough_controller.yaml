@@ -5,7 +5,3 @@ ronex_33554433_0_passthrough:
 ronex_33554433_1_passthrough:
   type: sr_ronex_controllers/GeneralIOPassthroughController
   ronex_id: "1"
-
-ronex_33554434_35_passthrough:
-  type: sr_ronex_controllers/SPIPassthroughController
-  ronex_id: "35"
