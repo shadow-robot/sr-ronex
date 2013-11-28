@@ -71,10 +71,10 @@ class LoadPassthroughControllers(object):
         for ronex_id in ronex_ids:
             if ronex_id[1] == "general_io":
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type", "sr_ronex_controllers/GeneralIOPassthroughController")
-                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id)
+                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
             elif ronex_id[1] == "spi":
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type", "sr_ronex_controllers/SPIPassthroughController")
-                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id)
+                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
 
     def load_and_start_ctrl(self, ronex_ids):
         """
@@ -85,7 +85,7 @@ class LoadPassthroughControllers(object):
         # building a list of controller names
         controllers_list = []
         for ronex_id in ronex_ids:
-            controllers_list.append("ronex_" + ronex_id + "_passthrough")
+            controllers_list.append("ronex_" + ronex_id[0] + "_passthrough")
 
         rospy.loginfo("Starting controllers: " + str(controllers_list))
 
