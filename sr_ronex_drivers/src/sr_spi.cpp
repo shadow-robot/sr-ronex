@@ -251,7 +251,7 @@ bool SrSPI::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
     state_msg_.header.stamp = ros::Time::now();
 
     //update state message
-    ROS_ERROR("@TODO: update state message");
+    ROS_DEBUG("@TODO: update state message");
 
     //publish
     if( state_publisher_->trylock() )
