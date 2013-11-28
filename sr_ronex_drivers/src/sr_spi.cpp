@@ -204,7 +204,7 @@ void SrSPI::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_02000002* command = (RONEX_COMMAND_02000002*)(buffer);
 
-  command->command_type = spi_->command_.command_type;
+  command->command_type = spi_->command_->command_type;
 
   ROS_ERROR("@TODO: fill the command");
 }
@@ -220,7 +220,7 @@ bool SrSPI::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
   // module has not finished writing it to memory yet.
 
   ROS_ERROR("@TODO: check against last command sent, not current one");
-  if( status_data->command_type == spi_->command_.command_type)
+  if( status_data->command_type == spi_->command_->command_type)
   {
     ROS_ERROR("@TODO: fill in the spi_ from hw interface");
   }
@@ -261,7 +261,7 @@ void SrSPI::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned
 
 void SrSPI::dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level)
 {
-  spi_->command_.command_type = static_cast<int16u>(config.command_type);
+  spi_->command_->command_type = static_cast<int16u>(config.command_type);
 
   ROS_ERROR("@TODO: add more config");
 }

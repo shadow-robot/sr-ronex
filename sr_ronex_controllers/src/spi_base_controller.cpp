@@ -30,6 +30,7 @@ namespace ronex
     : loop_count_(0)
   {
     command_queue_.resize(NUM_SPI_OUTPUTS);
+    status_queue_.resize(NUM_SPI_OUTPUTS);
   }
 
   SPIBaseController::~SPIBaseController()
@@ -89,16 +90,107 @@ namespace ronex
    */
   void SPIBaseController::update()
   {
-    ROS_ERROR("@TODO: implement update");
-
-    //if no available command then send the NULL command
     for (size_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
     {
-      if( command_queue_[spi_index].empty() )
+      //Check if we need to update a status
+      if( status_queue_[spi_index].front().second == NULL )
       {
-        spi_->nullify_command_(spi_index);
+        //the response has not been received. If the command type is NORMAL
+        // then the response can be updated (it's INVALID until the SPI responds)
+        if( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL );
+        {
+          status_queue_[spi_index].front().second.reset(new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]));
+        }
+      }
+
+      //if no available command then send the NULL command
+      if( command_queue_[spi_index].empty() )
+        spi_->nullify_command(spi_index);
+      else
+      {
+        //sending the available command
+
+        //first we copy it to the status queue - the status is still NULL
+        // as we haven't received the response yet.
+        status_queue_[spi_index].push(std::pair<boost::shared_ptr<SplittedSPICommand>,boost::shared_ptr<SPI_PACKET_IN> >());
+        status_queue_[spi_index].front().first = command_queue_[spi_index].front();
+
+        //now we copy the command to the hardware interface
+        copy_splitted_to_cmd_(spi_index);
+
+        //the command will be sent at the end of the iteration,
+        // removing the command from the queue.
+        command_queue_[spi_index].pop();
       }
     }
+  }
+
+  void SPIBaseController::copy_splitted_to_cmd_(size_t spi_index)
+  {
+    //setting the pre / post pin states for this spi output
+    switch( spi_index )
+    {
+    case 0:
+      if( command_queue_[spi_index].front()->pin_output_state_pre )
+        spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_0;
+      else
+        spi_->command_->pin_output_states_pre &= PIN_OUTPUT_STATE_CS_0;
+
+      if( command_queue_[spi_index].front()->pin_output_state_post )
+        spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_0;
+      else
+        spi_->command_->pin_output_states_post &= PIN_OUTPUT_STATE_CS_0;
+
+      break;
+
+    case 1:
+      if( command_queue_[spi_index].front()->pin_output_state_pre )
+        spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_1;
+      else
+        spi_->command_->pin_output_states_pre &= PIN_OUTPUT_STATE_CS_1;
+      break;
+
+      if( command_queue_[spi_index].front()->pin_output_state_post )
+        spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_1;
+      else
+        spi_->command_->pin_output_states_post &= PIN_OUTPUT_STATE_CS_1;
+      break;
+
+    case 2:
+      if( command_queue_[spi_index].front()->pin_output_state_pre )
+        spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_2;
+      else
+        spi_->command_->pin_output_states_pre &= PIN_OUTPUT_STATE_CS_2;
+      break;
+
+      if( command_queue_[spi_index].front()->pin_output_state_post )
+        spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_2;
+      else
+        spi_->command_->pin_output_states_post &= PIN_OUTPUT_STATE_CS_2;
+      break;
+
+    case 3:
+      if( command_queue_[spi_index].front()->pin_output_state_pre )
+        spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_3;
+      else
+        spi_->command_->pin_output_states_pre &= PIN_OUTPUT_STATE_CS_3;
+      break;
+
+      if( command_queue_[spi_index].front()->pin_output_state_post )
+        spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_3;
+      else
+        spi_->command_->pin_output_states_post &= PIN_OUTPUT_STATE_CS_3;
+      break;
+    }
+
+    //copying the packet data
+    spi_->command_->spi_out[spi_index].clock_divider = command_queue_[spi_index].front()->packet.clock_divider;
+    spi_->command_->spi_out[spi_index].SPI_config = command_queue_[spi_index].front()->packet.SPI_config;
+    spi_->command_->spi_out[spi_index].inter_byte_gap = command_queue_[spi_index].front()->packet.inter_byte_gap;
+    spi_->command_->spi_out[spi_index].num_bytes = command_queue_[spi_index].front()->packet.num_bytes;
+
+    for(size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i)
+      spi_->command_->spi_out[spi_index].data_bytes[i] = command_queue_[spi_index].front()->packet.data_bytes[i];
   }
 }
 

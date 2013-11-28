@@ -34,6 +34,14 @@
 
 namespace ronex
 {
+  struct SplittedSPICommand
+  {
+    bool pin_output_state_pre;
+    bool pin_output_state_post;
+
+    SPI_PACKET_OUT packet;
+  };
+
   class SPIBaseController
     : public pr2_controller_interface::Controller
   {
@@ -60,8 +68,10 @@ namespace ronex
 
     ronex::SPI* spi_;
 
-    std::vector<std::queue<RONEX_COMMAND_02000002*> > command_queue_;
-    std::queue<std::pair<RONEX_COMMAND_02000002*,RONEX_STATUS_02000002*> > status_queue_;
+    std::vector<std::queue<boost::shared_ptr<SplittedSPICommand> > > command_queue_;
+    std::vector<std::queue<std::pair<boost::shared_ptr<SplittedSPICommand>, boost::shared_ptr<SPI_PACKET_IN> > > > status_queue_;
+
+    void copy_splitted_to_cmd_(size_t spi_index);
   };
 }
 

@@ -46,39 +46,45 @@ namespace ronex
     : public pr2_hardware_interface::CustomHW
   {
   public:
-    RONEX_STATUS_02000002 state_;
-    RONEX_COMMAND_02000002 command_;
-
-    inline void nullify_command_(size_t spi_index)
+    SPI()
     {
-      command_.command_type = RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL;
+      state_.reset(new RONEX_STATUS_02000002());
+      command_.reset(new RONEX_COMMAND_02000002());
+    }
+
+    boost::shared_ptr<RONEX_STATUS_02000002> state_;
+    boost::shared_ptr<RONEX_COMMAND_02000002> command_;
+
+    inline void nullify_command(size_t spi_index)
+    {
+      command_->command_type = RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL;
 
       //set allocated CS pins to high (pre and post)
       switch( spi_index )
       {
       case 0:
-        command_.pin_output_states_pre |= PIN_OUTPUT_STATE_CS_0;
-        command_.pin_output_states_post |= PIN_OUTPUT_STATE_CS_0;
+        command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_0;
+        command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_0;
         break;
 
       case 1:
-        command_.pin_output_states_pre |= PIN_OUTPUT_STATE_CS_1;
-        command_.pin_output_states_post |= PIN_OUTPUT_STATE_CS_1;
+        command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_1;
+        command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_1;
         break;
 
       case 2:
-        command_.pin_output_states_pre |= PIN_OUTPUT_STATE_CS_2;
-        command_.pin_output_states_post |= PIN_OUTPUT_STATE_CS_2;
+        command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_2;
+        command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_2;
         break;
 
       case 3:
-        command_.pin_output_states_pre |= PIN_OUTPUT_STATE_CS_3;
-        command_.pin_output_states_post |= PIN_OUTPUT_STATE_CS_3;
+        command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_3;
+        command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_3;
         break;
       }
 
       //setting num bytes to 0 for each SPI outputs
-      command_.spi_out[spi_index].num_bytes = 0;
+      command_->spi_out[spi_index].num_bytes = 0;
     };
   };
 }
