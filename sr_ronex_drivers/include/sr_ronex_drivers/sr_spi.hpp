@@ -34,9 +34,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 
-#include <dynamic_reconfigure/server.h>
-#include "sr_ronex_drivers/SPIConfig.h"
-
 using namespace std;
 
 class SrSPI : public EthercatDevice
@@ -47,8 +44,6 @@ public:
 
   SrSPI();
   virtual ~SrSPI();
-
-  void dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level);
 
 protected:
   ///Replaces the product ID with a human readable product alias.
@@ -99,11 +94,6 @@ protected:
   boost::shared_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::SPIState> > state_publisher_;
   ///Temporary message
   sr_ronex_msgs::SPIState state_msg_;
-
-  ///Dynamic reconfigure server for setting the parameters of the driver
-  boost::shared_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig> > dynamic_reconfigure_server_;
-
-  dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>::CallbackType function_cb_;
 
   ///building the topics for publishing the state.
   void build_topics_();

@@ -30,6 +30,9 @@
 #include "sr_ronex_controllers/spi_base_controller.hpp"
 #include <sr_ronex_msgs/SPI.h>
 
+#include <dynamic_reconfigure/server.h>
+#include "sr_ronex_drivers/SPIConfig.h"
+
 namespace ronex
 {
   class SPIPassthroughController
@@ -43,6 +46,8 @@ namespace ronex
                          sr_ronex_msgs::SPI::Response &res,
                          size_t spi_out_index );
 
+  void dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level);
+
   private:
     ros::ServiceServer command_srv_;
 
@@ -50,6 +55,13 @@ namespace ronex
     // Some parameters of these commands are updated through the dynamic reconfigure interface
     // The data packet is updated from the service.
     std::vector<boost::shared_ptr<SplittedSPICommand> > standard_commands_;
+
+    ///Dynamic reconfigure server for setting the parameters of the driver
+    boost::shared_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig> > dynamic_reconfigure_server_;
+    dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>::CallbackType function_cb_;
+
+    //Instantiating the services / dynamic reconfigure callbacks etc..
+    void post_init_();
   };
 }
 

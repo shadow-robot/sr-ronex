@@ -283,14 +283,6 @@ void SrSPI::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned
   //@TODO add more diagnostics
 }
 
-
-void SrSPI::dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level)
-{
-  spi_->command_->command_type = static_cast<int16u>(config.command_type);
-
-  ROS_ERROR("@TODO: add more config");
-}
-
 void SrSPI::build_topics_()
 {
   //loading everything into the parameter server

@@ -32,14 +32,7 @@ namespace ronex
   SPIPassthroughController::SPIPassthroughController()
     : SPIBaseController()
   {
-    for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
-    {
-      std::stringstream service_path;
-      service_path << topic_prefix_ << "/command/passthrough/"<<i;
-      command_srv_ = node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i));
-
-      standard_commands_.push_back(boost::shared_ptr<SplittedSPICommand>(new SplittedSPICommand()));
-    }
+    post_init_();
   }
 
   SPIPassthroughController::~SPIPassthroughController()
@@ -69,6 +62,31 @@ namespace ronex
 
     return true;
   }
+
+  void SPIPassthroughController::post_init_()
+  {
+    dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>(ros::NodeHandle(topic_prefix_)));
+    function_cb_ = boost::bind(&SPIPassthroughController::dynamic_reconfigure_cb, this, _1, _2);
+    dynamic_reconfigure_server_->setCallback(function_cb_);
+
+    for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
+    {
+      ROS_ERROR_STREAM("prefix["<<i<<"] = " <<topic_prefix_);
+      std::stringstream service_path;
+      service_path << topic_prefix_ << "/command/passthrough/"<<i;
+      command_srv_ = node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i));
+
+      standard_commands_.push_back(boost::shared_ptr<SplittedSPICommand>(new SplittedSPICommand()));
+    }
+  }
+
+  void SPIPassthroughController::dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level)
+  {
+    spi_->command_->command_type = static_cast<int16u>(config.command_type);
+
+    ROS_ERROR("@TODO: add more config");
+  }
+
 }
 
 /* For the emacs weenies in the crowd.
