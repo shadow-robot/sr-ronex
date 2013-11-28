@@ -225,16 +225,24 @@ bool SrSPI::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
 {
   RONEX_STATUS_02000002* status_data = (RONEX_STATUS_02000002 *)(this_buffer+  command_size_);
 
-  // Checking that the received command type matches
-  // (the one that was used in the previous command). The ronex firmware will answer with whatever command type we send.
-  // The purpose of this is to filter those status_data structures that come filled with zeros due to the jitter
-  // in the realtime loop. The jitter causes that the host tries to read the status when the microcontroller in the ronex
-  // module has not finished writing it to memory yet.
+  //copying the status data to the HW interface
+  spi_->state_->command_type = status_data->command_type;
 
-  ROS_ERROR("@TODO: check against last command sent, not current one");
-  if( status_data->command_type == spi_->command_->command_type)
+  for(size_t sampling = 0; sampling < NUM_DIO_SAMPLES; ++sampling)
   {
-    ROS_ERROR("@TODO: fill in the spi_ from hw interface");
+    spi_->state_->info_type.status_data.pin_input_states_DIO[sampling] = status_data->info_type.status_data.pin_input_states_DIO[sampling];
+    spi_->state_->info_type.status_data.pin_input_states_SOMI[sampling] = status_data->info_type.status_data.pin_input_states_SOMI[sampling];
+  }
+
+  for (size_t spi_index=0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
+  {
+    for(size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i)
+      spi_->state_->info_type.status_data.spi_in[spi_index].data_bytes[i] = status_data->info_type.status_data.spi_in[spi_index].data_bytes[i];
+  }
+
+  for(size_t analogue_index = 0 ; analogue_index < NUM_ANALOGUE_INPUTS ; ++analogue_index)
+  {
+    spi_->state_->info_type.status_data.analogue_in[analogue_index] = status_data->info_type.status_data.analogue_in[analogue_index];
   }
 
   //publishing at 100Hz

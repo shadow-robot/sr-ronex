@@ -38,6 +38,7 @@
 #define ANALOGUE_OUTPUT_JUSTIFICATION                          RIGHT
 #define NUM_DIGITAL_IO                                             6
 #define NUM_SPI_OUTPUTS                                            4
+#define NUM_DIO_SAMPLES                                            4
 #define PRODUCT_NAME                                           "spi"
 #define PRODUCT_ID                                        0x02000002
 #define MAXIMUM_NUM_STACKERS                                       2
@@ -205,12 +206,12 @@ typedef struct
 
 typedef struct
 {
-    int8u     pin_input_states_DIO[4];
-    int8u     pin_input_states_SOMI[4];
+    int8u     pin_input_states_DIO[NUM_DIO_SAMPLES];
+    int8u     pin_input_states_SOMI[NUM_DIO_SAMPLES];
 
     SPI_PACKET_IN spi_in[NUM_SPI_OUTPUTS];
 
-    int16u    analogue_in[6];
+    int16u    analogue_in[NUM_ANALOGUE_INPUTS];
 }STATUS_DATA_02000002;
 
 typedef struct
