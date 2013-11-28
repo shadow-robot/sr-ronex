@@ -204,9 +204,21 @@ void SrSPI::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_02000002* command = (RONEX_COMMAND_02000002*)(buffer);
 
+  //Copying the command
   command->command_type = spi_->command_->command_type;
+  command->pin_output_states_pre = spi_->command_->pin_output_states_pre;
+  command->pin_output_states_post = spi_->command_->pin_output_states_post;
 
-  ROS_ERROR("@TODO: fill the command");
+  for(size_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
+  {
+    command->spi_out[spi_index].clock_divider = spi_->command_->spi_out[spi_index].clock_divider;
+    command->spi_out[spi_index].SPI_config = spi_->command_->spi_out[spi_index].SPI_config;
+    command->spi_out[spi_index].inter_byte_gap = spi_->command_->spi_out[spi_index].inter_byte_gap;
+    command->spi_out[spi_index].num_bytes = spi_->command_->spi_out[spi_index].num_bytes;
+
+    for( size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i )
+      command->spi_out[spi_index].data_bytes[i] = spi_->command_->spi_out[spi_index].data_bytes[i];
+  }
 }
 
 bool SrSPI::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
