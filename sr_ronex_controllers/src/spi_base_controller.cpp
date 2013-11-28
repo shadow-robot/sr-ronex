@@ -90,6 +90,8 @@ namespace ronex
    */
   void SPIBaseController::update()
   {
+    ROS_ERROR("UPDATE");
+
     for (size_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
     {
       //Check if we need to update a status

@@ -47,7 +47,11 @@ namespace ronex
                                                  sr_ronex_msgs::SPI::Response &res,
                                                  size_t spi_out_index )
   {
-    ROS_ERROR("TODO");
+    ROS_ERROR("IS THIS BLOCKING");
+
+    sleep(10.0);
+
+    ROS_ERROR("DONE");
   }
 }
 
