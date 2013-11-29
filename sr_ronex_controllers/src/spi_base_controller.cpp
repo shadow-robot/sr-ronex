@@ -138,12 +138,12 @@ namespace ronex
       if( command_queue_[spi_index].front()->pin_output_state_pre )
         spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_0;
       else
-        spi_->command_->pin_output_states_pre &= PIN_OUTPUT_STATE_CS_0;
+        spi_->command_->pin_output_states_pre &= 0xFFFF - PIN_OUTPUT_STATE_CS_0;
 
       if( command_queue_[spi_index].front()->pin_output_state_post )
         spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_0;
       else
-        spi_->command_->pin_output_states_post &= PIN_OUTPUT_STATE_CS_0;
+        spi_->command_->pin_output_states_post &= 0xFFFF - PIN_OUTPUT_STATE_CS_0;
 
       break;
 
@@ -151,39 +151,39 @@ namespace ronex
       if( command_queue_[spi_index].front()->pin_output_state_pre )
         spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_1;
       else
-        spi_->command_->pin_output_states_pre &= PIN_OUTPUT_STATE_CS_1;
+        spi_->command_->pin_output_states_pre &= 0xFFFF - PIN_OUTPUT_STATE_CS_1;
       break;
 
       if( command_queue_[spi_index].front()->pin_output_state_post )
         spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_1;
       else
-        spi_->command_->pin_output_states_post &= PIN_OUTPUT_STATE_CS_1;
+        spi_->command_->pin_output_states_post &= 0xFFFF - PIN_OUTPUT_STATE_CS_1;
       break;
 
     case 2:
       if( command_queue_[spi_index].front()->pin_output_state_pre )
         spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_2;
       else
-        spi_->command_->pin_output_states_pre &= PIN_OUTPUT_STATE_CS_2;
+        spi_->command_->pin_output_states_pre &= 0xFFFF - PIN_OUTPUT_STATE_CS_2;
       break;
 
       if( command_queue_[spi_index].front()->pin_output_state_post )
         spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_2;
       else
-        spi_->command_->pin_output_states_post &= PIN_OUTPUT_STATE_CS_2;
+        spi_->command_->pin_output_states_post &= 0xFFFF - PIN_OUTPUT_STATE_CS_2;
       break;
 
     case 3:
       if( command_queue_[spi_index].front()->pin_output_state_pre )
         spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_3;
       else
-        spi_->command_->pin_output_states_pre &= PIN_OUTPUT_STATE_CS_3;
+        spi_->command_->pin_output_states_pre &= 0xFFFF - PIN_OUTPUT_STATE_CS_3;
       break;
 
       if( command_queue_[spi_index].front()->pin_output_state_post )
         spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_3;
       else
-        spi_->command_->pin_output_states_post &= PIN_OUTPUT_STATE_CS_3;
+        spi_->command_->pin_output_states_post &= 0xFFFF - PIN_OUTPUT_STATE_CS_3;
       break;
     }
 
