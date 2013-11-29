@@ -31,12 +31,32 @@ namespace ronex
 {
   SPIPassthroughController::SPIPassthroughController()
     : SPIBaseController()
-  {
-    post_init_();
-  }
+  {}
 
   SPIPassthroughController::~SPIPassthroughController()
   {}
+
+  bool SPIPassthroughController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+  {
+    if( !pre_init_(robot, n) )
+      return false;
+
+    // dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>(ros::NodeHandle(topic_prefix_)));
+    // function_cb_ = boost::bind(&SPIPassthroughController::dynamic_reconfigure_cb, this, _1, _2);
+    // dynamic_reconfigure_server_->setCallback(function_cb_);
+    
+    for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
+    {
+      std::stringstream service_path;
+      service_path << topic_prefix_ << "/command/passthrough/"<<i;
+
+      command_srv_.push_back( node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i)) );
+
+      standard_commands_.push_back(boost::shared_ptr<SplittedSPICommand>(new SplittedSPICommand()));
+    }
+
+    return true;
+  }
 
   bool SPIPassthroughController::command_srv_cb( sr_ronex_msgs::SPI::Request &req,
                                                  sr_ronex_msgs::SPI::Response &res,
@@ -66,39 +86,21 @@ namespace ronex
       {
         if( status_queue_[i].front().first == standard_commands_[spi_out_index] )
         {
-          //found the status command corresponding to the command we sent
-          // updating the response
-          for(size_t j = 0; j < req.data.size(); ++j)
-          {
-            res.data.push_back(status_queue_[i].front().second->data_bytes[j]);
-          }
-          not_received = false;
-          break;
+	  if( status_queue_[i].front().second != NULL)
+	  {
+	    //found the status command corresponding to the command we sent
+	    // updating the response
+	    for(size_t j = 0; j < req.data.size(); ++j)
+	    {
+	      res.data.push_back(status_queue_[i].front().second->data_bytes[j]);
+	    }
+	    not_received = false;
+	    break;
+	  }
         }
       }
     }
-
     return true;
-  }
-
-  void SPIPassthroughController::post_init_()
-  {
-    /*dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>(ros::NodeHandle(topic_prefix_)));
-    function_cb_ = boost::bind(&SPIPassthroughController::dynamic_reconfigure_cb, this, _1, _2);
-    dynamic_reconfigure_server_->setCallback(function_cb_);
-    */
-
-    for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
-    {
-      std::stringstream service_path;
-      service_path << topic_prefix_ << "/command/passthrough/"<<i;
-
-      ROS_ERROR_STREAM("prefix["<<i<<"] = " <<topic_prefix_ << "  -> " << service_path.str());
-
-      command_srv_ = node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i));
-
-      standard_commands_.push_back(boost::shared_ptr<SplittedSPICommand>(new SplittedSPICommand()));
-    }
   }
 
   void SPIPassthroughController::dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level)

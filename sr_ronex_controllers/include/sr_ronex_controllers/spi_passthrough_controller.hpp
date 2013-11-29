@@ -42,14 +42,16 @@ namespace ronex
     SPIPassthroughController();
     virtual ~SPIPassthroughController();
 
+    virtual bool init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
+
     bool command_srv_cb( sr_ronex_msgs::SPI::Request &req,
                          sr_ronex_msgs::SPI::Response &res,
                          size_t spi_out_index );
 
-  void dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level);
+    void dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level);
 
   private:
-    ros::ServiceServer command_srv_;
+    std::vector<ros::ServiceServer> command_srv_;
 
     //vector containing one command per spi output.
     // Some parameters of these commands are updated through the dynamic reconfigure interface

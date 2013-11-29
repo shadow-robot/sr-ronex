@@ -38,6 +38,11 @@ namespace ronex
 
   bool SPIBaseController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
   {
+    return pre_init_(robot, n);
+  }
+
+  bool SPIBaseController::pre_init_(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+  {
     assert(robot);
     node_ = n;
 
@@ -67,7 +72,6 @@ namespace ronex
         }
       }
     }
-
     topic_prefix_ = path;
 
     spi_ = static_cast<ronex::SPI*>( robot->model_->hw_->getCustomHW(path) );
