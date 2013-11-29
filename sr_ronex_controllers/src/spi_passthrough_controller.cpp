@@ -105,7 +105,33 @@ namespace ronex
   {
     spi_->command_->command_type = static_cast<int16u>(config.command_type);
 
-    ROS_ERROR("@TODO: add more config");
+    //setting up spi 0
+    standard_commands_[0]->pin_output_state_pre = config.pin_output_state_pre_0;
+    standard_commands_[0]->pin_output_state_post = config.pin_output_state_post_0;
+    standard_commands_[0]->packet.clock_divider = static_cast<int16u>(config.spi_0_clock_divider);
+    standard_commands_[0]->packet.SPI_config = static_cast<int16u>(config.spi_0_SPI_config);
+    standard_commands_[0]->packet.inter_byte_gap = static_cast<int16u>(config.spi_0_inter_byte_gap);
+
+    //setting up spi 1
+    standard_commands_[1]->pin_output_state_pre = config.pin_output_state_pre_1;
+    standard_commands_[1]->pin_output_state_post = config.pin_output_state_post_1;
+    standard_commands_[1]->packet.clock_divider = static_cast<int16u>(config.spi_1_clock_divider);
+    standard_commands_[1]->packet.SPI_config = static_cast<int16u>(config.spi_1_SPI_config);
+    standard_commands_[1]->packet.inter_byte_gap = static_cast<int16u>(config.spi_1_inter_byte_gap);
+
+    //setting up spi 2
+    standard_commands_[2]->pin_output_state_pre = config.pin_output_state_pre_2;
+    standard_commands_[2]->pin_output_state_post = config.pin_output_state_post_2;
+    standard_commands_[2]->packet.clock_divider = static_cast<int16u>(config.spi_2_clock_divider);
+    standard_commands_[2]->packet.SPI_config = static_cast<int16u>(config.spi_2_SPI_config);
+    standard_commands_[2]->packet.inter_byte_gap = static_cast<int16u>(config.spi_2_inter_byte_gap);
+
+    //setting up spi 3
+    standard_commands_[3]->pin_output_state_pre = config.pin_output_state_pre_3;
+    standard_commands_[3]->pin_output_state_post = config.pin_output_state_post_3;
+    standard_commands_[3]->packet.clock_divider = static_cast<int16u>(config.spi_3_clock_divider);
+    standard_commands_[3]->packet.SPI_config = static_cast<int16u>(config.spi_3_SPI_config);
+    standard_commands_[3]->packet.inter_byte_gap = static_cast<int16u>(config.spi_3_inter_byte_gap);
   }
 
 }
