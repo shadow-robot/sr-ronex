@@ -40,10 +40,6 @@ namespace ronex
   {
     if( !pre_init_(robot, n) )
       return false;
-
-    // dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>(ros::NodeHandle(topic_prefix_)));
-    // function_cb_ = boost::bind(&SPIPassthroughController::dynamic_reconfigure_cb, this, _1, _2);
-    // dynamic_reconfigure_server_->setCallback(function_cb_);
     
     for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
     {
@@ -54,6 +50,10 @@ namespace ronex
 
       standard_commands_.push_back(boost::shared_ptr<SplittedSPICommand>(new SplittedSPICommand()));
     }
+
+    dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>(ros::NodeHandle(topic_prefix_)));
+    function_cb_ = boost::bind(&SPIPassthroughController::dynamic_reconfigure_cb, this, _1, _2);
+    dynamic_reconfigure_server_->setCallback(function_cb_);
 
     return true;
   }
