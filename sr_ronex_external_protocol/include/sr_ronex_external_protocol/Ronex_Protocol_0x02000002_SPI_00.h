@@ -30,15 +30,14 @@
 
 #define RONEX_COMMAND_02000002_MASTER_CLOCK_SPEED_HZ        64000000        //!< Master clock. This is divided down to create the SPI clock.
 #define RONEX_COMMAND_02000002_ADC_SAMPLE_RATE_HZ               1000        //!< Maximum possible ADC sample rate. Don't send EtherCAT packets faster than this.
-#define NUM_ANALOGUE_INPUTS                                        6
-#define ANALOGUE_INPUT_RESOLUTION                                 12        //!<
+#define NUM_ANALOGUE_INPUTS                                        6        
+#define ANALOGUE_INPUT_RESOLUTION                                 12        //!< 
 #define ANALOGUE_INPUT_JUSTIFICATION                           RIGHT
 #define NUM_ANALOGUE_OUTPUTS                                       0
 #define ANALOGUE_OUTPUT_RESOLUTION                                 0
 #define ANALOGUE_OUTPUT_JUSTIFICATION                          RIGHT
 #define NUM_DIGITAL_IO                                             6
 #define NUM_SPI_OUTPUTS                                            4
-#define NUM_DIO_SAMPLES                                            4
 #define PRODUCT_NAME                                           "spi"
 #define PRODUCT_ID                                        0x02000002
 #define MAXIMUM_NUM_STACKERS                                       2
@@ -92,13 +91,13 @@
 #define SPI_CONFIG_MODE_11                                  0x0003
 #define SPI_CONFIG_INPUT_TRIGGER_NONE                       0x0000
 #define SPI_CONFIG_INPUT_TRIGGER_D0                         0x0004
-#define SPI_CONFIG_INPUT_TRIGGER_D1                         0x0005
-#define SPI_CONFIG_INPUT_TRIGGER_D2                         0x0006
-#define SPI_CONFIG_INPUT_TRIGGER_D3                         0x0007
-#define SPI_CONFIG_INPUT_TRIGGER_D4                         0x0008
-#define SPI_CONFIG_INPUT_TRIGGER_D5                         0x0009
+#define SPI_CONFIG_INPUT_TRIGGER_D1                         0x0008
+#define SPI_CONFIG_INPUT_TRIGGER_D2                         0x000c
+#define SPI_CONFIG_INPUT_TRIGGER_D3                         0x0010
+#define SPI_CONFIG_INPUT_TRIGGER_D4                         0x0014
+#define SPI_CONFIG_INPUT_TRIGGER_D5                         0x0018
 #define SPI_CONFIG_MOSI_SOMI_DIFFERENT_PIN                  0x0000
-#define SPI_CONFIG_MOSI_SOMI_SAME_PIN                       0x0010
+#define SPI_CONFIG_MOSI_SOMI_SAME_PIN                       0x0020
 
 
 
@@ -193,6 +192,7 @@ typedef struct
     int16u     pin_output_states_post;
 
     SPI_PACKET_OUT spi_out[NUM_SPI_OUTPUTS];
+
 }__attribute__((packed)) RONEX_COMMAND_02000002;
 
 
@@ -206,12 +206,12 @@ typedef struct
 
 typedef struct
 {
-    int8u     pin_input_states_DIO[NUM_DIO_SAMPLES];
-    int8u     pin_input_states_SOMI[NUM_DIO_SAMPLES];
+    int8u     pin_input_states_DIO[4];
+    int8u     pin_input_states_SOMI[4];
 
     SPI_PACKET_IN spi_in[NUM_SPI_OUTPUTS];
 
-    int16u    analogue_in[NUM_ANALOGUE_INPUTS];
+    int16u    analogue_in[6];
 }STATUS_DATA_02000002;
 
 typedef struct
@@ -230,7 +230,7 @@ typedef struct
         STATUS_DATA_02000002  status_data;
         CONFIG_INFO_02000002  config_info;
     }info_type;
-
+    
 }__attribute__((packed)) RONEX_STATUS_02000002;
 
 
