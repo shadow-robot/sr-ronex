@@ -55,10 +55,28 @@ namespace ronex
     //pushing to the command queue to be sent through etherCAT
     command_queue_[spi_out_index].push(standard_commands_[spi_out_index]);
 
-    ROS_ERROR("TODO wait for response and send it back");
+    //wait for the response to be received
+    bool not_received = true;
+    while( not_received )
+    {
+      //sleep roughly 1ms to wait for new etherCAT packet to be received.
+      usleep(1000);
 
-    for(size_t i = 0; i < req.data.size(); ++i)
-      res.data.push_back(req.data[i]);
+      for(size_t i = 0; i < status_queue_.size(); ++i)
+      {
+        if( status_queue_[i].front().first == standard_commands_[spi_out_index] )
+        {
+          //found the status command corresponding to the command we sent
+          // updating the response
+          for(size_t j = 0; j < req.data.size(); ++j)
+          {
+            res.data.push_back(status_queue_[i].front().second->data_bytes[j]);
+          }
+          not_received = false;
+          break;
+        }
+      }
+    }
 
     return true;
   }
