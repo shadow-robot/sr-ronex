@@ -70,7 +70,6 @@ namespace ronex
     {
       try
       {
-        ROS_ERROR_STREAM("data["<<i<<"] = " << static_cast<int8u>(req.data[i]));
         standard_commands_[spi_out_index]->packet.data_bytes[i] = static_cast<int8u>(req.data[i]);
       }
       catch(boost::bad_lexical_cast &)

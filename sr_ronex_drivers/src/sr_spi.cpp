@@ -221,7 +221,13 @@ void SrSPI::packCommand(unsigned char *buffer, bool halt, bool reset)
 
     if( command->spi_out[spi_index].num_bytes != 0)
     {
-      ROS_ERROR_STREAM("SPI out ["<<spi_index<<"]: Sending non null command("<<static_cast<unsigned int>(command->spi_out[spi_index].num_bytes)<<"): -> " << static_cast<int>(command->spi_out[spi_index].data_bytes[0]) << "," << static_cast<int>(command->spi_out[spi_index].data_bytes[1])<< "," <<static_cast<int>(command->spi_out[spi_index].data_bytes[2]) << ","<<static_cast<int>(command->spi_out[spi_index].data_bytes[3]) );
+      std::stringstream ss;
+      ss << "SPI out ["<<spi_index<<"]: Sending non null command("<<static_cast<unsigned int>(command->spi_out[spi_index].num_bytes)<<"): -> ";
+
+      for(unsigned int i =0; i < static_cast<unsigned int>(command->spi_out[spi_index].num_bytes); ++i)
+	ss << static_cast<int>(command->spi_out[spi_index].data_bytes[i]) << ",";
+
+      ROS_ERROR_STREAM("" << ss.str());
     }
   }
 }
@@ -242,7 +248,14 @@ bool SrSPI::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
   for (size_t spi_index=0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
   {
     for(size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i)
+      {
       spi_->state_->info_type.status_data.spi_in[spi_index].data_bytes[i] = status_data->info_type.status_data.spi_in[spi_index].data_bytes[i];
+      /*if(status_data->info_type.status_data.spi_in[spi_index].data_bytes[i] != 0)
+	{
+	  ROS_ERROR_STREAM("NON NULL["<<i<<"]: "<< static_cast<int>(status_data->info_type.status_data.spi_in[spi_index].data_bytes[i])<<".");
+	}
+      */
+      }
   }
 
   for(size_t analogue_index = 0 ; analogue_index < NUM_ANALOGUE_INPUTS ; ++analogue_index)
@@ -251,7 +264,7 @@ bool SrSPI::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
   }
 
   //publishing at 100Hz
-  if(cycle_count_ > 9)
+  if(true)//cycle_count_ > 9)
   {
     state_msg_.header.stamp = ros::Time::now();
 
