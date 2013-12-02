@@ -274,9 +274,6 @@ bool SrSPI::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
       state_msg_.analogue_in[analogue_index] = spi_->state_->info_type.status_data.analogue_in[analogue_index];
     }
 
-    //update state message
-    ROS_DEBUG("@TODO: update state message");
-
     //publish
     if( state_publisher_->trylock() )
     {
