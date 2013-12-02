@@ -24,7 +24,6 @@
 
 #include "sr_ronex_controllers/spi_passthrough_controller.hpp"
 #include "pluginlib/class_list_macros.h"
-#include <boost/lexical_cast.hpp>
 
 PLUGINLIB_EXPORT_CLASS( ronex::SPIPassthroughController, pr2_controller_interface::Controller)
 
@@ -71,7 +70,8 @@ namespace ronex
     {
       try
       {
-        standard_commands_[spi_out_index]->packet.data_bytes[i] = static_cast<int8u>(boost::lexical_cast<int>(req.data[i]));
+        ROS_ERROR_STREAM("data["<<i<<"] = " << static_cast<int8u>(req.data[i]));
+        standard_commands_[spi_out_index]->packet.data_bytes[i] = static_cast<int8u>(req.data[i]);
       }
       catch(boost::bad_lexical_cast &)
       {
@@ -100,7 +100,7 @@ namespace ronex
 	    for(size_t j = 0; j < req.data.size(); ++j)
 	    {
               std::stringstream hex;
-              hex << "0x" << std::hex << status_queue_[i].front().second->data_bytes[j];
+              hex << std::hex << status_queue_[i].front().second->data_bytes[j];
 	      res.data.push_back(hex.str());
 	    }
 	    not_received = false;
