@@ -24,6 +24,7 @@
 
 #include "sr_ronex_controllers/spi_passthrough_controller.hpp"
 #include "pluginlib/class_list_macros.h"
+#include <boost/lexical_cast.hpp>
 
 PLUGINLIB_EXPORT_CLASS( ronex::SPIPassthroughController, pr2_controller_interface::Controller)
 
@@ -40,7 +41,7 @@ namespace ronex
   {
     if( !pre_init_(robot, n) )
       return false;
-    
+
     for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
     {
       std::stringstream service_path;
@@ -68,8 +69,14 @@ namespace ronex
     ROS_ERROR_STREAM("From passthrough: received "<< req.data.size()<<"bytes: ");
     for(size_t i = 0; i < req.data.size(); ++i)
     {
-      ROS_ERROR_STREAM("    ["<<i<<"] -> " << static_cast<int>(req.data[i]) );
-      standard_commands_[spi_out_index]->packet.data_bytes[i] = static_cast<int8u>(req.data[i]);
+      try
+      {
+        standard_commands_[spi_out_index]->packet.data_bytes[i] = static_cast<int8u>(boost::lexical_cast<int>(req.data[i]));
+      }
+      catch(boost::bad_lexical_cast &)
+      {
+        ROS_ERROR_STREAM("Input["<<i<<"]: "<<req.data[i] << " could not be converted to int");
+      }
     }
 
     //pushing to the command queue to be sent through etherCAT
@@ -92,7 +99,9 @@ namespace ronex
 	    // updating the response
 	    for(size_t j = 0; j < req.data.size(); ++j)
 	    {
-	      res.data.push_back(status_queue_[i].front().second->data_bytes[j]);
+              std::stringstream hex;
+              hex << "0x" << std::hex << status_queue_[i].front().second->data_bytes[j];
+	      res.data.push_back(hex.str());
 	    }
 	    not_received = false;
 	    break;
