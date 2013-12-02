@@ -255,6 +255,25 @@ bool SrSPI::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
   {
     state_msg_.header.stamp = ros::Time::now();
 
+    state_msg_.command_type = spi_->state_->command_type;
+
+    for(size_t sampling = 0; sampling < NUM_DIO_SAMPLES; ++sampling)
+    {
+      state_msg_.pin_input_states_DIO[sampling] = spi_->state_->info_type.status_data.pin_input_states_DIO[sampling];
+      state_msg_.pin_input_states_SOMI[sampling] = spi_->state_->info_type.status_data.pin_input_states_SOMI[sampling];
+    }
+
+    for (size_t spi_index=0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
+    {
+      for(size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i)
+        state_msg_.spi_in[spi_index].data[i] = spi_->state_->info_type.status_data.spi_in[spi_index].data_bytes[i];
+    }
+
+    for(size_t analogue_index = 0 ; analogue_index < NUM_ANALOGUE_INPUTS ; ++analogue_index)
+    {
+      state_msg_.analogue_in[analogue_index] = spi_->state_->info_type.status_data.analogue_in[analogue_index];
+    }
+
     //update state message
     ROS_DEBUG("@TODO: update state message");
 

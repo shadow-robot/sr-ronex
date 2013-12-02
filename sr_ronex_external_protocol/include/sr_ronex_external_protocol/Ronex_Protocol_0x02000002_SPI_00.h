@@ -207,8 +207,8 @@ typedef struct
 
 typedef struct
 {
-    int8u     pin_input_states_DIO[4];
-    int8u     pin_input_states_SOMI[4];
+    int8u     pin_input_states_DIO[NUM_DIO_SAMPLES];
+    int8u     pin_input_states_SOMI[NUM_DIO_SAMPLES];
 
     SPI_PACKET_IN spi_in[NUM_SPI_OUTPUTS];
 
