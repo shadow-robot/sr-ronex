@@ -103,6 +103,9 @@ namespace ronex
 	      res.data.push_back(hex.str());
 	    }
 	    not_received = false;
+
+	    status_queue_[i].pop();
+	    
 	    break;
 	  }
         }
