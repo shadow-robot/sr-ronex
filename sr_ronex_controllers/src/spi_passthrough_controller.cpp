@@ -99,7 +99,7 @@ namespace ronex
 	    for(size_t j = 0; j < req.data.size(); ++j)
 	    {
               std::stringstream hex;
-              hex << std::hex << status_queue_[i].front().second->data_bytes[j];
+              hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
 	      res.data.push_back(hex.str());
 	    }
 	    not_received = false;

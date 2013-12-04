@@ -264,7 +264,7 @@ bool SrSPI::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
   }
 
   //publishing at 100Hz
-  if(true)//cycle_count_ > 9)
+  if(cycle_count_ > 9)
   {
     state_msg_.header.stamp = ros::Time::now();
 

@@ -97,16 +97,18 @@ namespace ronex
     for (size_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
     {
       //Check if we need to update a status
-      if( status_queue_[spi_index].front().second == NULL )
+      if( status_queue_[spi_index].size() > 0)
       {
-        //the response has not been received. If the command type is NORMAL
-        // then the response can be updated (it's INVALID until the SPI responds)
-        if( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL );
+	if( status_queue_[spi_index].front().second == NULL )
         {
-          status_queue_[spi_index].front().second.reset(new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]));
-        }
+	  //the response has not been received. If the command type is NORMAL
+	  // then the response can be updated (it's INVALID until the SPI responds)
+	  if( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL );
+	  {
+	    status_queue_[spi_index].front().second.reset(new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]));
+	  }
+	}
       }
-
       //if no available command then send the NULL command
       if( command_queue_[spi_index].empty() )
         spi_->nullify_command(spi_index);
