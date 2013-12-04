@@ -74,6 +74,8 @@ namespace ronex
     bool pre_init_(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
 
     void copy_splitted_to_cmd_(size_t spi_index);
+  private:
+    bool new_command;
   };
 }
 

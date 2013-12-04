@@ -103,11 +103,14 @@ if __name__ == "__main__":
 
     dw1000 = DW1000SpiInterface()
 
-    success = dw1000.write_register(0, 0x01, [1,1,1])
-    packet = dw1000.read_register(0, 0x01, [0,1,2])
-    packet = dw1000.read_register(0, 0x02, [0,1,2])
-    success = dw1000.write_register(0, 0x01, [0x01,0x20,0x30])
-    packet = dw1000.read_register(0, 0x01, [1,1,1])
-    packet = dw1000.read_register(0, 0x01, [1,1,1])
+    print "--- new write"
+    success = dw1000.write_register(0, 0x03, [1,1,1,1])
+    packet = dw1000.read_register(0, 0x03, [0,1,2,3])
+
+    print "--- new write"
+    success = dw1000.write_register(0, 0x03, [0x01,0x20,0x30, 0x40])
+    packet = dw1000.read_register(0, 0x03, [1,1,1,1])
+
+
 
 

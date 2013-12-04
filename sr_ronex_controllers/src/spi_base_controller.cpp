@@ -101,6 +101,12 @@ namespace ronex
       {
 	if( status_queue_[spi_index].front().second == NULL )
         {
+	  if(new_command)
+	  {
+	    new_command = false;
+	    continue;
+	  }
+       
 	  //the response has not been received. If the command type is NORMAL
 	  // then the response can be updated (it's INVALID until the SPI responds)
 	  if( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL );
@@ -123,6 +129,8 @@ namespace ronex
 
         //now we copy the command to the hardware interface
         copy_splitted_to_cmd_(spi_index);
+
+	new_command = true;
 
         //the command will be sent at the end of the iteration,
         // removing the command from the queue.
