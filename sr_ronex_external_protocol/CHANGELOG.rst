@@ -2,6 +2,11 @@
 Changelog for package sr_ronex_external_protocol
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Adding an SPI module
+* Contributors: Hugo Elias, Ugo Cupcic
+
 0.9.4 (2013-11-20)
 ------------------
 
@@ -11,4 +16,3 @@ Changelog for package sr_ronex_external_protocol
 0.9.2 (2013-09-24)
 ------------------
 * first public release for Hydro
-
