@@ -2,8 +2,8 @@
 Changelog for package sr_ronex_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.9.5 (2013-12-18)
+------------------
 * Install controller_plugins.xml file
 
 0.9.4 (2013-11-20)

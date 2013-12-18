@@ -2,6 +2,9 @@
 Changelog for package sr_ronex_controllers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.9.5 (2013-12-18)
+------------------
+
 0.9.4 (2013-11-20)
 ------------------
 * added script for tests with hardware
