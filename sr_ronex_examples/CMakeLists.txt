@@ -75,3 +75,6 @@ install(DIRECTORY config/
 install(DIRECTORY model/
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/model)
 
+install(FILES controller_plugins.xml
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
