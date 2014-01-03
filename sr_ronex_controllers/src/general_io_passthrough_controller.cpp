@@ -25,14 +25,10 @@
 #include "sr_ronex_controllers/general_io_passthrough_controller.hpp"
 #include "pluginlib/class_list_macros.h"
 
-PLUGINLIB_EXPORT_CLASS( ronex::GeneralIOPassthroughController, pr2_controller_interface::Controller)
+PLUGINLIB_EXPORT_CLASS( ronex::GeneralIOPassthroughController, controller_interface::ControllerBase)
 
 namespace ronex
 {
-  GeneralIOPassthroughController::GeneralIOPassthroughController()
-    : loop_count_(0)
-  {}
-
   GeneralIOPassthroughController::~GeneralIOPassthroughController()
   {
     for(size_t i=0; i < digital_subscribers_.size(); ++i)
@@ -45,9 +41,8 @@ namespace ronex
     }
   }
 
-  bool GeneralIOPassthroughController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+  bool GeneralIOPassthroughController::init(ronex::GeneralIO *gio, ros::NodeHandle &n)
   {
-    assert(robot);
     node_ = n;
 
     std::string ronex_id;
@@ -103,23 +98,6 @@ namespace ronex
     return true;
   }
 
-  void GeneralIOPassthroughController::starting()
-  {}
-
-  /*!
-   * \brief Issues commands to the joint. Should be called at regular intervals
-   */
-  void GeneralIOPassthroughController::update()
-  {
-/*
-    if(loop_count_ % 10 == 0)
-    {
-      loop_count_ = 0;
-    }
-    loop_count_++;
-*/
-  }
-
   void GeneralIOPassthroughController::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
   {
     general_io_->command_.digital_[index] = msg->data;
@@ -127,12 +105,10 @@ namespace ronex
 
   void GeneralIOPassthroughController::pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index)
   {
-
     general_io_->command_.pwm_[index].period = msg->pwm_period;
     general_io_->command_.pwm_[index].on_time_0 = msg->pwm_on_time_0;
     general_io_->command_.pwm_[index].on_time_1 = msg->pwm_on_time_1;
   }
-
 }
 
 /* For the emacs weenies in the crowd.

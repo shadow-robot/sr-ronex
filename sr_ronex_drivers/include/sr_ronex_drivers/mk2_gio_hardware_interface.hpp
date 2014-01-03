@@ -25,7 +25,6 @@
 #ifndef _MK2_GIO_HARDWARE_INTERFACE_H_
 #define _MK2_GIO_HARDWARE_INTERFACE_H_
 
-#include <pr2_hardware_interface/hardware_interface.h>
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h>
 #include <vector>
 
@@ -65,7 +64,6 @@ namespace ronex
    *    sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h
    */
   class GeneralIO
-    : public pr2_hardware_interface::CustomHW
   {
   public:
     GeneralIOState state_;

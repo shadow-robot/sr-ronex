@@ -31,19 +31,19 @@
 #include "pr2_mechanism_model/robot.h"
 #include "realtime_tools/realtime_publisher.h"
 #include "std_msgs/Bool.h"
-#include <pr2_controller_interface/controller.h>
-#include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
+#include <controller_interface/controller.h>
+#include <sr_ronex_drivers/mk2_gio_hardware_interface.hpp>
 
 namespace ronex
 {
   class FakeCalibrationController
-    : public pr2_controller_interface::Controller
+    : public controller_interface::Controller<ronex::GeneralIO>
   {
   public:
     FakeCalibrationController();
     virtual ~FakeCalibrationController();
 
-    virtual bool init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
+    virtual bool init(ronex::GeneralIO *gio, ros::NodeHandle &n);
 
     /*!
      * \brief Issues commands to the joint. Should be called at regular intervals
