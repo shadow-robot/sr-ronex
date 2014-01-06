@@ -33,16 +33,16 @@
 #include "sr_ronex_drivers/cod_decod/cod_decod_manager.hpp"
 
 
-class StandardEthercatDevice : public EthercatDevice
+class StandardEthercatDevice// : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(pr2_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(bool allow_unprogrammed=true);
 
   StandardEthercatDevice();
   virtual ~StandardEthercatDevice();
 protected:
-  string reason_;
+  std::string reason_;
   int level_;
 
   int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);

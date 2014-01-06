@@ -33,10 +33,9 @@ namespace sr_cod_decod
   {
   }
 
-  void CodDecod::construct(pr2_hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
+  void CodDecod::construct(EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
   {
     sh_ = sh;
-    hw_ = hw;
   }
 
 

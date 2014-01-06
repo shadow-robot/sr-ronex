@@ -21,7 +21,7 @@
  * @brief  Driver for the RoNeX mk2 General I/O module.
  **/
 
-#include <sr_ronex_drivers/sr_board_mk2_gio.hpp>
+#include "sr_ronex_drivers/sr_board_mk2_gio.hpp"
 
 #include <dll/ethercat_dll.h>
 #include <al/ethercat_AL.h>
@@ -164,7 +164,7 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   ROS_INFO("Finished constructing the SrBoardMk2GIO driver");
 }
 
-int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
+int SrBoardMk2GIO::initialize(bool allow_unprogrammed)
 {
   digital_commands_ = 0;
   ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
@@ -185,7 +185,7 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
   ROS_INFO_STREAM("Adding a general_io RoNeX module to the hardware interface: " << device_name_);
   //Using the name of the ronex to prefix the state topic
 
-  hw->addCustomHW( general_io_.get() );
+  //hw->addCustomHW( general_io_.get() );
 
   return 0;
 }

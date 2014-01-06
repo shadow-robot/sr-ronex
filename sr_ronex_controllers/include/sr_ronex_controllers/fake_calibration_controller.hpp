@@ -32,7 +32,7 @@
 #include "realtime_tools/realtime_publisher.h"
 #include "std_msgs/Bool.h"
 #include <controller_interface/controller.h>
-#include <sr_ronex_drivers/mk2_gio_hardware_interface.hpp>
+#include "sr_ronex_drivers/mk2_gio_hardware_interface.hpp"
 
 namespace ronex
 {

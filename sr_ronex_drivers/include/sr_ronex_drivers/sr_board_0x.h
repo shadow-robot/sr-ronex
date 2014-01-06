@@ -31,14 +31,13 @@
 #include <sr_ronex_drivers/standard_ethercat_device.h>
 
 #include <vector>
-using namespace std;
 
 
 class SrBoard0X : public StandardEthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(pr2_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(bool allow_unprogrammed=true);
 
   SrBoard0X();
   virtual ~SrBoard0X();

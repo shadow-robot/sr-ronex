@@ -20,19 +20,16 @@
   <!-- Dependencies needed to compile this package. -->
   <build_depend>roscpp</build_depend>
   <build_depend>rostest</build_depend>
-  <build_depend>sr_ronex_hardware_interface</build_depend>
   <build_depend>pr2_mechanism_model</build_depend>
+  <build_depend>sr_ronex_drivers</build_depend>
 
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>roscpp</run_depend>
   <run_depend>rostest</run_depend>
-  <run_depend>sr_ronex_hardware_interface</run_depend>
   <run_depend>pr2_mechanism_model</run_depend>
+  <run_depend>sr_ronex_drivers</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
-  <!-- <test_depend>roscpp</test_depend> -->
-  <!-- <test_depend>sr_ronex_hardware_interface</test_depend> -->
-  <!-- <test_depend>pr2_mechanism_model</test_depend> -->
   <test_depend>gtest</test_depend>
 
 <export>

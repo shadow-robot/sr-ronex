@@ -28,8 +28,8 @@
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_msgs/GeneralIOState.h>
 
-#include <sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h>
-#include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
+#include "Ronex_Protocol_0x02000001_GIO_00.h"
+#include "mk2_gio_hardware_interface.hpp"
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
@@ -37,13 +37,11 @@
 #include <dynamic_reconfigure/server.h>
 #include "sr_ronex_drivers/GeneralIOConfig.h"
 
-using namespace std;
-
 class SrBoardMk2GIO : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(pr2_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(bool allow_unprogrammed=true);
 
   SrBoardMk2GIO();
   virtual ~SrBoardMk2GIO();

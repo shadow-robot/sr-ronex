@@ -26,8 +26,6 @@
   <run_depend>sr_ronex_msgs</run_depend>
   <run_depend>sr_ronex_controllers</run_depend>
   <run_depend>sr_ronex_drivers</run_depend>
-  <run_depend>sr_ronex_hardware_interface</run_depend>
-  <run_depend>sr_ronex_external_protocol</run_depend>
   <run_depend>sr_ronex_examples</run_depend>
   <run_depend>sr_ronex_utilities</run_depend>
 
