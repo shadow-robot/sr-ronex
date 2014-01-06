@@ -17,11 +17,10 @@
 # License along with this library.
 # ####################################################################
 
-import roslib; roslib.load_manifest('sr_ronex_controllers')
 import rospy
 from time import sleep
 
-from pr2_mechanism_msgs.srv import LoadController, ListControllers, SwitchController, SwitchControllerRequest
+from controller_manager_msgs.srv import LoadController, ListControllers, SwitchController, SwitchControllerRequest
 
 class LoadPassthroughControllers(object):
     """
@@ -86,13 +85,13 @@ class LoadPassthroughControllers(object):
         rospy.loginfo("Starting controllers: " + str(controllers_list))
 
         # calling the services to load and switch the controllers on
-        rospy.wait_for_service('pr2_controller_manager/list_controllers')
-        rospy.wait_for_service('pr2_controller_manager/load_controller')
-        rospy.wait_for_service('pr2_controller_manager/switch_controller')
+        rospy.wait_for_service('controller_manager/list_controllers')
+        rospy.wait_for_service('controller_manager/load_controller')
+        rospy.wait_for_service('controller_manager/switch_controller')
 
-        list_controllers = rospy.ServiceProxy('pr2_controller_manager/list_controllers', ListControllers)
-        load_controller = rospy.ServiceProxy('pr2_controller_manager/load_controller', LoadController)
-        switch_controller = rospy.ServiceProxy('pr2_controller_manager/switch_controller', SwitchController)
+        list_controllers = rospy.ServiceProxy('controller_manager/list_controllers', ListControllers)
+        load_controller = rospy.ServiceProxy('controller_manager/load_controller', LoadController)
+        switch_controller = rospy.ServiceProxy('controller_manager/switch_controller', SwitchController)
 
         # first list the available controllers
         available_controllers = None
@@ -110,7 +109,6 @@ class LoadPassthroughControllers(object):
                     print "Service did not process request: %s" % str(e)
 
         # start the controllers
-        switch_controller = rospy.ServiceProxy('pr2_controller_manager/switch_controller', SwitchController)
         try:
             resp1 = switch_controller(controllers_list, [], SwitchControllerRequest.BEST_EFFORT)
         except rospy.ServiceException, e:
