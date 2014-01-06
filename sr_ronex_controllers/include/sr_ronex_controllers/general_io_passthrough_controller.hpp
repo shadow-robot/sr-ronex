@@ -49,7 +49,7 @@ namespace ronex
     /*!
      * \brief Issues commands to the joint. Should be called at regular intervals
      */
-    virtual void update() {};
+    virtual void update(const ros::Time&, const ros::Duration&) {};
 
     void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 

@@ -25,13 +25,12 @@
 #ifndef _MK2_GIO_HARDWARE_INTERFACE_H_
 #define _MK2_GIO_HARDWARE_INTERFACE_H_
 
-#include <hardware_interface/hardware_interface.h>
 #include "Ronex_Protocol_0x02000001_GIO_00.h"
 #include <vector>
 
 namespace ronex
 {
-  class GeneralIOCommand : public hardware_interface::HardwareInterface
+  class GeneralIOCommand
   {
   public:
     std::vector<bool> digital_;

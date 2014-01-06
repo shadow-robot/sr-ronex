@@ -33,7 +33,7 @@
 #include "sr_ronex_drivers/cod_decod/cod_decod_manager.hpp"
 
 
-class StandardEthercatDevice// : public EthercatDevice
+class StandardEthercatDevice : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);

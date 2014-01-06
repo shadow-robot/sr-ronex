@@ -43,6 +43,7 @@ namespace ronex
 
   bool GeneralIOPassthroughController::init(ronex::GeneralIO *gio, ros::NodeHandle &n)
   {
+    assert(gio);
     node_ = n;
 
     std::string ronex_id;

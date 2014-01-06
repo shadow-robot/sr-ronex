@@ -37,17 +37,17 @@
 namespace ronex
 {
   class SrRoNeXSimpleController 
-    : public controller_interface::Controller
+    : public controller_interface::Controller<ronex::GeneralIO>
   {
   public:
     SrRoNeXSimpleController();
     virtual ~SrRoNeXSimpleController();
 
-    virtual bool init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
+    virtual bool init(ronex::GeneralIO *gio, ros::NodeHandle &n);
 
     virtual void starting();
 
-    virtual void update();
+    virtual void update(const ros::Time&, const ros::Duration&);
 
     virtual void stopping();
 
