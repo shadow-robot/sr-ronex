@@ -25,7 +25,7 @@
 #include "sr_ronex_controllers/general_io_passthrough_controller.hpp"
 #include "pluginlib/class_list_macros.h"
 
-PLUGINLIB_EXPORT_CLASS( ronex::GeneralIOPassthroughController, pr2_controller_interface::Controller)
+PLUGINLIB_EXPORT_CLASS( ronex::GeneralIOPassthroughController, controller_interface::ControllerBase)
 
 namespace ronex
 {

@@ -68,7 +68,7 @@ class LoadPassthroughControllers(object):
         @param ronex_ids the ids of the ronexes
         """
         for ronex_id in ronex_ids:
-            rospy.set_param("/ronex_" + ronex_id + "_passthrough/type", "sr_ronex_controllers/GeneralIOPassthroughController")
+            rospy.set_param("/ronex_" + ronex_id + "_passthrough/type", "ronex/GeneralIOPassthroughController")
             rospy.set_param("/ronex_" + ronex_id + "_passthrough/ronex_id", ronex_id)
 
     def load_and_start_ctrl(self, ronex_ids):
@@ -102,7 +102,7 @@ class LoadPassthroughControllers(object):
 
         # load the ones that don't exist
         for ctrl in controllers_list:
-            if ctrl not in available_controllers.controllers:
+            if ctrl not in available_controllers.controller:
                 try:
                     resp1 = load_controller(ctrl)
                 except rospy.ServiceException, e:

@@ -34,6 +34,7 @@
   <build_depend>sr_ronex_external_protocol</build_depend>
   <build_depend>sr_ronex_hardware_interface</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
+  <build_depend>ros_ethercat</build_depend>
 
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>pr2_msgs</run_depend>
@@ -53,22 +54,9 @@
   <run_depend>sr_ronex_hardware_interface</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>tinyxml</run_depend>
-
+  <run_depend>ros_ethercat</run_depend>
+  
   <!-- Dependencies needed only for running tests. -->
-  <!-- <test_depend>pr2_msgs</test_depend> -->
-  <!-- <test_depend>ethercat_hardware</test_depend> -->
-  <!-- <test_depend>std_msgs</test_depend> -->
-  <!-- <test_depend>sr_ronex_msgs</test_depend> -->
-  <!-- <test_depend>pr2_hardware_interface</test_depend> -->
-  <!-- <test_depend>eml</test_depend> -->
-  <!-- <test_depend>roscpp</test_depend> -->
-  <!-- <test_depend>realtime_tools</test_depend> -->
-  <!-- <test_depend>diagnostic_msgs</test_depend> -->
-  <!-- <test_depend>diagnostic_updater</test_depend> -->
-  <!-- <test_depend>pluginlib</test_depend> -->
-  <!-- <test_depend>sr_ronex_external_protocol</test_depend> -->
-  <!-- <test_depend>sr_ronex_hardware_interface</test_depend> -->
-  <!-- <test_depend>dynamic_reconfigure</test_depend> -->
   <test_depend>gtest</test_depend>
 
 <export>

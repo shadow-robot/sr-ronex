@@ -25,7 +25,7 @@
 #include "sr_ronex_controllers/fake_calibration_controller.hpp"
 #include "pluginlib/class_list_macros.h"
 
-PLUGINLIB_EXPORT_CLASS( ronex::FakeCalibrationController, pr2_controller_interface::Controller)
+PLUGINLIB_EXPORT_CLASS( ronex::FakeCalibrationController, controller_interface::ControllerBase)
 
 namespace ronex
 {
