@@ -27,7 +27,8 @@
 
 #include <ros/node_handle.h>
 
-#include <pr2_controller_interface/controller.h>
+#include <controller_interface/controller.h>
+#include <pr2_mechanism_model/robot.h>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
@@ -37,8 +38,7 @@
 
 namespace ronex
 {
-  class GeneralIOPassthroughController
-    : public pr2_controller_interface::Controller
+  class GeneralIOPassthroughController : public controller_interface::Controller<pr2_mechanism_model::RobotState>
   {
   public:
     GeneralIOPassthroughController();
@@ -51,7 +51,7 @@ namespace ronex
     /*!
      * \brief Issues commands to the joint. Should be called at regular intervals
      */
-    virtual void update();
+    virtual void update(const ros::Time&, const ros::Duration&) {}
 
     void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 

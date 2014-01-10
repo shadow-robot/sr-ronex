@@ -109,16 +109,6 @@ namespace ronex
   /*!
    * \brief Issues commands to the joint. Should be called at regular intervals
    */
-  void GeneralIOPassthroughController::update()
-  {
-/*
-    if(loop_count_ % 10 == 0)
-    {
-      loop_count_ = 0;
-    }
-    loop_count_++;
-*/
-  }
 
   void GeneralIOPassthroughController::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
   {

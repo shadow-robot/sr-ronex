@@ -31,13 +31,12 @@
 #include "pr2_mechanism_model/robot.h"
 #include "realtime_tools/realtime_publisher.h"
 #include "std_msgs/Bool.h"
-#include <pr2_controller_interface/controller.h>
+#include <controller_interface/controller.h>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 
 namespace ronex
 {
-  class FakeCalibrationController
-    : public pr2_controller_interface::Controller
+  class FakeCalibrationController : public controller_interface::Controller<pr2_mechanism_model::RobotState>
   {
   public:
     FakeCalibrationController();
@@ -48,7 +47,7 @@ namespace ronex
     /*!
      * \brief Issues commands to the joint. Should be called at regular intervals
      */
-    virtual void update();
+    virtual void update(const ros::Time&, const ros::Duration&);
 
   private:
     pr2_mechanism_model::RobotState* robot_;

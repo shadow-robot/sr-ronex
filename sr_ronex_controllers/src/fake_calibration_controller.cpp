@@ -68,7 +68,7 @@ namespace ronex
   /*!
    * \brief Sets the joint to calibrated = true; Also publishes true to the calibrated topic
    */
-  void FakeCalibrationController::update()
+  void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
   {
     assert(joint_);
 
