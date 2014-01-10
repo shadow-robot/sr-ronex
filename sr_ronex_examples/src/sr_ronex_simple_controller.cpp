@@ -24,7 +24,7 @@
 #include "sr_ronex_examples/sr_ronex_simple_controller.hpp"
 #include "pluginlib/class_list_macros.h"
 
-PLUGINLIB_EXPORT_CLASS( ronex::SrRoNeXSimpleController, pr2_controller_interface::Controller)
+PLUGINLIB_EXPORT_CLASS( ronex::SrRoNeXSimpleController, controller_interface::ControllerBase)
 
 namespace ronex
 {
@@ -57,7 +57,7 @@ void SrRoNeXSimpleController::starting()
   // Do nothing.
 }
 
-void SrRoNeXSimpleController::update()
+void SrRoNeXSimpleController::update(const ros::Time&, const ros::Duration&)
 {
   double position = general_io_->state_.analogue_[0];
   if (loop_count_++ % 100 == 0)

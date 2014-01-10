@@ -1,8 +1,8 @@
 <library path="lib/libsr_ronex_simple_controller">
   
-  <class name="sr_ronex_examples/SrRoNeXSimpleController"
+  <class name="ronex/SrRoNeXSimpleController"
          type="ronex::SrRoNeXSimpleController"
-         base_class_type="pr2_controller_interface::Controller" />
+         base_class_type="controller_interface::ControllerBase" />
   
 </library>
 

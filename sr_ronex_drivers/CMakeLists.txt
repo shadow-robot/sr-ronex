@@ -1,8 +1,6 @@
 # Catkin User Guide: http://www.ros.org/doc/groovy/api/catkin/html/user_guide/user_guide.html
 # Catkin CMake Standard: http://www.ros.org/doc/groovy/api/catkin/html/user_guide/standards.html
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
-
 cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_drivers)
 
@@ -39,7 +37,7 @@ add_library(
   sr_ronex_drivers src/standard_ethercat_device.cpp src/sr_board_0x.cpp
   src/cod_decod/cod_decod_manager.cpp src/cod_decod/cod_decod.cpp src/cod_decod/cod_decod_std_io.cpp
   src/sr_board_mk2_gio.cpp)
-target_link_libraries(sr_ronex_drivers gcov ${catkin_LIBRARIES})
+target_link_libraries(sr_ronex_drivers ${catkin_LIBRARIES})
 
 add_dependencies(sr_ronex_drivers sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
 

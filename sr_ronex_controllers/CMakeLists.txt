@@ -17,7 +17,8 @@ find_package(catkin REQUIRED COMPONENTS
   ros_ethercat
   controller_manager
   controller_interface
-  control_toolbox)
+  control_toolbox
+  pr2_mechanism_model)
 
 include_directories( include ${catkin_INCLUDE_DIRS})
 
@@ -41,12 +42,12 @@ catkin_package(
     std_srvs
     sr_ronex_msgs
     sr_ronex_hardware_interface
-    pr2_mechanism_model
     pluginlib
     ros_ethercat
     controller_manager
     controller_interface
     control_toolbox
+    pr2_mechanism_model
   INCLUDE_DIRS include
 )
 
