@@ -65,7 +65,7 @@ namespace ronex
     //transmitting the bytes we received
     standard_commands_[spi_out_index]->packet.num_bytes = static_cast<int8u>(req.data.size());
 
-    ROS_ERROR_STREAM("From passthrough: received "<< req.data.size()<<"bytes: ");
+    ROS_INFO_STREAM("From passthrough: received "<< req.data.size()<<"bytes.");
     for(size_t i = 0; i < req.data.size(); ++i)
     {
       try

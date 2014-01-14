@@ -104,6 +104,7 @@ namespace ronex
 	  if(new_command)
 	  {
 	    new_command = false;
+	    spi_->nullify_command(spi_index);
 	    continue;
 	  }
        
