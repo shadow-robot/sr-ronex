@@ -10,8 +10,8 @@ find_package( catkin REQUIRED COMPONENTS
   std_msgs
   std_srvs
   sr_ronex_msgs
-  sr_ronex_hardware_interface
   sr_ronex_utilities
+  sr_ronex_hardware_interface
   pluginlib
   realtime_tools
   dynamic_reconfigure
@@ -44,8 +44,8 @@ catkin_package(
     std_srvs
     sr_ronex_msgs
     sr_ronex_utilities
-    dynamic_reconfigure
     sr_ronex_hardware_interface
+    dynamic_reconfigure
     pluginlib
     pr2_mechanism_model
   INCLUDE_DIRS include

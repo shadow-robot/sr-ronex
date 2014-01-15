@@ -24,17 +24,16 @@
 #ifndef _SR_BOARD_MK2_GIO_HPP_
 #define _SR_BOARD_MK2_GIO_HPP_
 
-#include <ethercat_hardware/ethercat_device.h>
-#include <realtime_tools/realtime_publisher.h>
-#include <sr_ronex_msgs/GeneralIOState.h>
-
-#include <sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h>
-#include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
-
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 
+#include <ethercat_hardware/ethercat_device.h>
+#include <realtime_tools/realtime_publisher.h>
+#include <sr_ronex_msgs/GeneralIOState.h>
 #include <dynamic_reconfigure/server.h>
+
+#include "sr_ronex_hardware_interface/Ronex_Protocol_0x02000001_GIO_00.h"
+#include "sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp"
 #include "sr_ronex_drivers/GeneralIOConfig.h"
 
 using namespace std;

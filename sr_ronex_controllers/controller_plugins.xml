@@ -1,10 +1,10 @@
 <library path="lib/libsr_ronex_controllers">
 
-  <class name="ronex/GeneralIOPassthroughController"
+  <class name="sr_ronex_controllers/GeneralIOPassthroughController"
          type="ronex::GeneralIOPassthroughController"
          base_class_type="controller_interface::ControllerBase" />
 
-  <class name="ronex/FakeCalibrationController"
+  <class name="sr_ronex_controllers/FakeCalibrationController"
          type="ronex::FakeCalibrationController"
          base_class_type="controller_interface::ControllerBase" />
 

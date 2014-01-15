@@ -9,13 +9,12 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   sr_ronex_msgs
   sr_ronex_utilities
+  sr_ronex_hardware_interface
   roscpp
   rostest
   diagnostic_msgs
   diagnostic_updater
   pluginlib
-  sr_ronex_external_protocol
-  sr_ronex_hardware_interface
   dynamic_reconfigure
   realtime_tools
   ethercat_hardware
@@ -47,6 +46,7 @@ catkin_package(
     ethercat_hardware
     std_msgs
     sr_ronex_msgs
+    sr_ronex_hardware_interface 
     pr2_hardware_interface
     eml
     roscpp
@@ -55,8 +55,6 @@ catkin_package(
     diagnostic_msgs
     diagnostic_updater
     pluginlib
-    sr_ronex_external_protocol
-    sr_ronex_hardware_interface
     dynamic_reconfigure
     tinyxml
     ros_ethercat

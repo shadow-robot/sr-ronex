@@ -10,14 +10,11 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   std_srvs
   sr_ronex_msgs
-  sr_ronex_hardware_interface
   sr_ronex_utilities
+  sr_ronex_hardware_interface
   pluginlib
-  realtime_tools
   ros_ethercat
-  controller_manager
   controller_interface
-  control_toolbox
   pr2_mechanism_model)
 
 include_directories( include ${catkin_INCLUDE_DIRS})
@@ -44,9 +41,7 @@ catkin_package(
     sr_ronex_hardware_interface
     pluginlib
     ros_ethercat
-    controller_manager
     controller_interface
-    control_toolbox
     pr2_mechanism_model
   INCLUDE_DIRS include
 )
