@@ -35,7 +35,11 @@ namespace ronex
 
   SPIPassthroughController::~SPIPassthroughController()
   {
-    ROS_ERROR("@todo: delete / free the standard commands");
+    for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
+    {
+      delete standard_commands_[i];
+      standard_commands_[i] = NULL;
+    }
   }
 
   bool SPIPassthroughController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
@@ -81,7 +85,7 @@ namespace ronex
     }
 
     //pushing to the command queue to be sent through etherCAT
-    command_queue_[spi_out_index].push( new SplittedSPICommand(standard_commands_[spi_out_index]) );
+    command_queue_[spi_out_index].push(standard_commands_[spi_out_index]);
 
     //wait for the response to be received
     bool not_received = true;
@@ -106,9 +110,8 @@ namespace ronex
 	    }
 	    not_received = false;
 
-            //Delete the pointer in status queue, then pop
-            delete status_queue_[i].front().first;
-            delete status_queue_[i].front().second;
+	    //we used the status (sent it back to the user through the service
+	    // response -> popping from the queue
 	    status_queue_[i].pop();
 
 	    break;
