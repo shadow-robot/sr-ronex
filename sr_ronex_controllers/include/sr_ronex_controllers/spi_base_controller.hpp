@@ -40,6 +40,16 @@ namespace ronex
     bool pin_output_state_post;
 
     SPI_PACKET_OUT packet;
+
+    SplittedSPICommand()
+    {}
+
+    SplittedSPICommand(SplittedSPICommand* copy_me)
+    {
+      this->pin_output_state_pre = copy_me->pin_output_state_pre;
+      this->pin_output_state_post = copy_me->pin_output_state_post;
+      this->packet = copy_me->packet;
+    }
   };
 
   class SPIBaseController

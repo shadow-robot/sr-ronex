@@ -81,7 +81,7 @@ namespace ronex
     }
 
     //pushing to the command queue to be sent through etherCAT
-    command_queue_[spi_out_index].push(standard_commands_[spi_out_index]);
+    command_queue_[spi_out_index].push( new SplittedSPICommand(standard_commands_[spi_out_index]) );
 
     //wait for the response to be received
     bool not_received = true;
@@ -106,6 +106,9 @@ namespace ronex
 	    }
 	    not_received = false;
 
+            //Delete the pointer in status queue, then pop
+            delete status_queue_[i].front().first;
+            delete status_queue_[i].front().second;
 	    status_queue_[i].pop();
 
 	    break;
