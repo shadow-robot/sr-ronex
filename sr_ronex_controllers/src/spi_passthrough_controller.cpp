@@ -34,7 +34,9 @@ namespace ronex
   {}
 
   SPIPassthroughController::~SPIPassthroughController()
-  {}
+  {
+    ROS_ERROR("@todo: delete / free the standard commands");
+  }
 
   bool SPIPassthroughController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
   {
@@ -48,7 +50,7 @@ namespace ronex
 
       command_srv_.push_back( node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i)) );
 
-      standard_commands_.push_back(boost::shared_ptr<SplittedSPICommand>(new SplittedSPICommand()));
+      standard_commands_.push_back(new SplittedSPICommand());
     }
 
     dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>(ros::NodeHandle(topic_prefix_)));
@@ -105,7 +107,7 @@ namespace ronex
 	    not_received = false;
 
 	    status_queue_[i].pop();
-	    
+
 	    break;
 	  }
         }

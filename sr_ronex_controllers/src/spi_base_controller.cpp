@@ -107,12 +107,12 @@ namespace ronex
 	    spi_->nullify_command(spi_index);
 	    continue;
 	  }
-       
+
 	  //the response has not been received. If the command type is NORMAL
 	  // then the response can be updated (it's INVALID until the SPI responds)
 	  if( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL );
 	  {
-	    status_queue_[spi_index].front().second.reset(new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]));
+	    status_queue_[spi_index].front().second = new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
 	  }
 	}
       }
@@ -123,9 +123,9 @@ namespace ronex
       {
         //sending the available command
 
-        //first we copy it to the status queue - the status is still NULL
+        //first we add the pointer to the command onto the status queue - the status is still NULL
         // as we haven't received the response yet.
-        status_queue_[spi_index].push(std::pair<boost::shared_ptr<SplittedSPICommand>,boost::shared_ptr<SPI_PACKET_IN> >());
+        status_queue_[spi_index].push(std::pair<SplittedSPICommand*, SPI_PACKET_IN*>());
         status_queue_[spi_index].front().first = command_queue_[spi_index].front();
 
         //now we copy the command to the hardware interface
@@ -134,7 +134,8 @@ namespace ronex
 	new_command = true;
 
         //the command will be sent at the end of the iteration,
-        // removing the command from the queue.
+        // removing the command from the queue but not freeing the
+        // memory yet
         command_queue_[spi_index].pop();
       }
     }

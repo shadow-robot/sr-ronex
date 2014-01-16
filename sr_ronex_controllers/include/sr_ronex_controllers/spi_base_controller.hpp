@@ -68,8 +68,8 @@ namespace ronex
 
     ronex::SPI* spi_;
 
-    std::vector<std::queue<boost::shared_ptr<SplittedSPICommand> > > command_queue_;
-    std::vector<std::queue<std::pair<boost::shared_ptr<SplittedSPICommand>, boost::shared_ptr<SPI_PACKET_IN> > > > status_queue_;
+    std::vector<std::queue<SplittedSPICommand*> > command_queue_;
+    std::vector<std::queue<std::pair<SplittedSPICommand*, SPI_PACKET_IN* > > > status_queue_;
 
     bool pre_init_(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
 
