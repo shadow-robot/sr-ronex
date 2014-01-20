@@ -71,7 +71,7 @@ namespace ronex
     //transmitting the bytes we received
     standard_commands_[spi_out_index]->packet.num_bytes = static_cast<int8u>(req.data.size());
 
-    ROS_INFO_STREAM("From passthrough: received "<< req.data.size()<<"bytes.");
+    ROS_DEBUG_STREAM("From passthrough: received "<< req.data.size()<<"bytes.");
     for(size_t i = 0; i < req.data.size(); ++i)
     {
       try
@@ -96,26 +96,37 @@ namespace ronex
 
       for(size_t i = 0; i < status_queue_.size(); ++i)
       {
-        if( status_queue_[i].front().first == standard_commands_[spi_out_index] )
+        if(!status_queue_[i].empty())
         {
-	  if( status_queue_[i].front().second != NULL)
-	  {
-	    //found the status command corresponding to the command we sent
-	    // updating the response
-	    for(size_t j = 0; j < req.data.size(); ++j)
+          if( status_queue_[i].front().first == standard_commands_[spi_out_index] )
+          {
+	    if( status_queue_[i].front().second != NULL)
 	    {
-              std::stringstream hex;
-              hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
-	      res.data.push_back(hex.str());
+	      //found the status command corresponding to the command we sent
+	      // updating the response
+	      for(size_t j = 0; j < req.data.size(); ++j)
+	      {
+                std::stringstream hex;
+	        try
+	        {
+		  hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
+	        }
+	        catch(...)
+	        {
+		  ROS_ERROR_STREAM("Can't cast to uint.");
+		  hex << "bad_data";
+	        }
+	        res.data.push_back(hex.str());
+	      }
+	      not_received = false;
+
+	      //we used the status (sent it back to the user through the service
+	      // response -> popping from the queue
+	      status_queue_[i].pop();
+
+	      break;
 	    }
-	    not_received = false;
-
-	    //we used the status (sent it back to the user through the service
-	    // response -> popping from the queue
-	    status_queue_[i].pop();
-
-	    break;
-	  }
+          }
         }
       }
     }
