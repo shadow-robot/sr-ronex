@@ -90,24 +90,27 @@ namespace ronex
 
       for(size_t i = 0; i < status_queue_.size(); ++i)
       {
-        if( status_queue_[i].front().first == standard_commands_[spi_out_index] )
+        if(!status_queue_[i].empty())
         {
-	  if( status_queue_[i].front().second != NULL)
-	  {
-	    //found the status command corresponding to the command we sent
-	    // updating the response
-	    for(size_t j = 0; j < req.data.size(); ++j)
+          if( status_queue_[i].front().first == standard_commands_[spi_out_index] )
+          {
+            if( status_queue_[i].front().second != NULL)
 	    {
-              std::stringstream hex;
-              hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
-	      res.data.push_back(hex.str());
-	    }
-	    not_received = false;
+              //found the status command corresponding to the command we sent
+              // updating the response
+              for(size_t j = 0; j < req.data.size(); ++j)
+	      {
+                std::stringstream hex;
+                hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
+                res.data.push_back(hex.str());
+              }
+              not_received = false;
 
-	    status_queue_[i].pop();
-	    
-	    break;
-	  }
+              status_queue_[i].pop();
+
+              break;
+            }
+          }
         }
       }
     }
