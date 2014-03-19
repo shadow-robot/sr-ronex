@@ -76,8 +76,8 @@ namespace ronex
     std::vector<std::queue<SplittedSPICommand*> > command_queue_;
     std::vector<std::queue<std::pair<SplittedSPICommand*, SPI_PACKET_IN* > > > status_queue_;
 
-    int16u     cmd_pin_output_states_pre_;
-    int16u     cmd_pin_output_states_post_;
+    uint16_t     cmd_pin_output_states_pre_;
+    uint16_t     cmd_pin_output_states_post_;
 
     bool pre_init_(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
 
