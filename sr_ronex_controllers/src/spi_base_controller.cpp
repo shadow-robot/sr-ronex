@@ -143,62 +143,10 @@ namespace ronex
 
   void SPIBaseController::copy_splitted_to_cmd_(size_t spi_index)
   {
-    //setting the pre / post pin states for this spi output
-    switch( spi_index )
-    {
-    case 0:
-      if( command_queue_[spi_index].front()->pin_output_state_pre )
-        spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_0;
-      else
-        spi_->command_->pin_output_states_pre &= 0xFFFF - PIN_OUTPUT_STATE_CS_0;
-
-      if( command_queue_[spi_index].front()->pin_output_state_post )
-        spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_0;
-      else
-        spi_->command_->pin_output_states_post &= 0xFFFF - PIN_OUTPUT_STATE_CS_0;
-
-      break;
-
-    case 1:
-      if( command_queue_[spi_index].front()->pin_output_state_pre )
-        spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_1;
-      else
-        spi_->command_->pin_output_states_pre &= 0xFFFF - PIN_OUTPUT_STATE_CS_1;
-      break;
-
-      if( command_queue_[spi_index].front()->pin_output_state_post )
-        spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_1;
-      else
-        spi_->command_->pin_output_states_post &= 0xFFFF - PIN_OUTPUT_STATE_CS_1;
-      break;
-
-    case 2:
-      if( command_queue_[spi_index].front()->pin_output_state_pre )
-        spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_2;
-      else
-        spi_->command_->pin_output_states_pre &= 0xFFFF - PIN_OUTPUT_STATE_CS_2;
-      break;
-
-      if( command_queue_[spi_index].front()->pin_output_state_post )
-        spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_2;
-      else
-        spi_->command_->pin_output_states_post &= 0xFFFF - PIN_OUTPUT_STATE_CS_2;
-      break;
-
-    case 3:
-      if( command_queue_[spi_index].front()->pin_output_state_pre )
-        spi_->command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_3;
-      else
-        spi_->command_->pin_output_states_pre &= 0xFFFF - PIN_OUTPUT_STATE_CS_3;
-      break;
-
-      if( command_queue_[spi_index].front()->pin_output_state_post )
-        spi_->command_->pin_output_states_post |= PIN_OUTPUT_STATE_CS_3;
-      else
-        spi_->command_->pin_output_states_post &= 0xFFFF - PIN_OUTPUT_STATE_CS_3;
-      break;
-    }
-
+    //setting the pre / post pin states (for all the spi outputs)
+    spi_->command_->pin_output_states_pre = cmd_pin_output_states_pre_;
+    spi_->command_->pin_output_states_post = cmd_pin_output_states_post_;
+    
     //copying the packet data
     spi_->command_->spi_out[spi_index].clock_divider = command_queue_[spi_index].front()->packet.clock_divider;
     spi_->command_->spi_out[spi_index].SPI_config = command_queue_[spi_index].front()->packet.SPI_config;
