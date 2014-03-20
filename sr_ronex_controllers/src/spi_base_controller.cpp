@@ -144,12 +144,12 @@ namespace ronex
   void SPIBaseController::copy_splitted_to_cmd_(size_t spi_index)
   {
     //Mask to avoid setting the CS for the other SPI ports
-    uint16_t bit_mask_CS = 0xF000;
-    uint16_t bit_mask_no_CS = 0x0FFF;
-    uint16_t bit_mask_one_CS_bit = 0x0001 << (spi_index + 12);
+    uint16_t bit_mask_CS = PIN_OUTPUT_STATE_CS_0 | PIN_OUTPUT_STATE_CS_1 | PIN_OUTPUT_STATE_CS_2 | PIN_OUTPUT_STATE_CS_3;
+    uint16_t bit_mask_no_CS = ~bit_mask_CS;
+    uint16_t bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << spi_index;
  
     //setting the pre / post pin states (for all the spi outputs)
-    //First we leave the default values for the CS bits
+    //First we leave the existing values for the CS bits
     spi_->command_->pin_output_states_pre &= bit_mask_CS;
     //then we set the values for all the non-CS bits
     spi_->command_->pin_output_states_pre |= (cmd_pin_output_states_pre_ & bit_mask_no_CS);
@@ -158,6 +158,7 @@ namespace ronex
     spi_->command_->pin_output_states_pre |= (cmd_pin_output_states_pre_ & bit_mask_one_CS_bit);
 
     //We do the same for the post-state
+    //First we leave the existing values for the CS bits
     spi_->command_->pin_output_states_post &= bit_mask_CS;
     //then we set the values for all the non-CS bits
     spi_->command_->pin_output_states_post |= (cmd_pin_output_states_post_ & bit_mask_no_CS);
