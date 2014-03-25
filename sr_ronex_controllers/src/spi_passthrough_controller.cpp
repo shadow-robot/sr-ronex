@@ -34,7 +34,13 @@ namespace ronex
   {}
 
   SPIPassthroughController::~SPIPassthroughController()
-  {}
+  {
+    for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
+    {
+      delete standard_commands_[i];
+      standard_commands_[i] = NULL;
+    }
+  }
 
   bool SPIPassthroughController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
   {
@@ -48,7 +54,7 @@ namespace ronex
 
       command_srv_.push_back( node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i)) );
 
-      standard_commands_.push_back(boost::shared_ptr<SplittedSPICommand>(new SplittedSPICommand()));
+      standard_commands_.push_back(new SplittedSPICommand());
     }
 
     dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>(ros::NodeHandle(topic_prefix_)));
@@ -65,7 +71,7 @@ namespace ronex
     //transmitting the bytes we received
     standard_commands_[spi_out_index]->packet.num_bytes = static_cast<int8u>(req.data.size());
 
-    ROS_INFO_STREAM("From passthrough: received "<< req.data.size()<<"bytes.");
+    ROS_DEBUG_STREAM("From passthrough: received "<< req.data.size()<<"bytes.");
     for(size_t i = 0; i < req.data.size(); ++i)
     {
       try
@@ -94,22 +100,32 @@ namespace ronex
         {
           if( status_queue_[i].front().first == standard_commands_[spi_out_index] )
           {
-            if( status_queue_[i].front().second != NULL)
+	    if( status_queue_[i].front().second != NULL)
 	    {
-              //found the status command corresponding to the command we sent
-              // updating the response
-              for(size_t j = 0; j < req.data.size(); ++j)
+	      //found the status command corresponding to the command we sent
+	      // updating the response
+	      for(size_t j = 0; j < req.data.size(); ++j)
 	      {
                 std::stringstream hex;
-                hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
-                res.data.push_back(hex.str());
-              }
-              not_received = false;
+	        try
+	        {
+		  hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
+	        }
+	        catch(...)
+	        {
+		  ROS_ERROR_STREAM("Can't cast to uint.");
+		  hex << "bad_data";
+	        }
+	        res.data.push_back(hex.str());
+	      }
+	      not_received = false;
 
-              status_queue_[i].pop();
+	      //we used the status (sent it back to the user through the service
+	      // response -> popping from the queue
+	      status_queue_[i].pop();
 
-              break;
-            }
+	      break;
+	    }
           }
         }
       }

@@ -40,6 +40,16 @@ namespace ronex
     bool pin_output_state_post;
 
     SPI_PACKET_OUT packet;
+
+    SplittedSPICommand()
+    {}
+
+    SplittedSPICommand(SplittedSPICommand* copy_me)
+    {
+      this->pin_output_state_pre = copy_me->pin_output_state_pre;
+      this->pin_output_state_post = copy_me->pin_output_state_post;
+      this->packet = copy_me->packet;
+    }
   };
 
   class SPIBaseController
@@ -68,8 +78,8 @@ namespace ronex
 
     ronex::SPI* spi_;
 
-    std::vector<std::queue<boost::shared_ptr<SplittedSPICommand> > > command_queue_;
-    std::vector<std::queue<std::pair<boost::shared_ptr<SplittedSPICommand>, boost::shared_ptr<SPI_PACKET_IN> > > > status_queue_;
+    std::vector<std::queue<SplittedSPICommand*> > command_queue_;
+    std::vector<std::queue<std::pair<SplittedSPICommand*, SPI_PACKET_IN* > > > status_queue_;
 
     bool pre_init_(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
 

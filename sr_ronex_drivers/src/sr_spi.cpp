@@ -227,7 +227,7 @@ void SrSPI::packCommand(unsigned char *buffer, bool halt, bool reset)
       for(unsigned int i =0; i < static_cast<unsigned int>(command->spi_out[spi_index].num_bytes); ++i)
 	ss << static_cast<int>(command->spi_out[spi_index].data_bytes[i]) << ",";
 
-      ROS_INFO_STREAM("" << ss.str());
+      ROS_DEBUG_STREAM("" << ss.str());
     }
   }
 }
