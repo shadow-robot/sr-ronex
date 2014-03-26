@@ -2,6 +2,9 @@
 Changelog for package sr_ronex_external_protocol
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.9.5 (2013-12-18)
 ------------------
 

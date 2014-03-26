@@ -2,6 +2,10 @@
 Changelog for package sr_ronex_controllers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* call catkin_package() despite RONEX_TEST_WITH_HARDWARE
+
 0.9.5 (2013-12-18)
 ------------------
 
