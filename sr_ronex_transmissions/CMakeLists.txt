@@ -22,6 +22,7 @@ add_library(sr_ronex_transmissions src/ronex_transmission.cpp src/mapping/genera
 catkin_package(
     CATKIN_DEPENDS pr2_mechanism_model roscpp rostest sr_ronex_hardware_interface
     INCLUDE_DIRS include
+    LIBRARIES sr_ronex_transmissions
 )
 
 if(COMMAND add_rostest_gtest)
