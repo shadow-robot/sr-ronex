@@ -23,7 +23,7 @@ import dynamic_reconfigure.client
 from threading import Lock
 from sr_ronex_msgs.msg import GeneralIOState, PWM
 from std_msgs.msg import Bool
-from pr2_mechanism_msgs.srv import ListControllers
+from controller_manager_msgs.srv import ListControllers
 
 class TestRonexWithHardware(unittest.TestCase):
   '''
@@ -104,8 +104,9 @@ class TestRonexWithHardware(unittest.TestCase):
     self.assertTrue([ ron[1] + sta, 'sr_ronex_msgs/GeneralIOState' ] in topics_list)
 
     self.clients = [ dynamic_reconfigure.client.Client(r) for r in ron ]
-    self.digital_publishers = [ [ rospy.Publisher(r + com_dig + str(i), Bool, latch = True) for i in xrange(12) ] for r in ron ]
-    self.pwm_publishers = [ [ rospy.Publisher(r + com_pwm + str(i), PWM, latch = True) for i in xrange(6) ] for r in ron ]
+    self.digital_publishers = [ [ rospy.Publisher(r + com_dig + str(i), Bool, latch=True) for i in xrange(12) ] for r in ron ]
+    self.pwm_publishers = [ [ rospy.Publisher(r + com_pwm + str(i), PWM, latch=True) for i in xrange(6) ] for r in ron ]
+
 
     self.subscriber_0 = rospy.Subscriber(ron[0] + sta, GeneralIOState, self.state_callback_0)
     self.subscriber_1 = rospy.Subscriber(ron[1] + sta, GeneralIOState, self.state_callback_1)
@@ -144,7 +145,7 @@ class TestRonexWithHardware(unittest.TestCase):
 ############################################
 
   def test_if_controllers_are_loaded(self):
-    list_controllers = rospy.ServiceProxy('pr2_controller_manager/list_controllers', ListControllers)
+    list_controllers = rospy.ServiceProxy('controller_manager/list_controllers', ListControllers)
     available_controllers = list_controllers()
     for ctrl in self.controllers_list:
       self.assertTrue(ctrl in available_controllers.controllers)
@@ -208,7 +209,7 @@ class TestRonexWithHardware(unittest.TestCase):
         expected = self.expected_analogue_values_b
 
       for ind, value in enumerate(expected):
-        self.assertAlmostEqual(value, analogue[ind], delta = 30)
+        self.assertAlmostEqual(value, analogue[ind], delta=30)
 
   def test_pwm_outputs(self):
 
@@ -243,7 +244,7 @@ class TestRonexWithHardware(unittest.TestCase):
       rospy.sleep(0.2)
 
     for sample in samples:
-      self.assertAlmostEqual(sample.count(True), num_of_samples / 2, delta = num_of_samples / 3)
+      self.assertAlmostEqual(sample.count(True), num_of_samples / 2, delta=num_of_samples / 3)
 
 
 ############################################

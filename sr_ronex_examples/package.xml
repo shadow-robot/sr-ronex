@@ -44,7 +44,7 @@
   <run_depend>pr2_mechanism_model</run_depend>
   
   <export>
-    <pr2_controller_interface plugin="${prefix}/controller_plugins.xml"/>
+    <controller_interface plugin="${prefix}/controller_plugins.xml"/>
   </export>
   
 </package>
