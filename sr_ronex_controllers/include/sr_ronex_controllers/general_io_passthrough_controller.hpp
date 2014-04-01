@@ -29,7 +29,7 @@
 
 #include <controller_interface/controller.h>
 #include <pr2_mechanism_model/robot.h>
-#include "sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp"
+#include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 
@@ -38,7 +38,8 @@
 
 namespace ronex
 {
-  class GeneralIOPassthroughController : public controller_interface::Controller<pr2_mechanism_model::RobotState>
+  class GeneralIOPassthroughController
+    : public controller_interface::Controller<pr2_mechanism_model::RobotState>
   {
   public:
     GeneralIOPassthroughController();

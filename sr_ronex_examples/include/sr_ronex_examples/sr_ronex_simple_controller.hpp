@@ -37,7 +37,8 @@
 
 namespace ronex
 {
-  class SrRoNeXSimpleController : public controller_interface::Controller<pr2_mechanism_model::RobotState>
+  class SrRoNeXSimpleController
+    : public controller_interface::Controller<pr2_mechanism_model::RobotState>
   {
   public:
     SrRoNeXSimpleController();

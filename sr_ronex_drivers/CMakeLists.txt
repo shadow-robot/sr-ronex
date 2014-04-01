@@ -1,24 +1,13 @@
 # Catkin User Guide: http://www.ros.org/doc/groovy/api/catkin/html/user_guide/user_guide.html
 # Catkin CMake Standard: http://www.ros.org/doc/groovy/api/catkin/html/user_guide/standards.html
 
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fprofile-arcs -ftest-coverage")
+
 cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_drivers)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS
-  std_msgs
-  sr_ronex_msgs
-  sr_ronex_utilities
-  sr_ronex_hardware_interface
-  roscpp
-  rostest
-  diagnostic_msgs
-  diagnostic_updater
-  pluginlib
-  dynamic_reconfigure
-  realtime_tools
-  ethercat_hardware
-  ros_ethercat)
+find_package(catkin REQUIRED COMPONENTS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp rostest diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure realtime_tools ethercat_hardware)
 
 include_directories(include ${catkin_INCLUDE_DIRS} )
 
@@ -36,29 +25,14 @@ add_library(
   sr_ronex_drivers src/standard_ethercat_device.cpp src/sr_board_0x.cpp
   src/cod_decod/cod_decod_manager.cpp src/cod_decod/cod_decod.cpp src/cod_decod/cod_decod_std_io.cpp
   src/sr_board_mk2_gio.cpp)
-target_link_libraries(sr_ronex_drivers ${catkin_LIBRARIES})
+target_link_libraries(sr_ronex_drivers gcov ${catkin_LIBRARIES})
 
 add_dependencies(sr_ronex_drivers sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
-  CATKIN_DEPENDS
-    ethercat_hardware
-    std_msgs
-    sr_ronex_msgs
-    sr_ronex_hardware_interface 
-    pr2_hardware_interface
-    eml
-    roscpp
-    rostest
-    realtime_tools
-    diagnostic_msgs
-    diagnostic_updater
-    pluginlib
-    dynamic_reconfigure
-    tinyxml
-    ros_ethercat
-  INCLUDE_DIRS include
+    CATKIN_DEPENDS ethercat_hardware std_msgs sr_ronex_msgs pr2_hardware_interface eml roscpp rostest realtime_tools diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure tinyxml
+    INCLUDE_DIRS include
 )
 
 

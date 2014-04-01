@@ -17,6 +17,7 @@
 # License along with this library.
 # ####################################################################
 
+import roslib; roslib.load_manifest('sr_ronex_controllers')
 import rospy
 from time import sleep
 
@@ -68,7 +69,7 @@ class LoadPassthroughControllers(object):
         @param ronex_ids the ids of the ronexes
         """
         for ronex_id in ronex_ids:
-            rospy.set_param("/ronex_" + ronex_id + "_passthrough/type", "ronex/GeneralIOPassthroughController")
+            rospy.set_param("/ronex_" + ronex_id + "_passthrough/type", "sr_ronex_controllers/GeneralIOPassthroughController")
             rospy.set_param("/ronex_" + ronex_id + "_passthrough/ronex_id", ronex_id)
 
     def load_and_start_ctrl(self, ronex_ids):

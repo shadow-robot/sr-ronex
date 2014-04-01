@@ -28,15 +28,16 @@
 #include <ros/node_handle.h>
 
 #include <boost/smart_ptr.hpp>
-#include <pr2_mechanism_model/robot.h>
+#include "pr2_mechanism_model/robot.h"
 #include "realtime_tools/realtime_publisher.h"
 #include "std_msgs/Bool.h"
 #include <controller_interface/controller.h>
-#include "sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp"
+#include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 
 namespace ronex
 {
-  class FakeCalibrationController : public controller_interface::Controller<pr2_mechanism_model::RobotState>
+  class FakeCalibrationController
+    : public controller_interface::Controller<pr2_mechanism_model::RobotState>
   {
   public:
     FakeCalibrationController();

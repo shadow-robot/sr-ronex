@@ -26,10 +26,10 @@
   <build_depend>std_srvs</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
   <build_depend>sr_ronex_msgs</build_depend>
-  <build_depend>sr_ronex_utilities</build_depend>
   <build_depend>sr_ronex_hardware_interface</build_depend>
-  <build_depend>pluginlib</build_depend>
+  <build_depend>sr_ronex_utilities</build_depend>
   <build_depend>pr2_mechanism_model</build_depend>
+  <build_depend>pluginlib</build_depend>
 
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>roscpp</run_depend>
@@ -38,10 +38,10 @@
   <run_depend>std_srvs</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>sr_ronex_msgs</run_depend>
-  <run_depend>sr_ronex_utilities</run_depend>
   <run_depend>sr_ronex_hardware_interface</run_depend>
-  <run_depend>pluginlib</run_depend>
+  <run_depend>sr_ronex_utilities</run_depend>
   <run_depend>pr2_mechanism_model</run_depend>
+  <run_depend>pluginlib</run_depend>
   
   <export>
     <controller_interface plugin="${prefix}/controller_plugins.xml"/>
