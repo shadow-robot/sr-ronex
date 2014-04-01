@@ -211,7 +211,35 @@ bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
   // module has not finished writing it to memory yet.
   if( status_data->command_type == RONEX_COMMAND_02000003_COMMAND_TYPE_NORMAL)
   {
-    //TODO Update state message with the data
+    //ignore if receiver_number = -1 (data is not filled in)
+    if( status_data->receiver_number != -1 )
+    {
+      state_msg_.sequence_number = status_data->sequence_number;
+      //fill in the state message with the new data.
+      state_msg_.received_data[status_data->receiver_number].reserved.resize(NUM_RESERVED_WORDS);
+      for(size_t i=0 ; i<NUM_RESERVED_WORDS; ++i)
+        state_msg_.received_data[status_data->receiver_number].reserved[i] = status_data->receiver_data.reserved[i];
+
+      state_msg_.received_data[status_data->receiver_number].impulse_response.resize(IMPULSE_RESPONSE_SIZE);
+      for(size_t i=0 ; i<IMPULSE_RESPONSE_SIZE; ++i)
+      {
+        state_msg_.received_data[status_data->receiver_number].impulse_response[i].real = status_data->receiver_data.impulse_response[i].real;
+        state_msg_.received_data[status_data->receiver_number].impulse_response[i].imaginary = status_data->receiver_data.impulse_response[i].imaginary;
+      }
+
+      state_msg_.received_data[status_data->receiver_number].first_sample_number = status_data->receiver_data.first_sample_number;
+
+      state_msg_.received_data[status_data->receiver_number].payload.resize(PAYLOAD_MAX_SIZE);
+      for(size_t i=0 ; i<PAYLOAD_MAX_SIZE; ++i)
+        state_msg_.received_data[status_data->receiver_number].payload[i] = status_data->receiver_data.payload[i];
+
+      state_msg_.received_data[status_data->receiver_number].rx_frame_information = status_data->receiver_data.rx_frame_information;
+      state_msg_.received_data[status_data->receiver_number].std_noise = status_data->receiver_data.std_noise;
+      state_msg_.received_data[status_data->receiver_number].flags = status_data->receiver_data.flags;
+      state_msg_.received_data[status_data->receiver_number].FPI = status_data->receiver_data.FPI;
+      state_msg_.received_data[status_data->receiver_number].timestamp_L = status_data->receiver_data.timestamp_L;
+      state_msg_.received_data[status_data->receiver_number].timestamp_H = status_data->receiver_data.timestamp_H;
+    }
   } //end first time, the sizes are properly initialised, simply fill in the data
 
   //publishing  if the sequence number is increased
@@ -220,6 +248,11 @@ bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
     state_msg_.header.stamp = ros::Time::now();
 
     //publish the message
+    if( state_publisher_->trylock() )
+    {
+      state_publisher_->msg_ = state_msg_;
+      state_publisher_->unlockAndPublish();
+    }
 
     previous_sequence_number_ = status_data->sequence_number;
   }
