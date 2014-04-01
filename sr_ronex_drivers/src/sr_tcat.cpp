@@ -214,6 +214,8 @@ bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
     //ignore if receiver_number = -1 (data is not filled in)
     if( status_data->receiver_number != -1 )
     {
+      state_msg_.received_data[status_data->receiver_number].data_received = true;
+
       state_msg_.sequence_number = status_data->sequence_number;
       //fill in the state message with the new data.
       state_msg_.received_data[status_data->receiver_number].reserved.resize(NUM_RESERVED_WORDS);
@@ -253,6 +255,10 @@ bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
       state_publisher_->msg_ = state_msg_;
       state_publisher_->unlockAndPublish();
     }
+
+    //reset the data received flags to false
+    for(size_t i=0; i<NUM_RECEIVERS; ++i)
+      state_msg_.received_data[status_data->receiver_number].data_received = false;
 
     previous_sequence_number_ = status_data->sequence_number;
   }

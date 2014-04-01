@@ -1,3 +1,4 @@
+bool data_received
 uint16[] reserved
 sr_ronex_msgs/ImpulseSample[] impulse_response
 uint16 first_sample_number
