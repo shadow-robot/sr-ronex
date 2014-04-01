@@ -18,6 +18,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <!-- Dependencies needed to compile this package. -->
+  <build_depend>ros_ethercat</build_depend>
   <build_depend>ethercat_hardware</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>sr_ronex_msgs</build_depend>
@@ -33,9 +34,9 @@
   <build_depend>sr_ronex_external_protocol</build_depend>
   <build_depend>sr_ronex_hardware_interface</build_depend>
   <build_depend>dynamic_reconfigure</build_depend>
-  <build_depend>ros_ethercat</build_depend>
 
   <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>ros_ethercat</run_depend>  
   <run_depend>ethercat_hardware</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>sr_ronex_msgs</run_depend>
@@ -52,7 +53,6 @@
   <run_depend>sr_ronex_hardware_interface</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>tinyxml</run_depend>
-  <run_depend>ros_ethercat</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
   <!-- <test_depend>pr2_msgs</test_depend> -->
