@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_transmissions)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS roscpp rostest sr_ronex_hardware_interface pr2_mechanism_model)
+find_package(catkin REQUIRED COMPONENTS roscpp rostest sr_ronex_hardware_interface )
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
@@ -20,7 +20,7 @@ add_library(sr_ronex_transmissions src/ronex_transmission.cpp src/mapping/genera
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
-    CATKIN_DEPENDS sr_ronex_hardware_interface pr2_mechanism_model roscpp rostest
+    CATKIN_DEPENDS sr_ronex_hardware_interface  roscpp rostest
     INCLUDE_DIRS include
     LIBRARIES sr_ronex_transmissions
 )
@@ -28,7 +28,7 @@ catkin_package(
 if(COMMAND add_rostest_gtest)
   add_rostest_gtest(test_ronex_transmission test/test_ronex_transmission.test test/test_ronex_transmission.cpp)
   target_link_libraries(test_ronex_transmission tinyxml ${catkin_LIBRARIES} ${GTEST_LIBRARIES})
-  add_dependencies(test_ronex_transmission pr2_mechanism_model tinyxml)
+  add_dependencies(test_ronex_transmission  tinyxml)
 endif(COMMAND add_rostest_gtest)
 
 install(TARGETS sr_ronex_transmissions

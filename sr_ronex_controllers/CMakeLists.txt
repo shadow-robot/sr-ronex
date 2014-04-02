@@ -23,7 +23,7 @@ add_dependencies(sr_ronex_controllers ${catkin_EXPORTED_TARGETS})
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
-    CATKIN_DEPENDS roscpp std_msgs std_srvs sr_ronex_msgs sr_ronex_hardware_interface controller_interface pr2_mechanism_model pluginlib
+    CATKIN_DEPENDS roscpp std_msgs std_srvs sr_ronex_msgs sr_ronex_hardware_interface controller_interface pluginlib
     INCLUDE_DIRS include
 )
 

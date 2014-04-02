@@ -55,7 +55,7 @@ TEST(RonexUtils, constructor )
   int add = 0;
   sbm.construct( &sh, add );
 
-  pr2_hardware_interface::HardwareInterface hw;
+  ros_ethercat_hardware_interface::HardwareInterface hw;
   int retsbm = sbm.initialize( &hw );
 
   EXPECT_EQ(retsbm,0);

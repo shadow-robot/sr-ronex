@@ -23,7 +23,6 @@
   <build_depend>std_msgs</build_depend>
   <build_depend>sr_ronex_msgs</build_depend>
   <build_depend>sr_ronex_utilities</build_depend>
-  <build_depend>pr2_hardware_interface</build_depend>
   <build_depend>eml</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rostest</build_depend>
@@ -41,7 +40,6 @@
   <run_depend>std_msgs</run_depend>
   <run_depend>sr_ronex_msgs</run_depend>
   <run_depend>sr_ronex_utilities</run_depend>
-  <run_depend>pr2_hardware_interface</run_depend>
   <run_depend>eml</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>rostest</run_depend>
@@ -59,7 +57,7 @@
   <!-- <test_depend>ethercat_hardware</test_depend> -->
   <!-- <test_depend>std_msgs</test_depend> -->
   <!-- <test_depend>sr_ronex_msgs</test_depend> -->
-  <!-- <test_depend>pr2_hardware_interface</test_depend> -->
+  <!-- <test_depend></test_depend> -->
   <!-- <test_depend>eml</test_depend> -->
   <!-- <test_depend>roscpp</test_depend> -->
   <!-- <test_depend>realtime_tools</test_depend> -->

@@ -27,7 +27,6 @@
   <build_depend>sr_ronex_utilities</build_depend>
   <build_depend>controller_manager_msgs</build_depend>
   <build_depend>controller_interface</build_depend>
-  <build_depend>pr2_mechanism_model</build_depend>
   <build_depend>pluginlib</build_depend>
   
   <!-- Dependencies needed after this package is compiled. -->
@@ -39,7 +38,6 @@
   <run_depend>sr_ronex_utilities</run_depend>
   <run_depend>controller_manager_msgs</run_depend>
   <run_depend>controller_interface</run_depend>
-  <run_depend>pr2_mechanism_model</run_depend>
   <run_depend>pluginlib</run_depend>
   
   <!-- Dependencies needed only for running tests. -->
@@ -50,7 +48,6 @@
   <!-- <test_depend>sr_ronex_hardware_interface</test_depend> -->
   <!-- <test_depend>pr2_mechanism_controllers</test_depend> -->
   <!-- <test_depend>pr2_controller_interface</test_depend> -->
-  <!-- <test_depend>pr2_mechanism_model</test_depend> -->
   <!-- <test_depend>pluginlib</test_depend> -->
 
 <export>

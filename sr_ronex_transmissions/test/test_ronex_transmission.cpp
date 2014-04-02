@@ -24,7 +24,7 @@
 #include "sr_ronex_transmissions/ronex_transmission.hpp"
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <ros/ros.h>
-#include <pr2_mechanism_model/robot.h>
+#include <ros_ethercat/robot.h>
 #include <gtest/gtest.h>
 
 using namespace ronex;
@@ -40,7 +40,7 @@ TEST(RonexTransmission, constructor)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  pr2_hardware_interface::HardwareInterface hw;
+  ros_ethercat_hardware_interface::HardwareInterface hw;
 
   //add ronex
   boost::shared_ptr<ronex::GeneralIO> general_io;
@@ -48,9 +48,9 @@ TEST(RonexTransmission, constructor)
   general_io->name_ = "/ronex/general_io/0";
   hw.addCustomHW( general_io.get() );
 
-  pr2_mechanism_model::Robot model(&hw);
+  ros_ethercat_mechanism_model::Robot model(&hw);
   ASSERT_TRUE(model.initXml(root));
-  pr2_mechanism_model::RobotState state(&model);
+  ros_ethercat_mechanism_model::RobotState state(&model);
 }
 
 TEST(RonexTransmission, propagateCommand)
@@ -65,7 +65,7 @@ TEST(RonexTransmission, propagateCommand)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  pr2_hardware_interface::HardwareInterface hw;
+  ros_ethercat_hardware_interface::HardwareInterface hw;
 
   //add ronex
   boost::shared_ptr<ronex::GeneralIO> general_io;
@@ -80,10 +80,10 @@ TEST(RonexTransmission, propagateCommand)
 
   hw.addCustomHW( general_io.get() );
 
-  pr2_mechanism_model::Robot model(&hw);
+  ros_ethercat_mechanism_model::Robot model(&hw);
   ASSERT_TRUE(model.initXml(root));
 
-  pr2_mechanism_model::RobotState state(&model);
+  ros_ethercat_mechanism_model::RobotState state(&model);
 
   //setting effort for the joint
   state.joint_states_[0].commanded_effort_ = 5.1;
@@ -110,7 +110,7 @@ TEST(RonexTransmission, propagateState)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  pr2_hardware_interface::HardwareInterface hw;
+  ros_ethercat_hardware_interface::HardwareInterface hw;
 
   //add ronex
   boost::shared_ptr<ronex::GeneralIO> general_io;
@@ -123,9 +123,9 @@ TEST(RonexTransmission, propagateState)
 
   hw.addCustomHW( general_io.get() );
 
-  pr2_mechanism_model::Robot model(&hw);
+  ros_ethercat_mechanism_model::Robot model(&hw);
   ASSERT_TRUE(model.initXml(root));
-  pr2_mechanism_model::RobotState state(&model);
+  ros_ethercat_mechanism_model::RobotState state(&model);
 
   //setting analogue data on the ronex for generating joint position / effort
   general_io->state_.analogue_[0] = 1.0; //position according to urdf

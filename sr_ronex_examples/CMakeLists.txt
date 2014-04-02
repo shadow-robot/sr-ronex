@@ -4,7 +4,7 @@ project(sr_ronex_examples)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package( catkin REQUIRED COMPONENTS roscpp rospy std_msgs std_srvs sr_ronex_msgs sr_ronex_hardware_interface sr_ronex_utilities pluginlib pr2_mechanism_model realtime_tools dynamic_reconfigure )
+find_package( catkin REQUIRED COMPONENTS roscpp rospy std_msgs std_srvs sr_ronex_msgs sr_ronex_hardware_interface sr_ronex_utilities pluginlib realtime_tools dynamic_reconfigure )
 
 ###########
 ## Build ##
@@ -26,7 +26,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 # You must invoke catkin_package() before adding any targets (libraries and executables).
 # The reason is because catkin_package() will change the location where the targets are built.
 catkin_package(
-  CATKIN_DEPENDS roscpp rospy std_msgs std_srvs sr_ronex_msgs sr_ronex_utilities dynamic_reconfigure sr_ronex_hardware_interface pr2_mechanism_model pluginlib
+  CATKIN_DEPENDS roscpp rospy std_msgs std_srvs sr_ronex_msgs sr_ronex_utilities dynamic_reconfigure sr_ronex_hardware_interface pluginlib
   INCLUDE_DIRS include
 )
 

@@ -37,7 +37,7 @@ SrRoNeXSimpleController::~SrRoNeXSimpleController()
 {
 }
 
-bool SrRoNeXSimpleController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+bool SrRoNeXSimpleController::init(ros_ethercat_mechanism_model::RobotState* robot, ros::NodeHandle &n)
 {
   assert (robot);
   

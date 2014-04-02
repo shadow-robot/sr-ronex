@@ -38,7 +38,7 @@ namespace ronex
   FakeCalibrationController::~FakeCalibrationController()
   {}
 
-  bool FakeCalibrationController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+  bool FakeCalibrationController::init(ros_ethercat_mechanism_model::RobotState* robot, ros::NodeHandle &n)
   {
     robot_ = robot;
     node_ = n;

@@ -23,6 +23,7 @@
 #ifndef _SR_TCAT_HPP_
 #define _SR_TCAT_HPP_
 
+#define pr2_hardware_interface ros_ethercat_hardware_interface
 #include <ethercat_hardware/ethercat_device.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_msgs/TCATState.h>
@@ -41,7 +42,7 @@ class SrTCAT : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(pr2_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(ros_ethercat_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
 
   SrTCAT();
   virtual ~SrTCAT();
