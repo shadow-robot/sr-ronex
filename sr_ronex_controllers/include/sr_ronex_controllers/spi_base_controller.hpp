@@ -36,9 +36,6 @@ namespace ronex
 {
   struct SplittedSPICommand
   {
-    bool pin_output_state_pre;
-    bool pin_output_state_post;
-
     SPI_PACKET_OUT packet;
 
     SplittedSPICommand()
@@ -46,8 +43,6 @@ namespace ronex
 
     SplittedSPICommand(SplittedSPICommand* copy_me)
     {
-      this->pin_output_state_pre = copy_me->pin_output_state_pre;
-      this->pin_output_state_post = copy_me->pin_output_state_post;
       this->packet = copy_me->packet;
     }
   };
@@ -80,6 +75,9 @@ namespace ronex
 
     std::vector<std::queue<SplittedSPICommand*> > command_queue_;
     std::vector<std::queue<std::pair<SplittedSPICommand*, SPI_PACKET_IN* > > > status_queue_;
+
+    uint16_t     cmd_pin_output_states_pre_;
+    uint16_t     cmd_pin_output_states_post_;
 
     bool pre_init_(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
 
