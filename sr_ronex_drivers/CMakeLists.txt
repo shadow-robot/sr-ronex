@@ -24,7 +24,7 @@ add_definitions(-Wall)
 add_library(
   sr_ronex_drivers src/standard_ethercat_device.cpp src/sr_board_0x.cpp
   src/cod_decod/cod_decod_manager.cpp src/cod_decod/cod_decod.cpp src/cod_decod/cod_decod_std_io.cpp
-  src/sr_board_mk2_gio.cpp)
+  src/sr_board_mk2_gio.cpp src/sr_tcat.cpp)
 target_link_libraries(sr_ronex_drivers gcov ${catkin_LIBRARIES})
 
 add_dependencies(sr_ronex_drivers sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
@@ -56,5 +56,3 @@ install(FILES ethercat_device_plugin.xml
 
 install(DIRECTORY cfg/
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/cfg)
-
-
