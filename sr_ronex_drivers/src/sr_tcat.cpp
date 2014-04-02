@@ -238,9 +238,8 @@ bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
       state_msg_.received_data[status_data->receiver_number].rx_frame_information = status_data->receiver_data.rx_frame_information;
       state_msg_.received_data[status_data->receiver_number].std_noise = status_data->receiver_data.std_noise;
       state_msg_.received_data[status_data->receiver_number].flags = status_data->receiver_data.flags;
-      state_msg_.received_data[status_data->receiver_number].FPI = status_data->receiver_data.FPI;
-      state_msg_.received_data[status_data->receiver_number].timestamp_L = status_data->receiver_data.timestamp_L;
-      state_msg_.received_data[status_data->receiver_number].timestamp_H = status_data->receiver_data.timestamp_H;
+      state_msg_.received_data[status_data->receiver_number].FPI = FPI_FIXED_POINT_TO_FLOAT(status_data->receiver_data.FPI);
+      state_msg_.received_data[status_data->receiver_number].timestamp_ns = static_cast<double>(status_data->receiver_data.timestamp_L + (status_data->receiver_data.timestamp_H << 32)*(15.65/1000.0));
     }
   } //end first time, the sizes are properly initialised, simply fill in the data
 

@@ -6,6 +6,5 @@ uint16[] payload
 uint32 rx_frame_information
 uint16 std_noise
 uint32 flags
-uint16 FPI
-uint32 timestamp_L
-uint16 timestamp_H
+float32 FPI
+float64 timestamp_ns
