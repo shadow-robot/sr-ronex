@@ -19,7 +19,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 add_library(sr_ronex_controllers src/general_io_passthrough_controller.cpp src/fake_calibration_controller.cpp)
 target_link_libraries(sr_ronex_controllers ${catkin_LIBRARIES})
 
-add_dependencies(sr_ronex_controllers sr_ronex_msgs_gencpp)
+add_dependencies(sr_ronex_controllers ${catkin_EXPORTED_TARGETS})
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(

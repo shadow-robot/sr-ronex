@@ -38,9 +38,9 @@ add_executable(change_ronex_configuration src/change_ronex_configuration.cpp)
 add_library(sr_ronex_simple_controller src/sr_ronex_simple_controller.cpp)
 
 ## Add cmake target dependencies of the executable/library
-add_dependencies(sr_ronex_read_analog_data sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
-add_dependencies(sr_ronex_flash_LED_with_PWM sr_ronex_msgs_gencpp ${PROJECT_NAME}_gencfg)
-add_dependencies(sr_ronex_simple_controller sr_ronex_msgs_gencpp)
+add_dependencies(sr_ronex_read_analog_data ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gencfg)
+add_dependencies(sr_ronex_flash_LED_with_PWM ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gencfg)
+add_dependencies(sr_ronex_simple_controller ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(sr_ronex_parse_parameter_server ${catkin_LIBRARIES})
