@@ -1,2 +1,2 @@
-uint16 real
-uint16 imaginary
+int16 real
+int16 imaginary

@@ -209,20 +209,64 @@ bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
   // The purpose of this is to filter those status_data structures that come filled with zeros due to the jitter
   // in the realtime loop. The jitter causes that the host tries to read the status when the microcontroller in the ronex
   // module has not finished writing it to memory yet.
+  ROS_DEBUG_STREAM("-----\nNEW unpack");
+  ROS_DEBUG_STREAM("   command type: " << status_data->command_type << " ("<< RONEX_COMMAND_02000003_COMMAND_TYPE_NORMAL <<")");
+  ROS_DEBUG_STREAM("   receiver number: " << status_data->receiver_number);
+  ROS_DEBUG_STREAM("   seq number: " << status_data->sequence_number << " ("<<previous_sequence_number_<<")");
+
   if( status_data->command_type == RONEX_COMMAND_02000003_COMMAND_TYPE_NORMAL)
   {
-    //TODO Update state message with the data
-  } //end first time, the sizes are properly initialised, simply fill in the data
+    //ignore if receiver_number = -1 (data is not filled in)
+    if( status_data->receiver_number != -1 )
+    {
+      state_msg_.received_data[status_data->receiver_number].data_received = true;
 
-  //publishing  if the sequence number is increased
-  if(status_data->sequence_number != previous_sequence_number_)
-  {
-    state_msg_.header.stamp = ros::Time::now();
+      state_msg_.sequence_number = status_data->sequence_number;
+      //fill in the state message with the new data.
+      state_msg_.received_data[status_data->receiver_number].reserved.resize(NUM_RESERVED_WORDS);
+      for(size_t i=0 ; i<NUM_RESERVED_WORDS; ++i)
+        state_msg_.received_data[status_data->receiver_number].reserved[i] = status_data->receiver_data.reserved[i];
 
-    //publish the message
+      state_msg_.received_data[status_data->receiver_number].impulse_response.resize(IMPULSE_RESPONSE_SIZE);
+      for(size_t i=0 ; i<IMPULSE_RESPONSE_SIZE; ++i)
+      {
+        state_msg_.received_data[status_data->receiver_number].impulse_response[i].real = status_data->receiver_data.impulse_response[i].real;
+        state_msg_.received_data[status_data->receiver_number].impulse_response[i].imaginary = status_data->receiver_data.impulse_response[i].imaginary;
+      }
 
-    previous_sequence_number_ = status_data->sequence_number;
+      state_msg_.received_data[status_data->receiver_number].first_sample_number = status_data->receiver_data.first_sample_number;
+
+      state_msg_.received_data[status_data->receiver_number].payload.resize(PAYLOAD_MAX_SIZE);
+      for(size_t i=0 ; i<PAYLOAD_MAX_SIZE; ++i)
+        state_msg_.received_data[status_data->receiver_number].payload[i] = status_data->receiver_data.payload[i];
+
+      state_msg_.received_data[status_data->receiver_number].rx_frame_information = status_data->receiver_data.rx_frame_information;
+      state_msg_.received_data[status_data->receiver_number].std_noise = status_data->receiver_data.std_noise;
+      state_msg_.received_data[status_data->receiver_number].flags = status_data->receiver_data.flags;
+      state_msg_.received_data[status_data->receiver_number].FPI = FPI_FIXED_POINT_TO_FLOAT(status_data->receiver_data.FPI);
+      state_msg_.received_data[status_data->receiver_number].timestamp_ns = static_cast<double>(status_data->receiver_data.timestamp_L + (static_cast<u_int64_t>(status_data->receiver_data.timestamp_H) << 32)*(15.65/1000.0));
+    } //end first time, the sizes are properly initialised, simply fill in the data
+
+    //publishing  if the sequence number is increased
+    if(status_data->sequence_number != previous_sequence_number_)
+    {
+      state_msg_.header.stamp = ros::Time::now();
+
+      //publish the message
+      if( state_publisher_->trylock() )
+      {
+	state_publisher_->msg_ = state_msg_;
+	state_publisher_->unlockAndPublish();
+      }
+      
+      //reset the data received flags to false
+      for(size_t i=0; i<NUM_RECEIVERS; ++i)
+	state_msg_.received_data[status_data->receiver_number].data_received = false;
+      
+      previous_sequence_number_ = status_data->sequence_number;
+    }
   }
+
   return true;
 }
 

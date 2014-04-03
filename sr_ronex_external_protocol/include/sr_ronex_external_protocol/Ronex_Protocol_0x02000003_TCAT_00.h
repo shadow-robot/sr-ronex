@@ -30,8 +30,8 @@
 
 
 #define RONEX_COMMAND_02000003_MASTER_CLOCK_SPEED_HZ        64000000        //!< Master clock. This is divided down to create the SPI clock.
-#define NUM_ANALOGUE_INPUTS                                        0        
-#define ANALOGUE_INPUT_RESOLUTION                                  0        //!< 
+#define NUM_ANALOGUE_INPUTS                                        0
+#define ANALOGUE_INPUT_RESOLUTION                                  0        //!<
 #define ANALOGUE_INPUT_JUSTIFICATION                           RIGHT
 #define NUM_ANALOGUE_OUTPUTS                                       0
 #define ANALOGUE_OUTPUT_RESOLUTION                                 0
@@ -141,19 +141,19 @@
 
 typedef struct
 {
-    int16u real;
-    int16u imaginary;
+    int16s real;
+    int16s imaginary;
 }IMPULSE_SAMPLE;
 
 
 //! The RECEIVER_DATA structure contains data from one receiver.
-//! 
+//!
 //! impulse_response[] is a subset of the 4064 sample array inside the DW1000 chip.
 //! We only send back 64 samples, starting at first_sample_number.
-//! 
+//!
 //! FPI is a 10.6 fixed point value. It is a non-integer index into the impulse
 //! response date which tells us where the first pulse appears.
-//! 
+//!
 typedef struct
 {
     int16u          reserved[NUM_RESERVED_WORDS];
@@ -189,12 +189,12 @@ typedef struct
 //! Therefore it takes 4 EtherCAT packets to transmit all of the receiver
 //! data. The 4 packets will all have the same sequence_number, but a
 //! different receiver_number.
-//! 
+//!
 //! command_type:       currently undecided function
 //! sequence_number:    When this changes, it signals the arrival of a new message
 //! receiver_number:    Which of the 4 receivers is this data from?
 //! receiver_data:      Data from one receiver
-//! 
+//!
 typedef struct
 {
     int16u             command_type;
