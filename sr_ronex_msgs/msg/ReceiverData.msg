@@ -1,3 +1,4 @@
+bool data_received
 uint16[] reserved
 sr_ronex_msgs/ImpulseSample[] impulse_response
 uint16 first_sample_number
@@ -5,6 +6,5 @@ uint16[] payload
 uint32 rx_frame_information
 uint16 std_noise
 uint32 flags
-uint16 FPI
-uint32 timestamp_L
-uint16 timestamp_H
+float32 FPI
+float64 timestamp_ns
