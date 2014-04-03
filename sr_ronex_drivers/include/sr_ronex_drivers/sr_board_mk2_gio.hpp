@@ -24,8 +24,7 @@
 #ifndef _SR_BOARD_MK2_GIO_HPP_
 #define _SR_BOARD_MK2_GIO_HPP_
 
-#define pr2_hardware_interface ros_ethercat_hardware_interface
-#include <ethercat_hardware/ethercat_device.h>
+#include <ros_ethercat_hardware/ethercat_device.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_msgs/GeneralIOState.h>
 

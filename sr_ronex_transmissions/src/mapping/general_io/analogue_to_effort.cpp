@@ -22,7 +22,7 @@
  **/
 
 #include "sr_ronex_transmissions/mapping/general_io/analogue_to_effort.hpp"
-#include <ros_ethercat/robot.h>
+#include <ros_ethercat_mechanism_model/robot.hpp>
 #include <boost/lexical_cast.hpp>
 
 namespace ronex

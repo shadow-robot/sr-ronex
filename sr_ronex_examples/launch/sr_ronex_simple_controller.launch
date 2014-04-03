@@ -6,7 +6,7 @@
   <arg name="ethercat_port" default="$(optenv ETHERCAT_PORT eth1)" />
 
   <!-- Start the ronex driver -->
-  <node name="ronex" pkg="ros_ethercat" type="ros_ethercat" args="-i $(arg ethercat_port) -r /robot_description" output="screen"  launch-prefix="nice -n -20"/> 
+  <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen"  launch-prefix="nice -n -20"/> 
   
   <!-- Loads the controller parameter -->
   <rosparam command="load" file="$(find sr_ronex_examples)/config/data_access_controller.yaml" />

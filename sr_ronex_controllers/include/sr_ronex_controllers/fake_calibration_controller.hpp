@@ -28,7 +28,7 @@
 #include <ros/node_handle.h>
 
 #include <boost/smart_ptr.hpp>
-#include "ros_ethercat/robot.h"
+#include "ros_ethercat_mechanism_model/robot.hpp"
 #include "realtime_tools/realtime_publisher.h"
 #include "std_msgs/Bool.h"
 #include <controller_interface/controller.h>

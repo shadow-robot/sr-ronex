@@ -21,10 +21,10 @@
  * @brief  Testing the ronex transmission for a given urdf.
  **/
 
-#include "sr_ronex_transmissions/ronex_transmission.hpp"
+#include "sr_ronex_transmissions/ronex_transmission.hpppp"
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <ros/ros.h>
-#include <ros_ethercat/robot.h>
+#include <ros_ethercat_mechanism_model/robot.hpp>
 #include <gtest/gtest.h>
 
 using namespace ronex;

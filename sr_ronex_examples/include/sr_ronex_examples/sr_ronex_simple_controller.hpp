@@ -27,7 +27,7 @@
 #include <ros/node_handle.h>
 
 #include <controller_interface/controller.h>
-#include <ros_ethercat/robot.h>
+#include <ros_ethercat_mechanism_model/robot.hpp>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>

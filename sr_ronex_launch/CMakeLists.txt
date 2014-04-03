@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_launch)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS)
+find_package(catkin REQUIRED COMPONENTS ros_ethercat_loop)
 
 #set the default path for built executables to the "bin" directory
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
@@ -15,7 +15,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
-    CATKIN_DEPENDS ros_ethercat
+    CATKIN_DEPENDS ros_ethercat_loop
 )
 
 install(DIRECTORY launch/

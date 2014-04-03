@@ -27,7 +27,6 @@
 #ifndef _RONEX_UTILS_HPP_
 #define _RONEX_UTILS_HPP_
 
-#define pr2_hardware_interface ros_ethercat_hardware_interface
 #include <ethercat_hardware/ethercat_device.h>
 #include <sstream>
 #include <bitset>

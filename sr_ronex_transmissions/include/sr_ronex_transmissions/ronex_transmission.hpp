@@ -16,7 +16,7 @@
  */
 
 /**
- * @file   ronex_transmission.hpp
+ * @file   ronex_transmission.hpppp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
  * @brief  A transmission for mapping RoNeXes to joints.
  **/
@@ -24,9 +24,9 @@
 #ifndef _RONEX_TRANSMISSION_H_
 #define _RONEX_TRANSMISSION_H_
 
-#include <ros_ethercat/transmission.h>
-#include <ros_ethercat/joint.h>
-#include <ros_ethercat/joint_calibration_simulator.h>
+#include <ros_ethercat_mechanism_model/transmission.hpp>
+#include <ros_ethercat_mechanism_model/joint.hpp>
+#include <ros_ethercat_mechanism_model/joint_calibration_simulator.hpp>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "sr_ronex_transmissions/mapping/ronex_mapping.hpp"

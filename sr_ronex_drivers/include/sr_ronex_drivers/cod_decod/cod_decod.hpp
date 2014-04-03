@@ -27,7 +27,7 @@
 #ifndef _COD_DECOD_HPP_
 #define _COD_DECOD_HPP_
 
-#include <ros_ethercat/hardware_interface.hpp>
+#include <ros_ethercat_hardware_interface/hardware_interface.hpp>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_updater/DiagnosticStatusWrapper.h>
 #include <al/ethercat_slave_handler.h>
