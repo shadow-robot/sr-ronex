@@ -19,25 +19,29 @@
 
 import rospy
 from sr_ronex_msgs.msg import TCATState
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+#from PyQt4.QtCore import *
+from PyQt4.QtGui import QMainWindow, QApplication, QWidget, QVBoxLayout
 
 import numpy
 from std_msgs.msg import Int8
 import sys
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
 
 import matplotlib
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt4agg import NavigationToolbar2QTAgg as  NavigationToolbar
 from matplotlib.figure import Figure
 
+import ctypes
+from math import sqrt
+
 class PlotWindow(QMainWindow):
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
-        self.setWindowTitle('Sliding histogramm')
+        self.setWindowTitle('Impulse Responses')
         self.create_main_frame()
+
+        self.setMinimumSize(1600,900)
+
         self.on_draw()
 
     def save_plot(self):
@@ -85,23 +89,52 @@ class TCATPlot(PlotWindow):
 
   def plotResults(self, data):
     receiver_index = 0
+    i = 0
+
+
+    print
+    base=[0,0,0,0]
+    for r in data.received_data:
+        base[i] = data.received_data[i].timestamp_ns - (data.received_data[i].FPI - data.received_data[i].first_sample_number)
+        #print base[i], data.received_data[i].timestamp_ns, data.received_data[i].first_sample_number, data.received_data[i].FPI
+        #ts = (data.received_data[i].timestamp_ns*(1000.0/15.65))
+        #print data.received_data[i].timestamp_ns, str(hex( int(ts) ))
+        i = i + 1
+
+    base_min = min(base)
+    print base, base_min
+    
+    i = 0
+    for r in data.received_data:
+        base[i] = base[i] - base_min
+        i = i + 1
+    print base
+    
     for receiver, ax in zip(data.received_data, self.axes):
         ax.clear()
-        ax.set_xlim([0,64])
+        ax.set_xlim([0, 64])
         #ax.set_ylim([-32768,32768])
         y1 = []
         y2 = []
+        y3 = []
+        x  = []
+        x_value = base[receiver_index]
 
         for impulse in receiver.impulse_response:
             y1.append(impulse.real)
             y2.append(impulse.imaginary)
+            y3.append(sqrt(impulse.real*impulse.real + impulse.imaginary*impulse.imaginary))
+            x.append(x_value)
+            x_value = x_value + 1
 
-        x = range(len(y1))
-        ax.set_ylim([min(min(y2),min(y1)),max(max(y2),max(y1))])
-        self.line1 = ax.plot(x, y1, c="b", label="real")
-        self.line1 = ax.plot(x, y2, c="r", label="imaginary")
+        #x = range(receiver*10, len(y1)+(receiver*10))
+        #x = range(0, len(y1))
+        ax.set_ylim([min(min(y2),min(y1)), max(y3)])
+        self.line1 = ax.plot(x, y1, c='#A0A0FF', label="real")
+        self.line1 = ax.plot(x, y2, c='#A0FFA0', label="imag")
+        self.line1 = ax.plot(x, y3, c='#A00000', label="magn")
         ax.legend(loc=0, scatterpoints = 1)
-        ax.set_title("Impulse Response["+str(receiver_index)+"]")
+        #ax.set_title("Impulse Response["+str(receiver_index)+"]")
         receiver_index += 1
 
     self.canvas.draw()
