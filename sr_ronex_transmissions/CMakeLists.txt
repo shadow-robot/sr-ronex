@@ -5,7 +5,13 @@ cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_transmissions)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS roscpp rostest sr_ronex_hardware_interface)
+find_package(catkin REQUIRED COMPONENTS
+    roscpp
+    rostest
+    sr_ronex_hardware_interface
+    ros_ethercat_mechanism_model
+    ros_ethercat_hardware_interface
+)
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
@@ -20,7 +26,12 @@ add_library(sr_ronex_transmissions src/ronex_transmission.cpp src/mapping/genera
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
-    CATKIN_DEPENDS sr_ronex_hardware_interface roscpp rostest
+    CATKIN_DEPENDS
+        roscpp
+        rostest
+        sr_ronex_hardware_interface
+        ros_ethercat_mechanism_model
+        ros_ethercat_hardware_interface 
     INCLUDE_DIRS include
     LIBRARIES sr_ronex_transmissions
 )
