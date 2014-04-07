@@ -89,27 +89,15 @@ class TCATPlot(PlotWindow):
 
   def plotResults(self, data):
     receiver_index = 0
-    i = 0
-
 
     print
-    base=[0,0,0,0]
-    for r in data.received_data:
-        base[i] = data.received_data[i].timestamp_ns - (data.received_data[i].FPI - data.received_data[i].first_sample_number)
-        #print base[i], data.received_data[i].timestamp_ns, data.received_data[i].first_sample_number, data.received_data[i].FPI
-        #ts = (data.received_data[i].timestamp_ns*(1000.0/15.65))
-        #print data.received_data[i].timestamp_ns, str(hex( int(ts) ))
-        i = i + 1
-
+    base=[r.timestamp_ns - (r.FPI - r.first_sample_number) for r in data.received_data]
     base_min = min(base)
     print base, base_min
-    
-    i = 0
-    for r in data.received_data:
-        base[i] = base[i] - base_min
-        i = i + 1
+
+    base = [b - base_min for b in base]
     print base
-    
+
     for receiver, ax in zip(data.received_data, self.axes):
         ax.clear()
         ax.set_xlim([0, 64])
@@ -123,7 +111,7 @@ class TCATPlot(PlotWindow):
         for impulse in receiver.impulse_response:
             y1.append(impulse.real)
             y2.append(impulse.imaginary)
-            y3.append(sqrt(impulse.real*impulse.real + impulse.imaginary*impulse.imaginary))
+            y3.append(sqrt(impulse.real**2 + impulse.imaginary**2))
             x.append(x_value)
             x_value = x_value + 1
 
