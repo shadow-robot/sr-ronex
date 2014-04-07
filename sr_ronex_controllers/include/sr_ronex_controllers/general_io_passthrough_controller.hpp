@@ -39,13 +39,13 @@
 namespace ronex
 {
   class GeneralIOPassthroughController
-    : public controller_interface::Controller<ros_ethercat_mechanism_model::RobotState>
+    : public controller_interface::Controller<ros_ethercat_mechanism_model::Robot>
   {
   public:
     GeneralIOPassthroughController();
     virtual ~GeneralIOPassthroughController();
 
-    virtual bool init(ros_ethercat_mechanism_model::RobotState* robot, ros::NodeHandle &n);
+    virtual bool init(ros_ethercat_mechanism_model::Robot* robot, ros::NodeHandle &n);
 
     virtual void starting();
 

@@ -37,13 +37,13 @@
 namespace ronex
 {
   class FakeCalibrationController
-    : public controller_interface::Controller<ros_ethercat_mechanism_model::RobotState>
+    : public controller_interface::Controller<ros_ethercat_mechanism_model::Robot>
   {
   public:
     FakeCalibrationController();
     virtual ~FakeCalibrationController();
 
-    virtual bool init(ros_ethercat_mechanism_model::RobotState* robot, ros::NodeHandle &n);
+    virtual bool init(ros_ethercat_mechanism_model::Robot* robot, ros::NodeHandle &n);
 
     /*!
      * \brief Issues commands to the joint. Should be called at regular intervals
@@ -51,7 +51,7 @@ namespace ronex
     virtual void update(const ros::Time&, const ros::Duration&);
 
   private:
-    ros_ethercat_mechanism_model::RobotState* robot_;
+    ros_ethercat_mechanism_model::Robot* robot_;
     ros::NodeHandle node_;
     boost::shared_ptr<realtime_tools::RealtimePublisher<std_msgs::Bool> > pub_calibrated_;
     ros::Time last_publish_time_;

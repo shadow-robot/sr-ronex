@@ -24,6 +24,7 @@
 #ifndef _RONEX_TRANSMISSION_H_
 #define _RONEX_TRANSMISSION_H_
 
+#include <ros_ethercat_mechanism_model/robot.hpp>
 #include <ros_ethercat_mechanism_model/transmission.hpp>
 #include <ros_ethercat_mechanism_model/joint.hpp>
 #include <ros_ethercat_mechanism_model/joint_calibration_simulator.hpp>

@@ -25,6 +25,7 @@
 #ifndef _RONEX_MAPPING_H_
 #define _RONEX_MAPPING_H_
 
+#include <ros_ethercat_mechanism_model/robot.hpp>
 #include <ros_ethercat_mechanism_model/transmission.hpp>
 
 namespace ronex

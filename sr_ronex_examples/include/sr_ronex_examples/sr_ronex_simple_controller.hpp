@@ -38,13 +38,13 @@
 namespace ronex
 {
   class SrRoNeXSimpleController
-    : public controller_interface::Controller<ros_ethercat_mechanism_model::RobotState>
+    : public controller_interface::Controller<ros_ethercat_mechanism_model::Robot>
   {
   public:
     SrRoNeXSimpleController();
     virtual ~SrRoNeXSimpleController();
 
-    virtual bool init(ros_ethercat_mechanism_model::RobotState* robot, ros::NodeHandle &n);
+    virtual bool init(ros_ethercat_mechanism_model::Robot* robot, ros::NodeHandle &n);
 
     virtual void starting();
 

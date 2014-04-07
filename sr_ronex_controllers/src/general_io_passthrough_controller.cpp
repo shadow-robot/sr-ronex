@@ -45,7 +45,7 @@ namespace ronex
     }
   }
 
-  bool GeneralIOPassthroughController::init(ros_ethercat_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+  bool GeneralIOPassthroughController::init(ros_ethercat_mechanism_model::Robot* robot, ros::NodeHandle &n)
   {
     assert(robot);
     node_ = n;
@@ -77,7 +77,7 @@ namespace ronex
       }
     }
 
-    general_io_ = static_cast<ronex::GeneralIO*>( robot->model_->hw_->getCustomHW(path) );
+    general_io_ = static_cast<ronex::GeneralIO*>( robot->hw_.getCustomHW(path) );
     if( general_io_ == NULL)
     {
       ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");

@@ -21,7 +21,7 @@
  * @brief  Testing the ronex transmission for a given urdf.
  **/
 
-#include "sr_ronex_transmissions/ronex_transmission.hpppp"
+#include "sr_ronex_transmissions/ronex_transmission.hpp"
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <ros/ros.h>
 #include <ros_ethercat_mechanism_model/robot.hpp>
@@ -50,7 +50,7 @@ TEST(RonexTransmission, constructor)
 
   ros_ethercat_mechanism_model::Robot model(&hw);
   ASSERT_TRUE(model.initXml(root));
-  ros_ethercat_mechanism_model::RobotState state(&model);
+  ros_ethercat_mechanism_model::Robot state(&model);
 }
 
 TEST(RonexTransmission, propagateCommand)
@@ -83,7 +83,7 @@ TEST(RonexTransmission, propagateCommand)
   ros_ethercat_mechanism_model::Robot model(&hw);
   ASSERT_TRUE(model.initXml(root));
 
-  ros_ethercat_mechanism_model::RobotState state(&model);
+  ros_ethercat_mechanism_model::Robot state(&model);
 
   //setting effort for the joint
   state.joint_states_[0].commanded_effort_ = 5.1;
@@ -125,7 +125,7 @@ TEST(RonexTransmission, propagateState)
 
   ros_ethercat_mechanism_model::Robot model(&hw);
   ASSERT_TRUE(model.initXml(root));
-  ros_ethercat_mechanism_model::RobotState state(&model);
+  ros_ethercat_mechanism_model::Robot state(&model);
 
   //setting analogue data on the ronex for generating joint position / effort
   general_io->state_.analogue_[0] = 1.0; //position according to urdf
