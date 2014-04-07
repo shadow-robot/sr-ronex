@@ -203,6 +203,7 @@ void SrTCAT::packCommand(unsigned char *buffer, bool halt, bool reset)
 bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
 {
   RONEX_STATUS_02000003* status_data = (RONEX_STATUS_02000003 *)(this_buffer+  command_size_);
+  u_int64_t timestamp_64;
 
   // Checking that the received command type matches RONEX_COMMAND_02000003_COMMAND_TYPE_NORMAL
   // (the one that was used in the command). The ronex firmware will answer with whatever command type we send.
@@ -210,9 +211,9 @@ bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
   // in the realtime loop. The jitter causes that the host tries to read the status when the microcontroller in the ronex
   // module has not finished writing it to memory yet.
   ROS_DEBUG_STREAM("-----\nNEW unpack");
-  ROS_DEBUG_STREAM("   command type: " << status_data->command_type << " ("<< RONEX_COMMAND_02000003_COMMAND_TYPE_NORMAL <<")");
+  ROS_DEBUG_STREAM("   command type:    " << status_data->command_type << " ("<< RONEX_COMMAND_02000003_COMMAND_TYPE_NORMAL <<")");
   ROS_DEBUG_STREAM("   receiver number: " << status_data->receiver_number);
-  ROS_DEBUG_STREAM("   seq number: " << status_data->sequence_number << " ("<<previous_sequence_number_<<")");
+  ROS_DEBUG_STREAM("   seq number:      " << status_data->sequence_number << " ("<<previous_sequence_number_<<")");
 
   if( status_data->command_type == RONEX_COMMAND_02000003_COMMAND_TYPE_NORMAL)
   {
@@ -244,29 +245,41 @@ bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
       state_msg_.received_data[status_data->receiver_number].std_noise = status_data->receiver_data.std_noise;
       state_msg_.received_data[status_data->receiver_number].flags = status_data->receiver_data.flags;
       state_msg_.received_data[status_data->receiver_number].FPI = FPI_FIXED_POINT_TO_FLOAT(status_data->receiver_data.FPI);
-      state_msg_.received_data[status_data->receiver_number].timestamp_ns = static_cast<double>(status_data->receiver_data.timestamp_L + (static_cast<u_int64_t>(status_data->receiver_data.timestamp_H) << 32)*(15.65/1000.0));
-    } //end first time, the sizes are properly initialised, simply fill in the data
 
-    //publishing  if the sequence number is increased
-    if(status_data->sequence_number != previous_sequence_number_)
+      timestamp_64   = status_data->receiver_data.timestamp_H;
+      timestamp_64 <<= 32;
+      timestamp_64  += status_data->receiver_data.timestamp_L;
+
+      state_msg_.received_data[status_data->receiver_number].timestamp_ns = static_cast<double>(timestamp_64) * (15.65/1000.0);
+
+      ROS_DEBUG_STREAM("   timestamp:       " << state_msg_.received_data[status_data->receiver_number].timestamp_ns);
+
+      //printf("0x%04x%08x = %f\n", status_data->receiver_data.timestamp_H, status_data->receiver_data.timestamp_L, state_msg_.received_data[status_data->receiver_number].timestamp_ns);
+      //state_msg_.received_data[status_data->receiver_number].timestamp_ns = static_cast<double>(status_data->receiver_data.timestamp_L + (static_cast<u_int64_t>(status_data->receiver_data.timestamp_H) << 32)*(15.65/1000.0));
+    }
+  }
+  
+  //publishing  if the sequence number is increased
+  if ( status_data->sequence_number && 
+      (status_data->sequence_number != previous_sequence_number_ )
+     )
     {
       state_msg_.header.stamp = ros::Time::now();
-
+      
       //publish the message
       if( state_publisher_->trylock() )
       {
-	state_publisher_->msg_ = state_msg_;
-	state_publisher_->unlockAndPublish();
+        state_publisher_->msg_ = state_msg_;
+        state_publisher_->unlockAndPublish();
       }
       
       //reset the data received flags to false
       for(size_t i=0; i<NUM_RECEIVERS; ++i)
-	state_msg_.received_data[status_data->receiver_number].data_received = false;
+        state_msg_.received_data[i].data_received = false;
       
       previous_sequence_number_ = status_data->sequence_number;
     }
-  }
-
+  
   return true;
 }
 
