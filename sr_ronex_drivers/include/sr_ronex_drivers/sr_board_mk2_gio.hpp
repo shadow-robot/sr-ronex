@@ -43,7 +43,7 @@ class SrBoardMk2GIO : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(ros_ethercat_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(ros_ethercat_mechanism_model::Robot *hw, bool allow_unprogrammed=true);
 
   SrBoardMk2GIO();
   virtual ~SrBoardMk2GIO();
@@ -66,7 +66,7 @@ protected:
   ros::NodeHandle node_;
 
   ///The GeneralIO module which is added as a CustomHW to the hardware interface
-  boost::shared_ptr<ronex::GeneralIO> general_io_;
+  ronex::GeneralIO *general_io_;
 
   /**
    * A counter used to publish the data at 100Hz:

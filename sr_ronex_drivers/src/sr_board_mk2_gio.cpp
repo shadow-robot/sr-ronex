@@ -40,7 +40,7 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 const std::string SrBoardMk2GIO::product_alias_ = "general_io";
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
+  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false), general_io_(NULL)
 {}
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -164,7 +164,7 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   ROS_INFO("Finished constructing the SrBoardMk2GIO driver");
 }
 
-int SrBoardMk2GIO::initialize(ros_ethercat_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
+int SrBoardMk2GIO::initialize(ros_ethercat_mechanism_model::Robot *hw, bool allow_unprogrammed)
 {
   digital_commands_ = 0;
   ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
@@ -178,14 +178,13 @@ int SrBoardMk2GIO::initialize(ros_ethercat_hardware_interface::HardwareInterface
 
   //add the RoNeX to the hw interface
   general_io_.reset( new ronex::GeneralIO() );
-  general_io_->name_ = device_name_;
 
   build_topics_();
 
   ROS_INFO_STREAM("Adding a general_io RoNeX module to the hardware interface: " << device_name_);
   //Using the name of the ronex to prefix the state topic
 
-  hw->addCustomHW( general_io_.get() );
+  hw->custom_hws_[device_name_] = general_io_.get();
 
   return 0;
 }

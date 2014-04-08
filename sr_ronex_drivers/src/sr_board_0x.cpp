@@ -142,7 +142,7 @@ void SrBoard0X::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   ROS_INFO("Finished constructing the SrBoard0X driver");
 }
 
-int SrBoard0X::initialize(ros_ethercat_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
+int SrBoard0X::initialize(ros_ethercat_mechanism_model::Robot *hw, bool allow_unprogrammed)
 {
   StandardEthercatDevice::initialize(hw, allow_unprogrammed);
 
