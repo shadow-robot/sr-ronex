@@ -8,7 +8,6 @@ project(sr_ronex_hardware_interface)
 find_package(catkin REQUIRED COMPONENTS
     roscpp
     sr_ronex_external_protocol
-    ros_ethercat_hardware_interface
     ros_ethercat_hardware
     ros_ethercat_loop
     ros_ethercat_mechanism_model
@@ -27,7 +26,6 @@ catkin_package(
     CATKIN_DEPENDS
         roscpp
         sr_ronex_external_protocol
-        ros_ethercat_hardware_interface
         ros_ethercat_hardware
         ros_ethercat_loop
         ros_ethercat_mechanism_model

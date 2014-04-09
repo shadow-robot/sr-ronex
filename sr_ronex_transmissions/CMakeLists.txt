@@ -10,7 +10,6 @@ find_package(catkin REQUIRED COMPONENTS
     rostest
     sr_ronex_hardware_interface
     ros_ethercat_mechanism_model
-    ros_ethercat_hardware_interface
 )
 
 include_directories(include ${catkin_INCLUDE_DIRS})
@@ -30,8 +29,7 @@ catkin_package(
         roscpp
         rostest
         sr_ronex_hardware_interface
-        ros_ethercat_mechanism_model
-        ros_ethercat_hardware_interface 
+        ros_ethercat_mechanism_model 
     INCLUDE_DIRS include
     LIBRARIES sr_ronex_transmissions
 )

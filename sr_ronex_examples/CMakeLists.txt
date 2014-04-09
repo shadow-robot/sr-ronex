@@ -16,7 +16,6 @@ find_package( catkin REQUIRED COMPONENTS
     realtime_tools
     dynamic_reconfigure
     ros_ethercat_mechanism_model
-    ros_ethercat_hardware_interface
 )
 
 ###########
@@ -51,7 +50,6 @@ catkin_package(
         realtime_tools
         dynamic_reconfigure
         ros_ethercat_mechanism_model
-        ros_ethercat_hardware_interface
     INCLUDE_DIRS include
 )
 

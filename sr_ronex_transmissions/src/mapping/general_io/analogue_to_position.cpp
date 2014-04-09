@@ -42,7 +42,7 @@ namespace ronex
         }
 
         //@todo: when we have multiple available module types check the module type when casting
-        general_io_ = static_cast<ronex::GeneralIO*>( robot->hw_.getCustomHW(ronex_name) );
+        general_io_ = dynamic_cast<ronex::GeneralIO*>( robot->getCustomHW(ronex_name) );
         if(!general_io_)
         {
           ROS_ERROR_STREAM("The RoNeX: " << ronex_name << " was not found on the system.");

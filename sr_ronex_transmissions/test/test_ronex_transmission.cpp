@@ -40,17 +40,11 @@ TEST(RonexTransmission, constructor)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_hardware_interface::HardwareInterface hw;
+  ros_ethercat_mechanism_model::Robot robot(root);
 
   //add ronex
-  boost::shared_ptr<ronex::GeneralIO> general_io;
-  general_io.reset( new ronex::GeneralIO() );
-  general_io->name_ = "/ronex/general_io/0";
-  hw.addCustomHW( general_io.get() );
-
-  ros_ethercat_mechanism_model::Robot model(&hw);
-  ASSERT_TRUE(model.initXml(root));
-  ros_ethercat_mechanism_model::Robot state(&model);
+  ronex::GeneralIO* general_io = robot.custom_hws_["/ronex/general_io/0"];
+  ASSERT_NE(general_io, NULL);
 }
 
 TEST(RonexTransmission, propagateCommand)
@@ -65,12 +59,12 @@ TEST(RonexTransmission, propagateCommand)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_hardware_interface::HardwareInterface hw;
+  ros_ethercat_mechanism_model::Robot robot(root);
 
   //add ronex
-  boost::shared_ptr<ronex::GeneralIO> general_io;
-  general_io.reset( new ronex::GeneralIO() );
-  general_io->name_ = "/ronex/general_io/0";
+  ronex::GeneralIO* general_io = robot.custom_hws_["/ronex/general_io/0"];
+  ASSERT_NE(general_io, NULL);
+
   general_io->command_.pwm_clock_divider_ = 20;
   general_io->command_.pwm_.resize(6);
   general_io->state_.analogue_.resize(6);
@@ -78,19 +72,13 @@ TEST(RonexTransmission, propagateCommand)
   general_io->command_.pwm_.resize(6);
   general_io->command_.digital_.resize(6);
 
-  hw.addCustomHW( general_io.get() );
-
-  ros_ethercat_mechanism_model::Robot model(&hw);
-  ASSERT_TRUE(model.initXml(root));
-
-  ros_ethercat_mechanism_model::Robot state(&model);
-
   //setting effort for the joint
-  state.joint_states_[0].commanded_effort_ = 5.1;
+  robot.joint_states_[0].commanded_effort_ = 5.1;
 
   general_io->command_.pwm_[1].period =  64000;  //setting period too
 
-  state.propagateJointEffortToActuatorEffort();
+  //propagating
+  robot.propagateActuatorPositionToJointPosition();
 
   //reading the command from the RoNeX
   EXPECT_EQ(general_io->command_.pwm_[1].on_time_0, 3264);
@@ -110,31 +98,28 @@ TEST(RonexTransmission, propagateState)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_hardware_interface::HardwareInterface hw;
+  ros_ethercat_mechanism_model::Robot robot(root);
 
   //add ronex
-  boost::shared_ptr<ronex::GeneralIO> general_io;
-  general_io.reset( new ronex::GeneralIO() );
-  general_io->name_ = "/ronex/general_io/0";
+  std::string name = "/ronex/general_io/0";
+  ronex::GeneralIO* general_io = robot.custom_hws_[name];
+  ASSERT_NE(general_io, NULL);
+
   general_io->command_.pwm_.resize(6);
   general_io->state_.analogue_.resize(6);
   general_io->state_.digital_.resize(6);
   general_io->command_.pwm_.resize(6);
 
-  hw.addCustomHW( general_io.get() );
-
-  ros_ethercat_mechanism_model::Robot model(&hw);
-  ASSERT_TRUE(model.initXml(root));
-  ros_ethercat_mechanism_model::Robot state(&model);
-
   //setting analogue data on the ronex for generating joint position / effort
   general_io->state_.analogue_[0] = 1.0; //position according to urdf
   general_io->state_.analogue_[1] = 1.0; //mapped to effort
+
   //propagating
-  state.propagateActuatorPositionToJointPosition();
+  robot.propagateActuatorPositionToJointPosition();
+
   //reading the position and effort from the RoNeX
-  EXPECT_DOUBLE_EQ(state.joint_states_[0].position_, 1.0); //scale is 1.0, offset 0.0
-  EXPECT_DOUBLE_EQ(state.joint_states_[0].measured_effort_, 3.0); //scale is 2.0, offset 1.0
+  EXPECT_DOUBLE_EQ(robot.joint_states_[name].position_, 1.0); //scale is 1.0, offset 0.0
+  EXPECT_DOUBLE_EQ(robot.joint_states_[name].measured_effort_, 3.0); //scale is 2.0, offset 1.0
 }
 
 int main(int argc, char **argv)

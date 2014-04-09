@@ -82,17 +82,17 @@ namespace ronex
       calib_msg_.data = true;
       state_ = CALIBRATED;
       //We add the following line to delay for some time the first publish and allow the correct initialization of the subscribers in calibrate.py
-      last_publish_time_ = robot_->getTime();
+      last_publish_time_ = robot_->current_time_;
       break;
     case CALIBRATED:
       if (pub_calibrated_)
       {
-        if (last_publish_time_ + ros::Duration(0.5) < robot_->getTime())
+        if (last_publish_time_ + ros::Duration(0.5) < robot_->current_time_)
         {
           assert(pub_calibrated_);
           if (pub_calibrated_->trylock())
           {
-            last_publish_time_ = robot_->getTime();
+            last_publish_time_ = robot_->current_time_;
             pub_calibrated_->msg_ = calib_msg_;
             pub_calibrated_->unlockAndPublish();
           }

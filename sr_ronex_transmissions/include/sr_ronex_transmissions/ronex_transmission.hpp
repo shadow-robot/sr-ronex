@@ -27,7 +27,6 @@
 #include <ros_ethercat_mechanism_model/robot.hpp>
 #include <ros_ethercat_mechanism_model/transmission.hpp>
 #include <ros_ethercat_mechanism_model/joint.hpp>
-#include <ros_ethercat_mechanism_model/joint_calibration_simulator.hpp>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "sr_ronex_transmissions/mapping/ronex_mapping.hpp"
@@ -43,13 +42,13 @@ namespace ronex
     bool initXml(TiXmlElement *elt, ros_ethercat_mechanism_model::Robot *robot);
     bool initXml(TiXmlElement *elt);
 
-    void propagatePosition(std::vector<ros_ethercat_hardware_interface::Actuator*>& as,
+    void propagatePosition(std::vector<ros_ethercat_mechanism_model::Actuator*>& as,
                            std::vector<ros_ethercat_mechanism_model::JointState*>& js);
     void propagatePositionBackwards(std::vector<ros_ethercat_mechanism_model::JointState*>& js,
-                                    std::vector<ros_ethercat_hardware_interface::Actuator*>& as);
+                                    std::vector<ros_ethercat_mechanism_model::Actuator*>& as);
     void propagateEffort(std::vector<ros_ethercat_mechanism_model::JointState*>& js,
-                         std::vector<ros_ethercat_hardware_interface::Actuator*>& as);
-    void propagateEffortBackwards(std::vector<ros_ethercat_hardware_interface::Actuator*>& as,
+                         std::vector<ros_ethercat_mechanism_model::Actuator*>& as);
+    void propagateEffortBackwards(std::vector<ros_ethercat_mechanism_model::Actuator*>& as,
                                   std::vector<ros_ethercat_mechanism_model::JointState*>& js);
 
   protected:
