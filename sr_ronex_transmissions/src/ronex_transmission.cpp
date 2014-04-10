@@ -90,13 +90,6 @@ namespace ronex
     return true;
   }
 
-  bool RonexTransmission::initXml(TiXmlElement *elt)
-  {
-    //not doing anything (used in simulation only)
-
-    return true;
-  }
-
   void RonexTransmission::propagatePosition(std::vector<ros_ethercat_mechanism_model::Actuator*>& as,
                                             std::vector<ros_ethercat_mechanism_model::JointState*>& js)
   {
