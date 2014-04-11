@@ -41,13 +41,7 @@ namespace sr_cod_decod
     CodDecod();
     virtual ~CodDecod() {};
 
-    virtual void construct(ros_ethercat_mechanism_model::Robot *hw,
-                           EtherCAT_SlaveHandler *sh,
-                           int n_digital_outputs,
-                           int n_analog_outputs,
-                           int n_digital_inputs,
-                           int n_analog_inputs,
-                           int n_PWM_outputs);
+    virtual void construct(ros_ethercat_mechanism_model::Robot *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
     virtual void update(unsigned char *status_buffer);
     virtual void build_command(unsigned char *command_buffer);
     virtual void add_diagnostics(std::vector<diagnostic_msgs::DiagnosticStatus> &vec,

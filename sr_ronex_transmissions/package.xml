@@ -28,12 +28,11 @@
   <run_depend>rostest</run_depend>
   <run_depend>sr_ronex_hardware_interface</run_depend>
   <run_depend>ros_ethercat_mechanism_model</run_depend>
-  
 
   <!-- Dependencies needed only for running tests. -->
   <!-- <test_depend>roscpp</test_depend> -->
   <!-- <test_depend>sr_ronex_hardware_interface</test_depend> -->
-  <!-- <test_depend></test_depend> -->
+  <!-- <test_depend>pr2_mechanism_model</test_depend> -->
   <test_depend>gtest</test_depend>
 
 <export>

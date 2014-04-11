@@ -2,7 +2,7 @@
   <name>sr_ronex_hardware_interface</name>
   <version>0.9.5</version>
   <description>This package contains the definition of the CustomHW to be
-    added to the  CustomHWMap for the
+    added to the ros_ethercat_mechanism_model CustomHWMap for the
     RoNeX.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
@@ -22,7 +22,6 @@
   <!-- Dependencies needed to compile this package. -->
   <build_depend>roscpp</build_depend>
   <build_depend>ros_ethercat_hardware</build_depend>
-  <build_depend>ros_ethercat_loop</build_depend>
   <build_depend>ros_ethercat_mechanism_model</build_depend>
   <build_depend>sr_ronex_external_protocol</build_depend>
 
@@ -35,7 +34,7 @@
 
   <!-- Dependencies needed only for running tests. -->
   <!-- <test_depend>roscpp</test_depend> -->
-  <!-- <test_depend></test_depend> -->
+  <!-- <test_depend>pr2_hardware_interface</test_depend> -->
   <!-- <test_depend>sr_ronex_external_protocol</test_depend> -->
 
 </package>

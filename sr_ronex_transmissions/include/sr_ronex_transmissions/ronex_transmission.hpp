@@ -16,7 +16,7 @@
  */
 
 /**
- * @file   ronex_transmission.hpppp
+ * @file   ronex_transmission.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
  * @brief  A transmission for mapping RoNeXes to joints.
  **/

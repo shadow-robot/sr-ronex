@@ -106,10 +106,6 @@ namespace ronex
   void GeneralIOPassthroughController::starting()
   {}
 
-  /*!
-   * \brief Issues commands to the joint. Should be called at regular intervals
-   */
-
   void GeneralIOPassthroughController::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
   {
     general_io_->command_.digital_[index] = msg->data;

@@ -71,13 +71,7 @@ namespace sr_cod_decod
     CodDecodStdIo();
     virtual ~CodDecodStdIo();
 
-    virtual void construct(ros_ethercat_mechanism_model::Robot *hw,
-                           EtherCAT_SlaveHandler *sh,
-                           int n_digital_outputs,
-                           int n_analog_outputs,
-                           int n_digital_inputs,
-                           int n_analog_inputs,
-                           int n_PWM_outputs);
+    virtual void construct(ros_ethercat_mechanism_model::Robot *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
     /*!
      * \brief Reads the information from the ethercat device and decodes it. It's stored in
      * d_in_ and a_in_;
