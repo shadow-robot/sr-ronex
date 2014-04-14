@@ -19,6 +19,7 @@ find_package(catkin REQUIRED COMPONENTS
     dynamic_reconfigure
     realtime_tools
     ros_ethercat_model
+    ros_ethercat_hardware
 )
 
 include_directories(include ${catkin_INCLUDE_DIRS} )
@@ -57,6 +58,7 @@ catkin_package(
         dynamic_reconfigure
         realtime_tools
         ros_ethercat_model
+        ros_ethercat_hardware
     INCLUDE_DIRS include
 )
 
