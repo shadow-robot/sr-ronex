@@ -55,9 +55,15 @@ TEST(RonexUtils, constructor )
   int add = 0;
   sbm.construct( &sh, add );
 
-  ros_ethercat_model::RobotState hw;
-  int retsbm = sbm.initialize( &hw );
+  ros::NodeHandle nh;
+  string xml_string;
+  nh.getParam("robot_description", xml_string);
+  TiXmlDocument urdf_xml;
+  urdf_xml.Parse(xml_string.c_str());
+  TiXmlElement *root = urdf_xml.FirstChildElement("robot");
+  ros_ethercat_model::RobotState hw(root);
 
+  int retsbm = sbm.initialize( &hw );
   EXPECT_EQ(retsbm,0);
 }
 

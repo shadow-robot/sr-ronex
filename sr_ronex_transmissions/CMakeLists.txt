@@ -27,8 +27,8 @@ catkin_package(
 
 if(COMMAND add_rostest_gtest)
   add_rostest_gtest(test_ronex_transmission test/test_ronex_transmission.test test/test_ronex_transmission.cpp)
-  target_link_libraries(test_ronex_transmission tinyxml ${catkin_LIBRARIES} ${GTEST_LIBRARIES})
-  add_dependencies(test_ronex_transmission  tinyxml)
+  target_link_libraries(test_ronex_transmission ${catkin_LIBRARIES} ${GTEST_LIBRARIES})
+  add_dependencies(test_ronex_transmission sr_ronex_drivers)
 endif(COMMAND add_rostest_gtest)
 
 install(TARGETS sr_ronex_transmissions

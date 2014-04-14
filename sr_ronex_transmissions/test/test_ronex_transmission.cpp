@@ -37,16 +37,17 @@ TEST(RonexTransmission, constructor)
   ASSERT_TRUE( nh.getParam("robot_description", xml_string) );
   TiXmlDocument urdf_xml;
   urdf_xml.Parse(xml_string.c_str());
-
+  ros_ethercat_model::RobotState state(0);
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_model::RobotState robot(root);
 
   //add ronex
-  std::string chw("/ronex/general_io/0");
-  robot.custom_hws_.insert(chw, new ronex::GeneralIO());
-  ronex::GeneralIO* general_io = robot.getCustomHW(chw);
-  ASSERT_NE(general_io, NULL);
+  std::string name("/ronex/general_io/0");
+  state.custom_hws_.insert(name, new ronex::GeneralIO());
+  state.initXml(root);
+
+  ronex::GeneralIO* general_io = static_cast<ronex::GeneralIO*>( state.getCustomHW(name) );
+  ASSERT_TRUE(general_io != NULL);
 }
 
 TEST(RonexTransmission, propagateCommand)
@@ -55,19 +56,19 @@ TEST(RonexTransmission, propagateCommand)
   ros::NodeHandle nh;
   std::string xml_string;
   ASSERT_TRUE( nh.getParam("robot_description", xml_string) );
-
   TiXmlDocument urdf_xml;
   urdf_xml.Parse(xml_string.c_str());
-
+  ros_ethercat_model::RobotState state(0);
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_model::RobotState state(root);
 
   //add ronex
-  std::string chw("/ronex/general_io/0");
-  state.custom_hws_.insert(chw, new ronex::GeneralIO());
-  ronex::GeneralIO* general_io = state.getCustomHW(chw);
-  ASSERT_NE(general_io, NULL);
+  std::string name("/ronex/general_io/0");
+  state.custom_hws_.insert(name, new ronex::GeneralIO());
+  state.initXml(root);
+
+  ronex::GeneralIO* general_io = static_cast<ronex::GeneralIO*>( state.getCustomHW(name) );
+  ASSERT_TRUE(general_io != NULL);
   general_io->command_.pwm_clock_divider_ = 20;
   general_io->command_.pwm_.resize(6);
   general_io->state_.analogue_.resize(6);
@@ -76,10 +77,11 @@ TEST(RonexTransmission, propagateCommand)
   general_io->command_.digital_.resize(6);
 
   //setting effort for the joint
-  state.joint_states_[0].commanded_effort_ = 5.1;
+  state.joint_states_["joint1"].commanded_effort_ = 5.1;
 
   general_io->command_.pwm_[1].period =  64000;  //setting period too
 
+  state.propagateJointEffortToActuatorEffort();
   state.propagateJointEffortToActuatorEffort();
 
   //reading the command from the RoNeX
@@ -94,19 +96,19 @@ TEST(RonexTransmission, propagateState)
   ros::NodeHandle nh;
   std::string xml_string;
   ASSERT_TRUE( nh.getParam("robot_description", xml_string) );
-
   TiXmlDocument urdf_xml;
   urdf_xml.Parse(xml_string.c_str());
-
+  ros_ethercat_model::RobotState state(0);
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_model::RobotState state(root);
 
   //add ronex
   std::string name("/ronex/general_io/0");
   state.custom_hws_.insert(name, new ronex::GeneralIO());
-  ronex::GeneralIO* general_io = state.getCustomHW(name);
-  ASSERT_NE(general_io, NULL);
+  state.initXml(root);
+
+  ronex::GeneralIO* general_io = static_cast<ronex::GeneralIO*>( state.getCustomHW(name) );
+  ASSERT_TRUE(general_io != NULL);
   general_io->command_.pwm_.resize(6);
   general_io->state_.analogue_.resize(6);
   general_io->state_.digital_.resize(6);
@@ -117,9 +119,10 @@ TEST(RonexTransmission, propagateState)
   general_io->state_.analogue_[1] = 1.0; //mapped to effort
   //propagating
   state.propagateActuatorPositionToJointPosition();
+  state.propagateActuatorPositionToJointPosition();
   //reading the position and effort from the RoNeX
-  EXPECT_DOUBLE_EQ(state.joint_states_[name].position_, 1.0); //scale is 1.0, offset 0.0
-  EXPECT_DOUBLE_EQ(state.joint_states_[name].measured_effort_, 3.0); //scale is 2.0, offset 1.0
+  EXPECT_DOUBLE_EQ(state.joint_states_["joint1"].position_, 1.0); //scale is 1.0, offset 0.0
+  EXPECT_DOUBLE_EQ(state.joint_states_["joint1"].measured_effort_, 3.0); //scale is 2.0, offset 1.0
 }
 
 int main(int argc, char **argv)

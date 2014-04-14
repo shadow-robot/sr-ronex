@@ -40,7 +40,6 @@ namespace ronex
     const char *name = elt->Attribute("name");
     name_ = name ? name : "";
 
-
     //reading the joint name
     TiXmlElement *jel = elt->FirstChildElement("joint");
     const char *joint_name = jel ? jel->Attribute("name") : NULL;

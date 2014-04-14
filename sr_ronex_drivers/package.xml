@@ -23,7 +23,6 @@
   <build_depend>sr_ronex_msgs</build_depend>
   <build_depend>sr_ronex_utilities</build_depend>
   <build_depend>ros_ethercat_model</build_depend>
-  <build_depend>eml</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rostest</build_depend>
   <build_depend>realtime_tools</build_depend>
@@ -40,7 +39,6 @@
   <run_depend>sr_ronex_msgs</run_depend>
   <run_depend>sr_ronex_utilities</run_depend>
   <run_depend>ros_ethercat_model</run_depend>
-  <run_depend>eml</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>rostest</run_depend>
   <run_depend>realtime_tools</run_depend>
@@ -50,7 +48,6 @@
   <run_depend>sr_ronex_external_protocol</run_depend>
   <run_depend>sr_ronex_hardware_interface</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
-  <run_depend>tinyxml</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
   <!-- <test_depend>pr2_msgs</test_depend> -->

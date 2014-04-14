@@ -29,15 +29,16 @@ add_dependencies(sr_ronex_drivers ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gen
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
-    CATKIN_DEPENDS ros_ethercat_hardware std_msgs sr_ronex_msgs ros_ethercat_model eml roscpp rostest realtime_tools diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure tinyxml
+    CATKIN_DEPENDS ros_ethercat_hardware std_msgs sr_ronex_msgs ros_ethercat_model roscpp rostest realtime_tools diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure
     INCLUDE_DIRS include
+    LIBRARIES sr_ronex_drivers
 )
 
 
 if(COMMAND add_rostest_gtest)
   link_directories(/opt/ros/hydro/lib)
   add_rostest_gtest( test_ethercat_drivers test/test_ethercat_drivers.test test/test_ethercat_drivers.cpp )
-  target_link_libraries( test_ethercat_drivers sr_ronex_drivers eml rt ${catkin_LIBRARIES} ${GTEST_LIBRARIES} )
+  target_link_libraries( test_ethercat_drivers sr_ronex_drivers ${catkin_LIBRARIES} ${GTEST_LIBRARIES} )
   add_dependencies(test_ethercat_drivers ${catkin_EXPORTED_TARGETS})
 endif(COMMAND add_rostest_gtest)
 
