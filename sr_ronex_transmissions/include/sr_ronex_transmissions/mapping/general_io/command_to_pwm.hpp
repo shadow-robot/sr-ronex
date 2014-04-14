@@ -41,7 +41,7 @@ namespace ronex
           : RonexMapping()
         {};
 
-        CommandToPWM(TiXmlElement* mapping_el, ros_ethercat_model::Robot* robot);
+        CommandToPWM(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
         virtual ~CommandToPWM();
 
         /**

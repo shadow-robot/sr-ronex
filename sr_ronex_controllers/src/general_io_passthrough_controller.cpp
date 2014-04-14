@@ -45,7 +45,7 @@ namespace ronex
     }
   }
 
-  bool GeneralIOPassthroughController::init(ros_ethercat_model::Robot* robot, ros::NodeHandle &n)
+  bool GeneralIOPassthroughController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
   {
     assert(robot);
     node_ = n;

@@ -39,7 +39,7 @@ namespace ronex
     RonexTransmission() {};
     virtual ~RonexTransmission() {};
 
-    bool initXml(TiXmlElement *elt, ros_ethercat_model::Robot *robot);
+    bool initXml(TiXmlElement *elt, ros_ethercat_model::RobotState *robot);
 
     void propagatePosition(std::vector<ros_ethercat_model::Actuator*>& as,
                            std::vector<ros_ethercat_model::JointState*>& js);

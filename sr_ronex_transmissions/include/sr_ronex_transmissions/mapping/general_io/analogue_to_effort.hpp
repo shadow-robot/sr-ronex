@@ -39,7 +39,7 @@ namespace ronex
       {
       public:
         AnalogueToEffort() {};
-        AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::Robot* robot);
+        AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
         virtual ~AnalogueToEffort();
 
         /**

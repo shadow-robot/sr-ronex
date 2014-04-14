@@ -40,7 +40,7 @@ TEST(RonexTransmission, constructor)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_model::Robot robot(root);
+  ros_ethercat_model::RobotState robot(root);
 
   //add ronex
   ronex::GeneralIO* general_io = robot.custom_hws_["/ronex/general_io/0"];
@@ -59,7 +59,7 @@ TEST(RonexTransmission, propagateCommand)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_model::Robot robot(root);
+  ros_ethercat_model::RobotState robot(root);
 
   //add ronex
   ronex::GeneralIO* general_io = robot.custom_hws_["/ronex/general_io/0"];
@@ -97,7 +97,7 @@ TEST(RonexTransmission, propagateState)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_model::Robot state(root);
+  ros_ethercat_model::RobotState state(root);
 
   //add ronex
   std::string name = "/ronex/general_io/0";

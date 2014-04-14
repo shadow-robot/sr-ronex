@@ -47,7 +47,7 @@ namespace sr_cod_decod
   {
   }
 
-  void CodDecodStdIo::construct(ros_ethercat_model::Robot *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
+  void CodDecodStdIo::construct(ros_ethercat_model::RobotState *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
   {
     CodDecod::construct(hw, sh, n_digital_outputs, n_analog_outputs, n_digital_inputs, n_analog_inputs, n_PWM_outputs);
     n_digital_outputs_ = n_digital_outputs;

@@ -31,7 +31,7 @@ namespace ronex
   {
     namespace general_io
     {
-      AnalogueToEffort::AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::Robot* robot)
+      AnalogueToEffort::AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot)
         : AnalogueToPosition(mapping_el, robot)
       {
       }

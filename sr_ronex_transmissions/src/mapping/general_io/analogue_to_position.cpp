@@ -31,7 +31,7 @@ namespace ronex
   {
     namespace general_io
     {
-      AnalogueToPosition::AnalogueToPosition(TiXmlElement* mapping_el, ros_ethercat_model::Robot* robot)
+      AnalogueToPosition::AnalogueToPosition(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot)
         : RonexMapping(), pin_out_of_bound_(true)
       {
         const char *ronex_name = mapping_el ? mapping_el->Attribute("ronex") : NULL;

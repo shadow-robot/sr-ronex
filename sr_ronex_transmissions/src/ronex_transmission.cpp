@@ -35,7 +35,7 @@ PLUGINLIB_EXPORT_CLASS( ronex::RonexTransmission, ros_ethercat_model::Transmissi
 
 namespace ronex
 {
-  bool RonexTransmission::initXml(TiXmlElement *elt, ros_ethercat_model::Robot *robot)
+  bool RonexTransmission::initXml(TiXmlElement *elt, ros_ethercat_model::RobotState *robot)
   {
     std::cout << "ronex transmission" << std::endl;
 

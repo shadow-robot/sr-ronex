@@ -40,7 +40,7 @@ namespace ronex
       public:
         AnalogueToPosition()
          : RonexMapping() {};
-        AnalogueToPosition(TiXmlElement* mapping_el, ros_ethercat_model::Robot* robot);
+        AnalogueToPosition(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
         virtual ~AnalogueToPosition();
 
         /**

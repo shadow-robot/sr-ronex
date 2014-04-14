@@ -37,7 +37,7 @@ namespace ronex
       : first_iteration_(true)
     {};
     RonexMapping(TiXmlElement* mapping_el) {};
-    RonexMapping(TiXmlElement* mapping_el, ros_ethercat_model::Robot* robot) {};
+    RonexMapping(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot) {};
     virtual ~RonexMapping() {};
 
     /**
