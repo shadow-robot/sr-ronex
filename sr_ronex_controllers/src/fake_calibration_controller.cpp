@@ -87,7 +87,7 @@ namespace ronex
     case CALIBRATED:
       if (pub_calibrated_)
       {
-        if (last_publish_time_ + ros::Duration(0.5) < robot_->current_time_)
+        if (last_publish_time_ + ros::Duration(0.5) < robot_->getTime())
         {
           assert(pub_calibrated_);
           if (pub_calibrated_->trylock())

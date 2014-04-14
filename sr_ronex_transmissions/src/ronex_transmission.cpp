@@ -23,7 +23,7 @@
  *         RoNeX module to the position of the joint.
  **/
 
-#include "sr_ronex_transmissions/ronex_transmission.hpp"
+#include <sr_ronex_transmissions/ronex_transmission.hpp>
 #include "pluginlib/class_list_macros.h"
 #include <cstring>
 
@@ -37,8 +37,6 @@ namespace ronex
 {
   bool RonexTransmission::initXml(TiXmlElement *elt, ros_ethercat_model::RobotState *robot)
   {
-    std::cout << "ronex transmission" << std::endl;
-
     const char *name = elt->Attribute("name");
     name_ = name ? name : "";
 

@@ -176,13 +176,14 @@ int SrBoardMk2GIO::initialize(ros_ethercat_model::RobotState *hw, bool allow_unp
 
   device_offset_ = sh_->get_ring_position();// - hand_->getBridgeRingPosition();
 
+  //add the RoNeX to the hw interface
+  hw->custom_hws_.insert(device_name_, new ronex::GeneralIO());
+  general_io_ = hw->custom_hws_[device_name_];
+
   build_topics_();
 
   ROS_INFO_STREAM("Adding a general_io RoNeX module to the hardware interface: " << device_name_);
   //Using the name of the ronex to prefix the state topic
-
-  //add the RoNeX to the hw interface
-  general_io_ = dynamic_cast<ronex::GeneralIO*>(&hw->custom_hws_[device_name_]);
 
   return 0;
 }

@@ -77,7 +77,7 @@ namespace ronex
       }
     }
 
-    general_io_ = dynamic_cast<ronex::GeneralIO*>( robot->getCustomHW(path) );
+    general_io_ = static_cast<ronex::GeneralIO*>( robot->getCustomHW(path) );
     if( general_io_ == NULL)
     {
       ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");

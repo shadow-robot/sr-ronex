@@ -43,7 +43,9 @@ TEST(RonexTransmission, constructor)
   ros_ethercat_model::RobotState robot(root);
 
   //add ronex
-  ronex::GeneralIO* general_io = robot.custom_hws_["/ronex/general_io/0"];
+  std::string chw("/ronex/general_io/0");
+  robot.custom_hws_.insert(chw, new ronex::GeneralIO());
+  ronex::GeneralIO* general_io = robot.custom_hws_[chw];
   ASSERT_NE(general_io, NULL);
 }
 
@@ -59,10 +61,12 @@ TEST(RonexTransmission, propagateCommand)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_model::RobotState robot(root);
+  ros_ethercat_model::RobotState state(root);
 
   //add ronex
-  ronex::GeneralIO* general_io = robot.custom_hws_["/ronex/general_io/0"];
+  std::string chw("/ronex/general_io/0");
+  state.custom_hws_.insert(chw, new ronex::GeneralIO());
+  ronex::GeneralIO* general_io = state.custom_hws_[chw];
   ASSERT_NE(general_io, NULL);
   general_io->command_.pwm_clock_divider_ = 20;
   general_io->command_.pwm_.resize(6);
@@ -72,12 +76,11 @@ TEST(RonexTransmission, propagateCommand)
   general_io->command_.digital_.resize(6);
 
   //setting effort for the joint
-  robot.joint_states_[0].commanded_effort_ = 5.1;
+  state.joint_states_[0].commanded_effort_ = 5.1;
 
   general_io->command_.pwm_[1].period =  64000;  //setting period too
 
-  //propagating
-  robot.propagateActuatorPositionToJointPosition();
+  state.propagateJointEffortToActuatorEffort();
 
   //reading the command from the RoNeX
   EXPECT_EQ(general_io->command_.pwm_[1].on_time_0, 3264);
@@ -100,7 +103,8 @@ TEST(RonexTransmission, propagateState)
   ros_ethercat_model::RobotState state(root);
 
   //add ronex
-  std::string name = "/ronex/general_io/0";
+  std::string name("/ronex/general_io/0");
+  state.custom_hws_.insert(name, new ronex::GeneralIO());
   ronex::GeneralIO* general_io = state.custom_hws_[name];
   ASSERT_NE(general_io, NULL);
   general_io->command_.pwm_.resize(6);

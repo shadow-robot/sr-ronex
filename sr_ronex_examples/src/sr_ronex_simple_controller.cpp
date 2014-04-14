@@ -42,7 +42,7 @@ bool SrRoNeXSimpleController::init(ros_ethercat_model::RobotState* robot, ros::N
   assert (robot);
   
   std::string path("/ronex/general_io/test_ronex");
-  general_io_ = dynamic_cast<ronex::GeneralIO*>( robot->getCustomHW(path) );
+  general_io_ = static_cast<ronex::GeneralIO*>( robot->getCustomHW(path) );
   if( general_io_ == NULL)
   {
     ROS_ERROR_STREAM("Could not find RoNeX module (i.e., test_ronex). The controller is not loaded.");

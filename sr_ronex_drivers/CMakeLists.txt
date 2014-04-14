@@ -5,22 +5,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_drivers)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS
-    std_msgs
-    sr_ronex_msgs
-    sr_ronex_utilities
-    roscpp
-    rostest
-    diagnostic_msgs
-    diagnostic_updater
-    pluginlib
-    sr_ronex_external_protocol
-    sr_ronex_hardware_interface
-    dynamic_reconfigure
-    realtime_tools
-    ros_ethercat_model
-    ros_ethercat_hardware
-)
+find_package(catkin REQUIRED COMPONENTS std_msgs sr_ronex_msgs sr_ronex_utilities roscpp rostest diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure realtime_tools ros_ethercat_model ros_ethercat_hardware)
 
 include_directories(include ${catkin_INCLUDE_DIRS} )
 
@@ -44,21 +29,7 @@ add_dependencies(sr_ronex_drivers ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gen
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
-    CATKIN_DEPENDS
-        std_msgs
-        sr_ronex_msgs
-        sr_ronex_utilities
-        roscpp
-        rostest
-        diagnostic_msgs
-        diagnostic_updater
-        pluginlib
-        sr_ronex_external_protocol
-        sr_ronex_hardware_interface
-        dynamic_reconfigure
-        realtime_tools
-        ros_ethercat_model
-        ros_ethercat_hardware
+    CATKIN_DEPENDS std_msgs ros_ethercat_hardware std_msgs sr_ronex_msgs ros_ethercat_model eml roscpp rostest realtime_tools diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure tinyxml
     INCLUDE_DIRS include
 )
 
