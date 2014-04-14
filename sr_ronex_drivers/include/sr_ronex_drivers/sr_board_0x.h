@@ -38,7 +38,7 @@ class SrBoard0X : public StandardEthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(ros_ethercat_mechanism_model::Robot *hw, bool allow_unprogrammed=true);
+  virtual int initialize(ros_ethercat_model::Robot *hw, bool allow_unprogrammed=true);
 
   SrBoard0X();
   virtual ~SrBoard0X();

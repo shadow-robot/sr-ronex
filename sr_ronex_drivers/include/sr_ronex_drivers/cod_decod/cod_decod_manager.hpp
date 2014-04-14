@@ -29,7 +29,7 @@
 #define _COD_DECOD_MANAGER_HPP_
 
 #include <boost/smart_ptr.hpp>
-#include <ros_ethercat_mechanism_model/robot.hpp>
+#include <ros_ethercat_model/robot.hpp>
 #include "sr_ronex_drivers/cod_decod/cod_decod.hpp"
 #include <al/ethercat_slave_handler.h>
 #include <pluginlib/class_loader.h>
@@ -39,7 +39,7 @@ namespace sr_cod_decod
   class CodDecodManager
   {
   public:
-    CodDecodManager(ros_ethercat_mechanism_model::Robot *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
+    CodDecodManager(ros_ethercat_model::Robot *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
     ~CodDecodManager();
 
     void update(unsigned char *status_buffer);

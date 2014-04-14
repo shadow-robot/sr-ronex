@@ -41,7 +41,7 @@ class SrTCAT : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(ros_ethercat_mechanism_model::Robot *hw, bool allow_unprogrammed=true);
+  virtual int initialize(ros_ethercat_model::Robot *hw, bool allow_unprogrammed=true);
 
   SrTCAT();
   virtual ~SrTCAT();

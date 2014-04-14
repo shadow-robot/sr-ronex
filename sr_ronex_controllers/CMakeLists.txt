@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_controllers)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS roscpp std_msgs std_srvs sr_ronex_msgs sr_ronex_hardware_interface sr_ronex_utilities pluginlib controller_interface ros_ethercat_mechanism_model)
+find_package(catkin REQUIRED COMPONENTS roscpp std_msgs std_srvs sr_ronex_msgs sr_ronex_hardware_interface sr_ronex_utilities pluginlib controller_interface ros_ethercat_model)
 
 include_directories( include ${catkin_INCLUDE_DIRS})
 
@@ -23,7 +23,7 @@ add_dependencies(sr_ronex_controllers ${catkin_EXPORTED_TARGETS})
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
-    CATKIN_DEPENDS roscpp std_msgs std_srvs sr_ronex_msgs sr_ronex_hardware_interface sr_ronex_utilities controller_interface ros_ethercat_mechanism_model pluginlib
+    CATKIN_DEPENDS roscpp std_msgs std_srvs sr_ronex_msgs sr_ronex_hardware_interface sr_ronex_utilities controller_interface ros_ethercat_model pluginlib
     INCLUDE_DIRS include
 )
 

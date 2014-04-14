@@ -18,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
     sr_ronex_hardware_interface
     dynamic_reconfigure
     realtime_tools
-    ros_ethercat_mechanism_model
+    ros_ethercat_model
 )
 
 include_directories(include ${catkin_INCLUDE_DIRS} )
@@ -56,7 +56,7 @@ catkin_package(
         sr_ronex_hardware_interface
         dynamic_reconfigure
         realtime_tools
-        ros_ethercat_mechanism_model
+        ros_ethercat_model
     INCLUDE_DIRS include
 )
 

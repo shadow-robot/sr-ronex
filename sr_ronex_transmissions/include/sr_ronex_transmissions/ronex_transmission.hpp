@@ -24,31 +24,31 @@
 #ifndef _RONEX_TRANSMISSION_H_
 #define _RONEX_TRANSMISSION_H_
 
-#include <ros_ethercat_mechanism_model/robot.hpp>
-#include <ros_ethercat_mechanism_model/transmission.hpp>
-#include <ros_ethercat_mechanism_model/joint.hpp>
+#include <ros_ethercat_model/robot.hpp>
+#include <ros_ethercat_model/transmission.hpp>
+#include <ros_ethercat_model/joint.hpp>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "sr_ronex_transmissions/mapping/ronex_mapping.hpp"
 
 namespace ronex
 {
-  class RonexTransmission : public ros_ethercat_mechanism_model::Transmission
+  class RonexTransmission : public ros_ethercat_model::Transmission
   {
   public:
     RonexTransmission() {};
     virtual ~RonexTransmission() {};
 
-    bool initXml(TiXmlElement *elt, ros_ethercat_mechanism_model::Robot *robot);
+    bool initXml(TiXmlElement *elt, ros_ethercat_model::Robot *robot);
 
-    void propagatePosition(std::vector<ros_ethercat_mechanism_model::Actuator*>& as,
-                           std::vector<ros_ethercat_mechanism_model::JointState*>& js);
-    void propagatePositionBackwards(std::vector<ros_ethercat_mechanism_model::JointState*>& js,
-                                    std::vector<ros_ethercat_mechanism_model::Actuator*>& as);
-    void propagateEffort(std::vector<ros_ethercat_mechanism_model::JointState*>& js,
-                         std::vector<ros_ethercat_mechanism_model::Actuator*>& as);
-    void propagateEffortBackwards(std::vector<ros_ethercat_mechanism_model::Actuator*>& as,
-                                  std::vector<ros_ethercat_mechanism_model::JointState*>& js);
+    void propagatePosition(std::vector<ros_ethercat_model::Actuator*>& as,
+                           std::vector<ros_ethercat_model::JointState*>& js);
+    void propagatePositionBackwards(std::vector<ros_ethercat_model::JointState*>& js,
+                                    std::vector<ros_ethercat_model::Actuator*>& as);
+    void propagateEffort(std::vector<ros_ethercat_model::JointState*>& js,
+                         std::vector<ros_ethercat_model::Actuator*>& as);
+    void propagateEffortBackwards(std::vector<ros_ethercat_model::Actuator*>& as,
+                                  std::vector<ros_ethercat_model::JointState*>& js);
 
   protected:
     boost::ptr_vector<RonexMapping> ronex_mappings_;

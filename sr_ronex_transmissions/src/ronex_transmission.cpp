@@ -31,12 +31,14 @@
 #include "sr_ronex_transmissions/mapping/general_io/analogue_to_effort.hpp"
 #include "sr_ronex_transmissions/mapping/general_io/command_to_pwm.hpp"
 
-PLUGINLIB_EXPORT_CLASS( ronex::RonexTransmission, ros_ethercat_mechanism_model::Transmission)
+PLUGINLIB_EXPORT_CLASS( ronex::RonexTransmission, ros_ethercat_model::Transmission)
 
 namespace ronex
 {
-  bool RonexTransmission::initXml(TiXmlElement *elt, ros_ethercat_mechanism_model::Robot *robot)
+  bool RonexTransmission::initXml(TiXmlElement *elt, ros_ethercat_model::Robot *robot)
   {
+    std::cout << "ronex transmission" << std::endl;
+
     const char *name = elt->Attribute("name");
     name_ = name ? name : "";
 
@@ -90,8 +92,8 @@ namespace ronex
     return true;
   }
 
-  void RonexTransmission::propagatePosition(std::vector<ros_ethercat_mechanism_model::Actuator*>& as,
-                                            std::vector<ros_ethercat_mechanism_model::JointState*>& js)
+  void RonexTransmission::propagatePosition(std::vector<ros_ethercat_model::Actuator*>& as,
+                                            std::vector<ros_ethercat_model::JointState*>& js)
   {
     for(ronex_iter_ = ronex_mappings_.begin(); ronex_iter_ != ronex_mappings_.end(); ++ronex_iter_)
     {
@@ -99,14 +101,14 @@ namespace ronex
     }
   }
 
-  void RonexTransmission::propagatePositionBackwards(std::vector<ros_ethercat_mechanism_model::JointState*>& js,
-                                                     std::vector<ros_ethercat_mechanism_model::Actuator*>& as)
+  void RonexTransmission::propagatePositionBackwards(std::vector<ros_ethercat_model::JointState*>& js,
+                                                     std::vector<ros_ethercat_model::Actuator*>& as)
   {
     //not doing anything (used in simulation)
   }
 
-  void RonexTransmission::propagateEffort(std::vector<ros_ethercat_mechanism_model::JointState*>& js,
-                                          std::vector<ros_ethercat_mechanism_model::Actuator*>& as)
+  void RonexTransmission::propagateEffort(std::vector<ros_ethercat_model::JointState*>& js,
+                                          std::vector<ros_ethercat_model::Actuator*>& as)
   {
     for(ronex_iter_ = ronex_mappings_.begin(); ronex_iter_ != ronex_mappings_.end(); ++ronex_iter_)
     {
@@ -114,8 +116,8 @@ namespace ronex
     }
   }
 
-  void RonexTransmission::propagateEffortBackwards(std::vector<ros_ethercat_mechanism_model::Actuator*>& js,
-                                                   std::vector<ros_ethercat_mechanism_model::JointState*>& as)
+  void RonexTransmission::propagateEffortBackwards(std::vector<ros_ethercat_model::Actuator*>& js,
+                                                   std::vector<ros_ethercat_model::JointState*>& as)
   {
     //not doing anything (used in simulation)
   }

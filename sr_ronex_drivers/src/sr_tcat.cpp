@@ -163,7 +163,7 @@ void SrTCAT::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   ROS_INFO("Finished constructing the SrTCAT driver");
 }
 
-int SrTCAT::initialize(ros_ethercat_mechanism_model::Robot *hw, bool allow_unprogrammed)
+int SrTCAT::initialize(ros_ethercat_model::Robot *hw, bool allow_unprogrammed)
 {
   ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
             sh_->get_ring_position(),

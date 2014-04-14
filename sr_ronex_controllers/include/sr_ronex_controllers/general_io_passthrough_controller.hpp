@@ -28,7 +28,7 @@
 #include <ros/node_handle.h>
 
 #include <controller_interface/controller.h>
-#include <ros_ethercat_mechanism_model/robot.hpp>
+#include <ros_ethercat_model/robot.hpp>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
@@ -39,13 +39,13 @@
 namespace ronex
 {
   class GeneralIOPassthroughController
-    : public controller_interface::Controller<ros_ethercat_mechanism_model::Robot>
+    : public controller_interface::Controller<ros_ethercat_model::Robot>
   {
   public:
     GeneralIOPassthroughController();
     virtual ~GeneralIOPassthroughController();
 
-    virtual bool init(ros_ethercat_mechanism_model::Robot* robot, ros::NodeHandle &n);
+    virtual bool init(ros_ethercat_model::Robot* robot, ros::NodeHandle &n);
 
     virtual void starting();
 

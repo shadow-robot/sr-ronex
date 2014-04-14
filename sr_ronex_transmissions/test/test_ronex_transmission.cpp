@@ -24,7 +24,7 @@
 #include "sr_ronex_transmissions/ronex_transmission.hpp"
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <ros/ros.h>
-#include <ros_ethercat_mechanism_model/robot.hpp>
+#include <ros_ethercat_model/robot.hpp>
 #include <gtest/gtest.h>
 
 using namespace ronex;
@@ -40,7 +40,7 @@ TEST(RonexTransmission, constructor)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_mechanism_model::Robot robot(root);
+  ros_ethercat_model::Robot robot(root);
 
   //add ronex
   ronex::GeneralIO* general_io = robot.custom_hws_["/ronex/general_io/0"];
@@ -59,7 +59,7 @@ TEST(RonexTransmission, propagateCommand)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_mechanism_model::Robot robot(root);
+  ros_ethercat_model::Robot robot(root);
 
   //add ronex
   ronex::GeneralIO* general_io = robot.custom_hws_["/ronex/general_io/0"];
@@ -97,7 +97,7 @@ TEST(RonexTransmission, propagateState)
 
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ASSERT_TRUE(root != NULL);
-  ros_ethercat_mechanism_model::Robot state(root);
+  ros_ethercat_model::Robot state(root);
 
   //add ronex
   std::string name = "/ronex/general_io/0";
