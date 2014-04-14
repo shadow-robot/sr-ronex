@@ -13,11 +13,6 @@
       RoNeX - TCAT board. Product ID is 0x02000003.
     </description>
   </class>
-  <class name="33554434" type="SrSPI" base_class_type="EthercatDevice">
-    <description>
-      RoNeX mk2 - SPI board. Product ID is 0x02000002.
-    </description>
-  </class>
   <class name="33554433" type="SrBoardMk2GIO" base_class_type="EthercatDevice">
     <description>
       RoNeX mk2 - General I/O board. Product ID is 0x02000001.
