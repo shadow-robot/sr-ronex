@@ -40,7 +40,7 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 const std::string SrBoardMk2GIO::product_alias_ = "general_io";
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), node_("~"), general_io_(NULL), cycle_count_(0), has_stacker_(false)
+  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
 {}
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -178,7 +178,7 @@ int SrBoardMk2GIO::initialize(ros_ethercat_model::RobotState *hw, bool allow_unp
 
   //add the RoNeX to the hw interface
   hw->custom_hws_.insert(device_name_, new ronex::GeneralIO());
-  general_io_ = hw->custom_hws_[device_name_];
+  general_io_ = static_cast<ronex::GeneralIO*>(hw->getCustomHW(device_name_));
 
   build_topics_();
 

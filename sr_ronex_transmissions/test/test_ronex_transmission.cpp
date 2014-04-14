@@ -45,7 +45,7 @@ TEST(RonexTransmission, constructor)
   //add ronex
   std::string chw("/ronex/general_io/0");
   robot.custom_hws_.insert(chw, new ronex::GeneralIO());
-  ronex::GeneralIO* general_io = robot.custom_hws_[chw];
+  ronex::GeneralIO* general_io = robot.getCustomHW(chw);
   ASSERT_NE(general_io, NULL);
 }
 
@@ -66,7 +66,7 @@ TEST(RonexTransmission, propagateCommand)
   //add ronex
   std::string chw("/ronex/general_io/0");
   state.custom_hws_.insert(chw, new ronex::GeneralIO());
-  ronex::GeneralIO* general_io = state.custom_hws_[chw];
+  ronex::GeneralIO* general_io = state.getCustomHW(chw);
   ASSERT_NE(general_io, NULL);
   general_io->command_.pwm_clock_divider_ = 20;
   general_io->command_.pwm_.resize(6);
@@ -105,7 +105,7 @@ TEST(RonexTransmission, propagateState)
   //add ronex
   std::string name("/ronex/general_io/0");
   state.custom_hws_.insert(name, new ronex::GeneralIO());
-  ronex::GeneralIO* general_io = state.custom_hws_[name];
+  ronex::GeneralIO* general_io = state.getCustomHW(name);
   ASSERT_NE(general_io, NULL);
   general_io->command_.pwm_.resize(6);
   general_io->state_.analogue_.resize(6);

@@ -29,7 +29,7 @@ add_dependencies(sr_ronex_drivers ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gen
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
-    CATKIN_DEPENDS std_msgs ros_ethercat_hardware std_msgs sr_ronex_msgs ros_ethercat_model eml roscpp rostest realtime_tools diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure tinyxml
+    CATKIN_DEPENDS ros_ethercat_hardware std_msgs sr_ronex_msgs ros_ethercat_model eml roscpp rostest realtime_tools diagnostic_msgs diagnostic_updater pluginlib sr_ronex_external_protocol sr_ronex_hardware_interface dynamic_reconfigure tinyxml
     INCLUDE_DIRS include
 )
 

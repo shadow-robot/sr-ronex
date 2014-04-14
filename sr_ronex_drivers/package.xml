@@ -18,11 +18,11 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <!-- Dependencies needed to compile this package. -->
+  <build_depend>ros_ethercat_hardware</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>sr_ronex_msgs</build_depend>
   <build_depend>sr_ronex_utilities</build_depend>
   <build_depend>ros_ethercat_model</build_depend>
-  <build_depend>ros_ethercat_hardware</build_depend>
   <build_depend>eml</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rostest</build_depend>
@@ -35,11 +35,11 @@
   <build_depend>dynamic_reconfigure</build_depend>
 
   <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>ros_ethercat_hardware</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>sr_ronex_msgs</run_depend>
   <run_depend>sr_ronex_utilities</run_depend>
   <run_depend>ros_ethercat_model</run_depend>
-  <run_depend>ros_ethercat_hardware</run_depend>
   <run_depend>eml</run_depend>
   <run_depend>roscpp</run_depend>
   <run_depend>rostest</run_depend>
