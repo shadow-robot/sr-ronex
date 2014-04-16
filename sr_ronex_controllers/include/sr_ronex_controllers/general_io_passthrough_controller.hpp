@@ -47,8 +47,6 @@ namespace ronex
 
     virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-    virtual void starting();
-
     /*!
      * \brief Issues commands to the joint. Should be called at regular intervals
      */

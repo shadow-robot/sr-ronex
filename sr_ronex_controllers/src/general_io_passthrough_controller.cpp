@@ -103,9 +103,6 @@ namespace ronex
     return true;
   }
 
-  void GeneralIOPassthroughController::starting()
-  {}
-
   void GeneralIOPassthroughController::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)
   {
     general_io_->command_.digital_[index] = msg->data;
