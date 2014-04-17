@@ -25,8 +25,6 @@
 #define _RONEX_TRANSMISSION_H_
 
 #include <ros_ethercat_model/robot.hpp>
-#include <ros_ethercat_model/transmission.hpp>
-#include <ros_ethercat_model/joint.hpp>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "sr_ronex_transmissions/mapping/ronex_mapping.hpp"
