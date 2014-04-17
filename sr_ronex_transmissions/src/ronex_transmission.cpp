@@ -37,25 +37,8 @@ namespace ronex
 {
   bool RonexTransmission::initXml(TiXmlElement *elt, ros_ethercat_model::RobotState *robot)
   {
-    const char *name = elt->Attribute("name");
-    name_ = name ? name : "";
-
-    //reading the joint name
-    TiXmlElement *jel = elt->FirstChildElement("joint");
-    const char *joint_name = jel ? jel->Attribute("name") : NULL;
-    if (!joint_name)
-    {
-      ROS_ERROR("RonexTransmission did not specify joint name");
+    if (!ros_ethercat_model::Transmission::initXml(elt, robot))
       return false;
-    }
-
-    const boost::shared_ptr<const urdf::Joint> joint = robot->robot_model_.getJoint(joint_name);
-    if (!joint)
-    {
-      ROS_ERROR("RonexTransmission could not find joint named \"%s\"", joint_name);
-      return false;
-    }
-    joint_names_.push_back(joint_name);
 
     //Extract all the mapping information from the transmission
     for( TiXmlElement *mapping_el = elt->FirstChildElement("mapping"); mapping_el;
