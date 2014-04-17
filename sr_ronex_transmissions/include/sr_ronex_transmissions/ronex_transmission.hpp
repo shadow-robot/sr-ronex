@@ -43,12 +43,8 @@ namespace ronex
 
     void propagatePosition(std::vector<ros_ethercat_model::Actuator*>& as,
                            std::vector<ros_ethercat_model::JointState*>& js);
-    void propagatePositionBackwards(std::vector<ros_ethercat_model::JointState*>& js,
-                                    std::vector<ros_ethercat_model::Actuator*>& as);
     void propagateEffort(std::vector<ros_ethercat_model::JointState*>& js,
                          std::vector<ros_ethercat_model::Actuator*>& as);
-    void propagateEffortBackwards(std::vector<ros_ethercat_model::Actuator*>& as,
-                                  std::vector<ros_ethercat_model::JointState*>& js);
 
   protected:
     boost::ptr_vector<RonexMapping> ronex_mappings_;

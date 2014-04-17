@@ -98,12 +98,6 @@ namespace ronex
     }
   }
 
-  void RonexTransmission::propagatePositionBackwards(std::vector<ros_ethercat_model::JointState*>& js,
-                                                     std::vector<ros_ethercat_model::Actuator*>& as)
-  {
-    //not doing anything (used in simulation)
-  }
-
   void RonexTransmission::propagateEffort(std::vector<ros_ethercat_model::JointState*>& js,
                                           std::vector<ros_ethercat_model::Actuator*>& as)
   {
@@ -111,12 +105,6 @@ namespace ronex
     {
       ronex_iter_->propagateToRonex(js);
     }
-  }
-
-  void RonexTransmission::propagateEffortBackwards(std::vector<ros_ethercat_model::Actuator*>& js,
-                                                   std::vector<ros_ethercat_model::JointState*>& as)
-  {
-    //not doing anything (used in simulation)
   }
 }
 
