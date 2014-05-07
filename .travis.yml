@@ -15,4 +15,5 @@ install:
   - ln -s `eval echo $(dirs +1)` src/
 script:
   - catkin_make all run_tests
-
+after_script:
+  - cp -r /home/travis/catkin_ws/build/test_results ${TRAVIS_TEST_RESULT}
