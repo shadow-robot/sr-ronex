@@ -3,7 +3,7 @@ compiler: gcc
 
 before_install:
   - sudo pip install cpplint rosdep
-  - sudo rosdep init && rosdep update 
+  - sudo rosdep init && rosdep update
   - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu precise main" > /etc/apt/sources.list.d/ros-latest.list'
   - wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
   - sudo apt-get update -qq
@@ -16,4 +16,4 @@ install:
 script:
   - catkin_make all run_tests
 after_script:
-  - cp -r /home/travis/catkin_ws/build/test_results ${TRAVIS_TEST_RESULT}
+  - find /home/travis/catkin_ws/build/test_results -name "*.xml" -exec cp {} ${TRAVIS_TEST_RESULT}/ \;
