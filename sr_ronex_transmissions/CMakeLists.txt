@@ -9,12 +9,6 @@ find_package(catkin REQUIRED COMPONENTS roscpp rostest sr_ronex_hardware_interfa
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-#set the default path for built executables to the "bin" directory
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-
-#set the default path for built libraries to the "lib" directory
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-
 #common commands for building c++ executables and libraries
 add_library(sr_ronex_transmissions src/ronex_transmission.cpp src/mapping/general_io/analogue_to_position.cpp src/mapping/general_io/analogue_to_effort.cpp src/mapping/general_io/command_to_pwm.cpp)
 

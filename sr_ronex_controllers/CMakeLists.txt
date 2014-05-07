@@ -9,12 +9,6 @@ find_package(catkin REQUIRED COMPONENTS roscpp std_msgs std_srvs sr_ronex_msgs s
 
 include_directories( include ${catkin_INCLUDE_DIRS})
 
-#set the default path for built executables to the "bin" directory
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-
-#set the default path for built libraries to the "lib" directory
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-
 #common commands for building c++ executables and libraries
 add_library(sr_ronex_controllers src/general_io_passthrough_controller.cpp src/fake_calibration_controller.cpp)
 target_link_libraries(sr_ronex_controllers ${catkin_LIBRARIES})
@@ -27,7 +21,6 @@ catkin_package(
     INCLUDE_DIRS include
     LIBRARIES sr_ronex_controllers
 )
-
 
 
 install(TARGETS sr_ronex_controllers
