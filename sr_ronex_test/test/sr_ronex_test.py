@@ -23,7 +23,7 @@ import dynamic_reconfigure.client
 from threading import Lock
 from sr_ronex_msgs.msg import GeneralIOState, PWM
 from std_msgs.msg import Bool
-from pr2_mechanism_msgs.srv import ListControllers
+from controller_manager_msgs.srv import ListControllers
 
 class TestRonexWithHardware(unittest.TestCase):
   '''
@@ -144,7 +144,7 @@ class TestRonexWithHardware(unittest.TestCase):
 ############################################
 
   def test_if_controllers_are_loaded(self):
-    list_controllers = rospy.ServiceProxy('pr2_controller_manager/list_controllers', ListControllers)
+    list_controllers = rospy.ServiceProxy('controller_manager/list_controllers', ListControllers)
     available_controllers = list_controllers()
     for ctrl in self.controllers_list:
       self.assertTrue(ctrl in available_controllers.controllers)

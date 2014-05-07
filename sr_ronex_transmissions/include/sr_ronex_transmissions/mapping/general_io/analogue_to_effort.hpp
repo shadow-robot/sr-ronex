@@ -39,7 +39,7 @@ namespace ronex
       {
       public:
         AnalogueToEffort() {};
-        AnalogueToEffort(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot);
+        AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
         virtual ~AnalogueToEffort();
 
         /**
@@ -47,7 +47,7 @@ namespace ronex
          *
          * @param js joint_state of the joint specified in the transmission
          */
-        virtual void propagateFromRonex(std::vector<pr2_mechanism_model::JointState*>& js);
+        virtual void propagateFromRonex(std::vector<ros_ethercat_model::JointState*>& js);
       };
     }
   }

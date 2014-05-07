@@ -6,7 +6,7 @@
   <include file="$(find sr_ronex_launch)/loaders/load_ronex_model.launch" />
 
   <!-- etherCAT -->
-  <node name="ronex" pkg="pr2_ethercat" type="pr2_ethercat" args="-i $(arg ethercat_port) -r /robot_description" output="screen"  launch-prefix="nice -n -20" /> <!--launch-prefix="gdb -ex run -args" launch-prefix="xterm -hold -e strace -f -e trace=!gettimeofday,futex"> -->
+  <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen" launch-prefix="nice -n -20"/> <!--launch-prefix="gdb -ex run -args" launch-prefix="xterm -hold -e strace -f -e trace=!gettimeofday,futex"> -->
 
 </launch>
 

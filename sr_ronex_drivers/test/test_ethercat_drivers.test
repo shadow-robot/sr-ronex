@@ -1,3 +1,4 @@
 <launch>
+  <param name="robot_description" command="$(find xacro)/xacro.py '$(find sr_ronex_examples)/model/simple_robot.urdf'" />
   <test test-name="test_ethercat_drivers" pkg="sr_ronex_drivers" type="test_ethercat_drivers"/>
 </launch>

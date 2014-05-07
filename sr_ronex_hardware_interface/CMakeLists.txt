@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_hardware_interface)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS roscpp pr2_hardware_interface sr_ronex_external_protocol )
+find_package(catkin REQUIRED COMPONENTS roscpp ros_ethercat_hardware sr_ronex_external_protocol ros_ethercat_model)
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
@@ -17,7 +17,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
-    CATKIN_DEPENDS roscpp pr2_hardware_interface sr_ronex_external_protocol
+    CATKIN_DEPENDS roscpp ros_ethercat_hardware sr_ronex_external_protocol ros_ethercat_model
     INCLUDE_DIRS include
 )
 

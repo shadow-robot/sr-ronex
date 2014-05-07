@@ -28,7 +28,7 @@
 #ifndef STANDARD_ETHERCAT_DEVICE_H
 #define STANDARD_ETHERCAT_DEVICE_H
 
-#include <ethercat_hardware/ethercat_device.h>
+#include <ros_ethercat_hardware/ethercat_device.h>
 #include "realtime_tools/realtime_publisher.h"
 #include "sr_ronex_drivers/cod_decod/cod_decod_manager.hpp"
 
@@ -37,7 +37,7 @@ class StandardEthercatDevice : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(pr2_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(ros_ethercat_model::RobotState *hw, bool allow_unprogrammed=true);
 
   StandardEthercatDevice();
   virtual ~StandardEthercatDevice();

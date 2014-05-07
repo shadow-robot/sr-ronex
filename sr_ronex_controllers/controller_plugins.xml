@@ -2,10 +2,10 @@
 
   <class name="sr_ronex_controllers/GeneralIOPassthroughController"
          type="ronex::GeneralIOPassthroughController"
-         base_class_type="pr2_controller_interface::Controller" />
+         base_class_type="controller_interface::ControllerBase" />
 
   <class name="sr_ronex_controllers/FakeCalibrationController"
          type="ronex::FakeCalibrationController"
-         base_class_type="pr2_controller_interface::Controller" />
+         base_class_type="controller_interface::ControllerBase" />
 
 </library>
