@@ -29,7 +29,7 @@
 #define _COD_DECOD_MANAGER_HPP_
 
 #include <boost/smart_ptr.hpp>
-#include <ros_ethercat_model/robot.hpp>
+#include <ros_ethercat_model/robot_state.hpp>
 #include "sr_ronex_drivers/cod_decod/cod_decod.hpp"
 #include <al/ethercat_slave_handler.h>
 #include <pluginlib/class_loader.h>

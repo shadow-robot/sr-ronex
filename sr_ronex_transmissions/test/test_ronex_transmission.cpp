@@ -24,7 +24,7 @@
 #include "sr_ronex_transmissions/ronex_transmission.hpp"
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <ros/ros.h>
-#include <ros_ethercat_model/robot.hpp>
+#include <ros_ethercat_model/robot_state.hpp>
 #include <gtest/gtest.h>
 
 using namespace ronex;

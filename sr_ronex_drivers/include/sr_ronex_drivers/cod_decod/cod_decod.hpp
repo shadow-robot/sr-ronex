@@ -27,7 +27,7 @@
 #ifndef _COD_DECOD_HPP_
 #define _COD_DECOD_HPP_
 
-#include <ros_ethercat_model/robot.hpp>
+#include <ros_ethercat_model/robot_state.hpp>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_updater/DiagnosticStatusWrapper.h>
 #include <al/ethercat_slave_handler.h>

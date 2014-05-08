@@ -22,7 +22,7 @@
  **/
 
 #include "sr_ronex_transmissions/mapping/general_io/analogue_to_position.hpp"
-#include <ros_ethercat_model/robot.hpp>
+#include <ros_ethercat_model/robot_state.hpp>
 #include <boost/lexical_cast.hpp>
 
 namespace ronex
