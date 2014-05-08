@@ -55,7 +55,7 @@ void StandardEthercatDevice::construct(EtherCAT_SlaveHandler *sh, int &start_add
   sh->set_pd_config( new EtherCAT_PD_Config(0) );
 }
 
-int StandardEthercatDevice::initialize(ros_ethercat_model::RobotState *hw, bool allow_unprogrammed)
+int StandardEthercatDevice::initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
 {
   ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
             sh_->get_ring_position(),

@@ -63,7 +63,7 @@ TEST(RonexUtils, constructor )
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ros_ethercat_model::RobotState hw(root);
 
-  int retsbm = sbm.initialize( &hw );
+  int retsbm = sbm.initialize( static_cast<hardware_interface::HardwareInterface*>(&hw) );
   EXPECT_EQ(retsbm,0);
 }
 
