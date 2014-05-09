@@ -47,7 +47,7 @@ namespace sr_cod_decod
   {
   }
 
-  void CodDecodStdIo::construct(ros_ethercat_model::RobotState *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
+  void CodDecodStdIo::construct(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
   {
     CodDecod::construct(hw, sh, n_digital_outputs, n_analog_outputs, n_digital_inputs, n_analog_inputs, n_PWM_outputs);
     n_digital_outputs_ = n_digital_outputs;
@@ -72,7 +72,6 @@ namespace sr_cod_decod
 
     //Initialise digital outputs to 0
     boost::shared_ptr<sr_ronex_msgs::BoolArray> d_out_ptr(new sr_ronex_msgs::BoolArray());
-    d_out_ptr->data.clear();
     for (unsigned i = 0; i < n_digital_outputs_; ++i)
     {
       d_out_ptr->data.push_back(false);
@@ -81,7 +80,6 @@ namespace sr_cod_decod
 
     //Initialise analog outputs to 0
     boost::shared_ptr<std_msgs::UInt16MultiArray> a_out_ptr(new std_msgs::UInt16MultiArray());
-    a_out_ptr->data.clear();
     for (unsigned i = 0; i < n_analog_outputs_; ++i)
     {
       a_out_ptr->data.push_back(0x0000);
@@ -90,7 +88,6 @@ namespace sr_cod_decod
 
     //Initialise PWM outputs to 0
     boost::shared_ptr<std_msgs::UInt16MultiArray> PWM_out_ptr(new std_msgs::UInt16MultiArray());
-    PWM_out_ptr->data.clear();
     for (unsigned i = 0; i < (n_PWM_outputs_ * 2); ++i)
     {
       PWM_out_ptr->data.push_back(0x0000);
@@ -213,7 +210,7 @@ namespace sr_cod_decod
     buff_ptr = command_buffer;
 
     //Read the digital outputs from the digital_output_ realtime box and write them on the output buffer
-    boost::shared_ptr<const sr_ronex_msgs::BoolArray> d_out_ptr;
+    boost::shared_ptr<sr_ronex_msgs::BoolArray> d_out_ptr;
     digital_output_.get(d_out_ptr);
 
     //first we set all the digital output bytes in the buffer to zero
@@ -235,7 +232,7 @@ namespace sr_cod_decod
     buff_ptr = command_buffer + ((n_digital_outputs_/16 + 1) * 2);
 
     //Read the PWM outputs from the PWM_output_ realtime box and write them on the output buffer
-    boost::shared_ptr<const std_msgs::UInt16MultiArray> PWM_out_ptr;
+    boost::shared_ptr<std_msgs::UInt16MultiArray> PWM_out_ptr;
     PWM_output_.get(PWM_out_ptr);
 
     //we write the actual values to the buffer
@@ -250,7 +247,7 @@ namespace sr_cod_decod
     buff_ptr = command_buffer + ((n_digital_outputs_/16 + 1) * 2) + (n_PWM_outputs_ * 4);
 
     //Read the analog outputs from the analog_output_ realtime box and write them on the output buffer
-    boost::shared_ptr<const std_msgs::UInt16MultiArray> a_out_ptr;
+    boost::shared_ptr<std_msgs::UInt16MultiArray> a_out_ptr;
     analog_output_.get(a_out_ptr);
 
     //we write the actual values to the buffer
@@ -367,7 +364,7 @@ namespace sr_cod_decod
   {
     //Read the digital outputs from the digital_output_ realtime box and set the right values to the digital_output_ realtime box again
     boost::shared_ptr<sr_ronex_msgs::BoolArray> d_out_ptr(new sr_ronex_msgs::BoolArray());
-    boost::shared_ptr<const sr_ronex_msgs::BoolArray> current_d_out_ptr;
+    boost::shared_ptr<sr_ronex_msgs::BoolArray> current_d_out_ptr;
     digital_output_.get(current_d_out_ptr);
     d_out_ptr->data = current_d_out_ptr->data;
     //set the pin as digital input
@@ -432,7 +429,7 @@ namespace sr_cod_decod
   {
     //Read the digital outputs from the digital_output_ realtime box and set the right values to the digital_output_ realtime box again
     boost::shared_ptr<sr_ronex_msgs::BoolArray> d_out_ptr(new sr_ronex_msgs::BoolArray());
-    boost::shared_ptr<const sr_ronex_msgs::BoolArray> current_d_out_ptr;
+    boost::shared_ptr<sr_ronex_msgs::BoolArray> current_d_out_ptr;
     digital_output_.get(current_d_out_ptr);
     d_out_ptr->data = current_d_out_ptr->data;
     //set the pin as digital output
@@ -451,7 +448,7 @@ namespace sr_cod_decod
   {
     //Read the PWM outputs from the PWM_output_ realtime box and set the right values to the PWM_output_ realtime box again
     boost::shared_ptr<std_msgs::UInt16MultiArray> analog_out_ptr(new std_msgs::UInt16MultiArray());
-    boost::shared_ptr<const std_msgs::UInt16MultiArray> current_analog_out_ptr;
+    boost::shared_ptr<std_msgs::UInt16MultiArray> current_analog_out_ptr;
     analog_output_.get(current_analog_out_ptr);
     analog_out_ptr->data = current_analog_out_ptr->data;
     //set the value of the output
@@ -468,7 +465,7 @@ namespace sr_cod_decod
   {
     //Read the PWM outputs from the PWM_output_ realtime box and set the right values to the PWM_output_ realtime box again
     boost::shared_ptr<std_msgs::UInt16MultiArray> PWM_out_ptr(new std_msgs::UInt16MultiArray());
-    boost::shared_ptr<const std_msgs::UInt16MultiArray> current_PWM_out_ptr;
+    boost::shared_ptr<std_msgs::UInt16MultiArray> current_PWM_out_ptr;
     PWM_output_.get(current_PWM_out_ptr);
     PWM_out_ptr->data = current_PWM_out_ptr->data;
     //set the period to PWM_period

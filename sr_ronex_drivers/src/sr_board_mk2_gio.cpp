@@ -22,6 +22,7 @@
  **/
 
 #include <sr_ronex_drivers/sr_board_mk2_gio.hpp>
+#include <ros_ethercat_model/robot_state.hpp>
 
 #include <dll/ethercat_dll.h>
 #include <al/ethercat_AL.h>
@@ -40,7 +41,7 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 const std::string SrBoardMk2GIO::product_alias_ = "general_io";
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
+  node_("~"), cycle_count_(0), has_stacker_(false)
 {}
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -49,10 +50,6 @@ SrBoardMk2GIO::~SrBoardMk2GIO()
   std::stringstream param_path;
   param_path << "/ronex/devices/" << parameter_id_ ;
   ros::param::del(param_path.str());
-
-
-  delete sh_->get_fmmu_config();
-  delete sh_->get_pd_config();
 }
 
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
@@ -75,8 +72,6 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   device_name_ = ronex::build_name( product_alias_, ronex_id_ );
 
   EthercatDevice::construct(sh,start_address);
-  sh->set_fmmu_config( new EtherCAT_FMMU_Config(0) );
-  sh->set_pd_config( new EtherCAT_PD_Config(0) );
 
   command_base_  = start_address;
   command_size_  = COMMAND_ARRAY_SIZE_BYTES;
@@ -164,7 +159,7 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   ROS_INFO("Finished constructing the SrBoardMk2GIO driver");
 }
 
-int SrBoardMk2GIO::initialize(ros_ethercat_model::RobotState *hw, bool allow_unprogrammed)
+int SrBoardMk2GIO::initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
 {
   digital_commands_ = 0;
   ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
@@ -177,8 +172,9 @@ int SrBoardMk2GIO::initialize(ros_ethercat_model::RobotState *hw, bool allow_unp
   device_offset_ = sh_->get_ring_position();// - hand_->getBridgeRingPosition();
 
   //add the RoNeX to the hw interface
-  hw->custom_hws_.insert(device_name_, new ronex::GeneralIO());
-  general_io_ = static_cast<ronex::GeneralIO*>(hw->getCustomHW(device_name_));
+  ros_ethercat_model::RobotState *robot_state = static_cast<ros_ethercat_model::RobotState*>(hw);
+  robot_state->custom_hws_.insert(device_name_, new ronex::GeneralIO());
+  general_io_ = static_cast<ronex::GeneralIO*>(robot_state->getCustomHW(device_name_));
 
   build_topics_();
 
@@ -186,17 +182,6 @@ int SrBoardMk2GIO::initialize(ros_ethercat_model::RobotState *hw, bool allow_unp
   //Using the name of the ronex to prefix the state topic
 
   return 0;
-}
-
-int SrBoardMk2GIO::readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length)
-{
-  return EthercatDevice::readData(com, address, data, length, FIXED_ADDR);
-}
-
-
-int SrBoardMk2GIO::writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length)
-{
-  return EthercatDevice::writeData(com, sh_, address, data, length, FIXED_ADDR);
 }
 
 void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)

@@ -38,17 +38,11 @@ class SrBoard0X : public StandardEthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(ros_ethercat_model::RobotState *hw, bool allow_unprogrammed=true);
 
-  SrBoard0X();
-  virtual ~SrBoard0X();
 protected:
 
-  int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
-  int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
-  void packCommand(unsigned char *buffer, bool halt, bool reset);
-  bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
-
+  virtual void packCommand(unsigned char *buffer, bool halt, bool reset);
+  virtual bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 };
 
 #endif /* SR_BOARD_0X_H */
