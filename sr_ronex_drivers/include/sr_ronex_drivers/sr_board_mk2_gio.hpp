@@ -90,13 +90,10 @@ protected:
   ///False to run digital pins as output, True to run as input
   std::vector<bool> input_mode_;
 
-  int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
-  int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
+  virtual void packCommand(unsigned char *buffer, bool halt, bool reset);
+  virtual bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 
-  void packCommand(unsigned char *buffer, bool halt, bool reset);
-  bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
-
-  void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
+  virtual void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
 
   ///publisher for the data.
   boost::shared_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState> > state_publisher_;

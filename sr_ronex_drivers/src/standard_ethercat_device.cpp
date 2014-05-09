@@ -38,16 +38,6 @@
 
 PLUGINLIB_EXPORT_CLASS(StandardEthercatDevice, EthercatDevice);
 
-StandardEthercatDevice::StandardEthercatDevice() : EthercatDevice()
-{
-}
-
-StandardEthercatDevice::~StandardEthercatDevice()
-{
-  delete sh_->get_fmmu_config();
-  delete sh_->get_pd_config();
-}
-
 void StandardEthercatDevice::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
   EthercatDevice::construct(sh,start_address);
@@ -73,15 +63,3 @@ int StandardEthercatDevice::initialize(hardware_interface::HardwareInterface *hw
 
   return 0;
 }
-
-int StandardEthercatDevice::readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length)
-{
-  return EthercatDevice::readData(com, address, data, length, FIXED_ADDR);
-}
-
-
-int StandardEthercatDevice::writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length)
-{
-  return EthercatDevice::writeData(com, sh_, address, data, length, FIXED_ADDR);
-}
-

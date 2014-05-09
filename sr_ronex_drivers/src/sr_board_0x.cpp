@@ -45,12 +45,6 @@ SrBoard0X::SrBoard0X() :
 {
 }
 
-SrBoard0X::~SrBoard0X()
-{
-  //delete sh_->get_fmmu_config();
-  //delete sh_->get_pd_config();
-}
-
 void SrBoard0X::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
   StandardEthercatDevice::construct(sh,start_address);
@@ -140,24 +134,6 @@ void SrBoard0X::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   ROS_INFO("status_size_ : %d ; command_size_ : %d", status_size_, command_size_);
 
   ROS_INFO("Finished constructing the SrBoard0X driver");
-}
-
-int SrBoard0X::initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
-{
-  StandardEthercatDevice::initialize(hw, allow_unprogrammed);
-
-  return 0;
-}
-
-int SrBoard0X::readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length)
-{
-  return EthercatDevice::readData(com, address, data, length, FIXED_ADDR);
-}
-
-
-int SrBoard0X::writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length)
-{
-  return EthercatDevice::writeData(com, sh_, address, data, length, FIXED_ADDR);
 }
 
 void SrBoard0X::packCommand(unsigned char *buffer, bool halt, bool reset)

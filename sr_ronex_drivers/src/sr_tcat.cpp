@@ -40,7 +40,7 @@ PLUGINLIB_EXPORT_CLASS(SrTCAT, EthercatDevice);
 const std::string SrTCAT::product_alias_ = "tcat";
 
 SrTCAT::SrTCAT() :
-  EthercatDevice(), node_("~"), previous_sequence_number_(0)
+  node_("~"), previous_sequence_number_(0)
 {}
 
 SrTCAT::~SrTCAT()
@@ -49,9 +49,6 @@ SrTCAT::~SrTCAT()
   std::stringstream param_path;
   param_path << "/ronex/devices/" << parameter_id_ ;
   ros::param::del(param_path.str());
-
-  delete sh_->get_fmmu_config();
-  delete sh_->get_pd_config();
 }
 
 void SrTCAT::construct(EtherCAT_SlaveHandler *sh, int &start_address)
@@ -180,17 +177,6 @@ int SrTCAT::initialize(hardware_interface::HardwareInterface *hw, bool allow_unp
   //Using the name of the ronex to prefix the state topic
 
   return 0;
-}
-
-int SrTCAT::readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length)
-{
-  return EthercatDevice::readData(com, address, data, length, FIXED_ADDR);
-}
-
-
-int SrTCAT::writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length)
-{
-  return EthercatDevice::writeData(com, sh_, address, data, length, FIXED_ADDR);
 }
 
 void SrTCAT::packCommand(unsigned char *buffer, bool halt, bool reset)

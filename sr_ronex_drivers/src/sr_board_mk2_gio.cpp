@@ -41,7 +41,7 @@ PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 const std::string SrBoardMk2GIO::product_alias_ = "general_io";
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
+  node_("~"), cycle_count_(0), has_stacker_(false)
 {}
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
@@ -50,10 +50,6 @@ SrBoardMk2GIO::~SrBoardMk2GIO()
   std::stringstream param_path;
   param_path << "/ronex/devices/" << parameter_id_ ;
   ros::param::del(param_path.str());
-
-
-  delete sh_->get_fmmu_config();
-  delete sh_->get_pd_config();
 }
 
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
@@ -188,17 +184,6 @@ int SrBoardMk2GIO::initialize(hardware_interface::HardwareInterface *hw, bool al
   //Using the name of the ronex to prefix the state topic
 
   return 0;
-}
-
-int SrBoardMk2GIO::readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length)
-{
-  return EthercatDevice::readData(com, address, data, length, FIXED_ADDR);
-}
-
-
-int SrBoardMk2GIO::writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length)
-{
-  return EthercatDevice::writeData(com, sh_, address, data, length, FIXED_ADDR);
 }
 
 void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)

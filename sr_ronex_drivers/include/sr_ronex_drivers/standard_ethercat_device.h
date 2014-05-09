@@ -39,15 +39,9 @@ public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
   virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
 
-  StandardEthercatDevice();
-  virtual ~StandardEthercatDevice();
 protected:
   string reason_;
   int level_;
-
-  int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
-  int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
-
   int device_offset_;      //!< Offset of device position from first device
 
 protected:

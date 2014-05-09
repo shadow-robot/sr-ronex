@@ -229,9 +229,9 @@ namespace sr_cod_decod
     realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray> *digital_input_state_publisher_;
     realtime_tools::RealtimePublisher<std_msgs::UInt16MultiArray> *analog_input_state_publisher_;
 
-    realtime_tools::RealtimeBox<boost::shared_ptr<const sr_ronex_msgs::BoolArray> > digital_output_;
-    realtime_tools::RealtimeBox<boost::shared_ptr<const std_msgs::UInt16MultiArray> > analog_output_;
-    realtime_tools::RealtimeBox<boost::shared_ptr<const std_msgs::UInt16MultiArray> > PWM_output_;
+    realtime_tools::RealtimeBox<boost::shared_ptr<sr_ronex_msgs::BoolArray> > digital_output_;
+    realtime_tools::RealtimeBox<boost::shared_ptr<std_msgs::UInt16MultiArray> > analog_output_;
+    realtime_tools::RealtimeBox<boost::shared_ptr<std_msgs::UInt16MultiArray> > PWM_output_;
 
     sr_ronex_msgs::BoolArray d_in_;
     std_msgs::UInt16MultiArray a_in_;
