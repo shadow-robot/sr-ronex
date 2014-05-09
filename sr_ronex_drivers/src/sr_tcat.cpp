@@ -71,8 +71,6 @@ void SrTCAT::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   device_name_ = ronex::build_name( product_alias_, ronex_id_ );
 
   EthercatDevice::construct(sh,start_address);
-  sh->set_fmmu_config( new EtherCAT_FMMU_Config(0) );
-  sh->set_pd_config( new EtherCAT_PD_Config(0) );
 
   command_base_  = start_address;
   command_size_  = COMMAND_ARRAY_SIZE_BYTES;

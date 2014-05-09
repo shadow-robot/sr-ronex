@@ -27,8 +27,10 @@
 #include "sr_ronex_drivers/ronex_utils.hpp"
 #include "sr_ronex_drivers/sr_board_mk2_gio.hpp"
 #include "sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp"
+#include <ros_ethercat_model/robot_state.hpp>
 #include <ros/ros.h>
 #include <gtest/gtest.h>
+#include <tinyxml.h>
 
 using namespace std;
 using namespace ronex;

@@ -38,9 +38,7 @@ class SrBoard0X : public StandardEthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
 
-  SrBoard0X();
 protected:
 
   virtual void packCommand(unsigned char *buffer, bool halt, bool reset);
