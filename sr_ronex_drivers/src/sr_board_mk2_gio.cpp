@@ -154,8 +154,6 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
   sh->set_pd_config(pd);
 
-  ROS_INFO("status_size_ : %d ; command_size_ : %d", status_size_, command_size_);
-
   ROS_INFO("Finished constructing the SrBoardMk2GIO driver");
 }
 

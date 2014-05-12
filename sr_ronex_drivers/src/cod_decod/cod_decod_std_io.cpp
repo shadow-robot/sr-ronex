@@ -82,8 +82,8 @@ namespace sr_cod_decod
 
     //Initialise PWM outputs to 0
     std_msgs::UInt16MultiArrayPtr PWM_out_ptr(new std_msgs::UInt16MultiArray());
-    PWM_out_ptr->data.assign(n_analog_outputs_, 0x0000);
-    PWM_output_.set(a_out_ptr);
+    PWM_out_ptr->data.assign(n_PWM_outputs_, 0x0000);
+    PWM_output_.set(PWM_out_ptr);
 
     char buff[200];
     string topic;
@@ -112,25 +112,16 @@ namespace sr_cod_decod
             sh_->get_product_code(),
             sh_->get_serial());
     topic = buff;
-    digital_input_state_publisher_ = new realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray>(node_, topic, 1);
+    digital_input_state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray>(node_, topic, 1));
 
 
     sprintf(buff, "device_0x%08X_0x%08X_analog_inputs_state",
             sh_->get_product_code(),
             sh_->get_serial());
     topic = buff;
-    analog_input_state_publisher_ = new realtime_tools::RealtimePublisher<std_msgs::UInt16MultiArray>(node_, topic, 1);
+    analog_input_state_publisher_.reset(new realtime_tools::RealtimePublisher<std_msgs::UInt16MultiArray>(node_, topic, 1));
 
 
-  }
-
-  CodDecodStdIo::~CodDecodStdIo()
-  {
-    if (digital_input_state_publisher_) delete digital_input_state_publisher_;
-    if (analog_input_state_publisher_) delete analog_input_state_publisher_;
-    sub_digital_output_command_.shutdown();
-    sub_analog_output_command_.shutdown();
-    sub_PWM_output_command_.shutdown();
   }
 
   void CodDecodStdIo::update(unsigned char *status_buffer)

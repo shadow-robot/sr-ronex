@@ -39,7 +39,7 @@ namespace sr_cod_decod
   {
   public:
     CodDecod();
-    virtual ~CodDecod() {};
+    virtual ~CodDecod() {}
 
     virtual void construct(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
     virtual void update(unsigned char *status_buffer);
