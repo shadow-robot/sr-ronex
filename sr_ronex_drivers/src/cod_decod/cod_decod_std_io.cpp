@@ -71,29 +71,19 @@ namespace sr_cod_decod
     node_ = ros::NodeHandle();
 
     //Initialise digital outputs to 0
-    boost::shared_ptr<sr_ronex_msgs::BoolArray> d_out_ptr(new sr_ronex_msgs::BoolArray());
-    for (unsigned i = 0; i < n_digital_outputs_; ++i)
-    {
-      d_out_ptr->data.push_back(false);
-    }
+    sr_ronex_msgs::BoolArrayPtr d_out_ptr(new sr_ronex_msgs::BoolArray());
+    d_out_ptr->data.assign(n_digital_outputs_, false);
     digital_output_.set(d_out_ptr);
 
     //Initialise analog outputs to 0
-    boost::shared_ptr<std_msgs::UInt16MultiArray> a_out_ptr(new std_msgs::UInt16MultiArray());
-    for (unsigned i = 0; i < n_analog_outputs_; ++i)
-    {
-      a_out_ptr->data.push_back(0x0000);
-    }
+    std_msgs::UInt16MultiArrayPtr a_out_ptr(new std_msgs::UInt16MultiArray());
+    a_out_ptr->data.assign(n_analog_outputs_, 0x0000);
     analog_output_.set(a_out_ptr);
 
     //Initialise PWM outputs to 0
-    boost::shared_ptr<std_msgs::UInt16MultiArray> PWM_out_ptr(new std_msgs::UInt16MultiArray());
-    for (unsigned i = 0; i < (n_PWM_outputs_ * 2); ++i)
-    {
-      PWM_out_ptr->data.push_back(0x0000);
-    }
-    PWM_output_.set(PWM_out_ptr);
-
+    std_msgs::UInt16MultiArrayPtr PWM_out_ptr(new std_msgs::UInt16MultiArray());
+    PWM_out_ptr->data.assign(n_analog_outputs_, 0x0000);
+    PWM_output_.set(a_out_ptr);
 
     char buff[200];
     string topic;
