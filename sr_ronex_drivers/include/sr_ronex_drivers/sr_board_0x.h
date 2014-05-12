@@ -41,8 +41,8 @@ public:
 
 protected:
 
-  virtual void packCommand(unsigned char *buffer, bool halt, bool reset);
-  virtual bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
+  void packCommand(unsigned char *buffer, bool halt, bool reset);
+  bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 };
 
 #endif /* SR_BOARD_0X_H */
