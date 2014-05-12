@@ -32,6 +32,7 @@
 #include <sstream>
 #include <iomanip>
 #include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
 #include <math.h>
 
 #include "sr_ronex_drivers/ronex_utils.hpp"
@@ -39,6 +40,8 @@
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
 const std::string SrBoardMk2GIO::product_alias_ = "general_io";
+using boost::lexical_cast;
+
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
   node_("~"), cycle_count_(0), has_stacker_(false)
@@ -47,9 +50,19 @@ SrBoardMk2GIO::SrBoardMk2GIO() :
 SrBoardMk2GIO::~SrBoardMk2GIO()
 {
   //remove parameters from server
-  std::stringstream param_path;
-  param_path << "/ronex/devices/" << parameter_id_ ;
-  ros::param::del(param_path.str());
+  string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_ );
+  ros::param::del(device_id);
+
+  string general_io_name = "/ronex/general_io/" + serial_number_ + "/";
+  ros::param::del(general_io_name + "pwm_clock_divider");
+  for (size_t i = 0; i < general_io_->command_.digital_.size(); ++i)
+    ros::param::del(general_io_name + "input_mode_" + lexical_cast<string>(i));
+  for (size_t i = 0; i < general_io_->command_.pwm_.size(); ++i)
+    ros::param::del(general_io_name + "pwm_period_" + lexical_cast<string>(i));
+
+  string controller_name = "/ronex_" + serial_number_ + "_passthrough/";
+  ros::param::del(controller_name + "ronex_id");
+  ros::param::del(controller_name + "type");
 }
 
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)

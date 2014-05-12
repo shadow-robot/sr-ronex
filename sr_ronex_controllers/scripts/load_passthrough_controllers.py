@@ -17,7 +17,6 @@
 # License along with this library.
 # ####################################################################
 
-import roslib; roslib.load_manifest('sr_ronex_controllers')
 import rospy
 from time import sleep
 
