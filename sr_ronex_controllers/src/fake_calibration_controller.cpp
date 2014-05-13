@@ -35,9 +35,6 @@ namespace ronex
   {
   }
 
-  FakeCalibrationController::~FakeCalibrationController()
-  {}
-
   bool FakeCalibrationController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
   {
     robot_ = robot;

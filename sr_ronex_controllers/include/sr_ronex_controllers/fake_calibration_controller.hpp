@@ -41,7 +41,6 @@ namespace ronex
   {
   public:
     FakeCalibrationController();
-    virtual ~FakeCalibrationController();
 
     virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 

@@ -33,18 +33,6 @@ namespace ronex
     : loop_count_(0)
   {}
 
-  GeneralIOPassthroughController::~GeneralIOPassthroughController()
-  {
-    for(size_t i=0; i < digital_subscribers_.size(); ++i)
-    {
-      digital_subscribers_[i].shutdown();
-    }
-    for(size_t i=0; i < pwm_subscribers_.size(); ++i)
-    {
-      pwm_subscribers_[i].shutdown();
-    }
-  }
-
   bool GeneralIOPassthroughController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
   {
     assert(robot);

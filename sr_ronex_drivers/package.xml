@@ -67,7 +67,7 @@
   <test_depend>gtest</test_depend>
 
 <export>
-    <ros_ethercat_hardware plugin="${prefix}/ros_ethercat_device_plugin.xml"/>
+    <ros_ethercat_hardware plugin="${prefix}/ethercat_device_plugin.xml"/>
 </export>
 
 </package>

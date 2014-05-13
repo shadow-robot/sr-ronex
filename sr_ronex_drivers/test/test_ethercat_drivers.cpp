@@ -23,7 +23,7 @@
 
 #include <stdint.h>
 #include "sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h"
-#include <al/ethercat_slave_handler.h>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 #include "sr_ronex_drivers/ronex_utils.hpp"
 #include "sr_ronex_drivers/sr_board_mk2_gio.hpp"
 #include "sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp"
@@ -50,7 +50,7 @@ TEST(RonexUtils, constructor )
 
   EtherCAT_FMMU_Config fmmu(0);
   EtherCAT_PD_Config pdcfg(0);
-  EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (EC_UINT) 0 ), &fmmu, &pdcfg, 0);
+  EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (uint16_t) 0 ), &fmmu, &pdcfg, 0);
 
   SrBoardMk2GIO sbm;
 

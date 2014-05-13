@@ -72,6 +72,7 @@ namespace sr_cod_decod
 
     //Initialise digital outputs to 0
     boost::shared_ptr<sr_ronex_msgs::BoolArray> d_out_ptr(new sr_ronex_msgs::BoolArray());
+    d_out_ptr->data.clear();
     for (unsigned i = 0; i < n_digital_outputs_; ++i)
     {
       d_out_ptr->data.push_back(false);
@@ -80,6 +81,7 @@ namespace sr_cod_decod
 
     //Initialise analog outputs to 0
     boost::shared_ptr<std_msgs::UInt16MultiArray> a_out_ptr(new std_msgs::UInt16MultiArray());
+    a_out_ptr->data.clear();
     for (unsigned i = 0; i < n_analog_outputs_; ++i)
     {
       a_out_ptr->data.push_back(0x0000);
@@ -88,6 +90,7 @@ namespace sr_cod_decod
 
     //Initialise PWM outputs to 0
     boost::shared_ptr<std_msgs::UInt16MultiArray> PWM_out_ptr(new std_msgs::UInt16MultiArray());
+    PWM_out_ptr->data.clear();
     for (unsigned i = 0; i < (n_PWM_outputs_ * 2); ++i)
     {
       PWM_out_ptr->data.push_back(0x0000);
@@ -122,25 +125,16 @@ namespace sr_cod_decod
             sh_->get_product_code(),
             sh_->get_serial());
     topic = buff;
-    digital_input_state_publisher_ = new realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray>(node_, topic, 1);
+    digital_input_state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray>(node_, topic, 1));
 
 
     sprintf(buff, "device_0x%08X_0x%08X_analog_inputs_state",
             sh_->get_product_code(),
             sh_->get_serial());
     topic = buff;
-    analog_input_state_publisher_ = new realtime_tools::RealtimePublisher<std_msgs::UInt16MultiArray>(node_, topic, 1);
+    analog_input_state_publisher_.reset(new realtime_tools::RealtimePublisher<std_msgs::UInt16MultiArray>(node_, topic, 1));
 
 
-  }
-
-  CodDecodStdIo::~CodDecodStdIo()
-  {
-    if (digital_input_state_publisher_) delete digital_input_state_publisher_;
-    if (analog_input_state_publisher_) delete analog_input_state_publisher_;
-    sub_digital_output_command_.shutdown();
-    sub_analog_output_command_.shutdown();
-    sub_PWM_output_command_.shutdown();
   }
 
   void CodDecodStdIo::update(unsigned char *status_buffer)
@@ -195,7 +189,7 @@ namespace sr_cod_decod
     strcpy(buff, "");
     for (unsigned int i = 0; i<status_size_; i++)
     {
-      sprintf(aux, "%02x", static_cast<EC_UINT>(status_buffer[i]));
+      sprintf(aux, "%02x", static_cast<uint16_t>(status_buffer[i]));
       strcat(buff, aux);
     }
     if(status_size_ > 0)
@@ -263,14 +257,14 @@ namespace sr_cod_decod
     strcpy(buff, "");
     for (unsigned int i = 0; i<command_size_; i++)
     {
-      sprintf(aux, "%02x", static_cast<EC_UINT>(command_buffer[i]));
+      sprintf(aux, "%02x", static_cast<uint16_t>(command_buffer[i]));
       strcat(buff, aux);
     }
     if(command_size_ > 0)
     {
       ROS_DEBUG("Cmd buffer %02d: %s", sh_->get_ring_position(), buff);
     }
-    //ROS_INFO("Buffer: 0x%02x", static_cast<EC_UINT>(buffer[0]));
+    //ROS_INFO("Buffer: 0x%02x", static_cast<uint16_t>(buffer[0]));
     //ROS_INFO("State: %02d", sh_->get_state());
 
   }

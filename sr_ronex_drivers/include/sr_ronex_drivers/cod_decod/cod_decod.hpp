@@ -30,7 +30,7 @@
 #include <ros_ethercat_model/robot_state.hpp>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_updater/DiagnosticStatusWrapper.h>
-#include <al/ethercat_slave_handler.h>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 #include <pluginlib/class_list_macros.h>
 
 namespace sr_cod_decod
@@ -39,7 +39,7 @@ namespace sr_cod_decod
   {
   public:
     CodDecod();
-    virtual ~CodDecod() {};
+    virtual ~CodDecod() {}
 
     virtual void construct(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
     virtual void update(unsigned char *status_buffer);

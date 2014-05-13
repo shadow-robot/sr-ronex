@@ -3,34 +3,34 @@
   <!--
       The following definitions are EthercatDevice plugins (they are the drivers for a certain type of ethercat slave device, determined by its product code)
   -->
-  <class name="87032868" type="SrBoard0X" base_class_type="EthercatDevice">
+  <class name="sr_ronex_drivers/87032868" type="SrBoard0X" base_class_type="EthercatDevice">
     <description>
-      SrBoard0X - Shadow Robot RoNeX Board
+      RoNeX - General I/O module
     </description>
   </class>
-  <class name="33554435" type="SrTCAT" base_class_type="EthercatDevice">
+  <class name="sr_ronex_drivers/33554435" type="SrTCAT" base_class_type="EthercatDevice">
     <description>
-      RoNeX - TCAT board. Product ID is 0x02000003.
+      RoNeX - TCAT module
     </description>
   </class>
-  <class name="33554433" type="SrBoardMk2GIO" base_class_type="EthercatDevice">
+  <class name="sr_ronex_drivers/33554433" type="SrBoardMk2GIO" base_class_type="EthercatDevice">
     <description>
-      RoNeX mk2 - General I/O board. Product ID is 0x02000001.
+      RoNeX - General I/O module
     </description>
   </class>
-  <class name="33554432" type="StandardEthercatDevice" base_class_type="EthercatDevice">
+  <class name="sr_ronex_drivers/33554432" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
-      RoNeX bridge - Product ID is 0x02000000.
+      RoNeX - Bridge module
     </description>
   </class>
-  <class name="7" type="StandardEthercatDevice" base_class_type="EthercatDevice">
+  <class name="sr_ronex_drivers/7" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
-      RoNeX bridge - duplicated for backward compatibility issues.
+      RoNeX - Bridge module
     </description>
   </class>
-  <class name="73946162" type="StandardEthercatDevice" base_class_type="EthercatDevice">
+  <class name="sr_ronex_drivers/73946162" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
-      Beckhoff CU1128 bridge - Product ID is 73946162 (0x4685432).
+      RoNeX - Beckhoff CU1128 bridge module
     </description>
   </class>
 

@@ -69,7 +69,6 @@ namespace sr_cod_decod
   {
   public:
     CodDecodStdIo();
-    virtual ~CodDecodStdIo();
 
     virtual void construct(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
     /*!
@@ -226,8 +225,8 @@ namespace sr_cod_decod
     void PWMOutputCommandCB(const std_msgs::UInt16MultiArrayConstPtr& msg);
 
 
-    realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray> *digital_input_state_publisher_;
-    realtime_tools::RealtimePublisher<std_msgs::UInt16MultiArray> *analog_input_state_publisher_;
+    boost::scoped_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray> > digital_input_state_publisher_;
+    boost::scoped_ptr<realtime_tools::RealtimePublisher<std_msgs::UInt16MultiArray> >analog_input_state_publisher_;
 
     realtime_tools::RealtimeBox<boost::shared_ptr<sr_ronex_msgs::BoolArray> > digital_output_;
     realtime_tools::RealtimeBox<boost::shared_ptr<std_msgs::UInt16MultiArray> > analog_output_;

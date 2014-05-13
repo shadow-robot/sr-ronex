@@ -43,7 +43,6 @@ namespace ronex
   {
   public:
     GeneralIOPassthroughController();
-    virtual ~GeneralIOPassthroughController();
 
     virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 

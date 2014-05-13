@@ -23,7 +23,7 @@
 #ifndef _SR_TCAT_HPP_
 #define _SR_TCAT_HPP_
 
-#include <ros_ethercat_hardware/ethercat_device.h>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_msgs/TCATState.h>
 
@@ -74,10 +74,10 @@ protected:
   ///Offset of device position from first device
   int device_offset_;
 
-  virtual void packCommand(unsigned char *buffer, bool halt, bool reset);
-  virtual bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
+  void packCommand(unsigned char *buffer, bool halt, bool reset);
+  bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 
-  virtual void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
+  void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
 
   ///publisher for the data.
   boost::shared_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::TCATState> > state_publisher_;

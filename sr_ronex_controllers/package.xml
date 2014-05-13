@@ -24,7 +24,6 @@
   <build_depend>std_srvs</build_depend>
   <build_depend>sr_ronex_msgs</build_depend>
   <build_depend>sr_ronex_hardware_interface</build_depend>
-  <build_depend>sr_ronex_utilities</build_depend>
   <build_depend>controller_manager_msgs</build_depend>
   <build_depend>controller_interface</build_depend>
   <build_depend>ros_ethercat_model</build_depend>
@@ -36,7 +35,6 @@
   <run_depend>std_srvs</run_depend>
   <run_depend>sr_ronex_msgs</run_depend>
   <run_depend>sr_ronex_hardware_interface</run_depend>
-  <run_depend>sr_ronex_utilities</run_depend>
   <run_depend>controller_manager_msgs</run_depend>
   <run_depend>controller_interface</run_depend>
   <run_depend>ros_ethercat_model</run_depend>
