@@ -46,7 +46,7 @@ TEST(RonexUtils, build_name )
 
 TEST(RonexUtils, constructor )
 {
-  const EC_UDINT serial = 55662211;
+  const uint32_t serial = 55662211;
 
   EtherCAT_FMMU_Config fmmu(0);
   EtherCAT_PD_Config pdcfg(0);
