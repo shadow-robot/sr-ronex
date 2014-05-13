@@ -30,7 +30,7 @@
 #include <ros_ethercat_model/robot_state.hpp>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_updater/DiagnosticStatusWrapper.h>
-#include <al/ethercat_slave_handler.h>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 #include <pluginlib/class_list_macros.h>
 
 namespace sr_cod_decod

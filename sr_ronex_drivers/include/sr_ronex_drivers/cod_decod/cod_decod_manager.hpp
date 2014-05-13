@@ -30,8 +30,8 @@
 
 #include <boost/smart_ptr.hpp>
 #include <ros_ethercat_model/robot_state.hpp>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 #include "sr_ronex_drivers/cod_decod/cod_decod.hpp"
-#include <al/ethercat_slave_handler.h>
 #include <pluginlib/class_loader.h>
 
 namespace sr_cod_decod

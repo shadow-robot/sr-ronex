@@ -23,11 +23,7 @@
 
 #include <sr_ronex_drivers/sr_board_mk2_gio.hpp>
 #include <ros_ethercat_model/robot_state.hpp>
-
-#include <dll/ethercat_dll.h>
-#include <al/ethercat_AL.h>
-#include <dll/ethercat_device_addressed_telegram.h>
-#include <dll/ethercat_frame.h>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 
 #include <sstream>
 #include <iomanip>

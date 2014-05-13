@@ -189,7 +189,7 @@ namespace sr_cod_decod
     strcpy(buff, "");
     for (unsigned int i = 0; i<status_size_; i++)
     {
-      sprintf(aux, "%02x", static_cast<EC_UINT>(status_buffer[i]));
+      sprintf(aux, "%02x", static_cast<uint16_t>(status_buffer[i]));
       strcat(buff, aux);
     }
     if(status_size_ > 0)
@@ -257,14 +257,14 @@ namespace sr_cod_decod
     strcpy(buff, "");
     for (unsigned int i = 0; i<command_size_; i++)
     {
-      sprintf(aux, "%02x", static_cast<EC_UINT>(command_buffer[i]));
+      sprintf(aux, "%02x", static_cast<uint16_t>(command_buffer[i]));
       strcat(buff, aux);
     }
     if(command_size_ > 0)
     {
       ROS_DEBUG("Cmd buffer %02d: %s", sh_->get_ring_position(), buff);
     }
-    //ROS_INFO("Buffer: 0x%02x", static_cast<EC_UINT>(buffer[0]));
+    //ROS_INFO("Buffer: 0x%02x", static_cast<uint16_t>(buffer[0]));
     //ROS_INFO("State: %02d", sh_->get_state());
 
   }

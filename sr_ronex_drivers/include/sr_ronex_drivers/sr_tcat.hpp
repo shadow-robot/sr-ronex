@@ -23,7 +23,7 @@
 #ifndef _SR_TCAT_HPP_
 #define _SR_TCAT_HPP_
 
-#include <ros_ethercat_hardware/ethercat_device.h>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_msgs/TCATState.h>
 

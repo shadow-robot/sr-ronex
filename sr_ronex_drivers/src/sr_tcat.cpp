@@ -23,11 +23,6 @@
 
 #include <sr_ronex_drivers/sr_tcat.hpp>
 
-#include <dll/ethercat_dll.h>
-#include <al/ethercat_AL.h>
-#include <dll/ethercat_device_addressed_telegram.h>
-#include <dll/ethercat_frame.h>
-
 #include <sstream>
 #include <iomanip>
 #include <boost/foreach.hpp>
