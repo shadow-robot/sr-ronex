@@ -13,8 +13,8 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
+# catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
+catkin_package( CATKIN_DEPENDS )
 IF ("$ENV{RONEX_TESTS_WITH_HARDWARE}" STREQUAL "yes")
-  # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
-  catkin_package( CATKIN_DEPENDS )
   add_rostest(test/sr_ronex.test)
 ENDIF ("$ENV{RONEX_TESTS_WITH_HARDWARE}" STREQUAL "yes")
