@@ -8,7 +8,6 @@ compiler:
 # command to install dependencies
 install:
   - export ROS_DISTRO=hydro
-  - export WORKSPACE_PATH=/tmp/ros_comm_ws
   - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu precise main" > /etc/apt/sources.list.d/ros-latest.list'
   - wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
   - sudo apt-get update -qq
@@ -18,21 +17,21 @@ install:
   - rosdep update
   # Make a workspace
   - source /opt/ros/$ROS_DISTRO/setup.bash
-  - mkdir -p $WORKSPACE_PATH/src
-  - cd $WORKSPACE_PATH/src
+  - mkdir -p /tmp/ros_comm_ws/src
+  - cd /tmp/ros_comm_ws/src
   # Add this folder to the workspace
-  - ln -s `pwd` $WORKSPACE_PATH/src
+  - ln -s `pwd` /tmp/ros_comm_ws/src
   # Install dependencies
   - git clone -b $ROS_DISTRO-devel https://github.com/shadow-robot/ros_ethercat.git
-  - cd $WORKSPACE_PATH
-  - rosdep install --from-paths $WORKSPACE_PATH/src --ignore-src --rosdistro $ROS_DISTRO -y > /dev/null
+  - cd /tmp/ros_comm_ws
+  - rosdep install --from-paths /tmp/ros_comm_ws/src --ignore-src --rosdistro $ROS_DISTRO -y > /dev/null
 # command to run tests
 script:
   - source /opt/ros/$ROS_DISTRO/setup.bash
-  - cd $WORKSPACE_PATH
+  - cd /tmp/ros_comm_ws
   #- catkin_make tests > log.make_tests
   - catkin_make tests -j2
-  - source $WORKSPACE_PATH/devel/setup.bash
+  - source /tmp/ros_comm_ws/devel/setup.bash
   - cd build
   # Manually invoke make, catkin_make
   #- make run_tests > log.run_tests || cat log.*
