@@ -18,10 +18,9 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <!-- Dependencies needed to compile this package. -->
-  <build_depend>pr2_ethercat</build_depend>
 
   <!-- Dependencies needed after this package is compiled. -->
-  <run_depend>pr2_ethercat</run_depend>
+  <run_depend>ros_ethercat_loop</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
   <!-- <test_depend>pr2_ethercat</test_depend> -->

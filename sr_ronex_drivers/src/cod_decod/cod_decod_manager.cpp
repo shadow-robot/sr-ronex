@@ -33,7 +33,7 @@
 namespace sr_cod_decod
 {
 
-  CodDecodManager::CodDecodManager(pr2_hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
+  CodDecodManager::CodDecodManager(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
     :cod_decod_loader_("sr_ronex_drivers", "sr_cod_decod::CodDecod")
   {
     uint32_t product_code = sh->get_product_code();

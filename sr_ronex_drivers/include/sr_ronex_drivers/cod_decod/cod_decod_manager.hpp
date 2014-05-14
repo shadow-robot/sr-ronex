@@ -29,9 +29,9 @@
 #define _COD_DECOD_MANAGER_HPP_
 
 #include <boost/smart_ptr.hpp>
-#include <pr2_hardware_interface/hardware_interface.h>
+#include <ros_ethercat_model/robot_state.hpp>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 #include "sr_ronex_drivers/cod_decod/cod_decod.hpp"
-#include <al/ethercat_slave_handler.h>
 #include <pluginlib/class_loader.h>
 
 namespace sr_cod_decod
@@ -39,7 +39,7 @@ namespace sr_cod_decod
   class CodDecodManager
   {
   public:
-    CodDecodManager(pr2_hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
+    CodDecodManager(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
     ~CodDecodManager();
 
     void update(unsigned char *status_buffer);

@@ -22,15 +22,13 @@
  **/
 
 #include <sr_ronex_drivers/sr_board_mk2_gio.hpp>
-
-#include <dll/ethercat_dll.h>
-#include <al/ethercat_AL.h>
-#include <dll/ethercat_device_addressed_telegram.h>
-#include <dll/ethercat_frame.h>
+#include <ros_ethercat_model/robot_state.hpp>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 
 #include <sstream>
 #include <iomanip>
 #include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
 #include <math.h>
 
 #include "sr_ronex_drivers/ronex_utils.hpp"
@@ -38,21 +36,29 @@
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
 const std::string SrBoardMk2GIO::product_alias_ = "general_io";
+using boost::lexical_cast;
+
 
 SrBoardMk2GIO::SrBoardMk2GIO() :
-  EthercatDevice(), node_("~"), cycle_count_(0), has_stacker_(false)
+  node_("~"), cycle_count_(0), has_stacker_(false)
 {}
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
 {
   //remove parameters from server
-  std::stringstream param_path;
-  param_path << "/ronex/devices/" << parameter_id_ ;
-  ros::param::del(param_path.str());
+  string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_ );
+  ros::param::del(device_id);
 
+  string general_io_name = "/ronex/general_io/" + serial_number_ + "/";
+  ros::param::del(general_io_name + "pwm_clock_divider");
+  for (size_t i = 0; i < general_io_->command_.digital_.size(); ++i)
+    ros::param::del(general_io_name + "input_mode_" + lexical_cast<string>(i));
+  for (size_t i = 0; i < general_io_->command_.pwm_.size(); ++i)
+    ros::param::del(general_io_name + "pwm_period_" + lexical_cast<string>(i));
 
-  delete sh_->get_fmmu_config();
-  delete sh_->get_pd_config();
+  string controller_name = "/ronex_" + serial_number_ + "_passthrough/";
+  ros::param::del(controller_name + "ronex_id");
+  ros::param::del(controller_name + "type");
 }
 
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
@@ -75,8 +81,6 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   device_name_ = ronex::build_name( product_alias_, ronex_id_ );
 
   EthercatDevice::construct(sh,start_address);
-  sh->set_fmmu_config( new EtherCAT_FMMU_Config(0) );
-  sh->set_pd_config( new EtherCAT_PD_Config(0) );
 
   command_base_  = start_address;
   command_size_  = COMMAND_ARRAY_SIZE_BYTES;
@@ -159,12 +163,10 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
   sh->set_pd_config(pd);
 
-  ROS_INFO("status_size_ : %d ; command_size_ : %d", status_size_, command_size_);
-
   ROS_INFO("Finished constructing the SrBoardMk2GIO driver");
 }
 
-int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
+int SrBoardMk2GIO::initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
 {
   digital_commands_ = 0;
   ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
@@ -177,28 +179,16 @@ int SrBoardMk2GIO::initialize(pr2_hardware_interface::HardwareInterface *hw, boo
   device_offset_ = sh_->get_ring_position();// - hand_->getBridgeRingPosition();
 
   //add the RoNeX to the hw interface
-  general_io_.reset( new ronex::GeneralIO() );
-  general_io_->name_ = device_name_;
+  ros_ethercat_model::RobotState *robot_state = static_cast<ros_ethercat_model::RobotState*>(hw);
+  robot_state->custom_hws_.insert(device_name_, new ronex::GeneralIO());
+  general_io_ = static_cast<ronex::GeneralIO*>(robot_state->getCustomHW(device_name_));
 
   build_topics_();
 
   ROS_INFO_STREAM("Adding a general_io RoNeX module to the hardware interface: " << device_name_);
   //Using the name of the ronex to prefix the state topic
 
-  hw->addCustomHW( general_io_.get() );
-
   return 0;
-}
-
-int SrBoardMk2GIO::readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length)
-{
-  return EthercatDevice::readData(com, address, data, length, FIXED_ADDR);
-}
-
-
-int SrBoardMk2GIO::writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length)
-{
-  return EthercatDevice::writeData(com, sh_, address, data, length, FIXED_ADDR);
 }
 
 void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)

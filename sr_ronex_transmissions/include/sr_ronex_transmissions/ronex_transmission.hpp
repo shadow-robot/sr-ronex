@@ -24,32 +24,25 @@
 #ifndef _RONEX_TRANSMISSION_H_
 #define _RONEX_TRANSMISSION_H_
 
-#include <pr2_mechanism_model/transmission.h>
-#include <pr2_mechanism_model/joint.h>
-#include <pr2_mechanism_model/joint_calibration_simulator.h>
+#include <ros_ethercat_model/robot_state.hpp>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include "sr_ronex_transmissions/mapping/ronex_mapping.hpp"
 
 namespace ronex
 {
-  class RonexTransmission : public pr2_mechanism_model::Transmission
+  class RonexTransmission : public ros_ethercat_model::Transmission
   {
   public:
     RonexTransmission() {};
     virtual ~RonexTransmission() {};
 
-    bool initXml(TiXmlElement *elt, pr2_mechanism_model::Robot *robot);
-    bool initXml(TiXmlElement *elt);
+    bool initXml(TiXmlElement *elt, ros_ethercat_model::RobotState *robot);
 
-    void propagatePosition(std::vector<pr2_hardware_interface::Actuator*>& as,
-                           std::vector<pr2_mechanism_model::JointState*>& js);
-    void propagatePositionBackwards(std::vector<pr2_mechanism_model::JointState*>& js,
-                                    std::vector<pr2_hardware_interface::Actuator*>& as);
-    void propagateEffort(std::vector<pr2_mechanism_model::JointState*>& js,
-                         std::vector<pr2_hardware_interface::Actuator*>& as);
-    void propagateEffortBackwards(std::vector<pr2_hardware_interface::Actuator*>& as,
-                                  std::vector<pr2_mechanism_model::JointState*>& js);
+    void propagatePosition(std::vector<ros_ethercat_model::Actuator*>& as,
+                           std::vector<ros_ethercat_model::JointState*>& js);
+    void propagateEffort(std::vector<ros_ethercat_model::JointState*>& js,
+                         std::vector<ros_ethercat_model::Actuator*>& as);
 
   protected:
     boost::ptr_vector<RonexMapping> ronex_mappings_;

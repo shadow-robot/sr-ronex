@@ -22,7 +22,7 @@
  **/
 
 #include "sr_ronex_transmissions/mapping/general_io/analogue_to_effort.hpp"
-#include <pr2_mechanism_model/robot.h>
+#include <ros_ethercat_model/robot_state.hpp>
 #include <boost/lexical_cast.hpp>
 
 namespace ronex
@@ -31,7 +31,7 @@ namespace ronex
   {
     namespace general_io
     {
-      AnalogueToEffort::AnalogueToEffort(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot)
+      AnalogueToEffort::AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot)
         : AnalogueToPosition(mapping_el, robot)
       {
       }
@@ -40,7 +40,7 @@ namespace ronex
       {
       }
 
-      void AnalogueToEffort::propagateFromRonex(std::vector<pr2_mechanism_model::JointState*>& js)
+      void AnalogueToEffort::propagateFromRonex(std::vector<ros_ethercat_model::JointState*>& js)
       {
         assert(js.size() == 1);
 

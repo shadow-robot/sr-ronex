@@ -6,7 +6,7 @@ Contains ROS packages for RoNeX (Robot Nervous System). [RoNeX](http://www.shado
 This meta-package contain the following:
  - **sr_ronex** convenient meta package for making it possible to install all necessary RoNeX packages.
  - **sr_ronex_controllers** controllers specific to RoNeX - to be able to send commands to the RoNeX.
- - **sr_ronex_drivers** EtherCAT drivers for the RoNeX based on the pr2_ethercat drivers.
+ - **sr_ronex_drivers** EtherCAT drivers for the RoNeX based on the ros_ethercat drivers.
  - **sr_ronex_examples** a set of examples associated to their [Tutorials](https://github.com/shadow-robot/sr-ronex/wiki/Tutorials).
  - **sr_ronex_external_protocol** header files for the protocol used between the hardware and the software.
  - **sr_ronex_hardware_interface** classes for storing the RoNeX data in the CustomHW map of the hardware interface.

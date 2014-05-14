@@ -22,13 +22,15 @@
  **/
 
 #include <stdint.h>
-#include <sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h>
-#include <al/ethercat_slave_handler.h>
+#include "sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h"
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 #include "sr_ronex_drivers/ronex_utils.hpp"
 #include "sr_ronex_drivers/sr_board_mk2_gio.hpp"
-#include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
+#include "sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp"
+#include <ros_ethercat_model/robot_state.hpp>
 #include <ros/ros.h>
 #include <gtest/gtest.h>
+#include <tinyxml.h>
 
 using namespace std;
 using namespace ronex;
@@ -44,20 +46,26 @@ TEST(RonexUtils, build_name )
 
 TEST(RonexUtils, constructor )
 {
-  const EC_UDINT serial = 55662211;
+  const uint32_t serial = 55662211;
 
   EtherCAT_FMMU_Config fmmu(0);
   EtherCAT_PD_Config pdcfg(0);
-  EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (EC_UINT) 0 ), &fmmu, &pdcfg, 0);
+  EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (uint16_t) 0 ), &fmmu, &pdcfg, 0);
 
   SrBoardMk2GIO sbm;
 
   int add = 0;
   sbm.construct( &sh, add );
 
-  pr2_hardware_interface::HardwareInterface hw;
-  int retsbm = sbm.initialize( &hw );
+  ros::NodeHandle nh;
+  string xml_string;
+  nh.getParam("robot_description", xml_string);
+  TiXmlDocument urdf_xml;
+  urdf_xml.Parse(xml_string.c_str());
+  TiXmlElement *root = urdf_xml.FirstChildElement("robot");
+  ros_ethercat_model::RobotState hw(root);
 
+  int retsbm = sbm.initialize( static_cast<hardware_interface::HardwareInterface*>(&hw) );
   EXPECT_EQ(retsbm,0);
 }
 

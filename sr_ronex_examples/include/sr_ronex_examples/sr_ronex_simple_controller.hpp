@@ -26,7 +26,8 @@
 
 #include <ros/node_handle.h>
 
-#include <pr2_controller_interface/controller.h>
+#include <controller_interface/controller.h>
+#include <ros_ethercat_model/robot_state.hpp>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
@@ -36,18 +37,18 @@
 
 namespace ronex
 {
-  class SrRoNeXSimpleController 
-    : public pr2_controller_interface::Controller
+  class SrRoNeXSimpleController
+    : public controller_interface::Controller<ros_ethercat_model::RobotState>
   {
   public:
     SrRoNeXSimpleController();
     virtual ~SrRoNeXSimpleController();
 
-    virtual bool init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
+    virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
     virtual void starting();
 
-    virtual void update();
+    virtual void update(const ros::Time&, const ros::Duration&);
 
     virtual void stopping();
 

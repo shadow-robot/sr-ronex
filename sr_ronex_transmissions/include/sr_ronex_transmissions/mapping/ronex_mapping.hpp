@@ -25,7 +25,8 @@
 #ifndef _RONEX_MAPPING_H_
 #define _RONEX_MAPPING_H_
 
-#include <pr2_mechanism_model/transmission.h>
+#include <ros_ethercat_model/robot_state.hpp>
+#include <ros_ethercat_model/transmission.hpp>
 
 namespace ronex
 {
@@ -36,7 +37,7 @@ namespace ronex
       : first_iteration_(true)
     {};
     RonexMapping(TiXmlElement* mapping_el) {};
-    RonexMapping(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot) {};
+    RonexMapping(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot) {};
     virtual ~RonexMapping() {};
 
     /**
@@ -45,7 +46,7 @@ namespace ronex
      *
      * @param js Current joint states.
      */
-    virtual void propagateFromRonex(std::vector<pr2_mechanism_model::JointState*>& js) = 0;
+    virtual void propagateFromRonex(std::vector<ros_ethercat_model::JointState*>& js) = 0;
 
     /**
      * Propagating the commands from joint states to the RoNeXes. This function is
@@ -53,7 +54,7 @@ namespace ronex
      *
      * @param js Current joint states.
      */
-    virtual void propagateToRonex(std::vector<pr2_mechanism_model::JointState*>& js) = 0;
+    virtual void propagateToRonex(std::vector<ros_ethercat_model::JointState*>& js) = 0;
 
   protected:
     bool first_iteration_;

@@ -69,9 +69,8 @@ namespace sr_cod_decod
   {
   public:
     CodDecodStdIo();
-    virtual ~CodDecodStdIo();
 
-    virtual void construct(pr2_hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
+    virtual void construct(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
     /*!
      * \brief Reads the information from the ethercat device and decodes it. It's stored in
      * d_in_ and a_in_;
@@ -226,12 +225,12 @@ namespace sr_cod_decod
     void PWMOutputCommandCB(const std_msgs::UInt16MultiArrayConstPtr& msg);
 
 
-    realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray> *digital_input_state_publisher_;
-    realtime_tools::RealtimePublisher<std_msgs::UInt16MultiArray> *analog_input_state_publisher_;
+    boost::scoped_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray> > digital_input_state_publisher_;
+    boost::scoped_ptr<realtime_tools::RealtimePublisher<std_msgs::UInt16MultiArray> >analog_input_state_publisher_;
 
-    realtime_tools::RealtimeBox<boost::shared_ptr<const sr_ronex_msgs::BoolArray> > digital_output_;
-    realtime_tools::RealtimeBox<boost::shared_ptr<const std_msgs::UInt16MultiArray> > analog_output_;
-    realtime_tools::RealtimeBox<boost::shared_ptr<const std_msgs::UInt16MultiArray> > PWM_output_;
+    realtime_tools::RealtimeBox<boost::shared_ptr<sr_ronex_msgs::BoolArray> > digital_output_;
+    realtime_tools::RealtimeBox<boost::shared_ptr<std_msgs::UInt16MultiArray> > analog_output_;
+    realtime_tools::RealtimeBox<boost::shared_ptr<std_msgs::UInt16MultiArray> > PWM_output_;
 
     sr_ronex_msgs::BoolArray d_in_;
     std_msgs::UInt16MultiArray a_in_;
