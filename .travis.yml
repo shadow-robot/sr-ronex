@@ -27,7 +27,8 @@ install:
 script:
   - source /opt/ros/hydro/setup.bash
   - cd /tmp/ros_comm_ws
-  - catkin_make tests > log.make_tests
+  #- catkin_make tests > log.make_tests
+  - catkin_make tests
   - cd build
   # Manually invoke make, catkin_make
   - make run_tests > log.run_tests || cat log.*
