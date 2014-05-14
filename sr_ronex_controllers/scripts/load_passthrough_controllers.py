@@ -82,9 +82,8 @@ class LoadPassthroughControllers(object):
         for ronex_id in ronex_ids:
             controllers_list.append("ronex_" + ronex_id + "_passthrough")
 
-        rospy.loginfo("Starting controllers: " + str(controllers_list))
-
         # calling the services to load and switch the controllers on
+        rospy.loginfo("Waiting for controller_manager services: list/load/switch")
         rospy.wait_for_service('controller_manager/list_controllers')
         rospy.wait_for_service('controller_manager/load_controller')
         rospy.wait_for_service('controller_manager/switch_controller')
@@ -93,6 +92,8 @@ class LoadPassthroughControllers(object):
         load_controller = rospy.ServiceProxy('controller_manager/load_controller', LoadController)
         switch_controller = rospy.ServiceProxy('controller_manager/switch_controller', SwitchController)
 
+        rospy.loginfo("Starting controllers: " + str(controllers_list))
+        
         # first list the available controllers
         available_controllers = None
         try:
