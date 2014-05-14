@@ -38,7 +38,9 @@ using namespace ronex;
 TEST(RonexUtils, build_name )
 {
   string expected = "/ronex/general_io/beautiful_ronex";
+  ROS_ERROR_STREAM(expected);
   string result = build_name("general_io", "beautiful_ronex");
+  ROS_ERROR_STREAM(result);
 
 
   EXPECT_STREQ( result.c_str(), expected.c_str() );
@@ -49,20 +51,26 @@ TEST(RonexUtils, constructor )
   const uint32_t serial = 55662211;
 
   EtherCAT_FMMU_Config fmmu(0);
+  ROS_ERROR("fmmu");
   EtherCAT_PD_Config pdcfg(0);
+  ROS_ERROR("pdcfg");
   EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (uint16_t) 0 ), &fmmu, &pdcfg, 0);
+  ROS_ERROR("slave");
 
   SrBoardMk2GIO sbm;
 
   int add = 0;
   sbm.construct( &sh, add );
+  ROS_ERROR("construct");
 
   ros::NodeHandle nh;
   string xml_string;
   nh.getParam("robot_description", xml_string);
+  ROS_ERROR("getparam");
   TiXmlDocument urdf_xml;
   urdf_xml.Parse(xml_string.c_str());
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
+  ROS_ERROR("before robotstate");
   ros_ethercat_model::RobotState hw(root);
 
   int retsbm = sbm.initialize( static_cast<hardware_interface::HardwareInterface*>(&hw) );
