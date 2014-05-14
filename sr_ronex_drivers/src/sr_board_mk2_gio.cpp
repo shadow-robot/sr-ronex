@@ -168,8 +168,9 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
 int SrBoardMk2GIO::initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
 {
+  ROS_ERROR("SrboardMk2");
   digital_commands_ = 0;
-  ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
+  ROS_ERROR("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
             sh_->get_ring_position(),
             sh_->get_product_code(),
             sh_->get_product_code(),
@@ -180,12 +181,14 @@ int SrBoardMk2GIO::initialize(hardware_interface::HardwareInterface *hw, bool al
 
   //add the RoNeX to the hw interface
   ros_ethercat_model::RobotState *robot_state = static_cast<ros_ethercat_model::RobotState*>(hw);
+  ROS_ERROR("after cast");
   robot_state->custom_hws_.insert(device_name_, new ronex::GeneralIO());
   general_io_ = static_cast<ronex::GeneralIO*>(robot_state->getCustomHW(device_name_));
+  ROS_ERROR("after insert general_io");
 
   build_topics_();
 
-  ROS_INFO_STREAM("Adding a general_io RoNeX module to the hardware interface: " << device_name_);
+  ROS_ERROR_STREAM("Adding a general_io RoNeX module to the hardware interface: " << device_name_);
   //Using the name of the ronex to prefix the state topic
 
   return 0;
