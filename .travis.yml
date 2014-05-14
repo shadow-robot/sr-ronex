@@ -21,6 +21,7 @@ install:
   # Install dependencies
   - cd /tmp/ros_comm_ws/src
   - git clone https://github.com/shadow-robot/ros_ethercat.git
+  - git checkout hydro-devel
   - cd /tmp/ros_comm_ws
   - rosdep install --from-paths src --ignore-src --rosdistro hydro -y > /dev/null
 # command to run tests
