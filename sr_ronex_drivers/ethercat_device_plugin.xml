@@ -5,7 +5,7 @@
   -->
   <class name="sr_ronex_drivers/87032868" type="SrBoard0X" base_class_type="EthercatDevice">
     <description>
-      RoNeX - General I/O module
+      RoNeX - General I/O module mk2
     </description>
   </class>
   <class name="sr_ronex_drivers/33554435" type="SrTCAT" base_class_type="EthercatDevice">
@@ -15,22 +15,22 @@
   </class>
   <class name="sr_ronex_drivers/33554433" type="SrBoardMk2GIO" base_class_type="EthercatDevice">
     <description>
-      RoNeX - General I/O module
+      RoNeX - General I/O module mk3
     </description>
   </class>
   <class name="sr_ronex_drivers/33554432" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
-      RoNeX - Bridge module
+      RoNeX - Bridge module mk3
     </description>
   </class>
   <class name="sr_ronex_drivers/7" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
-      RoNeX - Bridge module
+      RoNeX - Bridge module mk2
     </description>
   </class>
   <class name="sr_ronex_drivers/73946162" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
-      RoNeX - Beckhoff CU1128 bridge module
+      RoNeX - Beckhoff CU1128 bridge
     </description>
   </class>
 
