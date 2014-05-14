@@ -26,10 +26,10 @@ install:
 # command to run tests
 script:
   - source /opt/ros/hydro/setup.bash
-  - source /tmp/ros_comm_ws/devel/setup.bash
   - cd /tmp/ros_comm_ws
   #- catkin_make tests > log.make_tests
   - catkin_make tests
+  - source /tmp/ros_comm_ws/devel/setup.bash
   - cd build
   # Manually invoke make, catkin_make
   #- make run_tests > log.run_tests || cat log.*
