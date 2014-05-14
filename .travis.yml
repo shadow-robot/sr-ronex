@@ -25,7 +25,7 @@ install:
   - rosdep install --from-paths src --ignore-src --rosdistro hydro -y > /dev/null
 # command to run tests
 script:
-  - source /tmp/ros_comm_ws/devel/setup.bash
+  - source /opt/ros/hydro/setup.bash
   - cd /tmp/ros_comm_ws
   #- catkin_make tests > log.make_tests
   - catkin_make tests
