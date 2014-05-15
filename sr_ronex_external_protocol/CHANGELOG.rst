@@ -2,6 +2,11 @@
 Changelog for package sr_ronex_external_protocol
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update CHANGELOG.rst
+* Contributors: Manos Nikolaidis
+
 0.9.7 (2014-05-15)
 ------------------
 

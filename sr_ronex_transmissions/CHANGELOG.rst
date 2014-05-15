@@ -2,6 +2,11 @@
 Changelog for package sr_ronex_transmissions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update CHANGELOG.rst
+* Contributors: Manos Nikolaidis
+
 0.9.7 (2014-05-15)
 ------------------
 
