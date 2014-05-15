@@ -2,6 +2,9 @@
 Changelog for package sr_ronex_external_protocol
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.9.8 (2014-05-15)
 ------------------
 * Update CHANGELOG.rst
