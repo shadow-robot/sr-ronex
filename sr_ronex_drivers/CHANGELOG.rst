@@ -2,6 +2,14 @@
 Changelog for package sr_ronex_drivers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.9.8 (2014-05-15)
+------------------
+* Update CHANGELOG.rst
+* Contributors: Manos Nikolaidis
+
+0.9.7 (2014-05-15)
+------------------
+
 0.9.6 (2014-03-26)
 ------------------
 
