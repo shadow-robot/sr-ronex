@@ -5,6 +5,9 @@ Changelog for package sr_ronex_controllers
 0.9.6 (2014-03-26)
 ------------------
 
+Forthcoming
+-----------
+
 0.9.5 (2013-12-18)
 ------------------
 
