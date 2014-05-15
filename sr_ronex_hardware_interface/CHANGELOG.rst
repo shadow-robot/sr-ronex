@@ -2,8 +2,8 @@
 Changelog for package sr_ronex_hardware_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.9.8 (2014-05-15)
+------------------
 * Update CHANGELOG.rst
 * Contributors: Manos Nikolaidis
 
