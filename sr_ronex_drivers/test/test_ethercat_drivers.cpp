@@ -47,9 +47,7 @@ TEST(RonexUtils, constructor )
 {
   const uint32_t serial = 55662211;
 
-  EtherCAT_FMMU_Config fmmu(0);
-  EtherCAT_PD_Config pdcfg(0);
-  EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (uint16_t) 0 ), &fmmu, &pdcfg, 0);
+  EtherCAT_SlaveHandler sh;
 
   SrBoardMk2GIO sbm;
 
