@@ -70,8 +70,8 @@ TEST(RonexUtils, constructor )
 
 int main(int argc, char **argv)
 {
+  ros::init(argc, argv, "test_ethercat_drivers_test");
   testing::InitGoogleTest(&argc, argv);
-  ros::init( std::map<std::string, std::string>(), "test_ethercat_drivers");
   return RUN_ALL_TESTS();
 }
 
