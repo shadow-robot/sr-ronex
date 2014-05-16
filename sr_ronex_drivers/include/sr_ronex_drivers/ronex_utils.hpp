@@ -57,8 +57,7 @@ namespace ronex
    *
    * @return a name to be used in the CustomHW map.
    */
-  static inline std::string build_name( const std::string &product_alias,
-                                        const std::string &ronex_id)
+  static inline std::string build_name( const std::string &product_alias, const std::string &ronex_id)
   {
     return std::string("/ronex/") + product_alias + '/' + ronex_id;
   }
