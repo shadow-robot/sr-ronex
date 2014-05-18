@@ -39,7 +39,7 @@ PLUGINLIB_EXPORT_CLASS(SrBoard0X, EthercatDevice);
 
 void SrBoard0X::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
-  EthercatDevice::construct(sh,start_address);
+  sh_ = sh;
 
   //TODO only for testing Shadow Robot boards. We read the number of inputs and outputs from the second half of the product code
   //This should ideally be done in standard_ethercat_device in construct, by reading the inputs and outputs
