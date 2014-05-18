@@ -40,7 +40,6 @@ TEST(RonexUtils, build_name )
   string expected = "/ronex/general_io/beautiful_ronex";
   string result = build_name("general_io", "beautiful_ronex");
 
-
   EXPECT_STREQ( result.c_str(), expected.c_str() );
 }
 
@@ -71,8 +70,8 @@ TEST(RonexUtils, constructor )
 
 int main(int argc, char **argv)
 {
+  ros::init(argc, argv, "test_ethercat_drivers_test");
   testing::InitGoogleTest(&argc, argv);
-  ros::init( std::map<std::string, std::string>(), "test_ethercat_drivers");
   return RUN_ALL_TESTS();
 }
 

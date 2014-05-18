@@ -63,6 +63,7 @@ SrBoardMk2GIO::~SrBoardMk2GIO()
 
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
+  sh_ = sh;
   serial_number_ = ronex::get_serial_number( sh );
 
   //get the alias from the parameter server if it exists
@@ -79,8 +80,6 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   }
 
   device_name_ = ronex::build_name( product_alias_, ronex_id_ );
-
-  EthercatDevice::construct(sh,start_address);
 
   command_base_  = start_address;
   command_size_  = COMMAND_ARRAY_SIZE_BYTES;
@@ -176,7 +175,7 @@ int SrBoardMk2GIO::initialize(hardware_interface::HardwareInterface *hw, bool al
             sh_->get_serial(),
             sh_->get_serial());
 
-  device_offset_ = sh_->get_ring_position();// - hand_->getBridgeRingPosition();
+  device_offset_ = sh_->get_ring_position();
 
   //add the RoNeX to the hw interface
   ros_ethercat_model::RobotState *robot_state = static_cast<ros_ethercat_model::RobotState*>(hw);
