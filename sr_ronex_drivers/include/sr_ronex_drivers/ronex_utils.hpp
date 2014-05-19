@@ -28,26 +28,21 @@
 #define _RONEX_UTILS_HPP_
 
 #include <ros_ethercat_hardware/ethercat_device.h>
-#include <sstream>
-#include <bitset>
+#include <boost/lexical_cast.hpp>
 #include <ros/ros.h>
 
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 
 namespace ronex
 {
-  static inline std::string get_serial_number(EtherCAT_SlaveHandler *sh)
+  static inline std::string get_serial_number(const EtherCAT_SlaveHandler *sh)
   {
-    std::stringstream id;
-    id << sh->get_serial();
-    return id.str();
+    return boost::lexical_cast<std::string>(sh->get_serial());
   }
 
-  static inline std::string get_product_code(EtherCAT_SlaveHandler *sh)
+  static inline std::string get_product_code(const EtherCAT_SlaveHandler *sh)
   {
-    std::stringstream id;
-    id << sh->get_product_code();
-    return id.str();
+    return boost::lexical_cast<std::string>(sh->get_product_code());
   }
 
   /**
@@ -62,13 +57,9 @@ namespace ronex
    *
    * @return a name to be used in the CustomHW map.
    */
-  static inline std::string build_name( const std::string product_alias,
-                                        std::string ronex_id)
+  static inline std::string build_name( const std::string &product_alias, const std::string &ronex_id)
   {
-    std::stringstream name;
-    name << "/ronex/" << product_alias << "/" << ronex_id;
-
-    return name.str();
+    return std::string("/ronex/") + product_alias + '/' + ronex_id;
   }
 }
 
