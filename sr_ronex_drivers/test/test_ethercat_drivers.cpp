@@ -39,8 +39,8 @@ TEST(RonexEthercatDrivers, build_name )
 {
   string expected = "/ronex/general_io/beautiful_ronex";
   string result = build_name("general_io", "beautiful_ronex");
-
-  ASSERT_STREQ( result.c_str(), expected.c_str() );
+  int res = expected.compare(result);
+  ASSERT_EQ(0, res);
 }
 
 TEST(RonexEthercatDrivers, constructor )
@@ -65,7 +65,7 @@ TEST(RonexEthercatDrivers, constructor )
   ros_ethercat_model::RobotState hw(root);
 
   int retsbm = sbm.initialize( static_cast<hardware_interface::HardwareInterface*>(&hw) );
-  ASSERT_EQ(retsbm,0);
+  ASSERT_EQ(0, retsbm);
 }
 
 int main(int argc, char **argv)
