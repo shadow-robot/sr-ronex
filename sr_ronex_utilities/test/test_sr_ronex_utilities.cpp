@@ -100,7 +100,7 @@ TEST(RonexUtils, get_ronex_devices_string)
 int main(int argc, char **argv)
 {
   testing::InitGoogleTest(&argc, argv);
-  ros::init( std::map<std::string, std::string>(), "test_sr_ronex_utilities");
+  ros::init(argc, argv, "test_sr_ronex_utilities");
   return RUN_ALL_TESTS();
 }
 
