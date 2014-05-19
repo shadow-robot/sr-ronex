@@ -35,15 +35,15 @@
 using namespace std;
 using namespace ronex;
 
-TEST(RonexUtils, build_name )
+TEST(RonexEthercatDrivers, build_name )
 {
   string expected = "/ronex/general_io/beautiful_ronex";
   string result = build_name("general_io", "beautiful_ronex");
-
-  EXPECT_STREQ( result.c_str(), expected.c_str() );
+  int res = expected.compare(result);
+  ASSERT_EQ(0, res);
 }
 
-TEST(RonexUtils, constructor )
+TEST(RonexEthercatDrivers, constructor )
 {
   const uint32_t serial = 55662211;
 
@@ -65,7 +65,7 @@ TEST(RonexUtils, constructor )
   ros_ethercat_model::RobotState hw(root);
 
   int retsbm = sbm.initialize( static_cast<hardware_interface::HardwareInterface*>(&hw) );
-  EXPECT_EQ(retsbm,0);
+  ASSERT_EQ(0, retsbm);
 }
 
 int main(int argc, char **argv)

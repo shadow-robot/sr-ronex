@@ -34,11 +34,11 @@ script:
   #- catkin_make tests > log.make_tests
   - catkin_make tests -j2 -DCMAKE_BUILD_TYPE=Release
   - source ~/shadow_ws/devel/setup.bash
-  - cd build
   # Manually invoke make, catkin_make
   #- make run_tests > log.run_tests || cat log.*
-  - make run_tests
-  - catkin_test_results
+  - rostest sr_ronex_drivers test_ethercat_drivers.test
+  - rostest sr_ronex_transmissions test_ronex_transmission.test
+  - rostest sr_ronex_utilities test_ronex_utilities.test
   # Check test results
   - 'python -c "from catkin.test_results import test_results;import sys;sys.exit(sum([v[1] + v[2] for k, v in test_results(\"test_results\").iteritems()]))" || cat log*'
   - 'python -c "from catkin.test_results import test_results;import sys;sys.exit(sum([v[1] + v[2] for k, v in test_results(\"test_results\").iteritems()]))"'
