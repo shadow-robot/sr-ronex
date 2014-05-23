@@ -42,18 +42,14 @@ namespace sr_cod_decod
 
   void CodDecod::update(unsigned char *status_buffer)
   {
-
   }
 
   void CodDecod::build_command(unsigned char *command_buffer)
   {
-
   }
 
   void CodDecod::add_diagnostics(std::vector<diagnostic_msgs::DiagnosticStatus> &vec,
                                  diagnostic_updater::DiagnosticStatusWrapper &d)
   {
-
   }
-
 }
