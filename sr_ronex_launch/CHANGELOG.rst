@@ -2,8 +2,8 @@
 Changelog for package sr_ronex_launch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.9.13 (2014-05-23)
+-------------------
 * 0.9.12
 * changelogs
 * split launch files to debug and normal
