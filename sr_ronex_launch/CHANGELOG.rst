@@ -2,6 +2,15 @@
 Changelog for package sr_ronex_launch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* 0.9.11
+* changlogs
+* split launch files to debug and normal
+  fixed a warning
+* 0.9.10
+* Contributors: shadowmanos
+
 0.9.11 (2014-05-23)
 -------------------
 * split launch files to debug and normal
