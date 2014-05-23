@@ -7,7 +7,7 @@ compiler:
   - gcc
 # command to install dependencies
 install:
-  - export ROS_DISTRO=hydro
+  - export ROS_DISTRO=indigo
   - export CI_SOURCE_PATH=$(pwd)
   - pwd
   - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu precise main" > /etc/apt/sources.list.d/ros-latest.list'
