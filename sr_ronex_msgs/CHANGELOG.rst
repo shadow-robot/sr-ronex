@@ -2,6 +2,12 @@
 Changelog for package sr_ronex_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* 0.9.12
+* changelogs
+* Contributors: shadowmanos
+
 0.9.12 (2014-05-23)
 -------------------
 
