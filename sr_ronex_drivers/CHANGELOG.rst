@@ -2,6 +2,12 @@
 Changelog for package sr_ronex_drivers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* split launch files to debug and normal
+  fixed a warning
+* Contributors: shadowmanos
+
 0.9.11 (2014-05-19)
 -------------------
 
