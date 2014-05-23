@@ -2,6 +2,11 @@
 Changelog for package sr_ronex_hardware_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* 0.9.10
+* Contributors: shadowmanos
+
 0.9.10 (2014-05-19)
 -------------------
 

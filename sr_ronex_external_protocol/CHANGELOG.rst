@@ -2,6 +2,11 @@
 Changelog for package sr_ronex_external_protocol
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* 0.9.10
+* Contributors: shadowmanos
+
 0.9.10 (2014-05-19)
 -------------------
 
