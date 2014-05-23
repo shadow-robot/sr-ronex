@@ -38,6 +38,9 @@ namespace ronex
   struct SplittedSPICommand
   {
     SPI_PACKET_OUT packet;
+    
+    SplittedSPICommand() : packet()
+    {}
 
     SplittedSPICommand(SplittedSPICommand* copy_me)
     {

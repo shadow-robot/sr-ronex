@@ -56,14 +56,14 @@ namespace ronex
                                                  size_t spi_out_index )
   {
     //transmitting the bytes we received
-    standard_commands_[spi_out_index]->packet.num_bytes = static_cast<int8u>(req.data.size());
+    standard_commands_[spi_out_index].packet.num_bytes = static_cast<int8u>(req.data.size());
 
     ROS_DEBUG_STREAM("From passthrough: received "<< req.data.size()<<"bytes.");
     for(size_t i = 0; i < req.data.size(); ++i)
     {
       try
       {
-        standard_commands_[spi_out_index]->packet.data_bytes[i] = static_cast<int8u>(req.data[i]);
+        standard_commands_[spi_out_index].packet.data_bytes[i] = static_cast<int8u>(req.data[i]);
       }
       catch(boost::bad_lexical_cast &)
       {
@@ -72,7 +72,7 @@ namespace ronex
     }
 
     //pushing to the command queue to be sent through etherCAT
-    command_queue_[spi_out_index].push(standard_commands_[spi_out_index]);
+    command_queue_[spi_out_index].push(&standard_commands_[spi_out_index]);
 
     //wait for the response to be received
     bool not_received = true;
@@ -85,7 +85,7 @@ namespace ronex
       {
         if(!status_queue_[i].empty())
         {
-          if( status_queue_[i].front().first == standard_commands_[spi_out_index] )
+          if( status_queue_[i].front().first == &standard_commands_[spi_out_index] )
           {
 	    if( status_queue_[i].front().second != NULL)
 	    {
@@ -125,24 +125,24 @@ namespace ronex
     spi_->command_->command_type = static_cast<int16u>(config.command_type);
 
     //setting up spi 0
-    standard_commands_[0]->packet.clock_divider = static_cast<int16u>(config.spi_0_clock_divider);
-    standard_commands_[0]->packet.SPI_config = static_cast<int16u>(config.spi_0_SPI_config);
-    standard_commands_[0]->packet.inter_byte_gap = static_cast<int16u>(config.spi_0_inter_byte_gap);
+    standard_commands_[0].packet.clock_divider = static_cast<int16u>(config.spi_0_clock_divider);
+    standard_commands_[0].packet.SPI_config = static_cast<int16u>(config.spi_0_SPI_config);
+    standard_commands_[0].packet.inter_byte_gap = static_cast<int16u>(config.spi_0_inter_byte_gap);
 
     //setting up spi 1
-    standard_commands_[1]->packet.clock_divider = static_cast<int16u>(config.spi_1_clock_divider);
-    standard_commands_[1]->packet.SPI_config = static_cast<int16u>(config.spi_1_SPI_config);
-    standard_commands_[1]->packet.inter_byte_gap = static_cast<int16u>(config.spi_1_inter_byte_gap);
+    standard_commands_[1].packet.clock_divider = static_cast<int16u>(config.spi_1_clock_divider);
+    standard_commands_[1].packet.SPI_config = static_cast<int16u>(config.spi_1_SPI_config);
+    standard_commands_[1].packet.inter_byte_gap = static_cast<int16u>(config.spi_1_inter_byte_gap);
 
     //setting up spi 2
-    standard_commands_[2]->packet.clock_divider = static_cast<int16u>(config.spi_2_clock_divider);
-    standard_commands_[2]->packet.SPI_config = static_cast<int16u>(config.spi_2_SPI_config);
-    standard_commands_[2]->packet.inter_byte_gap = static_cast<int16u>(config.spi_2_inter_byte_gap);
+    standard_commands_[2].packet.clock_divider = static_cast<int16u>(config.spi_2_clock_divider);
+    standard_commands_[2].packet.SPI_config = static_cast<int16u>(config.spi_2_SPI_config);
+    standard_commands_[2].packet.inter_byte_gap = static_cast<int16u>(config.spi_2_inter_byte_gap);
 
     //setting up spi 3
-    standard_commands_[3]->packet.clock_divider = static_cast<int16u>(config.spi_3_clock_divider);
-    standard_commands_[3]->packet.SPI_config = static_cast<int16u>(config.spi_3_SPI_config);
-    standard_commands_[3]->packet.inter_byte_gap = static_cast<int16u>(config.spi_3_inter_byte_gap);
+    standard_commands_[3].packet.clock_divider = static_cast<int16u>(config.spi_3_clock_divider);
+    standard_commands_[3].packet.SPI_config = static_cast<int16u>(config.spi_3_SPI_config);
+    standard_commands_[3].packet.inter_byte_gap = static_cast<int16u>(config.spi_3_inter_byte_gap);
 
 
     if( config.pin_output_state_pre_DIO_0 )

@@ -4,7 +4,7 @@ project(sr_ronex_examples)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package( catkin REQUIRED COMPONENTSz roscpp rospy std_msgs std_srvs sr_ronex_msgs sr_ronex_hardware_interface sr_ronex_utilities pluginlib ros_ethercat_model realtime_tools dynamic_reconfigure controller_interface xacro)
+find_package( catkin REQUIRED COMPONENTS roscpp rospy std_msgs std_srvs sr_ronex_msgs sr_ronex_hardware_interface sr_ronex_utilities pluginlib ros_ethercat_model realtime_tools dynamic_reconfigure controller_interface xacro)
 
 ###########
 ## Build ##

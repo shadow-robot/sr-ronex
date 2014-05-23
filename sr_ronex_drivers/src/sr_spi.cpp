@@ -27,7 +27,7 @@
 
 #include <sstream>
 #include <iomanip>
-#include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
 #include <math.h>
 
 #include "sr_ronex_drivers/ronex_utils.hpp"
@@ -35,6 +35,8 @@
 PLUGINLIB_EXPORT_CLASS(SrSPI, EthercatDevice);
 
 const std::string SrSPI::product_alias_ = PRODUCT_NAME;
+
+using boost::lexical_cast;
 
 SrSPI::SrSPI() :
   node_("~"), cycle_count_(0)
@@ -46,16 +48,11 @@ SrSPI::~SrSPI()
   string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_ );
   ros::param::del(device_id);
 
-  string general_io_name = "/ronex/general_io/" + serial_number_ + "/";
-  ros::param::del(general_io_name + "pwm_clock_divider");
-  for (size_t i = 0; i < general_io_->command_.digital_.size(); ++i)
-    ros::param::del(general_io_name + "input_mode_" + lexical_cast<string>(i));
-  for (size_t i = 0; i < general_io_->command_.pwm_.size(); ++i)
-    ros::param::del(general_io_name + "pwm_period_" + lexical_cast<string>(i));
-
-  string controller_name = "/ronex_" + serial_number_ + "_passthrough/";
-  ros::param::del(controller_name + "ronex_id");
-  ros::param::del(controller_name + "type");
+  string controller_name = "/ronex_" + serial_number_ + "_passthrough";
+  ros::param::del(controller_name);
+  
+  string spi_device_name = "/ronex/spi/" + serial_number_;
+  ros::param::del(spi_device_name);
 }
 
 void SrSPI::construct(EtherCAT_SlaveHandler *sh, int &start_address)
@@ -177,7 +174,7 @@ int SrSPI::initialize(hardware_interface::HardwareInterface *hw, bool allow_unpr
   //add the RoNeX SPI module to the hw interface
   ros_ethercat_model::RobotState *robot_state = static_cast<ros_ethercat_model::RobotState*>(hw);
   robot_state->custom_hws_.insert(device_name_, new ronex::SPI());
-  spi_ = static_cast<ronex::GeneralIO*>(robot_state->getCustomHW(device_name_));
+  spi_ = static_cast<ronex::SPI*>(robot_state->getCustomHW(device_name_));
 
   build_topics_();
 

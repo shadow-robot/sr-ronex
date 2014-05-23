@@ -54,7 +54,7 @@ namespace ronex
     //vector containing one command per spi output.
     // Some parameters of these commands are updated through the dynamic reconfigure interface
     // The data packet is updated from the service.
-    boost:ptr_vector<SplittedSPICommand> standard_commands_;
+    boost::ptr_vector<SplittedSPICommand> standard_commands_;
 
     ///Dynamic reconfigure server for setting the parameters of the driver
     boost::scoped_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig> > dynamic_reconfigure_server_;

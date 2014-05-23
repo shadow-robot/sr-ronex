@@ -32,6 +32,7 @@
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 
 #include <dynamic_reconfigure/server.h>
@@ -96,12 +97,12 @@ protected:
   void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
 
   ///publisher for the data.
-  boost::shared_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState> > state_publisher_;
+  boost::scoped_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState> > state_publisher_;
   ///Temporary message
   sr_ronex_msgs::GeneralIOState state_msg_;
 
   ///Dynamic reconfigure server for setting the parameters of the driver
-  boost::shared_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig> > dynamic_reconfigure_server_;
+  boost::scoped_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig> > dynamic_reconfigure_server_;
 
   dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig>::CallbackType function_cb_;
 

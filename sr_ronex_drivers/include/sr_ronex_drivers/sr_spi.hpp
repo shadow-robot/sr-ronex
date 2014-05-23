@@ -32,6 +32,7 @@
 #include <sr_ronex_hardware_interface/spi_hardware_interface.hpp>
 
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 
 using namespace std;
@@ -81,9 +82,6 @@ protected:
 
   ///False to run digital pins as output, True to run as input
   std::vector<bool> input_mode_;
-
-  int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
-  int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
 
   void packCommand(unsigned char *buffer, bool halt, bool reset);
   bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);

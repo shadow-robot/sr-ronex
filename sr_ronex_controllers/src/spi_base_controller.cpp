@@ -68,7 +68,7 @@ namespace ronex
     }
     topic_prefix_ = path;
 
-    spi_ = static_cast<ronex::SPI*>( robot->model_->hw_->getCustomHW(path) );
+    spi_ = static_cast<ronex::SPI*>( robot->getCustomHW(path) );
     if( spi_ == NULL)
     {
       ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");
@@ -80,7 +80,7 @@ namespace ronex
 
   void SPIBaseController::starting(const ros::Time&)
   {
-    ROS_ERROR("@TODO: implement starting");
+    //@TODO: implement starting
   }
 
   /*!
