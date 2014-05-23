@@ -1,0 +1,45 @@
+language:
+  - cpp
+  - python
+python:
+  - "2.7"
+compiler:
+  - gcc
+# command to install dependencies
+install:
+  - export ROS_DISTRO=hydro
+  - export CI_SOURCE_PATH=$(pwd)
+  - pwd
+  - sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu precise main" > /etc/apt/sources.list.d/ros-latest.list'
+  - wget http://packages.ros.org/ros.key -O - | sudo apt-key add -
+  - sudo apt-get update -qq
+  - sudo apt-get install python-rosdep python-catkin-pkg -qq
+  - sudo apt-get install ros-$ROS_DISTRO-catkin ros-$ROS_DISTRO-roscpp -qq
+  - sudo rosdep init
+  - rosdep update
+  # Make a workspace
+  - source /opt/ros/$ROS_DISTRO/setup.bash
+  - mkdir -p ~/shadow_ws/src
+  - cd ~/shadow_ws/src
+  # Link the repo we are testing to the new workspace
+  - ln -s $CI_SOURCE_PATH .
+  # Install dependencies
+  - git clone -b $ROS_DISTRO-devel https://github.com/shadow-robot/ros_ethercat.git
+  - cd ~/shadow_ws
+  - rosdep install --from-paths ~/shadow_ws/src --ignore-src --rosdistro $ROS_DISTRO -y > /dev/null
+# command to run tests
+script:
+  - source /opt/ros/$ROS_DISTRO/setup.bash
+  - cd ~/shadow_ws
+  #- catkin_make tests > log.make_tests
+  - catkin_make tests -j2 -DCMAKE_BUILD_TYPE=Release
+  - source ~/shadow_ws/devel/setup.bash
+  # Manually invoke make, catkin_make
+  #- make run_tests > log.run_tests || cat log.*
+  - rostest sr_ronex_drivers test_ethercat_drivers.test
+  - rostest sr_ronex_transmissions test_ronex_transmission.test
+  - rostest sr_ronex_utilities test_ronex_utilities.test
+  # Check test results
+  - 'python -c "from catkin.test_results import test_results;import sys;sys.exit(sum([v[1] + v[2] for k, v in test_results(\"test_results\").iteritems()]))" || cat log*'
+  - 'python -c "from catkin.test_results import test_results;import sys;sys.exit(sum([v[1] + v[2] for k, v in test_results(\"test_results\").iteritems()]))"'
+

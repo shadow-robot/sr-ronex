@@ -27,21 +27,15 @@
 namespace ronex
 {
   SPIBaseController::SPIBaseController()
-    : loop_count_(0)
-  {
-    command_queue_.resize(NUM_SPI_OUTPUTS);
-    status_queue_.resize(NUM_SPI_OUTPUTS);
-  }
-
-  SPIBaseController::~SPIBaseController()
+    : loop_count_(0), command_queue_(NUM_SPI_OUTPUTS), status_queue_(NUM_SPI_OUTPUTS)
   {}
 
-  bool SPIBaseController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+  bool SPIBaseController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
   {
     return pre_init_(robot, n);
   }
 
-  bool SPIBaseController::pre_init_(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+  bool SPIBaseController::pre_init_(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
   {
     assert(robot);
     node_ = n;
@@ -84,7 +78,7 @@ namespace ronex
     return true;
   }
 
-  void SPIBaseController::starting()
+  void SPIBaseController::starting(const ros::Time&)
   {
     ROS_ERROR("@TODO: implement starting");
   }
@@ -92,7 +86,7 @@ namespace ronex
   /*!
    * \brief Issues commands to the joint. Should be called at regular intervals
    */
-  void SPIBaseController::update()
+  void SPIBaseController::update(const ros::Time&, const ros::Duration&)
   {
     for (size_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
     {

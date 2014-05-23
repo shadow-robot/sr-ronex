@@ -25,7 +25,7 @@
 #include "sr_ronex_controllers/fake_calibration_controller.hpp"
 #include "pluginlib/class_list_macros.h"
 
-PLUGINLIB_EXPORT_CLASS( ronex::FakeCalibrationController, pr2_controller_interface::Controller)
+PLUGINLIB_EXPORT_CLASS( ronex::FakeCalibrationController, controller_interface::ControllerBase)
 
 namespace ronex
 {
@@ -35,10 +35,7 @@ namespace ronex
   {
   }
 
-  FakeCalibrationController::~FakeCalibrationController()
-  {}
-
-  bool FakeCalibrationController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+  bool FakeCalibrationController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
   {
     robot_ = robot;
     node_ = n;
@@ -68,7 +65,7 @@ namespace ronex
   /*!
    * \brief Sets the joint to calibrated = true; Also publishes true to the calibrated topic
    */
-  void FakeCalibrationController::update()
+  void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
   {
     assert(joint_);
 

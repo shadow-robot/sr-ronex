@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_test</name>
-  <version>0.9.4</version>
+  <version>0.9.12</version>
   <description>contains software tests that require RoNeX hardware.</description>
   <maintainer email="software@shadowrobot.com">Manos Nikolaidis</maintainer>
 
@@ -22,7 +22,7 @@
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>rospy</run_depend>
   <run_depend>rostest</run_depend>
-  <run_depend>pr2_ethercat</run_depend>
+  <run_depend>ros_ethercat</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
   <test_depend>rosunit</test_depend>

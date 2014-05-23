@@ -24,7 +24,7 @@
 #ifndef _SR_BOARD_MK2_GIO_HPP_
 #define _SR_BOARD_MK2_GIO_HPP_
 
-#include <ethercat_hardware/ethercat_device.h>
+#include <ros_ethercat_hardware/ethercat_device.h>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_msgs/GeneralIOState.h>
 
@@ -43,7 +43,7 @@ class SrBoardMk2GIO : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(pr2_hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
 
   SrBoardMk2GIO();
   virtual ~SrBoardMk2GIO();
@@ -66,7 +66,7 @@ protected:
   ros::NodeHandle node_;
 
   ///The GeneralIO module which is added as a CustomHW to the hardware interface
-  boost::shared_ptr<ronex::GeneralIO> general_io_;
+  ronex::GeneralIO *general_io_;
 
   /**
    * A counter used to publish the data at 100Hz:
@@ -89,9 +89,6 @@ protected:
 
   ///False to run digital pins as output, True to run as input
   std::vector<bool> input_mode_;
-
-  int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
-  int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
 
   void packCommand(unsigned char *buffer, bool halt, bool reset);
   bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);

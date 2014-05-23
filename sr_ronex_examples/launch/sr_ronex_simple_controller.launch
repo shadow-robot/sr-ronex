@@ -6,13 +6,13 @@
   <arg name="ethercat_port" default="$(optenv ETHERCAT_PORT eth1)" />
 
   <!-- Start the ronex driver -->
-  <node name="ronex" pkg="pr2_ethercat" type="pr2_ethercat" args="-i $(arg ethercat_port) -r /robot_description" output="screen"  launch-prefix="nice -n -20"/> 
+  <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen"  launch-prefix="nice -n -20"/> 
   
   <!-- Loads the controller parameter -->
   <rosparam command="load" file="$(find sr_ronex_examples)/config/data_access_controller.yaml" />
 
   <!-- spawning traditional joint controllers -->
   <node name="simple_controllers_spawner"
-        pkg="pr2_controller_manager" type="spawner" output="screen"
+        pkg="controller_manager" type="spawner" output="screen"
         args="super_simple_controller" />
 </launch>

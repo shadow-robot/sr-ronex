@@ -22,7 +22,7 @@
 **/
 
 #include "sr_ronex_transmissions/mapping/general_io/command_to_pwm.hpp"
-#include <pr2_mechanism_model/robot.h>
+#include <ros_ethercat_model/robot_state.hpp>
 #include <boost/lexical_cast.hpp>
 #include <math.h>
 
@@ -32,7 +32,7 @@ namespace ronex
   {
     namespace general_io
     {
-      CommandToPWM::CommandToPWM(TiXmlElement* mapping_el, pr2_mechanism_model::Robot* robot)
+      CommandToPWM::CommandToPWM(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot)
         : RonexMapping(), pin_out_of_bound_(true)
       {
         const char *ronex_name = mapping_el ? mapping_el->Attribute("ronex") : NULL;
@@ -42,7 +42,7 @@ namespace ronex
           return;
         }
 
-        general_io_ = static_cast<ronex::GeneralIO*>( robot->hw_->getCustomHW(ronex_name) );
+        general_io_ = static_cast<ronex::GeneralIO*>( robot->getCustomHW(ronex_name) );
         if(!general_io_)
         {
           ROS_ERROR_STREAM("The RoNeX: " << ronex_name << " was not found on the system.");
@@ -148,7 +148,7 @@ namespace ronex
         return true;
       }
 
-      void CommandToPWM::propagateToRonex(std::vector<pr2_mechanism_model::JointState*>& js)
+      void CommandToPWM::propagateToRonex(std::vector<ros_ethercat_model::JointState*>& js)
       {
         assert(js.size() == 1);
 

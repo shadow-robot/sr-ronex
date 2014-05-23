@@ -25,24 +25,11 @@
 #include "sr_ronex_controllers/spi_passthrough_controller.hpp"
 #include "pluginlib/class_list_macros.h"
 
-PLUGINLIB_EXPORT_CLASS( ronex::SPIPassthroughController, pr2_controller_interface::Controller)
+PLUGINLIB_EXPORT_CLASS( ronex::SPIPassthroughController, controller_interface::ControllerBase)
 
 namespace ronex
 {
-  SPIPassthroughController::SPIPassthroughController()
-    : SPIBaseController()
-  {}
-
-  SPIPassthroughController::~SPIPassthroughController()
-  {
-    for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
-    {
-      delete standard_commands_[i];
-      standard_commands_[i] = NULL;
-    }
-  }
-
-  bool SPIPassthroughController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+  bool SPIPassthroughController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
   {
     if( !pre_init_(robot, n) )
       return false;

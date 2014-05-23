@@ -5,7 +5,7 @@ head_swivel_fake_calib:
 
 #Settings for a simple joint position controller
 head_swivel_controller:
-  type: robot_mechanism_controllers/JointPositionController
+  type: position_controllers/JointPositionController
   joint: head_swivel
   pid: &head_swivel_gains
     p: 1000.0

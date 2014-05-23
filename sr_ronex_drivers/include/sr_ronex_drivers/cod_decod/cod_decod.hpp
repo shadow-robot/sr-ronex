@@ -27,10 +27,10 @@
 #ifndef _COD_DECOD_HPP_
 #define _COD_DECOD_HPP_
 
-#include <pr2_hardware_interface/hardware_interface.h>
+#include <ros_ethercat_model/robot_state.hpp>
 #include <diagnostic_msgs/DiagnosticStatus.h>
 #include <diagnostic_updater/DiagnosticStatusWrapper.h>
-#include <al/ethercat_slave_handler.h>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 #include <pluginlib/class_list_macros.h>
 
 namespace sr_cod_decod
@@ -39,16 +39,16 @@ namespace sr_cod_decod
   {
   public:
     CodDecod();
-    virtual ~CodDecod() {};
+    virtual ~CodDecod() {}
 
-    virtual void construct(pr2_hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
+    virtual void construct(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
     virtual void update(unsigned char *status_buffer);
     virtual void build_command(unsigned char *command_buffer);
     virtual void add_diagnostics(std::vector<diagnostic_msgs::DiagnosticStatus> &vec,
                                      diagnostic_updater::DiagnosticStatusWrapper &d);
   protected:
     EtherCAT_SlaveHandler *sh_;
-    pr2_hardware_interface::HardwareInterface *hw_;
+    ros_ethercat_model::RobotState *hw_;
   };
 }
 

@@ -14,36 +14,37 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
-
 /**
- * @file   sr_spi.hpp
+ * @file   sr_tcat.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @brief Driver for the RoNeX SPI module.
+ * @brief Driver for the RoNeX TCAT module.
  **/
 
-#ifndef _SR_SPI_HPP_
-#define _SR_SPI_HPP_
+#ifndef _SR_TCAT_HPP_
+#define _SR_TCAT_HPP_
 
-#include <ros_ethercat_hardware/ethercat_device.h>
+#include <ros_ethercat_hardware/ethercat_hardware.h>
 #include <realtime_tools/realtime_publisher.h>
-#include <sr_ronex_msgs/SPIState.h>
+#include <sr_ronex_msgs/TCATState.h>
 
-#include <sr_ronex_external_protocol/Ronex_Protocol_0x02000002_SPI_00.h>
-#include <sr_ronex_hardware_interface/spi_hardware_interface.hpp>
+#include <sr_ronex_external_protocol/Ronex_Protocol_0x02000003_TCAT_00.h>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <vector>
 
+#include <dynamic_reconfigure/server.h>
+#include "sr_ronex_drivers/GeneralIOConfig.h"
+
 using namespace std;
 
-class SrSPI : public EthercatDevice
+class SrTCAT : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
   virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
 
-  SrSPI();
-  virtual ~SrSPI();
+  SrTCAT();
+  virtual ~SrTCAT();
 
 protected:
   ///Replaces the product ID with a human readable product alias.
@@ -60,17 +61,11 @@ protected:
 
   ros::NodeHandle node_;
 
-  ///The SPI module which is added as a CustomHW to the hardware interface
-  ronex::SPI* spi_;
-
   /**
-   * A counter used to publish the data at 100Hz:
-   *  count 10 cycles, then reset the cycle_count to 0.
+   * Stores the previous sequence number: we publish the data when this
+   * number is changed as it means we've received all the data
    */
-  short cycle_count_;
-
-  ///the digital commands sent at each cycle (updated when we call the topic)
-  int32u digital_commands_;
+  int16u previous_sequence_number_;
 
   ///Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;
@@ -79,21 +74,15 @@ protected:
   ///Offset of device position from first device
   int device_offset_;
 
-  ///False to run digital pins as output, True to run as input
-  std::vector<bool> input_mode_;
-
-  int writeData(EthercatCom *com, EC_UINT address, void const *data, EC_UINT length);
-  int readData(EthercatCom *com, EC_UINT address, void *data, EC_UINT length);
-
   void packCommand(unsigned char *buffer, bool halt, bool reset);
   bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 
   void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
 
   ///publisher for the data.
-  boost::scoped_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::SPIState> > state_publisher_;
+  boost::shared_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::TCATState> > state_publisher_;
   ///Temporary message
-  sr_ronex_msgs::SPIState state_msg_;
+  sr_ronex_msgs::TCATState state_msg_;
 
   ///building the topics for publishing the state.
   void build_topics_();
@@ -108,4 +97,4 @@ protected:
    End:
 */
 
-#endif /* _SR_SPI_HPP_ */
+#endif /* _SR_TCAT_HPP_ */

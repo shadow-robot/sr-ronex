@@ -25,7 +25,7 @@
 #include "sr_ronex_controllers/general_io_passthrough_controller.hpp"
 #include "pluginlib/class_list_macros.h"
 
-PLUGINLIB_EXPORT_CLASS( ronex::GeneralIOPassthroughController, pr2_controller_interface::Controller)
+PLUGINLIB_EXPORT_CLASS( ronex::GeneralIOPassthroughController, controller_interface::ControllerBase)
 
 namespace ronex
 {
@@ -33,19 +33,7 @@ namespace ronex
     : loop_count_(0)
   {}
 
-  GeneralIOPassthroughController::~GeneralIOPassthroughController()
-  {
-    for(size_t i=0; i < digital_subscribers_.size(); ++i)
-    {
-      digital_subscribers_[i].shutdown();
-    }
-    for(size_t i=0; i < pwm_subscribers_.size(); ++i)
-    {
-      pwm_subscribers_[i].shutdown();
-    }
-  }
-
-  bool GeneralIOPassthroughController::init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n)
+  bool GeneralIOPassthroughController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
   {
     assert(robot);
     node_ = n;
@@ -77,7 +65,7 @@ namespace ronex
       }
     }
 
-    general_io_ = static_cast<ronex::GeneralIO*>( robot->model_->hw_->getCustomHW(path) );
+    general_io_ = static_cast<ronex::GeneralIO*>( robot->getCustomHW(path) );
     if( general_io_ == NULL)
     {
       ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");
@@ -101,23 +89,6 @@ namespace ronex
     }
 
     return true;
-  }
-
-  void GeneralIOPassthroughController::starting()
-  {}
-
-  /*!
-   * \brief Issues commands to the joint. Should be called at regular intervals
-   */
-  void GeneralIOPassthroughController::update()
-  {
-/*
-    if(loop_count_ % 10 == 0)
-    {
-      loop_count_ = 0;
-    }
-    loop_count_++;
-*/
   }
 
   void GeneralIOPassthroughController::digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index)

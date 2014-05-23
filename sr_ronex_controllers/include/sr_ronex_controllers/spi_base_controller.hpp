@@ -26,7 +26,8 @@
 
 #include <ros/node_handle.h>
 
-#include <pr2_controller_interface/controller.h>
+#include <controller_interface/controller.h>
+#include <ros_ethercat_model/robot_state.hpp>
 #include <sr_ronex_hardware_interface/spi_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
@@ -38,9 +39,6 @@ namespace ronex
   {
     SPI_PACKET_OUT packet;
 
-    SplittedSPICommand()
-    {}
-
     SplittedSPICommand(SplittedSPICommand* copy_me)
     {
       this->packet = copy_me->packet;
@@ -48,20 +46,19 @@ namespace ronex
   };
 
   class SPIBaseController
-    : public pr2_controller_interface::Controller
+    : public controller_interface::Controller<ros_ethercat_model::RobotState>
   {
   public:
     SPIBaseController();
-    virtual ~SPIBaseController();
 
-    virtual bool init(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
+    virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-    virtual void starting();
+    virtual void starting(const ros::Time&);
 
     /*!
      * \brief Issues commands to the joint. Should be called at regular intervals
      */
-    virtual void update();
+    virtual void update(const ros::Time&, const ros::Duration&);
 
   protected:
     ros::NodeHandle node_;
@@ -79,7 +76,7 @@ namespace ronex
     uint16_t     cmd_pin_output_states_pre_;
     uint16_t     cmd_pin_output_states_post_;
 
-    bool pre_init_(pr2_mechanism_model::RobotState* robot, ros::NodeHandle &n);
+    bool pre_init_(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
     void copy_splitted_to_cmd_(size_t spi_index);
   private:
