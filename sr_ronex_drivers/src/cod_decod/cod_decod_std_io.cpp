@@ -208,7 +208,7 @@ namespace sr_cod_decod
     digital_output_.get(d_out_ptr);
 
     //first we set all the digital output bytes in the buffer to zero
-    for (int i = 0; i < ((n_digital_outputs_/16 + 1) * 2); i++)
+    for (size_t i = 0; i < ((n_digital_outputs_/16 + 1) * 2); i++)
     {
       buff_ptr[i] = 0;
     }
@@ -216,9 +216,10 @@ namespace sr_cod_decod
     //then we write the actual values (only the digital ones now) to the buffer
     for (size_t i = 0; i < d_out_ptr->data.size(); i++)
     {
-      if (d_out_ptr->data.at(i)) (*((uint8_t *)buff_ptr)) |= (0x01 << (i % 8));
-
-      if((i + 1) % 8 == 0) buff_ptr++;
+      if (d_out_ptr->data.at(i))
+        (*((uint8_t *)buff_ptr)) |= (0x01 << (i % 8));
+      if((i + 1) % 8 == 0)
+        ++buff_ptr;
     }
 
 
