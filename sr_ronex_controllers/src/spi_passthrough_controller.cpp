@@ -36,7 +36,7 @@ namespace ronex
 
     for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
     {
-      std::stringstream service_path;
+      std::ostringstream service_path;
       service_path << topic_prefix_ << "/command/passthrough/"<<i;
 
       command_srv_.push_back( node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i)) );
@@ -65,7 +65,7 @@ namespace ronex
       {
         standard_commands_[spi_out_index].packet.data_bytes[i] = static_cast<int8u>(req.data[i]);
       }
-      catch(boost::bad_lexical_cast &)
+      catch(...)
       {
         ROS_ERROR_STREAM("Input["<<i<<"]: "<<req.data[i] << " could not be converted to int");
       }
@@ -93,7 +93,7 @@ namespace ronex
 	      // updating the response
 	      for(size_t j = 0; j < req.data.size(); ++j)
 	      {
-                std::stringstream hex;
+                std::ostringstream hex;
 	        try
 	        {
 		  hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
