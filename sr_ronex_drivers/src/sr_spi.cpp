@@ -34,9 +34,10 @@
 
 PLUGINLIB_EXPORT_CLASS(SrSPI, EthercatDevice);
 
-const std::string SrSPI::product_alias_ = PRODUCT_NAME;
-
+using namespace std;
 using boost::lexical_cast;
+
+const string SrSPI::product_alias_ = PRODUCT_NAME;
 
 SrSPI::SrSPI() :
   node_("~"), cycle_count_(0)
@@ -45,7 +46,7 @@ SrSPI::SrSPI() :
 SrSPI::~SrSPI()
 {
   //remove parameters from server
-  string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_ );
+  string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_);
   ros::param::del(device_id);
 
   string controller_name = "/ronex_" + serial_number_ + "_passthrough";
@@ -61,7 +62,7 @@ void SrSPI::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   serial_number_ = ronex::get_serial_number( sh );
 
   //get the alias from the parameter server if it exists
-  std::string path_to_alias, alias;
+  string path_to_alias, alias;
   path_to_alias = "/ronex/mapping/" + serial_number_;
   if( ros::param::get(path_to_alias, alias))
   {
@@ -100,15 +101,15 @@ void SrSPI::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
   ROS_INFO("First FMMU (command) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", command_base_, command_size_,
            static_cast<int>(COMMAND_ADDRESS) );
-  EC_FMMU *commandFMMU = new EC_FMMU( command_base_,            // Logical Start Address    (in ROS address space?)
+  EC_FMMU *commandFMMU = new EC_FMMU( command_base_,    // Logical Start Address    (in ROS address space?)
                                       command_size_,
-                                      0x00,                   // Logical Start Bit
-                                      0x07,                   // Logical End Bit
-                                      COMMAND_ADDRESS,        // Physical Start Address   (in ET1200 address space?)
-                                      0x00,                   // Physical Start Bit
-                                      false,                   // Read Enable
-                                      true,                    // Write Enable
-                                      true                     // Channel Enable
+                                      0x00,             // Logical Start Bit
+                                      0x07,             // Logical End Bit
+                                      COMMAND_ADDRESS,  // Physical Start Address   (in ET1200 address space?)
+                                      0x00,             // Physical Start Bit
+                                      false,            // Read Enable
+                                      true,             // Write Enable
+                                      true              // Channel Enable
     );
 
 
@@ -144,8 +145,8 @@ void SrSPI::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   EtherCAT_PD_Config *pd = new EtherCAT_PD_Config(2);
 
 // SyncMan takes the physical address
-  (*pd)[0] = EC_SyncMan(COMMAND_ADDRESS,              command_size_,    PROTOCOL_TYPE, EC_WRITTEN_FROM_MASTER);
-  (*pd)[1] = EC_SyncMan(STATUS_ADDRESS,               status_size_,     PROTOCOL_TYPE);
+  (*pd)[0] = EC_SyncMan(COMMAND_ADDRESS, command_size_, PROTOCOL_TYPE, EC_WRITTEN_FROM_MASTER);
+  (*pd)[1] = EC_SyncMan(STATUS_ADDRESS,  status_size_,  PROTOCOL_TYPE);
 
 
   (*pd)[0].ChannelEnable = true;
@@ -205,7 +206,7 @@ void SrSPI::packCommand(unsigned char *buffer, bool halt, bool reset)
 
     if( command->spi_out[spi_index].num_bytes != 0)
     {
-      std::stringstream ss;
+      ostringstream ss;
       ss << "SPI out ["<<spi_index<<"]: Sending non null command("<<static_cast<unsigned int>(command->spi_out[spi_index].num_bytes)<<"): -> ";
 
       for(unsigned int i =0; i < static_cast<unsigned int>(command->spi_out[spi_index].num_bytes); ++i)
@@ -300,7 +301,7 @@ void SrSPI::build_topics_()
 {
   //loading everything into the parameter server
   parameter_id_ = ronex::get_ronex_param_id("");
-  std::stringstream param_path, tmp_param;
+  ostringstream param_path, tmp_param;
   param_path << "/ronex/devices/" << parameter_id_ << "/";
   tmp_param << ronex::get_product_code(sh_);
   ros::param::set(param_path.str() + "product_id", tmp_param.str());

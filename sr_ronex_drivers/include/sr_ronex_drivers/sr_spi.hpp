@@ -35,8 +35,6 @@
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 
-using namespace std;
-
 class SrSPI : public EthercatDevice
 {
 public:
@@ -53,7 +51,7 @@ protected:
   ///A unique identifier for the ronex (either serial number or alias if provided)
   std::string ronex_id_;
 
-  string reason_;
+  std::string reason_;
   int level_;
 
   int command_base_;
