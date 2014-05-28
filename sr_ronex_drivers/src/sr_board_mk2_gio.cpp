@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
@@ -172,7 +172,8 @@ int SrBoardMk2GIO::initialize(hardware_interface::HardwareInterface *hw, bool al
 
   //add the RoNeX to the hw interface
   ros_ethercat_model::RobotState *robot_state = static_cast<ros_ethercat_model::RobotState*>(hw);
-  robot_state->custom_hws_.insert(device_name_, new ronex::GeneralIO());
+  if (robot_state->getCustomHW(device_name_) == NULL)
+    robot_state->custom_hws_.insert(device_name_, new ronex::GeneralIO());
   general_io_ = static_cast<ronex::GeneralIO*>(robot_state->getCustomHW(device_name_));
 
   build_topics_();

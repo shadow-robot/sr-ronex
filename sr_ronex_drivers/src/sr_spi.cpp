@@ -51,7 +51,7 @@ SrSPI::~SrSPI()
 
   string controller_name = "/ronex_" + serial_number_ + "_passthrough";
   ros::param::del(controller_name);
-  
+
   string spi_device_name = "/ronex/spi/" + serial_number_;
   ros::param::del(spi_device_name);
 }
@@ -174,7 +174,8 @@ int SrSPI::initialize(hardware_interface::HardwareInterface *hw, bool allow_unpr
 
   //add the RoNeX SPI module to the hw interface
   ros_ethercat_model::RobotState *robot_state = static_cast<ros_ethercat_model::RobotState*>(hw);
-  robot_state->custom_hws_.insert(device_name_, new ronex::SPI());
+  if (robot_state->getCustomHW(device_name_) == NULL)
+    robot_state->custom_hws_.insert(device_name_, new ronex::SPI());
   spi_ = static_cast<ronex::SPI*>(robot_state->getCustomHW(device_name_));
 
   build_topics_();
