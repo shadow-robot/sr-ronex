@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex</name>
-  <version>0.9.12</version>
+  <version>0.9.13</version>
   <description>This stack contains the different packages related to the RoNeX (Robot Nervous System).</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
@@ -18,7 +18,6 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <!-- Dependencies needed to compile this package. -->
-
 
   <!-- Dependencies needed after this package is compiled. -->
   <run_depend>sr_ronex_launch</run_depend>

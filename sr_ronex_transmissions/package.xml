@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_transmissions</name>
-  <version>0.9.12</version>
+  <version>0.9.13</version>
   <description>Contains the transmissions that can be used with the RoNeX driver. Using those transmissions makes it possible for the user to remap from the RoNeX to a joint based robot.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
@@ -30,9 +30,6 @@
   <run_depend>ros_ethercat_model</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
-  <!-- <test_depend>roscpp</test_depend> -->
-  <!-- <test_depend>sr_ronex_hardware_interface</test_depend> -->
-  <!-- <test_depend>pr2_mechanism_model</test_depend> -->
   <test_depend>gtest</test_depend>
 
 <export>

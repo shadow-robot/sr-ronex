@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_drivers</name>
-  <version>0.9.12</version>
+  <version>0.9.13</version>
   <description>Package containing the driver for the RoNeX boards.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
@@ -50,20 +50,6 @@
   <run_depend>dynamic_reconfigure</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
-  <!-- <test_depend>pr2_msgs</test_depend> -->
-  <!-- <test_depend>ethercat_hardware</test_depend> -->
-  <!-- <test_depend>std_msgs</test_depend> -->
-  <!-- <test_depend>sr_ronex_msgs</test_depend> -->
-  <!-- <test_depend>pr2_hardware_interface</test_depend> -->
-  <!-- <test_depend>eml</test_depend> -->
-  <!-- <test_depend>roscpp</test_depend> -->
-  <!-- <test_depend>realtime_tools</test_depend> -->
-  <!-- <test_depend>diagnostic_msgs</test_depend> -->
-  <!-- <test_depend>diagnostic_updater</test_depend> -->
-  <!-- <test_depend>pluginlib</test_depend> -->
-  <!-- <test_depend>sr_ronex_external_protocol</test_depend> -->
-  <!-- <test_depend>sr_ronex_hardware_interface</test_depend> -->
-  <!-- <test_depend>dynamic_reconfigure</test_depend> -->
   <test_depend>gtest</test_depend>
 
 <export>

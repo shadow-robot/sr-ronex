@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>sr_ronex_examples</name>
-  <version>0.9.12</version>
+  <version>0.9.13</version>
   <description>Package containing examples for the RoNeX boards.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
@@ -48,9 +48,9 @@
   <run_depend>controller_interface</run_depend>
   <run_depend>pluginlib</run_depend>
   <run_depend>xacro</run_depend>
-  
+
   <export>
     <controller_interface plugin="${prefix}/controller_plugins.xml"/>
   </export>
-  
+
 </package>

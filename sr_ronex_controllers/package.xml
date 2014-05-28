@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_controllers</name>
-  <version>0.9.12</version>
+  <version>0.9.13</version>
   <description>Contains different useful controllers to use with the RoNeX.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
@@ -43,15 +43,6 @@
   <run_depend>sr_ronex_utilities</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
-  <!-- <test_depend>roscpp</test_depend> -->
-  <!-- <test_depend>std_msgs</test_depend> -->
-  <!-- <test_depend>std_srvs</test_depend> -->
-  <!-- <test_depend>sr_ronex_msgs</test_depend> -->
-  <!-- <test_depend>sr_ronex_hardware_interface</test_depend> -->
-  <!-- <test_depend>pr2_mechanism_controllers</test_depend> -->
-  <!-- <test_depend>pr2_controller_interface</test_depend> -->
-  <!-- <test_depend>pr2_mechanism_model</test_depend> -->
-  <!-- <test_depend>pluginlib</test_depend> -->
 
 <export>
     <controller_interface plugin="${prefix}/controller_plugins.xml"/>
