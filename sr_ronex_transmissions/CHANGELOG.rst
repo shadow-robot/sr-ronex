@@ -12,7 +12,20 @@ Changelog for package sr_ronex_transmissions
 -------------------
 
 0.9.11 (2014-05-19)
+Forthcoming
+-----------
+0.9.12 (2014-05-23)
 -------------------
+* 0.9.11
+* changlogs
+* 0.9.10
+* Contributors: shadowmanos
+
+0.9.11 (2014-05-23)
+-------------------
+* 0.9.10
+* Contributors: shadowmanos
+
 0.9.10 (2014-05-19)
 -------------------
 

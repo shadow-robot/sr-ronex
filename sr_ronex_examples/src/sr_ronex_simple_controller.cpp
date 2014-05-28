@@ -52,7 +52,7 @@ bool SrRoNeXSimpleController::init(ros_ethercat_model::RobotState* robot, ros::N
   return true;
 }
 
-void SrRoNeXSimpleController::starting()
+void SrRoNeXSimpleController::starting(const ros::Time&)
 {
   // Do nothing.
 }
@@ -67,7 +67,7 @@ void SrRoNeXSimpleController::update(const ros::Time&, const ros::Duration&)
   }
 }
 
-void SrRoNeXSimpleController::stopping() 
+void SrRoNeXSimpleController::stopping(const ros::Time&)
 {
   // Do nothing.
 } 

@@ -40,7 +40,6 @@ namespace sr_cod_decod
   {
   public:
     CodDecodManager(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
-    ~CodDecodManager();
 
     void update(unsigned char *status_buffer);
     void build_command(unsigned char *command_buffer);
