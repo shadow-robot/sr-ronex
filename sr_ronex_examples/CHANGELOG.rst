@@ -2,31 +2,18 @@
 Changelog for package sr_ronex_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-0.9.13 (2014-05-23)
--------------------
-* 0.9.12
-* changelogs
-* Contributors: shadowmanos
-
-0.9.12 (2014-05-23)
--------------------
-
-0.9.11 (2014-05-19)
 Forthcoming
 -----------
-* adding an example on how to read / write to a register using SPI
-* Contributors: Ugo Cupcic
+* Adding an SPI module
+
+0.9.13 (2014-05-23)
+-------------------
+
 0.9.12 (2014-05-23)
 -------------------
-* 0.9.11
-* changlogs
-* 0.9.10
-* Contributors: shadowmanos
 
 0.9.11 (2014-05-23)
 -------------------
-* 0.9.10
-* Contributors: shadowmanos
 
 0.9.10 (2014-05-19)
 -------------------
@@ -36,8 +23,6 @@ Forthcoming
 
 0.9.8 (2014-05-15)
 ------------------
-* Update CHANGELOG.rst
-* Contributors: Manos Nikolaidis
 
 0.9.7 (2014-05-15)
 ------------------
@@ -47,7 +32,6 @@ Forthcoming
 
 0.9.5 (2013-12-18)
 ------------------
-* Install controller_plugins.xml file
 
 0.9.4 (2013-11-20)
 ------------------
