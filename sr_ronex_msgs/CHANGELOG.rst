@@ -2,6 +2,10 @@
 Changelog for package sr_ronex_msgs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Adding an SPI module
+* Contributors: Ugo Cupcic
 0.9.12 (2014-05-23)
 -------------------
 * 0.9.11
@@ -43,4 +47,3 @@ Changelog for package sr_ronex_msgs
 0.9.2 (2013-09-24)
 ------------------
 * first public release for Hydro
-

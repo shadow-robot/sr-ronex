@@ -55,7 +55,7 @@ class LoadPassthroughControllers(object):
         if attempts > 0:
             ronex_param = rospy.get_param("/ronex/devices")
             for key in ronex_param:
-                ronex_ids.append(ronex_param[key]["ronex_id"])
+                ronex_ids.append([ronex_param[key]["ronex_id"], ronex_param[key]["product_name"]])
         else:
             rospy.loginfo("Failed to find ronex devices in parameter server")
 
@@ -68,8 +68,14 @@ class LoadPassthroughControllers(object):
         @param ronex_ids the ids of the ronexes
         """
         for ronex_id in ronex_ids:
-            rospy.set_param("/ronex_" + ronex_id + "_passthrough/type", "sr_ronex_controllers/GeneralIOPassthroughController")
-            rospy.set_param("/ronex_" + ronex_id + "_passthrough/ronex_id", ronex_id)
+            if ronex_id[1] == "general_io":
+                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type", "sr_ronex_controllers/GeneralIOPassthroughController")
+                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
+            elif ronex_id[1] == "spi":
+                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type", "sr_ronex_controllers/SPIPassthroughController")
+                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
+            else:
+                rospy.logwarn("RoNeX["+ronex_id[0]+"] type not recognized: "+ronex_id[1]+" -> not loading any controllers for that RoNeX")
 
     def load_and_start_ctrl(self, ronex_ids):
         """
@@ -80,7 +86,7 @@ class LoadPassthroughControllers(object):
         # building a list of controller names
         controllers_list = []
         for ronex_id in ronex_ids:
-            controllers_list.append("ronex_" + ronex_id + "_passthrough")
+            controllers_list.append("ronex_" + ronex_id[0] + "_passthrough")
 
         # calling the services to load and switch the controllers on
         rospy.loginfo("Waiting for controller_manager services: list/load/switch")

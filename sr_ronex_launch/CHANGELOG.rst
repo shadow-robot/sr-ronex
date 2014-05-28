@@ -2,6 +2,9 @@
 Changelog for package sr_ronex_launch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Adding an SPI module
 0.9.12 (2014-05-23)
 -------------------
 * 0.9.11
@@ -47,4 +50,3 @@ Changelog for package sr_ronex_launch
 0.9.2 (2013-09-24)
 ------------------
 * first public release for Hydro
-

@@ -9,12 +9,6 @@ find_package(catkin REQUIRED COMPONENTS roscpp ros_ethercat_hardware sr_ronex_ex
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-#set the default path for built executables to the "bin" directory
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-
-#set the default path for built libraries to the "lib" directory
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
-
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
     CATKIN_DEPENDS roscpp ros_ethercat_hardware sr_ronex_external_protocol ros_ethercat_model

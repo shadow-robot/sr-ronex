@@ -10,7 +10,7 @@ find_package(catkin REQUIRED COMPONENTS roscpp std_msgs std_srvs sr_ronex_msgs s
 include_directories( include ${catkin_INCLUDE_DIRS})
 
 #common commands for building c++ executables and libraries
-add_library(sr_ronex_controllers src/general_io_passthrough_controller.cpp src/fake_calibration_controller.cpp)
+add_library(sr_ronex_controllers src/general_io_passthrough_controller.cpp src/fake_calibration_controller.cpp src/spi_base_controller.cpp src/spi_passthrough_controller.cpp)
 target_link_libraries(sr_ronex_controllers ${catkin_LIBRARIES})
 
 add_dependencies(sr_ronex_controllers ${catkin_EXPORTED_TARGETS})
@@ -22,14 +22,11 @@ catkin_package(
     LIBRARIES sr_ronex_controllers
 )
 
-
-
 install(TARGETS sr_ronex_controllers
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
+   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
 
-file(GLOB PYTHON_SCRIPTS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" 
+file(GLOB PYTHON_SCRIPTS RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
    "${CMAKE_CURRENT_SOURCE_DIR}/scripts/*")
 install(PROGRAMS ${PYTHON_SCRIPTS}
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
@@ -42,4 +39,3 @@ install(FILES controller_plugins.xml
 
 install(DIRECTORY config/
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config)
-

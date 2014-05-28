@@ -1,8 +1,8 @@
 <library path="lib/libsr_ronex_drivers" >
 
   <!--
-      The following definitions are EthercatDevice plugins (they are the drivers for a certain type of ethercat slave device, determined by its product code)
-  -->
+            The following definitions are EthercatDevice plugins (they are the drivers for a certain type of ethercat slave device, determined by its product code)
+    -->
   <class name="sr_ronex_drivers/87032868" type="SrBoard0X" base_class_type="EthercatDevice">
     <description>
       RoNeX - General I/O module mk2
@@ -16,6 +16,11 @@
   <class name="sr_ronex_drivers/33554433" type="SrBoardMk2GIO" base_class_type="EthercatDevice">
     <description>
       RoNeX - General I/O module mk3
+    </description>
+  </class>
+  <class name="sr_ronex_drivers/33554434" type="SrSPI" base_class_type="EthercatDevice">
+    <description>
+      RoNeX - SPI module
     </description>
   </class>
   <class name="sr_ronex_drivers/33554432" type="StandardEthercatDevice" base_class_type="EthercatDevice">
@@ -35,8 +40,8 @@
   </class>
 
   <!--
-      The following definitions are CodDecod plugins (they encode decode information from a certain (unique) ethercat slave device, determined by its product code and serial number)
-  -->
+           The following definitions are CodDecod plugins (they encode decode information from a certain (unique) ethercat slave device, determined by its product code and serial number)
+    -->
 
   <class name="sr_ronex_drivers/87032868_0" type="sr_cod_decod::CodDecodStdIo" base_class_type="sr_cod_decod::CodDecod">
     <description>
