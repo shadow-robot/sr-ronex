@@ -34,14 +34,13 @@ namespace ronex
     if( !pre_init_(robot, n) )
       return false;
 
+    standard_commands_.assign(NUM_SPI_OUTPUTS, SplittedSPICommand());
     for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
     {
       std::ostringstream service_path;
       service_path << topic_prefix_ << "/command/passthrough/"<<i;
 
       command_srv_.push_back( node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i)) );
-
-      standard_commands_.push_back(new SplittedSPICommand());
     }
 
     dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>(ros::NodeHandle(topic_prefix_)));
