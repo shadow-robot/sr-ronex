@@ -120,10 +120,6 @@ namespace sr_cod_decod
 
   }
 
-  CodDecodManager::~CodDecodManager()
-  {
-  }
-
   void CodDecodManager::update(unsigned char *status_buffer)
   {
     if(cod_decod_)

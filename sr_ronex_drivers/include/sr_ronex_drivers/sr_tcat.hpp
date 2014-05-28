@@ -80,7 +80,7 @@ protected:
   void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
 
   ///publisher for the data.
-  boost::shared_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::TCATState> > state_publisher_;
+  boost::scoped_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::TCATState> > state_publisher_;
   ///Temporary message
   sr_ronex_msgs::TCATState state_msg_;
 

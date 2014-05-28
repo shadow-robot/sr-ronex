@@ -53,7 +53,7 @@ protected:
   int n_analog_inputs;
   int n_PWM_outputs;
 
-  boost::shared_ptr<sr_cod_decod::CodDecodManager> cod_decod_manager_;
+  boost::scoped_ptr<sr_cod_decod::CodDecodManager> cod_decod_manager_;
 
 };
 

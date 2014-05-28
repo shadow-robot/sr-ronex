@@ -46,7 +46,7 @@ int StandardEthercatDevice::initialize(hardware_interface::HardwareInterface *hw
 
   if((command_size_ > 0) || (status_size_ > 0))
   {
-    cod_decod_manager_ = boost::shared_ptr<sr_cod_decod::CodDecodManager>( new sr_cod_decod::CodDecodManager(hw, sh_, n_digital_outputs, n_analog_outputs, n_digital_inputs, n_analog_inputs, n_PWM_outputs) );
+    cod_decod_manager_.reset(new sr_cod_decod::CodDecodManager(hw, sh_, n_digital_outputs, n_analog_outputs, n_digital_inputs, n_analog_inputs, n_PWM_outputs));
   }
 
   return 0;
