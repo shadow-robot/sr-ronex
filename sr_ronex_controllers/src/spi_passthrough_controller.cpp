@@ -34,14 +34,13 @@ namespace ronex
     if( !pre_init_(robot, n) )
       return false;
 
+    standard_commands_.assign(NUM_SPI_OUTPUTS, SplittedSPICommand());
     for(size_t i = 0; i < NUM_SPI_OUTPUTS; ++i)
     {
       std::ostringstream service_path;
       service_path << topic_prefix_ << "/command/passthrough/"<<i;
 
       command_srv_.push_back( node_.advertiseService<sr_ronex_msgs::SPI::Request, sr_ronex_msgs::SPI::Response>(service_path.str(), boost::bind(&SPIPassthroughController::command_srv_cb, this, _1, _2,  i)) );
-
-      standard_commands_.push_back(new SplittedSPICommand());
     }
 
     dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>(ros::NodeHandle(topic_prefix_)));
@@ -87,32 +86,32 @@ namespace ronex
         {
           if( status_queue_[i].front().first == &standard_commands_[spi_out_index] )
           {
-	    if( status_queue_[i].front().second != NULL)
-	    {
-	      //found the status command corresponding to the command we sent
-	      // updating the response
-	      for(size_t j = 0; j < req.data.size(); ++j)
-	      {
+            if( status_queue_[i].front().second != NULL)
+            {
+              //found the status command corresponding to the command we sent
+              // updating the response
+              for(size_t j = 0; j < req.data.size(); ++j)
+              {
                 std::ostringstream hex;
-	        try
-	        {
-		  hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
-	        }
-	        catch(...)
-	        {
-		  ROS_ERROR_STREAM("Can't cast to uint.");
-		  hex << "bad_data";
-	        }
-	        res.data.push_back(hex.str());
-	      }
-	      not_received = false;
+                try
+                {
+                  hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
+                }
+                  catch(...)
+                {
+                  ROS_ERROR_STREAM("Can't cast to uint.");
+                  hex << "bad_data";
+                }
+                res.data.push_back(hex.str());
+              }
+              not_received = false;
 
-	      //we used the status (sent it back to the user through the service
-	      // response -> popping from the queue
-	      status_queue_[i].pop();
+              //we used the status (sent it back to the user through the service
+              // response -> popping from the queue
+              status_queue_[i].pop();
 
-	      break;
-	    }
+              break;
+            }
           }
         }
       }
