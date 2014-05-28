@@ -4,7 +4,6 @@ Changelog for package sr_ronex_hardware_interface
 
 Forthcoming
 -----------
-* Adding an SPI module
 
 0.9.13 (2014-05-23)
 -------------------
