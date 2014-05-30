@@ -142,6 +142,7 @@ namespace ronex
      key += part;
      return key;
    }
+}
 
 /* For the emacs weenies in the crowd.
    Local Variables:

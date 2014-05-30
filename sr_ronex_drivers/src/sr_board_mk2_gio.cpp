@@ -31,7 +31,6 @@
 #include <math.h>
 
 #include "sr_ronex_drivers/ronex_utils.hpp"
-#include "sr_ronex_utilities/sr_ronex_utilities.hpp"
 
 PLUGINLIB_EXPORT_CLASS(SrBoardMk2GIO, EthercatDevice);
 
