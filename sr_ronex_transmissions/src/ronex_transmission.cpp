@@ -40,9 +40,10 @@ namespace ronex
     if (!ros_ethercat_model::Transmission::initXml(elt, robot))
       return false;
 
-    if (robot->getCustomHW(device_name_) == NULL)
-      robot_state->custom_hws_.insert(device_name_, new ronex::GeneralIO());
-    general_io_ = static_cast<ronex::GeneralIO*>(robot_state->getCustomHW(device_name_));
+    // TODO : get the same device name that the driver will get
+    std::string device_name = "";
+    if (robot->getCustomHW(device_name) == NULL)
+      robot->custom_hws_.insert(device_name, new ronex::GeneralIO());
 
     //Extract all the mapping information from the transmission
     for( TiXmlElement *mapping_el = elt->FirstChildElement("mapping"); mapping_el;

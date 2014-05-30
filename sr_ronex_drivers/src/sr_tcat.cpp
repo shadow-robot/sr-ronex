@@ -29,6 +29,7 @@
 #include <math.h>
 
 #include "sr_ronex_drivers/ronex_utils.hpp"
+#include "sr_ronex_utilities/sr_ronex_utilities.hpp"
 
 PLUGINLIB_EXPORT_CLASS(SrTCAT, EthercatDevice);
 
@@ -48,23 +49,11 @@ SrTCAT::~SrTCAT()
 
 void SrTCAT::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
-  sh_ = sh;
+  sh_            = sh;
+
   serial_number_ = ronex::get_serial_number( sh );
-
-  //get the alias from the parameter server if it exists
-  std::string path_to_alias, alias;
-  path_to_alias = "/ronex/mapping/" + serial_number_;
-  if( ros::param::get(path_to_alias, alias))
-  {
-    ronex_id_ = alias;
-  }
-  else
-  {
-    //no alias found, using the serial number directly.
-    ronex_id_ = serial_number_ ;
-  }
-
-  device_name_ = ronex::build_name( product_alias_, ronex_id_ );
+  ronex_id_      = ronex::get_alias(serial_number_);
+  device_name_   = ronex::build_name( product_alias_, ronex_id_ );
 
   command_base_  = start_address;
   command_size_  = COMMAND_ARRAY_SIZE_BYTES;
@@ -236,28 +225,28 @@ bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
       //state_msg_.received_data[status_data->receiver_number].timestamp_ns = static_cast<double>(status_data->receiver_data.timestamp_L + (static_cast<u_int64_t>(status_data->receiver_data.timestamp_H) << 32)*(15.65/1000.0));
     }
   }
-  
+
   //publishing  if the sequence number is increased
-  if ( status_data->sequence_number && 
+  if ( status_data->sequence_number &&
       (status_data->sequence_number != previous_sequence_number_ )
      )
     {
       state_msg_.header.stamp = ros::Time::now();
-      
+
       //publish the message
       if( state_publisher_->trylock() )
       {
         state_publisher_->msg_ = state_msg_;
         state_publisher_->unlockAndPublish();
       }
-      
+
       //reset the data received flags to false
       for(size_t i=0; i<NUM_RECEIVERS; ++i)
         state_msg_.received_data[i].data_received = false;
-      
+
       previous_sequence_number_ = status_data->sequence_number;
     }
-  
+
   return true;
 }
 
