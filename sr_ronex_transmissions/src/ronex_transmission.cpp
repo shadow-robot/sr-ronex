@@ -40,11 +40,6 @@ namespace ronex
     if (!ros_ethercat_model::Transmission::initXml(elt, robot))
       return false;
 
-    // TODO : get the same device name that the driver will get
-    std::string device_name = "";
-    if (robot->getCustomHW(device_name) == NULL)
-      robot->custom_hws_.insert(device_name, new ronex::GeneralIO());
-
     //Extract all the mapping information from the transmission
     for( TiXmlElement *mapping_el = elt->FirstChildElement("mapping"); mapping_el;
          mapping_el = mapping_el->NextSiblingElement("mapping") )
@@ -56,6 +51,12 @@ namespace ronex
       }
       else
       {
+        std::string device_name = mapping_el->Attribute("ronex");
+        if (robot->getCustomHW(device_name) == NULL)
+        {
+          robot->custom_hws_.insert(device_name, new ronex::GeneralIO());
+        }
+
         //@todo is there a better way of instantiating the correct type?
         if( std::strcmp("position", property) == 0 )
         {

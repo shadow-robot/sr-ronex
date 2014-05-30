@@ -49,14 +49,26 @@ SrTCAT::~SrTCAT()
 
 void SrTCAT::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
-  sh_            = sh;
-
+  sh_ = sh;
   serial_number_ = ronex::get_serial_number( sh );
-  ronex_id_      = ronex::get_alias(serial_number_);
-  device_name_   = ronex::build_name( product_alias_, ronex_id_ );
 
-  command_base_  = start_address;
-  command_size_  = COMMAND_ARRAY_SIZE_BYTES;
+  //get the alias from the parameter server if it exists
+  std::string path_to_alias, alias;
+  path_to_alias = "/ronex/mapping/" + serial_number_;
+  if( ros::param::get(path_to_alias, alias))
+  {
+    ronex_id_ = alias;
+  }
+  else
+  {
+    //no alias found, using the serial number directly.
+    ronex_id_ = serial_number_ ;
+  }
+
+  device_name_ = ronex::build_name( product_alias_, ronex_id_ );
+
+  command_base_ = start_address;
+  command_size_ = COMMAND_ARRAY_SIZE_BYTES;
 
   start_address += command_size_;
   status_base_   = start_address;

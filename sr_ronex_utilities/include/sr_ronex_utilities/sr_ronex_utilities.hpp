@@ -142,24 +142,6 @@ namespace ronex
      key += part;
      return key;
    }
-  /**
-     *  get the alias from the parameter server if it exists
-     *  if no alias found, use the serial number directly.
-     *
-     * @param serial_number the serial number of the ronex
-     * @return the ronex id
-     **/
-    static inline std::string get_alias(const std::string &serial_number)
-    {
-      std::string path_to_alias, alias, ronex_id;
-      path_to_alias = "/ronex/mapping/" + serial_number;
-      if (ros::param::get(path_to_alias, alias))
-        ronex_id = alias;
-      else
-        ronex_id = serial_number;
-      return ronex_id;
-    }
-}
 
 /* For the emacs weenies in the crowd.
    Local Variables:
