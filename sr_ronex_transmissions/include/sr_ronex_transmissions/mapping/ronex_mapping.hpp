@@ -34,7 +34,7 @@ namespace ronex
   {
   public:
     RonexMapping()
-      : first_iteration_(true)
+      : first_iteration_(true), is_initialized_(false)
     {};
     RonexMapping(TiXmlElement* mapping_el) {};
     RonexMapping(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot) {};
@@ -58,6 +58,11 @@ namespace ronex
 
   protected:
     bool first_iteration_;
+
+    ros::Timer init_timer_;
+    ros::NodeHandle nh_;
+    virtual bool try_init_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name) = 0;
+    bool is_initialized_;
   };
 }
 
