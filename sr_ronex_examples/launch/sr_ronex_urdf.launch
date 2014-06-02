@@ -8,6 +8,9 @@
   <!-- Start the ronex driver -->
   <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen"  launch-prefix="nice -n -20"/>
 
+  <!-- publishes the joint states -->
+  <include file="$(find ros_ethercat_model)/launch/joint_state_publisher.launch"/>
+
   <!-- Loads the controller parameter -->
   <rosparam command="load" file="$(find sr_ronex_examples)/config/joint_position_controller.yaml" />
 
