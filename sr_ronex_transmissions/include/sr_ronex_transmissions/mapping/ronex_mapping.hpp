@@ -57,12 +57,18 @@ namespace ronex
     virtual void propagateToRonex(std::vector<ros_ethercat_model::JointState*>& js) = 0;
 
   protected:
+    ros::NodeHandle nh_;
     bool first_iteration_;
 
-    ros::Timer init_timer_;
-    ros::NodeHandle nh_;
-    virtual bool try_init_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name) = 0;
+    /// this is false until the RoNeX driver has initialised the RoNeX we're waiting for
     bool is_initialized_;
+    /// using a timer to initialise the transmission once we find the RoNeX we're looking for.
+    ros::Timer init_timer_;
+    /**
+     * Timer callback for the transmission initialisation. Stops the init_timer_ when the
+     *  initialisation is successful.
+     */
+    virtual bool try_init_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name) = 0;
   };
 }
 
