@@ -68,7 +68,7 @@ namespace ronex
      * Timer callback for the transmission initialisation. Stops the init_timer_ when the
      *  initialisation is successful.
      */
-    virtual bool try_init_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name) = 0;
+    virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name) = 0;
   };
 }
 
