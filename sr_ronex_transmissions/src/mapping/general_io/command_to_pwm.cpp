@@ -43,10 +43,10 @@ namespace ronex
         }
 
         init_timer_ = nh_.createTimer(ros::Duration(0.01),
-                                      boost::bind(&CommandToPWM::try_init_, this, _1, mapping_el, robot, ronex_name));
+                                      boost::bind(&CommandToPWM::try_init_cb_, this, _1, mapping_el, robot, ronex_name));
       }
 
-      bool CommandToPWM::try_init_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name)
+      bool CommandToPWM::try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name)
       {
         //has the ronex been added by the driver?
         if( robot->getCustomHW(ronex_name) == NULL )
