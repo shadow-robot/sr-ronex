@@ -26,6 +26,20 @@
 
 namespace ronex
 {
+  const uint16_t CS_INPUTS = 10;
+  uint16_t cs_index_table[CS_INPUTS] = {
+                    PIN_OUTPUT_STATE_CS_0,
+                    PIN_OUTPUT_STATE_CS_1,
+                    PIN_OUTPUT_STATE_CS_2,
+                    PIN_OUTPUT_STATE_CS_3,
+                    PIN_OUTPUT_STATE_DIO_0,
+                    PIN_OUTPUT_STATE_DIO_1,
+                    PIN_OUTPUT_STATE_DIO_2,
+                    PIN_OUTPUT_STATE_DIO_3, 
+                    PIN_OUTPUT_STATE_DIO_4,
+                    PIN_OUTPUT_STATE_DIO_5};
+
+
   SPIBaseController::SPIBaseController()
     : loop_count_(0)
   {
@@ -86,7 +100,7 @@ namespace ronex
 
   void SPIBaseController::starting()
   {
-    ROS_ERROR("@TODO: implement starting");
+    //ROS_ERROR("@TODO: implement starting");
   }
 
   /*!
@@ -94,27 +108,27 @@ namespace ronex
    */
   void SPIBaseController::update()
   {
-    for (size_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
+    for (uint16_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
     {
       //Check if we need to update a status
       if( status_queue_[spi_index].size() > 0)
       {
-	if( status_queue_[spi_index].front().second == NULL )
+        if( status_queue_[spi_index].front().second == NULL )
         {
-	  if(new_command)
-	  {
-	    new_command = false;
-	    spi_->nullify_command(spi_index);
-	    continue;
-	  }
+          if(new_command)
+          {
+            new_command = false;
+            spi_->nullify_command(spi_index);
+            continue;
+          }
 
-	  //the response has not been received. If the command type is NORMAL
-	  // then the response can be updated (it's INVALID until the SPI responds)
-	  if( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL );
-	  {
-	    status_queue_[spi_index].front().second = new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
-	  }
-	}
+          //the response has not been received. If the command type is NORMAL
+          // then the response can be updated (it's INVALID until the SPI responds)
+          if( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL );
+          {
+            status_queue_[spi_index].front().second = new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
+          }
+        }
       }
       //if no available command then send the NULL command
       if( command_queue_[spi_index].empty() )
@@ -131,7 +145,7 @@ namespace ronex
         //now we copy the command to the hardware interface
         copy_splitted_to_cmd_(spi_index);
 
-	new_command = true;
+        new_command = true;
 
         //the command will be sent at the end of the iteration,
         // removing the command from the queue but not freeing the
@@ -141,12 +155,18 @@ namespace ronex
     }
   }
 
-  void SPIBaseController::copy_splitted_to_cmd_(size_t spi_index)
+  void SPIBaseController::copy_splitted_to_cmd_(uint16_t spi_index)
   {
     //Mask to avoid setting the CS for the other SPI ports
     uint16_t bit_mask_CS = PIN_OUTPUT_STATE_CS_0 | PIN_OUTPUT_STATE_CS_1 | PIN_OUTPUT_STATE_CS_2 | PIN_OUTPUT_STATE_CS_3;
     uint16_t bit_mask_no_CS = ~bit_mask_CS;
-    uint16_t bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << spi_index;
+    
+    uint16_t cs_input = command_queue_[spi_index].front()->packet.data_bytes[0];
+    uint16_t bit_mask_one_CS_bit;
+    if (cs_input >= CS_INPUTS)
+      bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << spi_index;
+    else
+      bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << cs_index_table[cs_input];
  
     //setting the pre / post pin states (for all the spi outputs)
     //First we leave the existing values for the CS bits
@@ -172,7 +192,8 @@ namespace ronex
     spi_->command_->spi_out[spi_index].inter_byte_gap = command_queue_[spi_index].front()->packet.inter_byte_gap;
     spi_->command_->spi_out[spi_index].num_bytes = command_queue_[spi_index].front()->packet.num_bytes;
 
-    for(size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i)
+    // the 1st byte is the CS and the remaining 32 bytes consitute the command
+    for(size_t i = 1; i < SPI_TRANSACTION_MAX_SIZE + 1; ++i)
       spi_->command_->spi_out[spi_index].data_bytes[i] = command_queue_[spi_index].front()->packet.data_bytes[i];
   }
 }
