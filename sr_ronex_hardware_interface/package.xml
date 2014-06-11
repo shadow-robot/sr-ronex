@@ -32,8 +32,5 @@
   <run_depend>sr_ronex_external_protocol</run_depend>
 
   <!-- Dependencies needed only for running tests. -->
-  <!-- <test_depend>roscpp</test_depend> -->
-  <!-- <test_depend>pr2_hardware_interface</test_depend> -->
-  <!-- <test_depend>sr_ronex_external_protocol</test_depend> -->
 
 </package>
