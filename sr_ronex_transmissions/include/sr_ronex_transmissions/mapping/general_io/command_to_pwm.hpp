@@ -75,6 +75,8 @@ namespace ronex
          * @return true if the pins are in the correct ranges
          */
         bool check_pins_in_bound_();
+
+        virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
       };
     }
   }

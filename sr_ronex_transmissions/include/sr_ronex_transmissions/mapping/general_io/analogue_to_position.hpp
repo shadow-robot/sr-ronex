@@ -39,7 +39,7 @@ namespace ronex
       {
       public:
         AnalogueToPosition()
-         : RonexMapping() {};
+          : RonexMapping() {};
         AnalogueToPosition(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
         virtual ~AnalogueToPosition();
 
@@ -77,6 +77,8 @@ namespace ronex
          * @return true if the pin is in the correct range
          */
         bool check_pin_in_bound_();
+
+        virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
       };
     }
   }

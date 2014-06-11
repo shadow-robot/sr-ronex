@@ -42,11 +42,21 @@ namespace ronex
           return;
         }
 
+        init_timer_ = nh_.createTimer(ros::Duration(0.01),
+                                      boost::bind(&CommandToPWM::try_init_cb_, this, _1, mapping_el, robot, ronex_name));
+      }
+
+      bool CommandToPWM::try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name)
+      {
+        //has the ronex been added by the driver?
+        if( robot->getCustomHW(ronex_name) == NULL )
+          return false;
+
         general_io_ = static_cast<ronex::GeneralIO*>( robot->getCustomHW(ronex_name) );
         if(!general_io_)
         {
           ROS_ERROR_STREAM("The RoNeX: " << ronex_name << " was not found on the system.");
-          return;
+          return false;
         }
 
         //read PWM module index from urdf
@@ -54,7 +64,7 @@ namespace ronex
         if (!pwm_module)
         {
           ROS_ERROR("RonexTransmission transmission did not specify the pwm module.");
-          return;
+          return false;
         }
         //convert to size_t
         try
@@ -64,7 +74,7 @@ namespace ronex
         catch( boost::bad_lexical_cast const& )
         {
           ROS_ERROR("RonexTransmission: Couldn't parse pwm_module to a size_t.");
-          return;
+          return false;
         }
 
         //read PWM pin index from urdf
@@ -72,7 +82,7 @@ namespace ronex
         if (!pin)
         {
           ROS_ERROR("RonexTransmission transmission did not specify the pwm pin.");
-          return;
+          return false;
         }
         //convert to size_t
         try
@@ -82,7 +92,7 @@ namespace ronex
         catch( boost::bad_lexical_cast const& )
         {
           ROS_ERROR("RonexTransmission: Couldn't parse pwm_pin to a size_t.");
-          return;
+          return false;
         }
 
         //read motor direction pin index from urdf
@@ -90,7 +100,7 @@ namespace ronex
         if (!d_pin)
         {
           ROS_ERROR("RonexTransmission transmission did not specify the direction pin.");
-          return;
+          return false;
         }
         //convert to size_t
         try
@@ -100,8 +110,15 @@ namespace ronex
         catch( boost::bad_lexical_cast const& )
         {
           ROS_ERROR("RonexTransmission: Couldn't parse direction_pin to a size_t.");
-          return;
+          return false;
         }
+
+        ROS_DEBUG_STREAM("RoNeX" << ronex_name << " is initialised now.");
+        //stopping timer
+        init_timer_.stop();
+
+        is_initialized_ = true;
+        return true;
       }
 
       CommandToPWM::~CommandToPWM()
@@ -150,6 +167,9 @@ namespace ronex
 
       void CommandToPWM::propagateToRonex(std::vector<ros_ethercat_model::JointState*>& js)
       {
+        if( !is_initialized_ )
+          return;
+
         assert(js.size() == 1);
 
         if( check_pins_in_bound_() )
