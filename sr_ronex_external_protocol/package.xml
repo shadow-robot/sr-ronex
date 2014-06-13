@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_external_protocol</name>
-  <version>0.9.13</version>
+  <version>0.9.14</version>
   <description>Contains the protocol to communicate between the driver and the ronex hardware.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
