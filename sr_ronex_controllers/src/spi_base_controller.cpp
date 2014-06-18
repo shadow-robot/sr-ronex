@@ -26,20 +26,6 @@
 
 namespace ronex
 {
-  const uint16_t CS_INPUTS = 10;
-  uint16_t cs_index_table[CS_INPUTS] = {
-                    PIN_OUTPUT_STATE_CS_0,
-                    PIN_OUTPUT_STATE_CS_1,
-                    PIN_OUTPUT_STATE_CS_2,
-                    PIN_OUTPUT_STATE_CS_3,
-                    PIN_OUTPUT_STATE_DIO_0,
-                    PIN_OUTPUT_STATE_DIO_1,
-                    PIN_OUTPUT_STATE_DIO_2,
-                    PIN_OUTPUT_STATE_DIO_3, 
-                    PIN_OUTPUT_STATE_DIO_4,
-                    PIN_OUTPUT_STATE_DIO_5};
-
-
   SPIBaseController::SPIBaseController()
     : loop_count_(0)
   {
@@ -161,12 +147,12 @@ namespace ronex
     uint16_t bit_mask_CS = PIN_OUTPUT_STATE_CS_0 | PIN_OUTPUT_STATE_CS_1 | PIN_OUTPUT_STATE_CS_2 | PIN_OUTPUT_STATE_CS_3;
     uint16_t bit_mask_no_CS = ~bit_mask_CS;
     
-    uint16_t cs_input = command_queue_[spi_index].front()->packet.data_bytes[0];
+    //uint16_t cs_input = command_queue_[spi_index].front()->packet.data_bytes[0];
     uint16_t bit_mask_one_CS_bit;
-    if (cs_input >= CS_INPUTS)
+    //if (cs_input >= CS_INPUTS)
       bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << spi_index;
-    else
-      bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << cs_index_table[cs_input];
+    //else
+    //  bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << cs_index_table[cs_input];
  
     //setting the pre / post pin states (for all the spi outputs)
     //First we leave the existing values for the CS bits
@@ -193,7 +179,7 @@ namespace ronex
     spi_->command_->spi_out[spi_index].num_bytes = command_queue_[spi_index].front()->packet.num_bytes;
 
     // the 1st byte is the CS and the remaining 32 bytes consitute the command
-    for(size_t i = 1; i < SPI_TRANSACTION_MAX_SIZE + 1; ++i)
+    for(size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE + 1; ++i)
       spi_->command_->spi_out[spi_index].data_bytes[i] = command_queue_[spi_index].front()->packet.data_bytes[i];
   }
 }
