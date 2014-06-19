@@ -17,14 +17,14 @@
 # License along with this library.
 # ####################################################################
 
-import rospy
-from time import sleep
+from rospy import get_param, loginfo, Subscriber, Publisher, init_node, is_shutdown, sleep
 from sr_ronex_msgs.msg import PWM, GeneralIOState
 
-"""
-This class demonstrates how to find the General I/O module with the given ronex_id.
-"""
 class SrRonexFindGeneralIOModule(object):
+    """
+    This class demonstrates how to find the General I/O module with the given ronex_id.
+    """
+
     def __init__(self, ronex_id):
         self.ronex_id = ronex_id
 
@@ -37,11 +37,11 @@ class SrRonexFindGeneralIOModule(object):
         # Wait until there's one ronex.
         while True:
             try:
-                rospy.get_param("/ronex/devices/0/ronex_id")
+                get_param("/ronex/devices/0/ronex_id")
                 break
             except:
-                rospy.loginfo("Waiting for the ronex to be loaded properly.")
-                sleep(0.1)
+                loginfo("Waiting for the ronex to be loaded properly.")
+                sleep(0.05)
 
         """
         Retrieve all the ronex parameter ids from the parameter server.
@@ -49,31 +49,27 @@ class SrRonexFindGeneralIOModule(object):
         Note that the id starts from zero. And the size of the returned variable
         is equal to the number of General I/O modules.
         """
-        ronex_param_ids = rospy.get_param("/ronex/devices")
-        for key in ronex_param_ids:
-            if self.ronex_id == ronex_param_ids[key]["ronex_id"]:
-                path = ronex_param_ids[key]["path"]
-                return path
-analog = 0
-def generalIOState_cb(data):
-    global analog
-    analog = data.analogue[0]
+        for device in get_param("/ronex/devices").itervalues():
+            if self.ronex_id == device["ronex_id"]:
+                return device["path"]
+
+def general_io_state_cb(data, controller):
+    controller.analog = data.analogue[0]
 
 class SpeedController():
     def __init__(self):
         path = SrRonexFindGeneralIOModule('10').get_path()
         topic = path + "/state"
-        self.subscriber = rospy.Subscriber(topic, GeneralIOState, generalIOState_cb)
+        self.analog = 0.0
+        self.subscriber = Subscriber(topic, GeneralIOState, general_io_state_cb, self)
         topic = path + "/command/pwm/0"
-        self.publisher = rospy.Publisher(topic, PWM, latch=True)
+        self.publisher = Publisher(topic, PWM, latch=True)
 
     def execute(self):
-        global analog
-        while not rospy.is_shutdown():
-            self.publisher.publish(PWM(pwm_period=6400, pwm_on_time_1=0, pwm_on_time_0=analog))
+        while not is_shutdown():
+            self.publisher.publish(PWM(pwm_period=6400, pwm_on_time_1=0, pwm_on_time_0=self.analog))
             sleep(0.01)
 
-rospy.init_node('sr_speed_controller')
+init_node('sr_speed_controller')
 controller = SpeedController()
 controller.execute()
-
