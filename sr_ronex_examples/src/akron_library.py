@@ -54,12 +54,11 @@ class AnalogReader():
         self.valid_channels = tuple(self.channel_map.iterkeys())
 
         # limits of raw analog values
-        self.min_raw = 600.0
-        self.max_raw = 3300.0
+        self.min = 600.0
+        self.max = 3300.0
 
         # coefficient to normalize raw analog values [600, 3300] to range [-1.0, 1.0]
-        # ( 1.0 - (-1.0) ) / (3300.0 - 600.0)
-        self.raw_coefficient = 0.0006666666666666666
+        self.raw_coefficient = (1.0 - (-1.0)) / (self.max - self.min)
 
     def analog_by_channel(self, channel):
         """
@@ -75,7 +74,7 @@ class AnalogReader():
 
         # union of the high niblle of response[1] (4 bits) and response[2]
         raw_value = 0x100*(response[1] & 0x0F) + response[2]
-        return self.raw_coefficient*(min(max(raw_value, self.min_raw), self.max_raw) - self.min_raw) - 1.0
+        return self.raw_coefficient*(min(max(raw_value, self.min), self.max) - self.min) - 1.0
 
     def analogs_by_adc(self, adc):
         """
@@ -83,9 +82,9 @@ class AnalogReader():
         basically for each row of self.channels
         valid adc values are [1,6]
         """
-        if adc not in range(1,6):
-            print("adc {0} out of range {1}".format(adc, tuple(range(1,6))))
-        return [self.analog_by_channel(ch) for ch in self.channels[adc-1]]
+        if adc not in xrange(1, 6):
+            print("adc {0} out of range {1}".format(adc, tuple(xrange(1, 6))))
+        return [self.analog_by_channel(ch) for ch in self.channels[adc - 1]]
 
     def all_analogs(self):
         """
@@ -95,3 +94,31 @@ class AnalogReader():
 
 
 class SimpleHandMotions():
+    """
+    define simple predefined joint space trajectories for the hand
+    """
+    def __init__(self):
+        joints = ("lfj0", "lfj3", "lfj4", "lfj5",
+                  "rfj0", "rfj3", "rfj4",
+                  "mfj0", "mfj3", "mfj4",
+                  "ffj0", "ffj3", "ffj4",
+                  "thj1", "thj2", "thj3", "thj4", "thj5")
+
+        #     joint max degs  0 90  3 45  4 -20  5 20   finger
+        limits =             (1.57, 0.79, -0.30, 0.30,  # lf
+                              1.57, 0.79, -0.30,        # rf
+                              1.57, 0.79, -0.30,        # mf
+                              1.57, 0.79, -0.30,        # ff
+        #            thumb    1 45  2 20  3  5  4 70  5 30
+                              0.79, 0.30, 0.09, 1.22, 0.52)
+
+        self.joint_coeffs = {jn : (lim/1.57) for jn,lim in zip(joints, limits)}
+
+        self.pubs = {jn : Publisher("/sh_{}_position_controller/command".format(j), Float64, latch=True)
+                     for jn in joints}
+
+        self.stop_motion = True
+
+    def move_sine(self, joint_name):
+
+        while self.stop_motion:
