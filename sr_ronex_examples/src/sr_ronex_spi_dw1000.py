@@ -32,7 +32,7 @@ class DW1000SpiInterface(object):
         self.spi_srvs_ = []
 
         for spi_out_index in range(0, 4):
-            self.spi_srvs_.append(rospy.ServiceProxy("/ronex/spi/35/command/passthrough/"+str(spi_out_index), SPI))
+            self.spi_srvs_.append(rospy.ServiceProxy("/ronex/spi/1385468312/command/passthrough/"+str(spi_out_index), SPI))
 
     def read_register(self, spi_out_index, address, data_packet):
         """
