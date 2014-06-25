@@ -1,7 +1,9 @@
-from rospy import ServiceProxy
+from rospy import ServiceProxy, is_shutdown, init_node
 from sr_ronex_msgs.srv import SPI
+from std_msgs.msg import Float64
+from sr_hand.shadowhand_commander import Commander
 
-class AnalogReader():
+class AnalogReader(object):
     """
     retrieves values from analog to converters (ADCs)
     connnected to spi modules
@@ -80,7 +82,7 @@ class AnalogReader():
         """
         get list of current analog readings for all channels of ADC
         basically for each row of self.channels
-        valid adc values are [1,6]
+        valid adc values are [1, 6]
         """
         if adc not in xrange(1, 6):
             print("adc {0} out of range {1}".format(adc, tuple(xrange(1, 6))))
@@ -93,9 +95,9 @@ class AnalogReader():
         return [self.analog_by_channel(ch) for adc in self.channels for ch in adc]
 
 
-class SimpleHandMotions():
+class JointMotions(object):
     """
-    define simple predefined joint space trajectories for the hand
+    Helps programming some joint motions
     """
     def __init__(self):
         joints = ("lfj0", "lfj3", "lfj4", "lfj5",
@@ -112,13 +114,28 @@ class SimpleHandMotions():
         #            thumb    1 45  2 20  3  5  4 70  5 30
                               0.79, 0.30, 0.09, 1.22, 0.52)
 
-        self.joint_coeffs = {jn : (lim/1.57) for jn,lim in zip(joints, limits)}
+        self.joint_coeffs = {jn : (lim/1.57) for jn, lim in zip(joints, limits)}
 
-        self.pubs = {jn : Publisher("/sh_{}_position_controller/command".format(j), Float64, latch=True)
-                     for jn in joints}
+       # self.pubs = {jn : Publisher("/sh_{}_position_controller/command".format(j), Float64, latch=True)
+       #              for jn in joints}
 
-        self.stop_motion = True
+        self.motion_allowed = True
 
-    def move_sine(self, joint_name):
+        init_node("AkronJointMotions")
 
-        while self.stop_motion:
+        self.commander = Commander()
+
+
+    def sinewave_motion(self, joint_name):
+        """
+        Repeatedly move a joint following a sinewave function
+        """
+        while self.motion_allowed and not is_shutdown():
+            pass
+
+    def channel_joint_mapping(self, channel, joint):
+        """
+        Map readings of analog channel joint motion
+        """
+        while self.motion_allowed and not is_shutdown():
+            pass
