@@ -140,14 +140,8 @@ namespace ronex
     //Mask to avoid setting the CS for the other SPI ports
     uint16_t bit_mask_CS = PIN_OUTPUT_STATE_CS_0 | PIN_OUTPUT_STATE_CS_1 | PIN_OUTPUT_STATE_CS_2 | PIN_OUTPUT_STATE_CS_3;
     uint16_t bit_mask_no_CS = ~bit_mask_CS;
-    
-    //uint16_t cs_input = command_queue_[spi_index].front()->packet.data_bytes[0];
-    uint16_t bit_mask_one_CS_bit;
-    //if (cs_input >= CS_INPUTS)
-      bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << spi_index;
-    //else
-    //  bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << cs_index_table[cs_input];
- 
+    uint16_t bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << spi_index;
+
     //setting the pre / post pin states (for all the spi outputs)
     //First we leave the existing values for the CS bits
     spi_->command_->pin_output_states_pre &= bit_mask_CS;
@@ -165,15 +159,14 @@ namespace ronex
     //then we set the value for the CS bit corresponding to the current spi_index
     spi_->command_->pin_output_states_post &= (~bit_mask_one_CS_bit);
     spi_->command_->pin_output_states_post |= (cmd_pin_output_states_post_ & bit_mask_one_CS_bit);
-    
+
     //copying the packet data
     spi_->command_->spi_out[spi_index].clock_divider = command_queue_[spi_index].front()->packet.clock_divider;
     spi_->command_->spi_out[spi_index].SPI_config = command_queue_[spi_index].front()->packet.SPI_config;
     spi_->command_->spi_out[spi_index].inter_byte_gap = command_queue_[spi_index].front()->packet.inter_byte_gap;
     spi_->command_->spi_out[spi_index].num_bytes = command_queue_[spi_index].front()->packet.num_bytes;
 
-    // the 1st byte is the CS and the remaining 32 bytes consitute the command
-    for(size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE + 1; ++i)
+    for(size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i)
       spi_->command_->spi_out[spi_index].data_bytes[i] = command_queue_[spi_index].front()->packet.data_bytes[i];
   }
 }

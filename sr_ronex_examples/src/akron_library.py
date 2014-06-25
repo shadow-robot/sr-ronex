@@ -1,12 +1,12 @@
 from rospy import ServiceProxy, is_shutdown, init_node
 from sr_ronex_msgs.srv import SPI
-from std_msgs.msg import Float64
+#from std_msgs.msg import Float64
 from sr_hand.shadowhand_commander import Commander
 
 class AnalogReader(object):
     """
-    retrieves values from analog to converters (ADCs)
-    connnected to spi modules
+    retrieves values from analog to digital converters (ADCs)
+    connnected to 6 spi modules
     """
 
     def __init__(self):
@@ -70,12 +70,13 @@ class AnalogReader(object):
         if channel not in self.valid_channels:
             print("channel {} is out of range".format(channel))
             print("valid channels = {}".format(self.valid_channels))
+            return
 
         request = self.analog_requests[self.request_map[channel]]
         response = self.proxies[self.channel_map[channel]](request).data
 
         # union of the high niblle of response[1] (4 bits) and response[2]
-        raw_value = 0x100*(response[1] & 0x0F) + response[2]
+        raw_value = 0x100*(ord(response[1]) & 0x0F) + ord(response[2])
         return self.raw_coefficient*(min(max(raw_value, self.min), self.max) - self.min) - 1.0
 
     def analogs_by_adc(self, adc):
@@ -84,8 +85,9 @@ class AnalogReader(object):
         basically for each row of self.channels
         valid adc values are [1, 6]
         """
-        if adc not in xrange(1, 6):
-            print("adc {0} out of range {1}".format(adc, tuple(xrange(1, 6))))
+        if adc not in xrange(1, 7):
+            print("adc {0} out of range {1}".format(adc, tuple(xrange(1, 7))))
+            return
         return [self.analog_by_channel(ch) for ch in self.channels[adc - 1]]
 
     def all_analogs(self):
@@ -97,7 +99,7 @@ class AnalogReader(object):
 
 class JointMotions(object):
     """
-    Helps programming some joint motions
+    Helps to execute some joint motions
     """
     def __init__(self):
         joints = ("lfj0", "lfj3", "lfj4", "lfj5",
@@ -115,9 +117,6 @@ class JointMotions(object):
                               0.79, 0.30, 0.09, 1.22, 0.52)
 
         self.joint_coeffs = {jn : (lim/1.57) for jn, lim in zip(joints, limits)}
-
-       # self.pubs = {jn : Publisher("/sh_{}_position_controller/command".format(j), Float64, latch=True)
-       #              for jn in joints}
 
         self.motion_allowed = True
 
