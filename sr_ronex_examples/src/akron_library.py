@@ -1,7 +1,5 @@
-from rospy import ServiceProxy, is_shutdown, init_node
+from rospy import ServiceProxy
 from sr_ronex_msgs.srv import SPI
-#from std_msgs.msg import Float64
-from sr_hand.shadowhand_commander import Commander
 
 class AnalogReader(object):
     """
@@ -17,8 +15,7 @@ class AnalogReader(object):
         devices = ("/ronex/spi/" + serials[0] + "/command/passthrough/",
                    "/ronex/spi/" + serials[1] + "/command/passthrough/")
 
-        # list of services for each SPI board
-        # ordered by ADC index
+        # list of services for each SPI board ordered by ADC index
         self.proxies = (ServiceProxy(devices[0] + '0', SPI),
                         ServiceProxy(devices[0] + '1', SPI),
                         ServiceProxy(devices[1] + '0', SPI),
@@ -52,89 +49,132 @@ class AnalogReader(object):
                          (4, 12, 20, 28),
                          (5, 13, 21, 29))
 
-        # all valid channels
-        self.valid_channels = tuple(self.channel_map.iterkeys())
-
         # limits of raw analog values
-        self.min = 600.0
-        self.max = 3300.0
+        self.raw_min =  400.0
+        self.raw_max = 3500.0
 
-        # coefficient to normalize raw analog values [600, 3300] to range [-1.0, 1.0]
-        self.raw_coefficient = (1.0 - (-1.0)) / (self.max - self.min)
+        # desired range of analog readings
+        self.min = -1.0
+        self.max =  1.0
 
-    def analog_by_channel(self, channel):
+        # coefficient to normalize raw analog values to desired range
+        self.raw_coefficient = (self.max - self.min) / (self.raw_max - self.raw_min)
+
+    def analog_channel(self, channel):
         """
         get the current analog reading of given channel
-        self.channels contains valid values for channel
+        self.channels contains all valid values for channel
         """
-        if channel not in self.valid_channels:
+        if not self.channel_map.has_key(channel):
             print("channel {} is out of range".format(channel))
-            print("valid channels = {}".format(self.valid_channels))
             return
 
         request = self.analog_requests[self.request_map[channel]]
         response = self.proxies[self.channel_map[channel]](request).data
 
-        # union of the high niblle of response[1] (4 bits) and response[2]
-        raw_value = 0x100*(ord(response[1]) & 0x0F) + ord(response[2])
-        return self.raw_coefficient*(min(max(raw_value, self.min), self.max) - self.min) - 1.0
+        # union of the high niblle of response[1] and all data in response[2]
+        bin_value = '{0:08b}{1:08b}'.format(int(response[1]), int(response[2]))
+
+        raw_value = int(bin_value[4:], 2)
+        raw_value = min(max(raw_value, self.raw_min), self.raw_max)
+        return self.raw_coefficient*(raw_value - self.raw_min) + self.min
 
     def analogs_by_adc(self, adc):
         """
         get list of current analog readings for all channels of ADC
-        basically for each row of self.channels
-        valid adc values are [1, 6]
+        basically for each row of self.channels. Valid adc values are [1, 6]
         """
         if adc not in xrange(1, 7):
-            print("adc {0} out of range {1}".format(adc, tuple(xrange(1, 7))))
+            print("adc {} out of range".format(adc))
             return
-        return [self.analog_by_channel(ch) for ch in self.channels[adc - 1]]
+        return [self.analog_channel(ch) for ch in self.channels[adc - 1]]
 
     def all_analogs(self):
         """
         get list of all available analog readings
         """
-        return [self.analog_by_channel(ch) for adc in self.channels for ch in adc]
+        return [self.analog_channel(ch) for adc in self.channels for ch in adc]
 
+from rospy import is_shutdown, init_node, Rate, Time
+from sr_hand.shadowhand_commander import Commander
+from math import sin, pi
 
 class JointMotions(object):
     """
     Helps to execute some joint motions
     """
     def __init__(self):
-        joints = ("lfj0", "lfj3", "lfj4", "lfj5",
-                  "rfj0", "rfj3", "rfj4",
-                  "mfj0", "mfj3", "mfj4",
-                  "ffj0", "ffj3", "ffj4",
-                  "thj1", "thj2", "thj3", "thj4", "thj5")
-
-        #     joint max degs  0 90  3 45  4 -20  5 20   finger
-        limits =             (1.57, 0.79, -0.30, 0.30,  # lf
-                              1.57, 0.79, -0.30,        # rf
-                              1.57, 0.79, -0.30,        # mf
-                              1.57, 0.79, -0.30,        # ff
-        #            thumb    1 45  2 20  3  5  4 70  5 30
-                              0.79, 0.30, 0.09, 1.22, 0.52)
-
-        self.joint_coeffs = {jn : (lim/1.57) for jn, lim in zip(joints, limits)}
-
         self.motion_allowed = True
 
         init_node("AkronJointMotions")
-
         self.commander = Commander()
 
+        # scale coefficients from desired analog range to each joint's limits in degrees
+        self.jnt_coeffs = {joint.name : (joint.max - joint.min) / (self.max - self.min)
+                           for joint in self.commander.hand.allJoints}
 
-    def sinewave_motion(self, joint_name):
+        # offset to add after scaling analogs to joint range to start from joint's low limit
+        self.jnt_offset = {joint.name : joint.min / self.min
+                           for joint in self.commander.hand.allJoints}
+
+        # starting position for the hand
+        self.start_pos = {"THJ1": 0, "THJ2": 0, "THJ3": 0, "THJ4": 0, "THJ5": 0,
+                          "FFJ0": 0, "FFJ3": 0, "FFJ4": 0,
+                          "MFJ0": 0, "MFJ3": 0, "MFJ4": 0,
+                          "RFJ0": 0, "RFJ3": 0, "RFJ4": 0,
+                          "LFJ0": 0, "LFJ3": 0, "LFJ4": 0, "LFJ5": 0,
+                          "WRJ1": 0, "WRJ2": 0}
+
+    def sinewave_motion(self, joint_name, frequency=0.5, motion_ratio=1.0):
         """
         Repeatedly move a joint following a sinewave function
+        @param joint_name - name of the joint to move
+        @param frequency - cycles per second
+        @param motion_ratio - [0, 1] ratio of joint's full range to perform
         """
-        while self.motion_allowed and not is_shutdown():
-            pass
 
-    def channel_joint_mapping(self, channel, joint):
-        """
-        Map readings of analog channel joint motion
-        """
+        if not self.jnt_coeffs.has_key(joint_name):
+            print("invalid joint_name : " + joint_name)
+            return
+
+        if motion_ratio > 1.0 or motion_ratio < 0.0:
+            print("motion_ratio out of range")
+            return
+
+        command = dict(self.start_pos)
+
+        fcoeff = (2.0*pi)/(1.0/frequency)
+        amplit = motion_ratio*self.jnt_coeffs[joint_name]
+        offset = amplit + self.jnt_offset[joint_name]
+
+        rate = Rate(frequency)
         while self.motion_allowed and not is_shutdown():
-            pass
+            command[joint_name] = amplit*sin(fcoeff*Time.now()) + offset
+            self.commander.move_hand(command)
+            rate.sleep()
+
+    def channel_joint_mapping(self, channel_to_joint, reader):
+        """
+        move joints according to map from channels to joints
+        """
+        for joint_name in channel_to_joint.iter_values():
+            if not self.jnt_coeffs.has_key(joint_name):
+                print("invalid joint_name : " + joint_name)
+                return
+
+        for channel in channel_to_joint.iter_keys():
+            if not self.channel_map.has_key(channel):
+                print("channel {} is out of range".format(channel))
+                return
+
+        if reader is not AnalogReader:
+            print("an instance of AnalogReader class must be passed as argument")
+
+        command = dict(self.start_pos)
+
+        rate = Rate(100)
+        while self.motion_allowed and not is_shutdown():
+            for c, j in channel_to_joint:
+                command[j] = self.jnt_coeffs[j]*reader.analog_channel(c) + self.jnt_offset[j]
+            self.commander.move_hand(command)
+            rate.sleep()
