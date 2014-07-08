@@ -88,27 +88,27 @@ namespace ronex
    */
   void SPIBaseController::update(const ros::Time&, const ros::Duration&)
   {
-    for (size_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
+    for (uint16_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
     {
       //Check if we need to update a status
       if( status_queue_[spi_index].size() > 0)
       {
-	if( status_queue_[spi_index].front().second == NULL )
+        if( status_queue_[spi_index].front().second == NULL )
         {
-	  if(new_command)
-	  {
-	    new_command = false;
-	    spi_->nullify_command(spi_index);
-	    continue;
-	  }
+          if(new_command)
+          {
+            new_command = false;
+            spi_->nullify_command(spi_index);
+            continue;
+          }
 
-	  //the response has not been received. If the command type is NORMAL
-	  // then the response can be updated (it's INVALID until the SPI responds)
-	  if( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL );
-	  {
-	    status_queue_[spi_index].front().second = new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
-	  }
-	}
+          //the response has not been received. If the command type is NORMAL
+          // then the response can be updated (it's INVALID until the SPI responds)
+          if( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL );
+          {
+            status_queue_[spi_index].front().second = new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
+          }
+        }
       }
       //if no available command then send the NULL command
       if( command_queue_[spi_index].empty() )
@@ -125,7 +125,7 @@ namespace ronex
         //now we copy the command to the hardware interface
         copy_splitted_to_cmd_(spi_index);
 
-	new_command = true;
+        new_command = true;
 
         //the command will be sent at the end of the iteration,
         // removing the command from the queue but not freeing the
@@ -135,13 +135,13 @@ namespace ronex
     }
   }
 
-  void SPIBaseController::copy_splitted_to_cmd_(size_t spi_index)
+  void SPIBaseController::copy_splitted_to_cmd_(uint16_t spi_index)
   {
     //Mask to avoid setting the CS for the other SPI ports
     uint16_t bit_mask_CS = PIN_OUTPUT_STATE_CS_0 | PIN_OUTPUT_STATE_CS_1 | PIN_OUTPUT_STATE_CS_2 | PIN_OUTPUT_STATE_CS_3;
     uint16_t bit_mask_no_CS = ~bit_mask_CS;
     uint16_t bit_mask_one_CS_bit = PIN_OUTPUT_STATE_CS_0 << spi_index;
- 
+
     //setting the pre / post pin states (for all the spi outputs)
     //First we leave the existing values for the CS bits
     spi_->command_->pin_output_states_pre &= bit_mask_CS;
@@ -159,7 +159,7 @@ namespace ronex
     //then we set the value for the CS bit corresponding to the current spi_index
     spi_->command_->pin_output_states_post &= (~bit_mask_one_CS_bit);
     spi_->command_->pin_output_states_post |= (cmd_pin_output_states_post_ & bit_mask_one_CS_bit);
-    
+
     //copying the packet data
     spi_->command_->spi_out[spi_index].clock_divider = command_queue_[spi_index].front()->packet.clock_divider;
     spi_->command_->spi_out[spi_index].SPI_config = command_queue_[spi_index].front()->packet.SPI_config;

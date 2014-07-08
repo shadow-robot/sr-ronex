@@ -2,7 +2,7 @@
 
 # ####################################################################
 # Copyright (c) 2013, Shadow Robot Company, All rights reserved.
-# 
+#
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
@@ -57,7 +57,7 @@ class SrRonexFindGeneralIOModule(object):
 
     def __init__(self, ronex_id):
         self.ronex_id = ronex_id
-        
+
     """
     Get the path of the General I/O module with the given ronex_id.
     Note that None is returned if the module is not found.
@@ -91,17 +91,17 @@ class SrRonexFindGeneralIOModule(object):
 
 """
 Assume that your RoNeX consists of a Bridge (IN) module, and one or multiple General I/O module(s).
-This example demonstrates how to flash a LED light with pulse-width modulation (PWM). 
+This example demonstrates how to flash a LED light with pulse-width modulation (PWM).
 """
 if __name__ == "__main__":
     rospy.init_node('sr_ronex_flash_LED_with_PWM')
-    
+
     # Note that you may have to set the value of ronex_id,
     # depending on which General I/O board the LED is connected to.
     ronex_id = raw_input( "Please enter the ronex id: " )
     findModule = SrRonexFindGeneralIOModule( str(ronex_id) )
     path = findModule.get_path()
-     
+
     if path != None:
         # Always use the first digital I/O channel to flash the LED light.
         # For example "/ronex/general_io/1" + "/command/pwm/0".

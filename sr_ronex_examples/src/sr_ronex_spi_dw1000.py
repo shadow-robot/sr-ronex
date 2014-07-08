@@ -60,7 +60,7 @@ class DW1000SpiInterface(object):
 
         #removing the first item from the received packet of data
         return_data_packet = resp.data[1:]
-        
+
         print "SPI[",spi_out_index,"]: reading ",self.hexify_list(return_data_packet), " from address: ",address
 
         return return_data_packet
@@ -87,7 +87,7 @@ class DW1000SpiInterface(object):
         except rospy.ServiceException, e:
             rospy.logerr("Service call failed: %s"%e)
             return False
-        
+
         print " ... OK data written"
         return True
 
