@@ -72,8 +72,7 @@ namespace ronex
     return true;
   }
 
-  void RonexTransmission::propagatePosition(ros_ethercat_model::Actuator*,
-                                            std::vector<ros_ethercat_model::JointState*>& js)
+  void RonexTransmission::propagatePosition()
   {
     for(ronex_iter_ = ronex_mappings_.begin(); ronex_iter_ != ronex_mappings_.end(); ++ronex_iter_)
     {
@@ -81,8 +80,7 @@ namespace ronex
     }
   }
 
-  void RonexTransmission::propagateEffort(std::vector<ros_ethercat_model::JointState*>& js,
-                                          ros_ethercat_model::Actuator*)
+  void RonexTransmission::propagateEffort()
   {
     for(ronex_iter_ = ronex_mappings_.begin(); ronex_iter_ != ronex_mappings_.end(); ++ronex_iter_)
     {

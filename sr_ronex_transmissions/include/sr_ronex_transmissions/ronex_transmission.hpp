@@ -36,10 +36,8 @@ namespace ronex
   public:
     bool initXml(TiXmlElement *elt, ros_ethercat_model::RobotState *robot);
 
-    void propagatePosition(ros_ethercat_model::Actuator *as,
-                           std::vector<ros_ethercat_model::JointState*> &js);
-    void propagateEffort(std::vector<ros_ethercat_model::JointState*> &js,
-                         ros_ethercat_model::Actuator *as);
+    void propagatePosition();
+    void propagateEffort();
 
   protected:
     boost::ptr_vector<RonexMapping> ronex_mappings_;
