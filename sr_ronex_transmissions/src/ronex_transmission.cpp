@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
@@ -65,14 +65,14 @@ namespace ronex
           ronex_mappings_.push_back( new mapping::general_io::CommandToPWM(mapping_el, robot) );
         }
         else
-          ROS_WARN_STREAM("Property not recognised: " << property);
+          ROS_WARN_STREAM("Property not recognized: " << property);
       }
     }
 
     return true;
   }
 
-  void RonexTransmission::propagatePosition(std::vector<ros_ethercat_model::Actuator*>& as,
+  void RonexTransmission::propagatePosition(ros_ethercat_model::Actuator*,
                                             std::vector<ros_ethercat_model::JointState*>& js)
   {
     for(ronex_iter_ = ronex_mappings_.begin(); ronex_iter_ != ronex_mappings_.end(); ++ronex_iter_)
@@ -82,7 +82,7 @@ namespace ronex
   }
 
   void RonexTransmission::propagateEffort(std::vector<ros_ethercat_model::JointState*>& js,
-                                          std::vector<ros_ethercat_model::Actuator*>& as)
+                                          ros_ethercat_model::Actuator*)
   {
     for(ronex_iter_ = ronex_mappings_.begin(); ronex_iter_ != ronex_mappings_.end(); ++ronex_iter_)
     {
