@@ -36,20 +36,14 @@ namespace ronex
       {
       }
 
-      AnalogueToEffort::~AnalogueToEffort()
-      {
-      }
-
-      void AnalogueToEffort::propagateFromRonex(std::vector<ros_ethercat_model::JointState*>& js)
+      void AnalogueToEffort::propagateFromRonex(ros_ethercat_model::JointState *js)
       {
         if( !is_initialized_ )
           return;
 
-        assert(js.size() == 1);
-
         if( check_pin_in_bound_() )
         {
-          js[0]->measured_effort_ = compute_scaled_data_();
+          js->measured_effort_ = compute_scaled_data_();
         }
       }
     }

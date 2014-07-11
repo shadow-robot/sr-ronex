@@ -32,7 +32,7 @@ namespace ronex
     namespace general_io
     {
       AnalogueToPosition::AnalogueToPosition(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot)
-        : RonexMapping(), pin_out_of_bound_(true)
+        : pin_out_of_bound_(true)
       {
         const char *ronex_name = mapping_el ? mapping_el->Attribute("ronex") : NULL;
         if (!ronex_name)
@@ -123,20 +123,14 @@ namespace ronex
         return true;
       }
 
-      AnalogueToPosition::~AnalogueToPosition()
-      {
-      }
-
-      void AnalogueToPosition::propagateFromRonex(std::vector<ros_ethercat_model::JointState*>& js)
+      void AnalogueToPosition::propagateFromRonex(ros_ethercat_model::JointState *js)
       {
         if( !is_initialized_ )
           return;
 
-        assert(js.size() == 1);
-
         if( check_pin_in_bound_() )
         {
-          js[0]->position_ = compute_scaled_data_();
+          js->position_ = compute_scaled_data_();
         }
       }
 

@@ -121,10 +121,6 @@ namespace ronex
         return true;
       }
 
-      CommandToPWM::~CommandToPWM()
-      {
-      }
-
       bool CommandToPWM::check_pins_in_bound_()
       {
         //we ignore the first iteration as the array is not yet initialised.
@@ -165,22 +161,20 @@ namespace ronex
         return true;
       }
 
-      void CommandToPWM::propagateToRonex(std::vector<ros_ethercat_model::JointState*>& js)
+      void CommandToPWM::propagateToRonex(ros_ethercat_model::JointState *js)
       {
         if( !is_initialized_ )
           return;
 
-        assert(js.size() == 1);
-
         if( check_pins_in_bound_() )
         {
           if( pwm_pin_index_ == 0 )
-            general_io_->command_.pwm_[pwm_module_].on_time_0 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * js[0]->commanded_effort_ ) / 100);
+            general_io_->command_.pwm_[pwm_module_].on_time_0 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * js->commanded_effort_ ) / 100);
           else
-            general_io_->command_.pwm_[pwm_module_].on_time_1 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * js[0]->commanded_effort_ ) / 100);
+            general_io_->command_.pwm_[pwm_module_].on_time_1 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * js->commanded_effort_ ) / 100);
 
           // This is assigned by convention: negative effort sets the direction pin to 1.
-          general_io_->command_.digital_[digital_pin_index_] = (js[0]->commanded_effort_ < 0.0);
+          general_io_->command_.digital_[digital_pin_index_] = (js->commanded_effort_ < 0.0);
        }
       }
     }

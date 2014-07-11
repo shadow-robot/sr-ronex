@@ -38,16 +38,14 @@ namespace ronex
         : public AnalogueToPosition
       {
       public:
-        AnalogueToEffort() {};
         AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
-        virtual ~AnalogueToEffort();
 
         /**
          * Propagating the specified analogue pin data to the given joint measured_effort.
          *
          * @param js joint_state of the joint specified in the transmission
          */
-        virtual void propagateFromRonex(std::vector<ros_ethercat_model::JointState*>& js);
+        virtual void propagateFromRonex(ros_ethercat_model::JointState *js);
       };
     }
   }
