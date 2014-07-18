@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_test</name>
-  <version>0.9.14</version>
+  <version>0.9.15</version>
   <description>contains software tests that require RoNeX hardware.</description>
   <maintainer email="software@shadowrobot.com">Manos Nikolaidis</maintainer>
 

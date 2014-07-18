@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_controllers</name>
-  <version>0.9.14</version>
+  <version>0.9.15</version>
   <description>Contains different useful controllers to use with the RoNeX.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 

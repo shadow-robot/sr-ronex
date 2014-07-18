@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex</name>
-  <version>0.9.14</version>
+  <version>0.9.15</version>
   <description>This stack contains the different packages related to the RoNeX (Robot Nervous System).</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 

@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_msgs</name>
-  <version>0.9.14</version>
+  <version>0.9.15</version>
   <description>sr_ronex_msgs contains the messages for RoNeX.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 

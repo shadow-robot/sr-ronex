@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>sr_ronex_utilities</name>
-  <version>0.9.14</version>
+  <version>0.9.15</version>
   <description>Package containing a header library with useful inline functions for working with the RoNeX.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 

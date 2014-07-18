@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package>
   <name>sr_ronex_examples</name>
-  <version>0.9.14</version>
+  <version>0.9.15</version>
   <description>Package containing examples for the RoNeX boards.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
