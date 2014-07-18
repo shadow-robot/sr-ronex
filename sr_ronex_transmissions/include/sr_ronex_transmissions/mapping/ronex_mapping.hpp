@@ -36,25 +36,22 @@ namespace ronex
     RonexMapping()
       : first_iteration_(true), is_initialized_(false)
     {};
-    RonexMapping(TiXmlElement* mapping_el) {};
-    RonexMapping(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot) {};
-    virtual ~RonexMapping() {};
 
     /**
      * Propagating the data from the RoNeXes to the joint states. This function is
      *  implemented in the different mappings.
      *
-     * @param js Current joint states.
+     * @param js joint_state of the joint specified in the transmission
      */
-    virtual void propagateFromRonex(std::vector<ros_ethercat_model::JointState*>& js) = 0;
+    virtual void propagateFromRonex(ros_ethercat_model::JointState *js) = 0;
 
     /**
      * Propagating the commands from joint states to the RoNeXes. This function is
      *  implemented in the different mappings.
      *
-     * @param js Current joint states.
+     * @param js joint_state of the joint specified in the transmission
      */
-    virtual void propagateToRonex(std::vector<ros_ethercat_model::JointState*>& js) = 0;
+    virtual void propagateToRonex(ros_ethercat_model::JointState *js) = 0;
 
   protected:
     ros::NodeHandle nh_;
@@ -62,11 +59,11 @@ namespace ronex
 
     /// this is false until the RoNeX driver has initialised the RoNeX we're waiting for
     bool is_initialized_;
-    /// using a timer to initialise the transmission once we find the RoNeX we're looking for.
+    /// using a timer to initialize the transmission once we find the RoNeX we're looking for.
     ros::Timer init_timer_;
     /**
-     * Timer callback for the transmission initialisation. Stops the init_timer_ when the
-     *  initialisation is successful.
+     * Timer callback for the transmission initialization. Stops the init_timer_ when the
+     *  initialization is successful.
      */
     virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name) = 0;
   };

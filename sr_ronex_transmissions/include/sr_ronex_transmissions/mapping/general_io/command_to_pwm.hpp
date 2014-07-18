@@ -37,24 +37,19 @@ namespace ronex
         : public RonexMapping
       {
       public:
-        CommandToPWM()
-          : RonexMapping()
-        {};
-
         CommandToPWM(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
-        virtual ~CommandToPWM();
 
         /**
          * This function is not doing anything as we're not propagating a status in this mapping.
          */
-        virtual void propagateFromRonex(std::vector<ros_ethercat_model::JointState*>& js) {};
+        virtual void propagateFromRonex(ros_ethercat_model::JointState *js) {};
 
         /**
          * Propagating the specified joint command to the given PWM module.
          *
          * @param js joint_state of the joint specified in the transmission
          */
-        virtual void propagateToRonex(std::vector<ros_ethercat_model::JointState*>& js);
+        virtual void propagateToRonex(ros_ethercat_model::JointState *js);
 
       protected:
         ///Pointer to the GeneralIO module we specified in the transmission.

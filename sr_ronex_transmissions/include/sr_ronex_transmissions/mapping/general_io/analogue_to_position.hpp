@@ -38,22 +38,19 @@ namespace ronex
         : public RonexMapping
       {
       public:
-        AnalogueToPosition()
-          : RonexMapping() {};
         AnalogueToPosition(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
-        virtual ~AnalogueToPosition();
 
         /**
          * Propagating the specified analogue pin data to the given joint position.
          *
          * @param js joint_state of the joint specified in the transmission
          */
-        virtual void propagateFromRonex(std::vector<ros_ethercat_model::JointState*>& js);
+        virtual void propagateFromRonex(ros_ethercat_model::JointState *js);
 
         /**
          * This function is not doing anything as we're not propagating a command in this mapping.
          */
-        virtual void propagateToRonex(std::vector<ros_ethercat_model::JointState*>& js) {};
+        virtual void propagateToRonex(ros_ethercat_model::JointState *js) {};
 
       protected:
         ///Pointer to the GeneralIO module we specified in the transmission.

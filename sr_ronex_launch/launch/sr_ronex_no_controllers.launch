@@ -6,7 +6,11 @@
   <include file="$(find sr_ronex_launch)/loaders/load_ronex_model.launch" />
 
   <!-- etherCAT -->
-  <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen" launch-prefix="nice -n -20"/>
+  <group if="$(optenv ROS_ETHERCAT_LOOP_DEBUG 0)">
+      <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen" launch-prefix="gdb -ex run -args"/>
+  </group>
+  <group unless="$(optenv ROS_ETHERCAT_LOOP_DEBUG 0)">
+      <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen" launch-prefix="nice -n -20"/>
+  </group>
 
 </launch>
-
