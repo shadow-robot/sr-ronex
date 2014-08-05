@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_hardware_interface</name>
-  <version>0.9.14</version>
+  <version>0.9.15</version>
   <description>This package contains the definition of the CustomHW to be
     added to the ros_ethercat_model CustomHWMap for the
     RoNeX.</description>

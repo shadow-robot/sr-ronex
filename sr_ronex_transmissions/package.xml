@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_transmissions</name>
-  <version>0.9.14</version>
+  <version>0.9.15</version>
   <description>Contains the transmissions that can be used with the RoNeX driver. Using those transmissions makes it possible for the user to remap from the RoNeX to a joint based robot.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 

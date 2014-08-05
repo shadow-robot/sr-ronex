@@ -1,6 +1,6 @@
 <package>
   <name>sr_ronex_launch</name>
-  <version>0.9.14</version>
+  <version>0.9.15</version>
   <description>Contains the main launch files for the RoNeX system.</description>
   <maintainer email="software@shadowrobot.com">Shadow Robot's software team</maintainer>
 
