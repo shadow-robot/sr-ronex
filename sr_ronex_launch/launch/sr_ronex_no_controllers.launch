@@ -1,15 +1,18 @@
 <launch>
   <!-- Allows to specify the ethernet interface to be used. It defaults to the value of the env var ETHERCAT_PORT -->
-  <arg name="ethercat_port" default="$(optenv ETHERCAT_PORT eth0)" />
+  <arg name="ethercat_port" default="$(optenv ETHERCAT_PORT eth0)"/>
+
+  <!-- Set to true for debugging -->
+  <arg name="debug" default="false"/>
 
   <!-- Loads the robot description -->
-  <include file="$(find sr_ronex_launch)/loaders/load_ronex_model.launch" />
+  <include file="$(find sr_ronex_launch)/loaders/load_ronex_model.launch"/>
 
   <!-- etherCAT -->
-  <group if="$(optenv ROS_ETHERCAT_LOOP_DEBUG 0)">
+  <group if="$(arg debug)">
       <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen" launch-prefix="gdb -ex run -args"/>
   </group>
-  <group unless="$(optenv ROS_ETHERCAT_LOOP_DEBUG 0)">
+  <group unless="$(arg debug)">
       <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen" launch-prefix="nice -n -20"/>
   </group>
 
