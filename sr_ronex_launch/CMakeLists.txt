@@ -5,7 +5,9 @@ cmake_minimum_required(VERSION 2.8.3)
 project(sr_ronex_launch)
 
 # Load catkin and all dependencies required for this package
-find_package(catkin REQUIRED COMPONENTS)
+find_package(catkin REQUIRED COMPONENTS
+  ros_grant
+)
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(
@@ -17,4 +19,3 @@ install(DIRECTORY launch/
 
 install(DIRECTORY loaders/
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/loaders)
-

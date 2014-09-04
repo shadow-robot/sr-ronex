@@ -13,7 +13,7 @@
       <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen" launch-prefix="gdb -ex run -args"/>
   </group>
   <group unless="$(arg debug)">
-      <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen" launch-prefix="nice -n -20"/>
+      <node name="ronex" pkg="ros_ethercat_loop" type="ros_ethercat_loop" args="-i $(arg ethercat_port) -r /robot_description" output="screen" launch-prefix="ros_grant"/>
   </group>
 
 </launch>
