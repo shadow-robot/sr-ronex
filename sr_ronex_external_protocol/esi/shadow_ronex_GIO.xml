@@ -1,0 +1,856 @@
+<?xml version="1.0"?>
+<EtherCATInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="EtherCATInfo.xsd" Version="1.2">
+	<Vendor>
+		<Id>#x00000530</Id>
+		<!-- Vendor ID assigned by the EtherCAT Technology Group-->
+		<Name LcId="2057">Shadow Robot Company Ltd.</Name>
+		<ImageData16x14>424DE6000000000000007600000028000000100000000E000000010004000000000070000000C40E0000C40E000000000000000000000000000000008000008000000080800080000000800080008080000080808000C0C0C0000000FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00F877FF7777777FFF7007FF87777717FFFFFFFFFFFFFF70FFFFFFFFF5000007FFFFFFFF8088888FFFFFFFFF80888888FFFFFFF8F70000008FFFF85FFFFFFFFFFFFF80FFF1FF8FF78FFF07FF78F77FF77FF75FFF0FF1FFF75FFFFFF55F71FFF57FFFFF807F07FFFFFFFFFFF7FF7FFFFFFF</ImageData16x14>
+		<!-- Shadow website favicon-->
+	</Vendor>
+	<Descriptions>
+		<Groups>
+			<Group>
+				<Type>GIO</Type>
+				<Name LcId="2057">General IO Module</Name>
+				<ImageData16x14>424DD6020000000000003600000028000000100000000E0000000100180000000000A002000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFFFFFFFFFFFFFFFFFFF4CB1221DE6B5241CEDB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EFB0E4EF4CB1224CB1224CB1224CB122C3C3C34CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB122C3C3C34CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1220000000000000000000000004CB1224CB1224CB1224CB1224CB1228ED8E84CB1224CB1220000000000000000004CB1220000000000000000000000004CB1224CB1228ED8E84CB1224CB1228ED8E84CB1224CB1220000000000000000004CB1220000000000000000000000004CB1224CB1228ED8E84CB1224CB1228ED8E84CB1224CB1220000000000000000004CB1220000000000000000000000004CB1224CB1228ED8E84CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB122017E074CB1224CB1224CB122C3C3C34CB1224CB1224CB1224CB1224CB1224CB1224CB122C3C3C34CB1224CB122017E07FFFFFF017E074CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB1224CB122017E07FFFFFFFFFFFFFFFFFF017E07017E07017E07017E07017E07017E07017E07017E07017E07017E07017E07017E07FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF</ImageData16x14>
+				<!-- RoNeX Node-->
+			</Group>
+		</Groups>
+		<Devices>
+			<Device Physics="KK">
+				<Type ProductCode="#x2000001" RevisionNo="#x02">General IO Module</Type>
+				<Name LcId="2057">
+					<![CDATA[RoNeX General IO Module]]>
+				</Name>
+				<URL LcId="2057">
+					<![CDATA[http://www.shadowrobot.com/products/ronex/]]>
+				</URL>
+				<Info>
+					<Electrical>
+						<EBusCurrent>90</EBusCurrent>
+					</Electrical>
+				</Info>
+				<GroupType>GIO</GroupType>
+				<Fmmu>Outputs</Fmmu>
+				<Fmmu>Inputs</Fmmu>
+				<Sm DefaultSize="44" StartAddress="#x1000" ControlByte="#x6" Enable="1" OpOnly="1">MBoxOut</Sm>
+				<Sm DefaultSize="30" StartAddress="#x10A8" ControlByte="#x2" Enable="1" OpOnly="1">MBoxIn</Sm>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1600</Index>
+					<Name LcId="2057">Command Type</Name>
+					<Entry>
+						<Index>#x7000</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<Comment>Command to the module. The only value allowed is 0x0001</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1601</Index>
+					<Name LcId="2057">PWM Module 0</Name>
+					<Entry>
+						<Index>#x7010</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM period</Name>
+						<Comment>PWM period for the 2 outputs associated to this PWM module. Units are ticks, so the actual period depends on the clock divider</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7010</Index>
+						<SubIndex>17</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_0</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7010</Index>
+						<SubIndex>33</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_1</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1602</Index>
+					<Name LcId="2057">PWM Module 1</Name>
+					<Entry>
+						<Index>#x7020</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM period</Name>
+						<Comment>PWM period for the 2 outputs associated to this PWM module. Units are ticks, so the actual period depends on the clock divider</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7020</Index>
+						<SubIndex>17</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_0</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7020</Index>
+						<SubIndex>33</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_1</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1603</Index>
+					<Name LcId="2057">PWM Module 2</Name>
+					<Entry>
+						<Index>#x7030</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM period</Name>
+						<Comment>PWM period for the 2 outputs associated to this PWM module. Units are ticks, so the actual period depends on the clock divider</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7030</Index>
+						<SubIndex>17</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_0</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7030</Index>
+						<SubIndex>33</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_1</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1604</Index>
+					<Name LcId="2057">PWM Module 3</Name>
+					<Entry>
+						<Index>#x7040</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM period</Name>
+						<Comment>PWM period for the 2 outputs associated to this PWM module. Units are ticks, so the actual period depends on the clock divider</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7040</Index>
+						<SubIndex>17</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_0</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7040</Index>
+						<SubIndex>33</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_1</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1605</Index>
+					<Name LcId="2057">PWM Module 4</Name>
+					<Entry>
+						<Index>#x7050</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM period</Name>
+						<Comment>PWM period for the 2 outputs associated to this PWM module. Units are ticks, so the actual period depends on the clock divider</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7050</Index>
+						<SubIndex>17</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_0</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7050</Index>
+						<SubIndex>33</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_1</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1606</Index>
+					<Name LcId="2057">PWM Module 5</Name>
+					<Entry>
+						<Index>#x7060</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM period</Name>
+						<Comment>PWM period for the 2 outputs associated to this PWM module. Units are ticks, so the actual period depends on the clock divider</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7060</Index>
+						<SubIndex>17</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_0</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7060</Index>
+						<SubIndex>33</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">PWM on_time_1</Name>
+						<Comment>Must be smaller or equal to PWM period. Units are ticks</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1607</Index>
+					<Name LcId="2057">Digital Output Channel 0</Name>
+					<Entry>
+						<Index>#x7070</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7070</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1608</Index>
+					<Name LcId="2057">Digital Output Channel 1</Name>
+					<Entry>
+						<Index>#x7080</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7080</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1609</Index>
+					<Name LcId="2057">Digital Output Channel 2</Name>
+					<Entry>
+						<Index>#x7090</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7090</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x160a</Index>
+					<Name LcId="2057">Digital Output Channel 3</Name>
+					<Entry>
+						<Index>#x70a0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x70a0</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x160b</Index>
+					<Name LcId="2057">Digital Output Channel 4</Name>
+					<Entry>
+						<Index>#x70b0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="1033">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x70b0</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x160c</Index>
+					<Name LcId="2057">Digital Output Channel 5</Name>
+					<Entry>
+						<Index>#x70c0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x70c0</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x160d</Index>
+					<Name LcId="2057">Digital Output Channel 6</Name>
+					<Entry>
+						<Index>#x70d0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x70d0</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x160e</Index>
+					<Name LcId="2057">Digital Output Channel 7</Name>
+					<Entry>
+						<Index>#x70e0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x70e0</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x160f</Index>
+					<Name LcId="2057">Digital Output Channel 8</Name>
+					<Entry>
+						<Index>#x70f0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x70f0</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1610</Index>
+					<Name LcId="2057">Digital Output Channel 9</Name>
+					<Entry>
+						<Index>#x7100</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7100</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1611</Index>
+					<Name LcId="2057">Digital Output Channel 10</Name>
+					<Entry>
+						<Index>#x7110</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7110</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1612</Index>
+					<Name LcId="2057">Digital Output Channel 11</Name>
+					<Entry>
+						<Index>#x7120</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Direction of digital pin</Name>
+						<Comment>0=Output, 1=Input</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x7120</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Output Value</Name>
+						<Comment>0=Low, 1=High</Comment>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x0</Index>
+						<BitLen>8</BitLen>
+						<Name LcId="2057">Unused bits</Name>
+					</Entry>
+				</RxPdo>
+				<RxPdo Fixed="1" Mandatory="1" Sm="0">
+					<Index>#x1613</Index>
+					<Name LcId="2057">PWM Clock Divider</Name>
+					<Entry>
+						<Index>#x7130</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<Comment>Divides the raw clock frequency to obtain the PWM clock frequency</Comment>
+						<DataType>UINT</DataType>
+					</Entry>
+				</RxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a00</Index>
+					<Name LcId="2057">Command Type</Name>
+					<Entry>
+						<Index>#x6000</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<Comment>Last command received by the module. The only value allowed is 0x0001. Any other values means that the whole frame is invalid</Comment>
+						<DataType>INT</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a01</Index>
+					<Name LcId="2057">Analogue Channel 0</Name>
+					<Entry>
+						<Index>#x6010</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a02</Index>
+					<Name LcId="2057">Analogue Channel 1</Name>
+					<Entry>
+						<Index>#x6020</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a03</Index>
+					<Name LcId="2057">Analogue Channel 2</Name>
+					<Entry>
+						<Index>#x6030</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a04</Index>
+					<Name LcId="2057">Analogue Channel 3</Name>
+					<Entry>
+						<Index>#x6040</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a05</Index>
+					<Name LcId="2057">Analogue Channel 4</Name>
+					<Entry>
+						<Index>#x6050</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a06</Index>
+					<Name LcId="2057">Analogue Channel 5</Name>
+					<Entry>
+						<Index>#x6060</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a07</Index>
+					<Name LcId="2057">Analogue Channel 6</Name>
+					<Entry>
+						<Index>#x6070</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a08</Index>
+					<Name LcId="2057">Analogue Channel 7</Name>
+					<Entry>
+						<Index>#x6080</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a09</Index>
+					<Name LcId="2057">Analogue Channel 8</Name>
+					<Entry>
+						<Index>#x6090</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a0a</Index>
+					<Name LcId="2057">Analogue Channel 9</Name>
+					<Entry>
+						<Index>#x60a0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a0b</Index>
+					<Name LcId="2057">Analogue Channel 10</Name>
+					<Entry>
+						<Index>#x60b0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a0c</Index>
+					<Name LcId="2057">Analogue Channel 11</Name>
+					<Entry>
+						<Index>#x60c0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>16</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>INT</DataType>
+						<!--DataType DScale="0-10">INT</DataType-->
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a0d</Index>
+					<Name LcId="2057">Digital Input Channel 0</Name>
+					<Entry>
+						<Index>#x60d0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a0e</Index>
+					<Name LcId="2057">Digital Input Channel 1</Name>
+					<Entry>
+						<Index>#x60e0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a0f</Index>
+					<Name LcId="2057">Digital Input Channel 2</Name>
+					<Entry>
+						<Index>#x60f0</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a10</Index>
+					<Name LcId="2057">Digital Input Channel 3</Name>
+					<Entry>
+						<Index>#x6100</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a11</Index>
+					<Name LcId="2057">Digital Input Channel 4</Name>
+					<Entry>
+						<Index>#x6110</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a12</Index>
+					<Name LcId="2057">Digital Input Channel 5</Name>
+					<Entry>
+						<Index>#x6120</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a13</Index>
+					<Name LcId="2057">Digital Input Channel 6</Name>
+					<Entry>
+						<Index>#x6130</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a14</Index>
+					<Name LcId="2057">Digital Input Channel 7</Name>
+					<Entry>
+						<Index>#x6140</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a15</Index>
+					<Name LcId="2057">Digital Input Channel 8</Name>
+					<Entry>
+						<Index>#x6150</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a16</Index>
+					<Name LcId="2057">Digital Input Channel 9</Name>
+					<Entry>
+						<Index>#x6160</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a17</Index>
+					<Name LcId="2057">Digital Input Channel 10</Name>
+					<Entry>
+						<Index>#x6170</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a18</Index>
+					<Name LcId="2057">Digital Input Channel 11</Name>
+					<Entry>
+						<Index>#x6180</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">Value</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x0</Index>
+						<BitLen>4</BitLen>
+						<Name LcId="2057">Unused bits</Name>
+					</Entry>
+				</TxPdo>
+				<TxPdo Fixed="1" Mandatory="1" Sm="1">
+					<Index>#x1a19</Index>
+					<Name LcId="2057">Flags</Name>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>1</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">UNKNOWN_ERROR</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>2</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">OVER_TEMPERATURE_ERROR</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>3</SubIndex>
+						<BitLen>6</BitLen>
+						<Name LcId="2057">RESERVED_ERRORS</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>9</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">STACKER_3_ERROR</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>10</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">STACKER_2_ERROR</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>11</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">STACKER_1_ERROR</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>12</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">STACKER_0_ERROR</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>13</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">STACKER_3_PRESENT</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>14</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">STACKER_2_PRESENT</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>15</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">STACKER_1_PRESENT</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+					<Entry>
+						<Index>#x6190</Index>
+						<SubIndex>16</SubIndex>
+						<BitLen>1</BitLen>
+						<Name LcId="2057">STACKER_0_PRESENT</Name>
+						<DataType>BOOL</DataType>
+					</Entry>
+				</TxPdo>
+				<Eeprom>
+					<ByteSize>2048</ByteSize>
+					<ConfigData>050200000000000000c000000000</ConfigData>
+				</Eeprom>
+			</Device>
+		</Devices>
+	</Descriptions>
+</EtherCATInfo>
