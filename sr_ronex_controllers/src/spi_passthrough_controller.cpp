@@ -123,6 +123,70 @@ namespace ronex
   {
     spi_->command_->command_type = static_cast<int16u>(config.command_type);
 
+    switch( config.spi_mode_0 )
+    {
+    case 0:
+      standard_commands_[0].packet.SPI_config = SPI_CONFIG_MODE_00;
+      break;
+    case 1:
+      standard_commands_[0].packet.SPI_config = SPI_CONFIG_MODE_01;
+      break;
+    case 2:
+      standard_commands_[0].packet.SPI_config = SPI_CONFIG_MODE_10;
+      break;
+    default:
+      standard_commands_[0].packet.SPI_config = SPI_CONFIG_MODE_11;
+      break;
+    }
+
+    switch( config.spi_mode_1 )
+    {
+    case 0:
+      standard_commands_[1].packet.SPI_config = SPI_CONFIG_MODE_00;
+      break;
+    case 1:
+      standard_commands_[1].packet.SPI_config = SPI_CONFIG_MODE_01;
+      break;
+    case 2:
+      standard_commands_[1].packet.SPI_config = SPI_CONFIG_MODE_10;
+      break;
+    default:
+      standard_commands_[1].packet.SPI_config = SPI_CONFIG_MODE_11;
+      break;
+    }
+
+    switch( config.spi_mode_2 )
+    {
+    case 0:
+      standard_commands_[2].packet.SPI_config = SPI_CONFIG_MODE_00;
+      break;
+    case 1:
+      standard_commands_[2].packet.SPI_config = SPI_CONFIG_MODE_01;
+      break;
+    case 2:
+      standard_commands_[2].packet.SPI_config = SPI_CONFIG_MODE_10;
+      break;
+    default:
+      standard_commands_[2].packet.SPI_config = SPI_CONFIG_MODE_11;
+      break;
+    }
+
+    switch( config.spi_mode_3 )
+    {
+    case 0:
+      standard_commands_[3].packet.SPI_config = SPI_CONFIG_MODE_00;
+      break;
+    case 1:
+      standard_commands_[3].packet.SPI_config = SPI_CONFIG_MODE_01;
+      break;
+    case 2:
+      standard_commands_[3].packet.SPI_config = SPI_CONFIG_MODE_10;
+      break;
+    default:
+      standard_commands_[3].packet.SPI_config = SPI_CONFIG_MODE_11;
+      break;
+    }
+
     //setting up spi 0
     standard_commands_[0].packet.clock_divider = static_cast<int16u>(config.spi_0_clock_divider);
     standard_commands_[0].packet.SPI_config = static_cast<int16u>(config.spi_0_SPI_config);
