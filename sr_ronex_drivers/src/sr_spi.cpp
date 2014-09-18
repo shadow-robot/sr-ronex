@@ -221,31 +221,44 @@ bool SrSPI::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
 {
   RONEX_STATUS_02000002* status_data = (RONEX_STATUS_02000002 *)(this_buffer+  command_size_);
 
-  //copying the status data to the HW interface
-  spi_->state_->command_type = status_data->command_type;
-
-  for(size_t sampling = 0; sampling < NUM_DIO_SAMPLES; ++sampling)
+  // Checking that the received command type matches one of the valid commands
+  // (we could check for the one that was used in the command but this is easier).
+  // The ronex firmware will answer with whatever command type we send.
+  // The purpose of this is to filter those status_data structures that come filled with zeros due to the jitter
+  // in the realtime loop. The jitter causes that the host tries to read the status when the microcontroller in the ronex
+  // module has not finished writing it to memory yet.
+  if( status_data->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL)
   {
-    spi_->state_->info_type.status_data.pin_input_states_DIO[sampling] = status_data->info_type.status_data.pin_input_states_DIO[sampling];
-    spi_->state_->info_type.status_data.pin_input_states_SOMI[sampling] = status_data->info_type.status_data.pin_input_states_SOMI[sampling];
+    //copying the status data to the HW interface
+    spi_->state_->command_type = status_data->command_type;
+
+    for(size_t sampling = 0; sampling < NUM_DIO_SAMPLES; ++sampling)
+    {
+      spi_->state_->info_type.status_data.pin_input_states_DIO[sampling] = status_data->info_type.status_data.pin_input_states_DIO[sampling];
+      spi_->state_->info_type.status_data.pin_input_states_SOMI[sampling] = status_data->info_type.status_data.pin_input_states_SOMI[sampling];
+    }
+
+    for (size_t spi_index=0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
+    {
+      for(size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i)
+        {
+        spi_->state_->info_type.status_data.spi_in[spi_index].data_bytes[i] = status_data->info_type.status_data.spi_in[spi_index].data_bytes[i];
+        /*if(status_data->info_type.status_data.spi_in[spi_index].data_bytes[i] != 0)
+          {
+            ROS_ERROR_STREAM("NON NULL["<<i<<"]: "<< static_cast<int>(status_data->info_type.status_data.spi_in[spi_index].data_bytes[i])<<".");
+          }
+        */
+        }
+    }
+
+    for(size_t analogue_index = 0 ; analogue_index < NUM_ANALOGUE_INPUTS ; ++analogue_index)
+    {
+      spi_->state_->info_type.status_data.analogue_in[analogue_index] = status_data->info_type.status_data.analogue_in[analogue_index];
+    }
   }
-
-  for (size_t spi_index=0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
+  else if( status_data->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_CONFIG_INFO)
   {
-    for(size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i)
-      {
-      spi_->state_->info_type.status_data.spi_in[spi_index].data_bytes[i] = status_data->info_type.status_data.spi_in[spi_index].data_bytes[i];
-      /*if(status_data->info_type.status_data.spi_in[spi_index].data_bytes[i] != 0)
-	{
-	  ROS_ERROR_STREAM("NON NULL["<<i<<"]: "<< static_cast<int>(status_data->info_type.status_data.spi_in[spi_index].data_bytes[i])<<".");
-	}
-      */
-      }
-  }
-
-  for(size_t analogue_index = 0 ; analogue_index < NUM_ANALOGUE_INPUTS ; ++analogue_index)
-  {
-    spi_->state_->info_type.status_data.analogue_in[analogue_index] = status_data->info_type.status_data.analogue_in[analogue_index];
+    //This command type is not used for the time being. For future expansion.
   }
 
   //publishing at 100Hz
