@@ -43,7 +43,7 @@ namespace ronex
 
         if( check_pin_in_bound_() )
         {
-          js->measured_effort_ = compute_scaled_data_();
+          js->effort_ = compute_scaled_data_();
         }
       }
     }
