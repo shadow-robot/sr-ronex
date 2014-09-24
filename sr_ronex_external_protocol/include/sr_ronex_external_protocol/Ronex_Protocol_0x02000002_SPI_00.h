@@ -30,8 +30,8 @@
 
 #define RONEX_COMMAND_02000002_MASTER_CLOCK_SPEED_HZ        64000000        //!< Master clock. This is divided down to create the SPI clock.
 #define RONEX_COMMAND_02000002_ADC_SAMPLE_RATE_HZ               1000        //!< Maximum possible ADC sample rate. Don't send EtherCAT packets faster than this.
-#define NUM_ANALOGUE_INPUTS                                        6
-#define ANALOGUE_INPUT_RESOLUTION                                 12        //!<
+#define NUM_ANALOGUE_INPUTS                                        6        
+#define ANALOGUE_INPUT_RESOLUTION                                 12        //!< 
 #define ANALOGUE_INPUT_JUSTIFICATION                           RIGHT
 #define NUM_ANALOGUE_OUTPUTS                                       0
 #define ANALOGUE_OUTPUT_RESOLUTION                                 0
@@ -44,7 +44,6 @@
 #define MAXIMUM_NUM_STACKERS                                       2
 #define STACKER_TYPE                                               2            //!< range [1..13]
 #define SPI_TRANSACTION_MAX_SIZE                                  32
-
 
 //! Command Types
 //! -------------
@@ -79,7 +78,15 @@
 #define RONEX_02000002_FLAGS_OVER_TEMPERATURE_ERROR           0x0002
 #define RONEX_02000002_FLAGS_UNKNOWN_ERROR                    0x0001
 
+#define SPI_MODE_00_NAME            "Mode 0: Pha=0 Pol=0"
+#define SPI_MODE_01_NAME            "Mode 1: Pha=1 Pol=0"
+#define SPI_MODE_10_NAME            "Mode 2: Pha=0 Pol=1"
+#define SPI_MODE_11_NAME            "Mode 3: Pha=1 Pol=1"
 
+#define SPI_MODE_00_DESCRIPTION     "Clock normally low, sample on rising edge"
+#define SPI_MODE_01_DESCRIPTION     "Clock normally low, sample on falling edge"
+#define SPI_MODE_10_DESCRIPTION     "Clock normally high, sample on falling edge"
+#define SPI_MODE_11_DESCRIPTION     "Clock normally high, sample on rising edge"
 
 //! SPI Configuration
 //! -----------------
@@ -135,40 +142,28 @@
 //!
 //! The CS pins and the Digital I/O pins can be controlled by the host.
 //! The states can be set before and after the transaction.
-//! The CS pins are always outputs
+//! The pins are always outputs
 //!
 #define PIN_OUTPUT_STATE_DIO_0                0x0001
-#define PIN_OUTPUT_DIRECTION_DIO_0            0x0002
-#define PIN_OUTPUT_STATE_DIO_1                0x0004
-#define PIN_OUTPUT_DIRECTION_DIO_1            0x0008
-#define PIN_OUTPUT_STATE_DIO_2                0x0010
-#define PIN_OUTPUT_DIRECTION_DIO_2            0x0020
-#define PIN_OUTPUT_STATE_DIO_3                0x0040
-#define PIN_OUTPUT_DIRECTION_DIO_3            0x0080
-#define PIN_OUTPUT_STATE_DIO_4                0x0100
-#define PIN_OUTPUT_DIRECTION_DIO_4            0x0200
-#define PIN_OUTPUT_STATE_DIO_5                0x0400
-#define PIN_OUTPUT_DIRECTION_DIO_5            0x0800
-#define PIN_OUTPUT_STATE_CS_0                 0x1000
-#define PIN_OUTPUT_STATE_CS_1                 0x2000
-#define PIN_OUTPUT_STATE_CS_2                 0x4000
-#define PIN_OUTPUT_STATE_CS_3                 0x8000
+#define PIN_OUTPUT_STATE_DIO_1                0x0002
+#define PIN_OUTPUT_STATE_DIO_2                0x0004
+#define PIN_OUTPUT_STATE_DIO_3                0x0008
+#define PIN_OUTPUT_STATE_DIO_4                0x0010
+#define PIN_OUTPUT_STATE_DIO_5                0x0020
+#define PIN_OUTPUT_STATE_CS_0                 0x0100
+#define PIN_OUTPUT_STATE_CS_1                 0x0200
+#define PIN_OUTPUT_STATE_CS_2                 0x0400
+#define PIN_OUTPUT_STATE_CS_3                 0x0800
 
 
 
 //! Pin input states
 //! ----------------
 //!
-//! The Digital I/O and MOSI pins are sampled by the PSoC at four
+//! The MOSI pins are sampled by the PSoC at four
 //! points during the SPI transaction. All Digital I/O are sampled
 //! even if they are set as outputs.
 //!
-#define PIN_INPUT_STATE_DIO_0                 0x0001
-#define PIN_INPUT_STATE_DIO_1                 0x0002
-#define PIN_INPUT_STATE_DIO_2                 0x0004
-#define PIN_INPUT_STATE_DIO_3                 0x0008
-#define PIN_INPUT_STATE_DIO_4                 0x0010
-#define PIN_INPUT_STATE_DIO_5                 0x0020
 #define PIN_INPUT_STATE_MOSI_0                0x0001
 #define PIN_INPUT_STATE_MOSI_1                0x0002
 #define PIN_INPUT_STATE_MOSI_2                0x0004
@@ -219,7 +214,7 @@ typedef struct
 {
     int32u    implemented_features;
     int16u    flags;
-    int8u     padding[sizeof(STATUS_DATA_02000002)-6];
+    int8u     padding[sizeof(STATUS_DATA_02000002) - (sizeof(int32u)+sizeof(int16u))];
 }CONFIG_INFO_02000002;
 
 typedef struct
@@ -231,7 +226,7 @@ typedef struct
         STATUS_DATA_02000002  status_data;
         CONFIG_INFO_02000002  config_info;
     }info_type;
-
+    
 }__attribute__((packed)) RONEX_STATUS_02000002;
 
 
