@@ -166,16 +166,6 @@ namespace ronex
     else
       cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_STATE_DIO_0;
 
-    if( config.pin_output_state_pre_dir_DIO_0 )
-      cmd_pin_output_states_pre_ |= PIN_OUTPUT_DIRECTION_DIO_0;
-    else
-      cmd_pin_output_states_pre_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_0;
-
-    if( config.pin_output_state_post_dir_DIO_0 )
-      cmd_pin_output_states_post_ |= PIN_OUTPUT_DIRECTION_DIO_0;
-    else
-      cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_0;
-
 
     if( config.pin_output_state_pre_DIO_1 )
       cmd_pin_output_states_pre_ |= PIN_OUTPUT_STATE_DIO_1;
@@ -186,16 +176,6 @@ namespace ronex
       cmd_pin_output_states_post_ |= PIN_OUTPUT_STATE_DIO_1;
     else
       cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_STATE_DIO_1;
-
-    if( config.pin_output_state_pre_dir_DIO_1 )
-      cmd_pin_output_states_pre_ |= PIN_OUTPUT_DIRECTION_DIO_1;
-    else
-      cmd_pin_output_states_pre_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_1;
-
-    if( config.pin_output_state_post_dir_DIO_1 )
-      cmd_pin_output_states_post_ |= PIN_OUTPUT_DIRECTION_DIO_1;
-    else
-      cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_1;
 
 
     if( config.pin_output_state_pre_DIO_2 )
@@ -208,16 +188,6 @@ namespace ronex
     else
       cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_STATE_DIO_2;
 
-    if( config.pin_output_state_pre_dir_DIO_2 )
-      cmd_pin_output_states_pre_ |= PIN_OUTPUT_DIRECTION_DIO_2;
-    else
-      cmd_pin_output_states_pre_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_2;
-
-    if( config.pin_output_state_post_dir_DIO_2 )
-      cmd_pin_output_states_post_ |= PIN_OUTPUT_DIRECTION_DIO_2;
-    else
-      cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_2;
-
 
     if( config.pin_output_state_pre_DIO_3 )
       cmd_pin_output_states_pre_ |= PIN_OUTPUT_STATE_DIO_3;
@@ -228,16 +198,6 @@ namespace ronex
       cmd_pin_output_states_post_ |= PIN_OUTPUT_STATE_DIO_3;
     else
       cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_STATE_DIO_3;
-
-    if( config.pin_output_state_pre_dir_DIO_3 )
-      cmd_pin_output_states_pre_ |= PIN_OUTPUT_DIRECTION_DIO_3;
-    else
-      cmd_pin_output_states_pre_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_3;
-
-    if( config.pin_output_state_post_dir_DIO_3 )
-      cmd_pin_output_states_post_ |= PIN_OUTPUT_DIRECTION_DIO_3;
-    else
-      cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_3;
 
 
     if( config.pin_output_state_pre_DIO_4 )
@@ -250,16 +210,6 @@ namespace ronex
     else
       cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_STATE_DIO_4;
 
-    if( config.pin_output_state_pre_dir_DIO_4 )
-      cmd_pin_output_states_pre_ |= PIN_OUTPUT_DIRECTION_DIO_4;
-    else
-      cmd_pin_output_states_pre_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_4;
-
-    if( config.pin_output_state_post_dir_DIO_4 )
-      cmd_pin_output_states_post_ |= PIN_OUTPUT_DIRECTION_DIO_4;
-    else
-      cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_4;
-
 
     if( config.pin_output_state_pre_DIO_5 )
       cmd_pin_output_states_pre_ |= PIN_OUTPUT_STATE_DIO_5;
@@ -270,16 +220,6 @@ namespace ronex
       cmd_pin_output_states_post_ |= PIN_OUTPUT_STATE_DIO_5;
     else
       cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_STATE_DIO_5;
-
-    if( config.pin_output_state_pre_dir_DIO_5 )
-      cmd_pin_output_states_pre_ |= PIN_OUTPUT_DIRECTION_DIO_5;
-    else
-      cmd_pin_output_states_pre_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_5;
-
-    if( config.pin_output_state_post_dir_DIO_5 )
-      cmd_pin_output_states_post_ |= PIN_OUTPUT_DIRECTION_DIO_5;
-    else
-      cmd_pin_output_states_post_ &= 0xFFFF - PIN_OUTPUT_DIRECTION_DIO_5;
 
 
     if( config.pin_output_state_pre_CS_0 )
