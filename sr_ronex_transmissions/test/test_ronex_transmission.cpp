@@ -122,7 +122,7 @@ TEST(RonexTransmission, propagateState)
   state.propagateActuatorPositionToJointPosition();
   //reading the position and effort from the RoNeX
   EXPECT_DOUBLE_EQ(state.joint_states_["joint1"].position_, 1.0); //scale is 1.0, offset 0.0
-  EXPECT_DOUBLE_EQ(state.joint_states_["joint1"].measured_effort_, 3.0); //scale is 2.0, offset 1.0
+  EXPECT_DOUBLE_EQ(state.joint_states_["joint1"].effort_, 3.0); //scale is 2.0, offset 1.0
 }
 
 int main(int argc, char **argv)
