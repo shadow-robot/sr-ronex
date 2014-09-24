@@ -45,7 +45,6 @@
 #define STACKER_TYPE                                               2            //!< range [1..13]
 #define SPI_TRANSACTION_MAX_SIZE                                  32
 
-
 //! Command Types
 //! -------------
 //! COMMAND_TYPE values are sent by the host to tell the node
@@ -215,7 +214,7 @@ typedef struct
 {
     int32u    implemented_features;
     int16u    flags;
-    int8u     padding[sizeof(STATUS_DATA_02000002)-6];
+    int8u     padding[sizeof(STATUS_DATA_02000002) - (sizeof(int32u)+sizeof(int16u))];
 }CONFIG_INFO_02000002;
 
 typedef struct
