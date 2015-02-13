@@ -96,6 +96,8 @@ This example demonstrates how to flash a LED light with pulse-width modulation (
 if __name__ == "__main__":
     rospy.init_node('sr_ronex_flash_LED_with_PWM')
 
+    print "Please configure D0 pin of your ronex module as output (you can use plugin Dynamic Reconfigure in rqt): \n"
+
     # Note that you may have to set the value of ronex_id,
     # depending on which General I/O board the LED is connected to.
     ronex_id = raw_input( "Please enter the ronex id: " )
