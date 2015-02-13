@@ -50,7 +50,7 @@ public:
    * @param path The path of the module.
    * @return True if the module is found and the path is set. Otherwise, false.
    **/
-  bool get_path_( const short unsigned int& ronex_id_as_int, std::string& path )
+  bool get_path_( const unsigned int& ronex_id_as_int, std::string& path )
   {
     std::string ronex_id = this->to_string_(ronex_id_as_int);
     
@@ -88,7 +88,7 @@ private:
    * @param d The integer to be converted.
    * @return The integer as a string. 
    **/
-  std::string to_string_(int d)
+  std::string to_string_(unsigned int d)
   {
     return boost::lexical_cast<std::string>(d);
   }
@@ -148,13 +148,17 @@ int main(int argc, char **argv)
   
   // Create a handle to this process' node. 
   ros::NodeHandle n;
+
+  std::cout << "Please configure D0 pin of your ronex module as output (you can use plugin Dynamic Reconfigure in rqt): \n";
   
   // Get the path of the General I/O module with the given ronex id.
   // Note that you may have to set the value of ronex_id,
   // depending on which General I/O board the LED is connected to.
-  short unsigned int ronex_id; 
+  std::string input = "";
+  unsigned int ronex_id; 
   std::cout << "Please enter the ronex id: ";
-  std::cin >> ronex_id;
+  std::getline(std::cin, input);
+  ronex_id = boost::lexical_cast<unsigned int>(input);
   std::string path;
   SrRonexFindGeneralIOModule findModule;
   if ( findModule.get_path_( ronex_id, path ) ) 
