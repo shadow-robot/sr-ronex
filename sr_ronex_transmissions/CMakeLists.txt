@@ -14,7 +14,8 @@ add_library(sr_ronex_transmissions
     src/ronex_transmission.cpp
     src/mapping/general_io/analogue_to_position.cpp
     src/mapping/general_io/analogue_to_effort.cpp
-    src/mapping/general_io/command_to_pwm.cpp)
+    src/mapping/general_io/command_to_pwm.cpp
+    src/mapping/general_io/command_to_pwm_2_dir_pin.cpp)
 
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package(

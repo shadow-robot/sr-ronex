@@ -48,6 +48,21 @@ namespace ronex
 
       bool CommandToPWM::try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name)
       {
+        if( !init_(mapping_el, robot, ronex_name) )
+        {
+          return false;
+        }
+
+        ROS_DEBUG_STREAM("RoNeX" << ronex_name << " is initialised now.");
+        //stopping timer
+        init_timer_.stop();
+
+        is_initialized_ = true;
+        return true;
+      }
+
+      bool CommandToPWM::init_(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name)
+      {
         //has the ronex been added by the driver?
         if( robot->getCustomHW(ronex_name) == NULL )
           return false;
@@ -113,11 +128,6 @@ namespace ronex
           return false;
         }
 
-        ROS_DEBUG_STREAM("RoNeX" << ronex_name << " is initialised now.");
-        //stopping timer
-        init_timer_.stop();
-
-        is_initialized_ = true;
         return true;
       }
 
@@ -137,7 +147,7 @@ namespace ronex
           if( pwm_module_ >= general_io_->command_.pwm_.size() )
           {
             //size_t is always >= 0 so no need to check lower bound
-            ROS_ERROR_STREAM("Specified PWM module index is out of bound: " << pwm_pin_index_ << " / max = " << general_io_->command_.pwm_.size() << ", not propagating the command to the RoNeX.");
+            ROS_ERROR_STREAM("Specified PWM module index is out of bound: " << pwm_module_ << " / max = " << general_io_->command_.pwm_.size() << ", not propagating the command to the RoNeX.");
             pin_out_of_bound_ = true;
             return false;
           }
