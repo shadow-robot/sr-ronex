@@ -179,9 +179,9 @@ namespace ronex
         if( check_pins_in_bound_() )
         {
           if( pwm_pin_index_ == 0 )
-            general_io_->command_.pwm_[pwm_module_].on_time_0 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * js->commanded_effort_ ) / 100);
+            general_io_->command_.pwm_[pwm_module_].on_time_0 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * abs(js->commanded_effort_) ) / 100);
           else
-            general_io_->command_.pwm_[pwm_module_].on_time_1 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * js->commanded_effort_ ) / 100);
+            general_io_->command_.pwm_[pwm_module_].on_time_1 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * abs(js->commanded_effort_) ) / 100);
 
           // This is assigned by convention: negative effort sets the direction pin to 1.
           general_io_->command_.digital_[digital_pin_index_] = (js->commanded_effort_ < 0.0);
