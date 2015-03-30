@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+ * Copyright (c) 2015, Shadow Robot Company, All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,16 +16,15 @@
  */
 
 /**
- * @file   command_to_pwm.hpp
- * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @brief  Contains the data mapping one joint command to a pwm module.
+ * @file   command_to_pwm_2_dir_pin.hpp
+ * @author Toni Oliver <toni@shadowrobot.com>
+ * @brief  Contains the data mapping one joint command to a pwm module. It uses 2 opposite direction pins (unlike CommandToPWM, that uses a single one)
  **/
 
-#ifndef SR_RONEX_GENERAL_IO_COMMAND_TO_PWM_H_
-#define SR_RONEX_GENERAL_IO_COMMAND_TO_PWM_H_
+#pragma once
 
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
-#include "sr_ronex_transmissions/mapping/ronex_mapping.hpp"
+#include "sr_ronex_transmissions/mapping/general_io/command_to_pwm.hpp"
 
 namespace ronex
 {
@@ -33,13 +32,14 @@ namespace ronex
   {
     namespace general_io
     {
-      class CommandToPWM
-        : public RonexMapping
+      class CommandToPWM2PinDir
+        : public CommandToPWM
       {
       public:
-        CommandToPWM(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
+    	CommandToPWM2PinDir(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
+    	virtual ~CommandToPWM2PinDir(){};
 
-        /**
+    	/**
          * This function is not doing anything as we're not propagating a status in this mapping.
          */
         virtual void propagateFromRonex(ros_ethercat_model::JointState *js) {};
@@ -52,18 +52,8 @@ namespace ronex
         virtual void propagateToRonex(ros_ethercat_model::JointState *js);
 
       protected:
-        ///Pointer to the GeneralIO module we specified in the transmission.
-        GeneralIO* general_io_;
-        ///PWM module index and PWM pin (0 or 1) as we have 2 pins per pwm_module_
-        size_t pwm_module_, pwm_pin_index_;
-        ///digital pin index for the motor direction digital pin
-        size_t digital_pin_index_;
-        ///Are the pwm_module_, pwm_pin_index_ and digital_pin_index_ in the correct ranges?
-        bool pin_out_of_bound_;
-
-        ///Those are used for computing the PWM on time / PWM period
-        unsigned long int ideal_period_;
-        unsigned short int clock_divider_, actual_period_, on_time_;
+        ///digital pin index for the second motor direction digital pin
+        size_t digital_pin_index_2_;
 
         /**
          * Check whether the pwm_module_ and pin_index_ are in the correct ranges.
@@ -84,4 +74,3 @@ namespace ronex
    End:
 */
 
-#endif  /* SR_RONEX_GENERAL_IO_COMMAND_TO_PWM_H_ */
