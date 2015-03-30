@@ -21,8 +21,7 @@
  * @brief  Contains the data mapping one joint command to a pwm module. It uses 2 opposite direction pins (unlike CommandToPWM, that uses a single one)
  **/
 
-#ifndef SR_RONEX_GENERAL_IO_COMMAND_TO_PWM_2_DIR_PIN_H_
-#define SR_RONEX_GENERAL_IO_COMMAND_TO_PWM_2_DIR_PIN_H_
+#pragma once
 
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include "sr_ronex_transmissions/mapping/general_io/command_to_pwm.hpp"
@@ -75,4 +74,3 @@ namespace ronex
    End:
 */
 
-#endif  /* SR_RONEX_GENERAL_IO_COMMAND_TO_PWM_2_DIR_PIN_H_ */
