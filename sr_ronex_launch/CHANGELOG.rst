@@ -2,6 +2,10 @@
 Changelog for package sr_ronex_launch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* mod debug mode of launch file
+
 0.9.15 (2014-07-18)
 -------------------
 

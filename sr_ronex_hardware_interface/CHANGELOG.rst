@@ -2,6 +2,9 @@
 Changelog for package sr_ronex_hardware_interface
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.9.15 (2014-07-18)
 -------------------
 
