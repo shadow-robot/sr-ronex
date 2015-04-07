@@ -2,8 +2,8 @@
 Changelog for package sr_ronex_examples
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.10.0 (2015-04-07)
+-------------------
 * Fix bug in example
 
 0.9.15 (2014-07-18)

@@ -2,8 +2,8 @@
 Changelog for package sr_ronex_external_protocol
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.10.0 (2015-04-07)
+-------------------
 * Change Ronex_Protocol_0x02000002_SPI_00.h
 * Add esi xml files.
 

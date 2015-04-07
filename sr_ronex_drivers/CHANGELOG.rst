@@ -2,8 +2,8 @@
 Changelog for package sr_ronex_drivers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.10.0 (2015-04-07)
+-------------------
 * Adapt SPI controller and configuration to changes in the protocol
 * Add filter to discard invalid status frames.
 * Fix SPI dynamic config.
