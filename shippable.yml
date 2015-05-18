@@ -1,0 +1,23 @@
+language: python
+build_image: shippableimages/ubuntu1404_python
+python:
+  - 2.7
+
+install:
+  - root_folder=`pwd`
+  - mkdir -p ~/workspace
+  - cd ~/workspace
+  - git clone https://github.com/shadow-robot/sr-build-tools.git
+  - sudo apt-get update
+  - sudo apt-get install python-dev libxml2-dev libxslt-dev python-pip lcov wget -y
+  - sudo pip install ansible gcovr
+  - mkdir -p ${root_folder}/shippable/codecoverage
+
+before_script:
+  - cd ~/workspace/sr-build-tools/ansible
+
+script:
+  - sudo ansible-playbook -v -i "localhost," -c local docker_site.yml --tags "shippable,install,create_workspace,update_dependencies,build,unit_tests" -e "shippable_repo_dir=$SHIPPABLE_REPO_DIR"
+
+after_success:
+  - gcovr -r ~/workspace --xml-pretty > ${root_folder}/shippable/codecoverage/coverage.xml
