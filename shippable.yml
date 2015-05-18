@@ -13,7 +13,7 @@ install:
   - cd ~/workspace
   - git clone https://github.com/shadow-robot/sr-build-tools.git
   - sudo apt-get update
-  - sudo apt-get install python-dev libxml2-dev libxslt-dev python-pip lcov wget -y
+  - sudo apt-get install python-dev libxml2-dev libxslt-dev python-pip lcov wget curl -y
   - sudo pip install ansible gcovr
   - mkdir -p ${root_folder}/shippable/codecoverage
 
