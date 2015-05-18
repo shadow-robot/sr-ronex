@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
  * version 3.0 of the License, or (at your option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library.
  */
@@ -49,7 +49,12 @@ TEST(RonexEthercatDrivers, constructor )
 
   EtherCAT_FMMU_Config fmmu(0);
   EtherCAT_PD_Config pdcfg(0);
-  EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (uint16_t) 0 ), &fmmu, &pdcfg, 0);
+  EtherCAT_MbxConfig mbxcfg;
+  EtherCAT_DataLinkLayer dll;
+  EC_Logic logic;
+  EtherCAT_PD_Buffer pdbuf(&logic, &dll);
+
+  EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (uint16_t) 0 ), &fmmu, &pdcfg, &mbxcfg, &dll, &logic, &pdbuf);
 
   SrBoardMk2GIO sbm;
 
