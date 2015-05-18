@@ -4,7 +4,8 @@ python:
   - 2.7
 
 #codecov token (encrypted)
-- secure: H0XZB72tgnQ6aERq9Q/Aycg1KP4LNCP//Yo9N5rc20ioqo25kMweddDQfyqnMkCqyLhca+uCcQw1HGWfYcus8DQzVPUIgntqBq7P13ag4kin1ym5BrYel5irPLnnt3CATH1/VLCMDoN+q9DnkbvDVPWwCWKzf6Vv5AsItyjb6cQi2jksk6exkC1Zv33h/0Mf/qFlMx5nLSUubuOkH9a0K5GmtFciSI2k/5d+K7RaB1PERFLTAcnAiRXxhd2O+dyMpnw5CEzODYDDm1Hekji7mOtOd4rmAvQWMkHGPRmJF4a/KfvX4W2hfZyoCSZIeAud+NLrmP0nvYWBVmqdVRvnCw==
+env:
+  - secure: H0XZB72tgnQ6aERq9Q/Aycg1KP4LNCP//Yo9N5rc20ioqo25kMweddDQfyqnMkCqyLhca+uCcQw1HGWfYcus8DQzVPUIgntqBq7P13ag4kin1ym5BrYel5irPLnnt3CATH1/VLCMDoN+q9DnkbvDVPWwCWKzf6Vv5AsItyjb6cQi2jksk6exkC1Zv33h/0Mf/qFlMx5nLSUubuOkH9a0K5GmtFciSI2k/5d+K7RaB1PERFLTAcnAiRXxhd2O+dyMpnw5CEzODYDDm1Hekji7mOtOd4rmAvQWMkHGPRmJF4a/KfvX4W2hfZyoCSZIeAud+NLrmP0nvYWBVmqdVRvnCw==
 
 install:
   - root_folder=`pwd`
@@ -24,4 +25,5 @@ script:
 
 after_success:
   - gcovr -r ~/workspace --xml-pretty > ${root_folder}/shippable/codecoverage/coverage.xml
+  - cd ${root_folder}/shippable/codecoverage
   - bash <(curl -s https://codecov.io/bash)
