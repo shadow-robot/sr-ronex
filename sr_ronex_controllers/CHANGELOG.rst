@@ -2,6 +2,12 @@
 Changelog for package sr_ronex_controllers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+0.10.0 (2015-04-07)
+-------------------
+* Adapt SPI controller and configuration to changes in the protocol
+* Fix SPI dynamic config.
+* adding SPI modes
+
 0.9.15 (2014-07-18)
 -------------------
 

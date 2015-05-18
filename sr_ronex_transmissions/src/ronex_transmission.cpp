@@ -30,6 +30,7 @@
 #include "sr_ronex_transmissions/mapping/general_io/analogue_to_position.hpp"
 #include "sr_ronex_transmissions/mapping/general_io/analogue_to_effort.hpp"
 #include "sr_ronex_transmissions/mapping/general_io/command_to_pwm.hpp"
+#include "sr_ronex_transmissions/mapping/general_io/command_to_pwm_2_dir_pin.hpp"
 
 PLUGINLIB_EXPORT_CLASS( ronex::RonexTransmission, ros_ethercat_model::Transmission)
 
@@ -39,6 +40,21 @@ namespace ronex
   {
     if (!ros_ethercat_model::Transmission::initXml(elt, robot))
       return false;
+
+    //reading the joint name
+    TiXmlElement *jel = elt->FirstChildElement("joint");
+    if (!jel || !jel->Attribute("name"))
+    {
+      ROS_ERROR_STREAM("Joint name not specified in transmission " << name_);
+      return false;
+    }
+
+    joint_ = robot->getJointState(jel->Attribute("name"));
+
+    // TODO Modify the ros_ethercat_model so that a transmission is not expected to have an actuator
+    // (currently the ronex mappings don't use actuators, they access a ronex::GeneralIO object directly)
+    actuator_ = new ros_ethercat_model::Actuator();
+    actuator_->name_ = "Dummy_actuator_" + std::string(jel->Attribute("name"));
 
     //Extract all the mapping information from the transmission
     for( TiXmlElement *mapping_el = elt->FirstChildElement("mapping"); mapping_el;
@@ -63,6 +79,10 @@ namespace ronex
         else if( std::strcmp("command", property) == 0 )
         {
           ronex_mappings_.push_back( new mapping::general_io::CommandToPWM(mapping_el, robot) );
+        }
+        else if( std::strcmp("command_2_dir", property) == 0 )
+        {
+          ronex_mappings_.push_back( new mapping::general_io::CommandToPWM2PinDir(mapping_el, robot) );
         }
         else
           ROS_WARN_STREAM("Property not recognized: " << property);
