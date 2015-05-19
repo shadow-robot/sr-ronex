@@ -7,6 +7,12 @@ project(sr_ronex_test)
 # Load catkin and all dependencies required for this package
 find_package(catkin REQUIRED COMPONENTS rospy rostest )
 
+set(COVERAGE "OFF" CACHE STRING "Enable coverage generation.")
+message(STATUS "Using COVERAGE: ${COVERAGE}")
+if("${COVERAGE}" STREQUAL "ON")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fprofile-arcs -ftest-coverage")
+endif()
+
 # catkin_package parameters: http://ros.org/doc/groovy/api/catkin/html/dev_guide/generated_cmake_api.html#catkin-package
 catkin_package( CATKIN_DEPENDS )
 IF ("$ENV{RONEX_TESTS_WITH_HARDWARE}" STREQUAL "yes")

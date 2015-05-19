@@ -62,6 +62,11 @@ catkin_package(
     LIBRARIES sr_ronex_drivers
 )
 
+set(COVERAGE "OFF" CACHE STRING "Enable coverage generation.")
+message(STATUS "Using COVERAGE: ${COVERAGE}")
+if("${COVERAGE}" STREQUAL "ON")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fprofile-arcs -ftest-coverage")
+endif()
 
 if(COMMAND add_rostest_gtest)
   add_rostest_gtest( test_ethercat_drivers test/test_ethercat_drivers.test test/test_ethercat_drivers.cpp )

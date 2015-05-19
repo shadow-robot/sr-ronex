@@ -30,6 +30,13 @@ install(DIRECTORY include/${PROJECT_NAME}/
 ## Testing ##
 #############
 
+#Code Coverage
+set(COVERAGE "OFF" CACHE STRING "Enable coverage generation.")
+message(STATUS "Using COVERAGE: ${COVERAGE}")
+if("${COVERAGE}" STREQUAL "ON")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage -fprofile-arcs -ftest-coverage")
+endif()
+
 ## Add gtest based cpp test target and link libraries
 if(COMMAND add_rostest_gtest)
   add_rostest_gtest(test_ronex_utilities test/test_ronex_utilities.test test/test_sr_ronex_utilities.cpp)
