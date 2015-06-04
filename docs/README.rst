@@ -11,6 +11,9 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   General/General-RoNeX-Setup
+   General/General-RoNeX-Tutorials
+
    GIO/GIO-Module-Analogue-Read-(CL)
    GIO/GIO-Module-Config-(GUI)
    GIO/GIO-Module-PWM-LED-(GUI)
@@ -26,8 +29,15 @@ Contents:
    GIO/GIO-Module-Config-(CL)
    GIO/GIO-Module-PWM-LED-(CL)
    GIO/GIO-Module-Config-(CPP)
-   GIO/GIO-Module-PWM-LED-(CPP).rst
+   GIO/GIO-Module-PWM-LED-(CPP)
 
+   SPI/SPI-Module-Manual
+   SPI/SPI-Module-System-Overview
+
+   Special/Ronex-on-RaspberryPi
+   Special/RoNeX-on-Windows:-VirtualBox-and-MATLAB
+   Special/RoNeX-plus-Matlab
+   Special/Special-Use-Cases
 
 
 Indices and tables
@@ -52,39 +62,41 @@ know <https://github.com/shadow-robot/sr-ronex/issues?state=open>`__!
 RoNeX user support, feedback and discussions in our Google Groups based
 forum `RoNeX Sig <https://groups.google.com/forum/#!forum/ronex-sig>`__.
 
-[[General RoNeX Setup\|General-RoNeX-Setup]]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`General RoNeX Setup </General/General-RoNeX-Setup>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This section explains how to get started with a RoNeX system, including
 setting up your computer, launching the drivers and a run through
 overall layout of the system. This information is universal, regardless
 of which functional modules you are using.
 
-[[GIO Module Manual\|GIO-Module-Manual]]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`GIO Module Manual </GIO/GIO-Module-Manual>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This section will tell you everything you need to know to get started
 with a GIO module, including the interfaces provided and various ways to
 interact with the module through said interfaces.
 
-[[SPI Module Manual\|SPI-Module-Manual]]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:doc:`SPI Module Manual </SPI/SPI-Module-Manual>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This section will tell you everything you need to know to get started
 with an SPI module, including the interfaces provided and various ways
 to interact with the module through said interfaces.
 
-[[Special Use Cases\|Special-Use-Cases]]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:doc:`Special Use Cases </Special/Special-Use-Cases>`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This section explains how to use RoNeX in non standard ways, such as
 through a virtual machine, on an ARM device or through MATLAB.
 
-[[Purchase RoNeX\|http://store.shadowrobot.com]]
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`Purchase RoNeX <http://store.shadowrobot.com>`__
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you don't already have RoNeX hardware, you can head over to our
-[[Online Shop\|http://store.shadowrobot.com]] to buy it now!
+`Online Shop <http://store.shadowrobot.com>`__ to buy it now!
 
 EtherCAT Conformant
 ~~~~~~~~~~~~~~~~~~~
