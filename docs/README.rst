@@ -10,40 +10,14 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
+   :glob:
+   :hidden:
 
-   General/General-RoNeX-Setup
-   General/General-RoNeX-Tutorials
-   General/Interacting-with-RoNeX
-   General/Launching-the-RoNeX-driver
-   General/RoNeX-General-System-Overview
-   General/Setting-up-your-computer
-   General/Groovy Install
-
-   GIO/GIO-Module-Analogue-Read-(CL)
-   GIO/GIO-Module-Config-(GUI)
-   GIO/GIO-Module-PWM-LED-(GUI)
-   GIO/GIO-Module-Analogue-Read-(CPP)
-   GIO/GIO-Module-Config-(Python)
-   GIO/GIO-Module-PWM-LED-(Python)
-   GIO/GIO-Module-Analogue-Read-(GUI)
-   GIO/GIO-Module-GUI
-   GIO/GIO-Module-System-Overview
-   GIO/GIO-Module-Analogue-Read-(Python)
-   GIO/GIO-Module-Manual
-   GIO/GIO-Module-Tutorials
-   GIO/GIO-Module-Config-(CL)
-   GIO/GIO-Module-PWM-LED-(CL)
-   GIO/GIO-Module-Config-(CPP)
-   GIO/GIO-Module-PWM-LED-(CPP)
-
-   SPI/SPI-Module-Manual
-   SPI/SPI-Module-System-Overview
-
-   Special/Ronex-on-RaspberryPi
-   Special/RoNeX-on-Windows:-VirtualBox-and-MATLAB
-   Special/RoNeX-plus-Matlab
-   Special/Special-Use-Cases
-
+   *
+   General/*
+   GIO/*
+   SPI/*
+   Special/*
 
 Indices and tables
 ==================
