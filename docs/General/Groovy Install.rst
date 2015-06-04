@@ -1,43 +1,58 @@
- We assume you've installed ROS groovy [following those instructions](http://wiki.ros.org/groovy/Installation/Ubuntu).
+Groovy Install
+==============
 
- - You'll need to install the following packages to be able to build from source.
+We assume you've installed ROS groovy `following those
+instructions <http://wiki.ros.org/groovy/Installation/Ubuntu>`__.
 
-```
-> sudo apt-get install python-rosdep python-wstool build-essential
-> sudo rosdep init
-> rosdep update
-```
+-  You'll need to install the following packages to be able to build
+   from source.
 
- - You can now download the [rosinstall file](https://gist.github.com/ugocupcic/6636982/download) - this file contains all the information needed to download the different source of the packages that need to be built. We'll assume the file has been downloaded to `~/Downloads/sr_ronex.rosinstall`.
+::
 
- - Let's create a catkin workspace to download and compile the different packages. We'll use `~/catkin_ws` for this step by step (but it could be anywhere).
+    sudo apt-get install python-rosdep python-wstool build-essential
+    sudo rosdep init
+    rosdep update
 
-```
- > mkdir -p ~/catkin_ws/src
- > cd ~/catkin_ws/src
- > wstool init
- > wstool merge ~/Downloads/ronex-groovy.rosinstall
- > wstool update
- > rosdep install --from-paths src --ignore-src --rosdistro groovy -y
-```
+-  You can now download the `rosinstall
+   file <https://gist.github.com/ugocupcic/6636982/download>`__ - this
+   file contains all the information needed to download the different
+   source of the packages that need to be built. We'll assume the file
+   has been downloaded to ``~/Downloads/sr_ronex.rosinstall``.
 
- - To load the workspace, you need to source the setup.bash:
+-  Let's create a catkin workspace to download and compile the different
+   packages. We'll use ``~/catkin_ws`` for this step by step (but it
+   could be anywhere).
 
-```
- > source ~/catkin_ws/devel/setup.bash
-```
+::
 
- - If you want the workspace to be sourced each time you open a terminal, then you can source it in your `~/.bashrc`. To do this run:
+     mkdir -p ~/catkin_ws/src
+     cd ~/catkin_ws/src
+     wstool init
+     wstool merge ~/Downloads/ronex-groovy.rosinstall
+     wstool update
+     rosdep install --from-paths src --ignore-src --rosdistro groovy -y
 
-```
- > echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
-```
+-  To load the workspace, you need to source the setup.bash:
 
- - It is now time to build all those packages (this can take a long time)
+::
 
-```
- > cd ~/catkin_ws
- > catkin_make_isolated
-```
+     source ~/catkin_ws/devel/setup.bash
 
- Once this command finishes successfuly, the RoNeX drivers are installed. You can continue reading the wiki to [[get started with your RoNeX|Home]].
+-  If you want the workspace to be sourced each time you open a
+   terminal, then you can source it in your ``~/.bashrc``. To do this
+   run:
+
+::
+
+     echo "source ~/catkin_ws/devel/setup.bash" >~/.bashrc
+
+-  It is now time to build all those packages (this can take a long
+   time)
+
+::
+
+     cd ~/catkin_ws
+     catkin_make_isolated
+
+Once this command finishes successfuly, the RoNeX drivers are installed.
+You can continue reading the wiki to :doc:`get started with your RoNeX </README>`.

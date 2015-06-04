@@ -9,14 +9,14 @@ Indigo <http://wiki.ros.org/indigo/Installation/Ubuntu>`__ to install ROS
 Indigo on Ubuntu - we recommend the ``ros-indigo-desktop-full`` package.
 
 Installing the drivers for ROS Indigo
-------------------------------------
+-------------------------------------
 
 This is the **easiest and recommended way** to install the RoNeX
 drivers. To install the drivers and their dependencies, simply run:
 
 ::
 
-     $ sudo apt-get install ros-indigo-sr-ronex
+     sudo apt-get install ros-indigo-sr-ronex
 
 Using ROS is made much easier by setting up the terminal window and its
 environment. If indigo is the only ROS version on the computer then you
@@ -24,7 +24,7 @@ should do:
 
 ::
 
-     $ sudo echo "source /opt/ros/indigo/setup.bash" >> -/.bashrc
+     sudo echo "source /opt/ros/indigo/setup.bash" >> -/.bashrc
 
 Now each new terminal window will have the ROS Indigo environment setup
 automatically.
@@ -35,7 +35,7 @@ then in each new terminal window you should type:
 
 ::
 
-     $ source /opt/ros/indigo/setup.bash
+     source /opt/ros/indigo/setup.bash
 
 Installing the drivers for ROS Groovy
 -------------------------------------
