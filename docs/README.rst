@@ -42,8 +42,7 @@ Indices and tables
 
 RoNeX is an industrial strength fieldbus for robots, that allows you to
 connect laptops, workstations or server farms directly to your hardware,
-in real time. To find out more, head over to the [[RoNeX
-Homepage\|http://www.shadowrobot.com/products/ronex]].
+in real time. To find out more, head over to the `RoNeX Homepage <http://www.shadowrobot.com/products/ronex>`__.
 
 This wiki contains RoNeX documentation. Please click on one of the links
 below to get started. If you can't find the information you are looking
