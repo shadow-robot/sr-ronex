@@ -19,15 +19,6 @@ Contents:
    SPI/*
    Special/*
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
-
-
 
 RoNeX is an industrial strength fieldbus for robots, that allows you to
 connect laptops, workstations or server farms directly to your hardware,
