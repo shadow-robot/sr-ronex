@@ -30,6 +30,10 @@ know <https://github.com/shadow-robot/sr-ronex/issues?state=open>`__!
 RoNeX user support, feedback and discussions in our Google Groups based
 forum `RoNeX Sig <https://groups.google.com/forum/#!forum/ronex-sig>`__.
 
+.. image:: imgs/RoNeX.jpg
+    :scale: 50%
+    :align: center
+
 :doc:`General RoNeX Setup </General/General-RoNeX-Setup>`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
