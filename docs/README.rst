@@ -11,6 +11,24 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   GIO/GIO-Module-Analogue-Read-(CL)
+   GIO/GIO-Module-Config-(GUI)
+   GIO/GIO-Module-PWM-LED-(GUI)
+   GIO/GIO-Module-Analogue-Read-(CPP)
+   GIO/GIO-Module-Config-(Python)
+   GIO/GIO-Module-PWM-LED-(Python)
+   GIO/GIO-Module-Analogue-Read-(GUI)
+   GIO/GIO-Module-GUI
+   GIO/GIO-Module-System-Overview
+   GIO/GIO-Module-Analogue-Read-(Python)
+   GIO/GIO-Module-Manual
+   GIO/GIO-Module-Tutorials
+   GIO/GIO-Module-Config-(CL)
+   GIO/GIO-Module-PWM-LED-(CL)
+   GIO/GIO-Module-Config-(CPP)
+   GIO/GIO-Module-PWM-LED-(CPP).rst
+
+
 
 Indices and tables
 ==================
