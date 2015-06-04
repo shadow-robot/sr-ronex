@@ -12,7 +12,6 @@ Contents:
    :maxdepth: 2
 
 
-
 Indices and tables
 ==================
 
@@ -20,3 +19,59 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+
+
+
+RoNeX is an industrial strength fieldbus for robots, that allows you to
+connect laptops, workstations or server farms directly to your hardware,
+in real time. To find out more, head over to the [[RoNeX
+Homepage\|http://www.shadowrobot.com/products/ronex]].
+
+This wiki contains RoNeX documentation. Please click on one of the links
+below to get started. If you can't find the information you are looking
+for, `please let us
+know <https://github.com/shadow-robot/sr-ronex/issues?state=open>`__!
+
+RoNeX user support, feedback and discussions in our Google Groups based
+forum `RoNeX Sig <https://groups.google.com/forum/#!forum/ronex-sig>`__.
+
+[[General RoNeX Setup\|General-RoNeX-Setup]]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This section explains how to get started with a RoNeX system, including
+setting up your computer, launching the drivers and a run through
+overall layout of the system. This information is universal, regardless
+of which functional modules you are using.
+
+[[GIO Module Manual\|GIO-Module-Manual]]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This section will tell you everything you need to know to get started
+with a GIO module, including the interfaces provided and various ways to
+interact with the module through said interfaces.
+
+[[SPI Module Manual\|SPI-Module-Manual]]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This section will tell you everything you need to know to get started
+with an SPI module, including the interfaces provided and various ways
+to interact with the module through said interfaces.
+
+[[Special Use Cases\|Special-Use-Cases]]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This section explains how to use RoNeX in non standard ways, such as
+through a virtual machine, on an ARM device or through MATLAB.
+
+[[Purchase RoNeX\|http://store.shadowrobot.com]]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you don't already have RoNeX hardware, you can head over to our
+[[Online Shop\|http://store.shadowrobot.com]] to buy it now!
+
+EtherCAT Conformant
+~~~~~~~~~~~~~~~~~~~
+
+Although there are plans to make RoNeX etherCAT conformant, it is not
+yet the case. This means that RoNeX doesn't work with programs like
+TwinCAT.
