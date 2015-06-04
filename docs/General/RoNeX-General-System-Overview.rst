@@ -23,7 +23,7 @@ ROS Topics provide a fast, flexible way to transfer data between nodes.
 
 Topics can be published or subscribed to from the command line or within
 a program. For more information see the
-`tutorials <General-RoNeX-Tutorials>`__.
+:doc:`General Examples and Tutorials </General/General-RoNeX-Tutorials>`.
 
 - ``/diagnostics`` : RoNeX publishes diagnostics messages containing information on connected modules and communication status to this topic.
 
@@ -40,5 +40,5 @@ get <http://wiki.ros.org/rosparam>`__ command at any time.
 - ``/ronex/devices/0/path``: The path to the first detected RoNeX device, all parameters, topics and services related to this device will start with this path.
 - ``/ronex/devices/0/product_id``: This parameter tells you the product_id number corresponding to the type of module detected.
 - ``/ronex/devices/0/product_name``: This parameter tells you the name corresponding to the type of module detected.
-- ``/ronex/devices/0/ronex_id``: This parameter will contain the id of the RoNeX module, which will be the module alias if you have set one (as described `here <Using-aliases-with-your-RoNeX>`__, otherwise it will match the serial number.)
+- ``/ronex/devices/0/ronex_id``: This parameter will contain the id of the RoNeX module, which will be the module alias if you have set one (as described :doc:`here </General/Using-aliases-with-your-RoNeX>`, otherwise it will match the serial number.)
 - ``/ronex/devices/0/serial``: The pre-programmed serial number of the RoNeX module, which makes it possible to distinguish between different modules of the same type on the bus.
