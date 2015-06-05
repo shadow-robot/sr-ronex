@@ -1,3 +1,6 @@
+RoNeX on Windows with Matlab
+============================
+
 This tutorial shows how to interact with RoNeX from MATLAB with minimal
 prior knowledge of Linux and ROS. RoNeX drivers run on Ubuntu within a
 VirtualBox virtual machine (A pre-configured VM image is available for
@@ -14,17 +17,16 @@ If you experience problems during this tutorial, `please let us
 know <https://github.com/shadow-robot/sr-ronex/issues?state=open>`__!
 
 Installing VirtualBox + RoNeX Image
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------------
 
 First download + install VirtualBox. The latest install file can be
-downloaded from: [[https://www.virtualbox.org/wiki/Downloads]]
+downloaded from: https://www.virtualbox.org/wiki/Downloads
 
-Next download our ROS\_RoNeX.ova Virtual Machine image, which has Ubuntu
-12.04, ROS Hydro and RoNeX drivers pre-installed.
-[[https://whereweputourimage.com]]
+Next download our **ROS\_RoNeX.ova** Virtual Machine image, which has Ubuntu
+12.04, ROS Hydro and RoNeX drivers pre-installed. https://whereweputourimage.com
 
 Configure VirtualBox
-~~~~~~~~~~~~~~~~~~~~
+--------------------
 
 Once installed, open VirtualBox, go to File > Import Appliance, then
 find the Ubuntu ROS\_RoNeX.ova system image you've just downloaded. You
@@ -47,21 +49,21 @@ communication between MATLAB and VirtualBox, but that is beyond the
 scope of this tutorial.
 
 Install MATLAB + ROS toolbox
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 To interact with ROS you will require MATLAB R2013a or R2013b. If you
 don't have MATLAB already, you can head over to the Mathworks website to
 find out how to get it:
 
-[[http://www.mathworks.com/]]
+http://www.mathworks.com/
 
 Once MATLAB is set up, you will need to set up ROS support by
 downloading it from here:
 
-[[http://www.mathworks.com/hardware-support/robot-operating-system.html]]
+http://www.mathworks.com/hardware-support/robot-operating-system.html
 
 Configure ROS inside Virtual Machine
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------
 
 With your network adapters correctly configured in VirtualBox, once
 Ubuntu has booted, it should have obtained a unique IP on your network.
@@ -70,7 +72,7 @@ typing:
 
 ::
 
-    $ ifconfig
+    ifconfig
 
 Under adapter eth1 - inet addr: you should see the IP assigned to the
 virtual machine, make a note of it. Now in the same terminal we're going
@@ -79,7 +81,7 @@ by typing:
 
 ::
 
-    $ gedit ~/.bashrc
+    gedit ~/.bashrc
 
 Scroll to the bottom of the file, and you should see the following
 lines：
@@ -93,7 +95,7 @@ Change the IP address there to the one obtained from ifconfig. Be sure
 to leave the "http://" and ":11311" on the ROS\_MASTER\_URI.
 
 Hardware Configuration
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 As previously mentioned, RoNeX is connected to the wired Ethernet port
 on the Laptop, which should now be set as eth0 in the virtual machine.
@@ -103,7 +105,7 @@ the GIO node, then connect 5V, GND and Channel 0 to your potentiometer,
 preferably on a solderless breadboard.
 
 MATLAB Code
-~~~~~~~~~~~
+-----------
 
 The MATLAB code below starts a RoNeX node and subscriber to receive
 RoNeX data.
@@ -111,7 +113,7 @@ RoNeX data.
 The first section should be copied to a new MATLAB script in your
 workspace, named rostest.m
 
-.. code:: matlab
+.. code-block:: matlab
 
     node = rosmatlab.node('my_data_listener_node','http://192.168.0.14:11311');
     subscriber = rosmatlab.subscriber('/ronex/general_io/12/state','sr_ronex_msgs/GeneralIOState',10,node);
@@ -126,7 +128,7 @@ workspace, named rostest.m
 This code should be copied into a file named my\_function.m, in the same
 directory as rostest.m
 
-.. code:: matlab
+.. code-block:: matlab
 
     function my_function(message)
     mydata = message.getAnalogue();
@@ -134,24 +136,24 @@ directory as rostest.m
     end
 
 Modifying the MATLAB Code
-~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------
 
 You will need to change the first line of the MATLAB script, to ensure
 the IP address listed for the ROS master, matches that we obtained from
 Ubuntu in the ROS configuration step.
 
-.. code:: matlab
+.. code-block:: matlab
 
     node = rosmatlab.node('my_data_listener_node','http://192.168.0.14:11311');
 
 The Code Explained
-~~~~~~~~~~~~~~~~~~
+------------------
 
 The MATLAB code we are running is fairly simple, you can find a PDF
 manual with more information on the various functions in the MATLAB ROS
 Support package you downloaded. We'll start by looking at rostest.m:
 
-.. code:: matlab
+.. code-block:: matlab
 
     node = rosmatlab.node('matlab_ronex_listener','http://192.168.0.14:11311');
     subscriber = rosmatlab.subscriber('/ronex/general_io/12/state','sr_ronex_msgs/GeneralIOState',10,node);
@@ -171,7 +173,7 @@ is then bound to the node that we just defined.
 Finally we set the callback function for the subscriber, i.e. whenever a
 valid message is received on the topic, this function is executed.
 
-.. code:: matlab
+.. code-block:: matlab
 
     i = 'a';
     while i ~= 'q'
@@ -182,7 +184,7 @@ This code is to allow us to quit the program cleanly. It loops while
 waiting for keyboard input, if the received input character is a 'q', it
 will move on to shutdown the node.
 
-.. code:: matlab
+.. code-block:: matlab
 
     node.removeSubscriber(subscriber);
     clear;
@@ -193,7 +195,7 @@ the clear command.
 
 Next we will look at the my\_function.m file:
 
-.. code:: matlab
+.. code-block:: matlab
 
     function my_function(message)
     mydata = message.getAnalogue();
@@ -212,11 +214,10 @@ we are interested in the first value in the array, so we display this
 value then wait for the next message.
 
 Execute Programs
-~~~~~~~~~~~~~~~~
+----------------
 
 First make sure ROS and the RoNeX driver are running in the virtual
-machine, as described in (`Launch driver <launching-the-ronex-driver>`__
-).
+machine, as described in (see :doc:`Launch driver </General/Launching-the-RoNeX-driver>` ).
 
 Next run the MATLAB script (Either by right clicking on it in the
 current folder window and clicking run, typing the name of the file in
