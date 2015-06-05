@@ -7,7 +7,7 @@ a user environment.
 The following example shows how to set the mode to "output" for the I/O
 pin number 2.
 
-.. code:: xml
+.. code-block:: xml
 
     <launch>
 
@@ -19,4 +19,3 @@ pin number 2.
     ...
 
     </launch>
-
