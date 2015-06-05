@@ -1,4 +1,4 @@
-Accessing Module parameters [Python]
+Accessing Module parameters [C++]
 ====================================
 
 The example demonstrates how to access RoNeX modules listed in the

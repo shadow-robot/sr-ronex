@@ -15,13 +15,13 @@ For this example, we assume that the LED is connected to digital channel
 0.
 
 The code
-========
+--------
 
 First change directories to your **sr\_ronex\_examples** package.
 
 ::
 
-    $ roscd sr_ronex_examples/
+    roscd sr_ronex_examples/
 
 Python file **sr\_ronex\_flash\_LED\_with\_PWM.py** is located inside
 the **src** directory.
@@ -98,8 +98,7 @@ For simplicity, in this example we hard code the ronex id (12), and you
 will need to change it to correspond to that of your RoNeX GIO module.
 To make this example more robust, the path to the first connected device
 could be retrieved from the parameter server. To learn how to do this
-you can follow the [[Parse Parameter Server (Python) Tutorial\|Parse
-Parameter Server (Python)]].
+you can follow the :doc:`Parse Parameter Server (Python) Tutorial </General/Parse-Parameter-Server-(Python)>`.
 
 .. code:: python
 
@@ -144,21 +143,20 @@ just assigned, publish it (send the command) and sleep for 10ms before
 returning to the start of the while loop.
 
 Running the code
-================
+----------------
 
-First make sure that the RoNeX driver is running (see `Launch
-driver <Home#launching-the-ronex-driver>`__ ).
+First make sure that the RoNeX driver is running (see :doc:`Launch driver </General/Launching-the-RoNeX-driver>` ).
 
 Digital i/o channel 0 needs to be configured as an output in order to
 flash the LED (all digital channels are set to input by default). The
-easiest way to do this is to use the [[GUI\|GIO Module Config (GUI)]]
+easiest way to do this is to use the :doc:`GUI </GIO/GIO-Module-Config-(GUI)>`
 and set ``input_mode_0`` to ``false``.
 
 Once this is done we can run our Python script:
 
 ::
 
-    $ rosrun sr_ronex_examples sr_ronex_flash_LED_with_PWM.py
+    rosrun sr_ronex_examples sr_ronex_flash_LED_with_PWM.py
 
 You should now see your LED flashing. You can try adjusting the
 pwm\_on\_time\_0 increments and sleep time to achieve different light

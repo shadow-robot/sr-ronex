@@ -1,12 +1,17 @@
+Control a Joint Based Robot
+===========================
+
+
 If you're working with a joint based robot, thanks to RoNeX, you can
 control your whole robot with just a few lines of xml (simply adding
 custom transmissions to the URDF robot model).
 
 You can find this example in the **sr\_ronex\_examples** package. The
-files used are: - *model/ronex.urdf*: a description of the robot -
-*launch/sr\_ronex\_urdf.launch*: a launch file to start the drivers, the
-controllers, and a few utils. -
-*config/joint\_position\_controller.yaml*: the parameter settings.
+files used are:
+
+- *model/ronex.urdf*: a description of the robot
+- *launch/sr\_ronex\_urdf.launch*: a launch file to start the drivers, the controllers, and a few utils.
+- *config/joint\_position\_controller.yaml*: the parameter settings.
 
 Set an alias for your RoNeX module
 ----------------------------------
@@ -25,7 +30,7 @@ familiar with URDF for this tutorial.
 Let's use this very simple robot model as a base, with one continuous
 joint.
 
-.. code:: xml
+.. code-block:: xml
 
     <?xml version="1.0"?>
     <robot name="flexible">
@@ -63,7 +68,7 @@ Let's say that a **position sensor** is plugged into the **analogue pin
 our robot's joint position. To do this, we use a **RonexTransmission**.
 Add the following after the ``</joint>`` in the previous URDF:
 
-.. code:: xml
+.. code-block:: xml
 
       <transmission type="sr_ronex_transmissions/RonexTransmission" name="my_ronex_transmission">
         <joint name="head_swivel"/>
@@ -83,7 +88,7 @@ the **PWM module 1 - pin 0** using **digital pin 0** as the direction
 pin. We now want to control the joint in position. We can refine the
 previous transmission to add this servo.
 
-.. code:: xml
+.. code-block:: xml
 
       <transmission type="sr_ronex_transmissions/RonexTransmission" name="my_ronex_transmission">
         <joint name="head_swivel"/>
@@ -97,7 +102,7 @@ As you can see we're adding a *command* mapping line to map the
 If you have an effort sensor (on analogue pin 7 for example), you could
 also map it in the transmission:
 
-.. code:: xml
+.. code-block:: xml
 
       <transmission type="sr_ronex_transmissions/RonexTransmission" name="my_ronex_transmission">
         <joint name="head_swivel"/>
@@ -118,7 +123,7 @@ model, start the driver, and publish the current joint states (position,
 effort, velocity) of our bot. To do this you can use this simple launch
 file.
 
-.. code:: xml
+.. code-block:: xml
 
     <launch>
       <!-- Load the robot description -->
@@ -153,7 +158,7 @@ Setting up the different controller settings
 If you create a *joint\_position\_controller.yaml* file you can define
 these simple parameters.
 
-.. code:: yaml
+.. code-block:: yaml
 
     head_swivel_fake_calib:
       type: sr_ronex_controllers/FakeCalibrationController
@@ -162,10 +167,9 @@ these simple parameters.
 Now that it is possible to use our joints in the standard ROS
 controller, we can setup a PID joint position controller on our head
 swivel topic. Let's add the parameters to our yaml controller parameter
-file. We can use the ROS standard
-`robot\_mechanism\_controllers/JointPositionController <http://wiki.ros.org/robot_mechanism_controllers>`__.
+file. We can use the ROS standard `robot\_mechanism\_controllers/JointPositionController <http://wiki.ros.org/robot_mechanism_controllers>`__.
 
-.. code:: yaml
+.. code-block:: yaml
 
     head_swivel_controller:
       type: robot_mechanism_controllers/JointPositionController
@@ -184,7 +188,7 @@ can go back to editing the launch file to load them and then we'll spawn
 the fake calibration controllers (making the joints controllable) and
 the position controller.
 
-.. code:: xml
+.. code-block:: xml
 
     <!-- Loads the controller parameter -->
       <rosparam command="load" file="$(find sr_ronex_examples)/config/joint_position_controller.yaml" />
@@ -212,11 +216,10 @@ input. To do this we access the `dynamic reconfigure
 interface <http://wiki.ros.org/dynamic_reconfigure>`__ from our launch
 file.
 
-.. code:: xml
+.. code-block:: xml
 
       <!-- setting the corresponding pins to output mode on the RoNeX -->
       <node pkg="dynamic_reconfigure" type="dynparam" name="dynparam_i2"
         args="set /ronex/general_io/test_ronex input_mode_2 false" />
       <node pkg="dynamic_reconfigure" type="dynparam" name="dynparam_i5"
         args="set /ronex/general_io/test_ronex input_mode_5 false" />
-

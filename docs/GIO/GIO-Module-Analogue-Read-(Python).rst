@@ -87,13 +87,12 @@ then output it to screen. The analogue data is in the format tuple.
 Running the code
 ================
 
-First make sure that the RoNeX driver is running (see `Launch
-driver <Home#launching-the-ronex-driver>`__ ).
+First make sure that the RoNeX driver is running (see :doc:`Launch driver </General/Launching-the-RoNeX-driver>` ).
 
 Once this is done we can run our Python script:
 
 ::
 
-    $ rosrun sr_ronex_examples sr_ronex_read_analog_data.py
+    rosrun sr_ronex_examples sr_ronex_read_analog_data.py
 
 Now you should to able to see the analogue data on the console.

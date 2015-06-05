@@ -16,9 +16,10 @@ the message types.
 In the example below we will set 4 of the digital channels as an
 outputs:
 
-::
 
-    $ rosservice call /ronex/general_io/12/set_parameters "config:
+.. code-block:: bash
+
+    rosservice call /ronex/general_io/12/set_parameters "config:
       bools:
       - {name: 'input_mode_0', value: false, name: 'input_mode_1', value: false, name: 'input_mode_2', value: false, name: 'input_mode_3', value: false}"
 
@@ -26,6 +27,6 @@ The service call will return the current state of the GIO parameters,
 alternatively you can view this information at any time by echoing the
 relevant topic:
 
-::
+.. code-block:: bash
 
-    $ rostopic list /ronex/general_io/12/parameter_updates
+    rostopic list /ronex/general_io/12/parameter_updates

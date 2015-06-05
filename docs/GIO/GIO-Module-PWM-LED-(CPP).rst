@@ -1,3 +1,6 @@
+Flashing a LED (C++)
+=====================
+
 This example demonstrates how to flash an LED using `PWM (Pulse Width Modulation) <http://en.wikipedia.org/wiki/Pulse-width_modulation>`__ by varying duty cycle (i.e., the amount of time in the period that the pulse is active or high).
 
 Note that General I/O (GIO) module consists of one GIO Node board and one GIO Peripheral board, so there are 12 digital I/O channels (a GIO Node board has 6 digital I/O channels, a GIO Peripheral board has also 6 digital I/O channels). PWM is available on all 12 digital channels.
@@ -5,13 +8,13 @@ Note that General I/O (GIO) module consists of one GIO Node board and one GIO Pe
 For this example, we assume that the LED is connected to digital channel 0.
 
 The code
-========
+--------
 
 First change directories to your **sr\_ronex\_examples** package.
 
 .. code-block:: bash
 
-    $ roscd sr_ronex_examples/
+    roscd sr_ronex_examples/
 
 C++ file **sr\_ronex\_flash\_LED\_with\_PWM.cpp** is located inside the
 **src** directory.
@@ -86,8 +89,7 @@ For simplicity, in this example we hard code the ronex id (12), and you
 will need to change it to correspond to that of your RoNeX GIO module.
 To make this example more robust, the path to the first connected device
 could be retrieved from the parameter server. To learn how to do this
-you can follow the [[Parse Parameter Server (CPP) Tutorial\|Parse
-Parameter Server (CPP)]].
+you can follow the :doc:`Parse Parameter Server (C++) Tutorial </General/Parse-Parameter-Server-(CPP)>`.
 
 .. code-block:: c++
 
@@ -142,19 +144,18 @@ sleep for the required time to maintain a 100Hz rate before returning to
 the start of the while loop.
 
 Running the code
-================
+----------------
 
 If you're running this code from your own workspace, you'll first need
 to build it using Catkin, if you're not sure how to do this you can
 follow the instructions
-`here <Create-a-package-to-interact-with-RoNeX#running-the-code>`__.
+`here </General/Create-a-package-to-interact-with-RoNeX#running-the-code>`.
 
-Next sure that a roscore and the RoNeX driver are running (see `Launch
-driver <Home#launching-the-ronex-driver>`__ ).
+Next sure that a roscore and the RoNeX driver are running (see :doc:`Launch driver </General/Launching-the-RoNeX-driver>` ).
 
 Digital i/o channel 0 needs to be configured as an output in order to
 flash the LED (all digital channels are set to input by default). The
-easiest way to do this is to use the [[GUI\|GIO Module Config (GUI)]]
+easiest way to do this is to use the :doc:`GUI </GIO/GIO-Module-Config-(GUI)>`
 and set ``input_mode_0`` to ``false``.
 
 Once this is done we can run our C++ program:

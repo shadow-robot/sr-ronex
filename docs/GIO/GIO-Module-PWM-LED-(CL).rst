@@ -19,9 +19,9 @@ calling the set\_parameters service. In the example below we have also
 set the pwm\_clock\_divider parameter in the same message for
 convenience.
 
-::
+.. code-block:: bash
 
-    $ rosservice call /ronex/general_io/12/set_parameters "config:
+    rosservice call /ronex/general_io/12/set_parameters "config:
       bools:
       - {name: 'input_mode_0', value: false}
       ints:
@@ -31,8 +31,8 @@ Once the channel is configured correctly we can publish a message to the
 command topic for the corresponding PWM module as shown below. Changing
 the pwm\_on\_time\_0 value will adjust the brightness of the LED.
 
-::
+.. code-block:: bash
 
-    $ rostopic pub /ronex/general_io/12/command/pwm/0 sr_ronex_msgs/PWM "pwm_period: 64000
-    pwm_on_time_0: 1000
-    pwm_on_time_1: 0"
+    rostopic pub /ronex/general_io/12/command/pwm/0 sr_ronex_msgs/PWM "pwm_period: 64000
+        pwm_on_time_0: 1000
+        pwm_on_time_1: 0"
