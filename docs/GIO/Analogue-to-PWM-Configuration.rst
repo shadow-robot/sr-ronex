@@ -3,8 +3,8 @@ Analogue to PWM Configuration
 
 This tutorial explains the calculations for converting an analogue value
 from a potentiometer into a PWM value corresponding to the same angle
-for a servo motor, as described in this tutorial and video: `Youtube
-Interfacing Code <Youtube-Interfacing-Code>`__
+for a servo motor, as described in this tutorial and video: :doc:`Youtube
+Interfacing Code </GIO/Youtube-Interfacing-Code>`
 
 From the range of rotation of our potentiometer and resolution of the
 RoNeX ADC we know:
