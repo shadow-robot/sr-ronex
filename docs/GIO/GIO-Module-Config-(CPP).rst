@@ -1,3 +1,6 @@
+Configure GIO Module (c++)
+==========================
+
 This tutorial will walk you through the basics of calling the RoNeX
 /set\_parameters service in a C++ script to adjust your RoNeX
 configuration. If you are often executing different RoNeX scripts that
@@ -9,25 +12,25 @@ sr\_ronex\_examples/src/change\_ronex\_configuration.cpp # The Code
 
 \`\`\`c++
 
-include 
+include
 ========
 
-include 
+include
 ========
 
-include 
+include
 ========
 
-include 
+include
 ========
 
-include 
+include
 ========
 
-include 
+include
 ========
 
-include 
+include
 ========
 
 class ChangeRonexConfigurationExample { public:
@@ -83,16 +86,16 @@ explain each piece:
 
 \`\`\`c++ #include #include #include
 
-include 
+include
 ========
 
-include 
+include
 ========
 
-include 
+include
 ========
 
-include 
+include
 ========
 
 \`\`\` First we import the standard ROS headers, plus those for the

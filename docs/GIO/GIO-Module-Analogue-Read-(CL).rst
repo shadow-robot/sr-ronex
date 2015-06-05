@@ -1,3 +1,6 @@
+GIO - Read analogue inputs (command line)
+=========================================
+
 Viewing GIO analogue input data on the command line is incredibly
 simple. The rostopic echo command subscribes to the topic in question
 then displays an data received in the terminal window:
@@ -13,4 +16,3 @@ example below) you can use the following command:
 ::
 
     $ rostopic echo /ronex/general_io/12/state/analogue[0]
-

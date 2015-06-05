@@ -1,3 +1,6 @@
+GIO - Read analogue inputs (python)
+====================================
+
 A General I/O Module consists of one GIO Node board and one GIO
 Peripheral board. Each module has 12 Analogue sampling channels (12bits,
 1kHz) (a GIO Node board has 6 analogue input channels, a GIO Peripheral
@@ -28,7 +31,7 @@ Python file **sr\_ronex\_read\_analog\_data.py** is located inside the
     from sr_ronex_msgs.msg import GeneralIOState
 
     def generalIOState_callback(data):
-        analogue = data.analogue 
+        analogue = data.analogue
         rospy.loginfo( "analogue = %s", analogue )
 
     if __name__ == "__main__":
@@ -74,7 +77,7 @@ Parameter Server (Python)]].
 .. code:: python
 
     def generalIOState_callback(data):
-        analogue = data.analogue 
+        analogue = data.analogue
         rospy.loginfo( "analogue = %s", analogue )
 
 This callback function is called every time a message is received on the

@@ -1,3 +1,6 @@
+Flashing a LED (python)
+========================
+
 This example demonstrates how to flash an LED using `PWM (Pulse Width
 Modulation) <http://en.wikipedia.org/wiki/Pulse-width_modulation>`__ by
 varying duty cycle (i.e., the amount of time in the period that the

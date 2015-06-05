@@ -1,3 +1,6 @@
+Flashing a LED (command line)
+=============================
+
 ROS Terminal commands are a quick and easy way to see what's going on
 with your RoNeX module. If you need to run something over and over again
 you'll want to write a script or use the GUI, but for one off tests, or
@@ -32,5 +35,4 @@ the pwm\_on\_time\_0 value will adjust the brightness of the LED.
 
     $ rostopic pub /ronex/general_io/12/command/pwm/0 sr_ronex_msgs/PWM "pwm_period: 64000
     pwm_on_time_0: 1000
-    pwm_on_time_1: 0" 
-
+    pwm_on_time_1: 0"

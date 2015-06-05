@@ -1,58 +1,82 @@
-This example demonstrates how to flash an LED using `PWM (Pulse Width
-Modulation) <http://en.wikipedia.org/wiki/Pulse-width_modulation>`__ by
-varying duty cycle (i.e., the amount of time in the period that the
-pulse is active or high).
+This example demonstrates how to flash an LED using `PWM (Pulse Width Modulation) <http://en.wikipedia.org/wiki/Pulse-width_modulation>`__ by varying duty cycle (i.e., the amount of time in the period that the pulse is active or high).
 
-Note that General I/O (GIO) module consists of one GIO Node board and
-one GIO Peripheral board, so there are 12 digital I/O channels (a GIO
-Node board has 6 digital I/O channels, a GIO Peripheral board has also 6
-digital I/O channels). PWM is available on all 12 digital channels.
+Note that General I/O (GIO) module consists of one GIO Node board and one GIO Peripheral board, so there are 12 digital I/O channels (a GIO Node board has 6 digital I/O channels, a GIO Peripheral board has also 6 digital I/O channels). PWM is available on all 12 digital channels.
 
-For this example, we assume that the LED is connected to digital channel
-0.
+For this example, we assume that the LED is connected to digital channel 0.
 
 The code
 ========
 
 First change directories to your **sr\_ronex\_examples** package.
 
-::
+.. code-block:: bash
 
     $ roscd sr_ronex_examples/
 
 C++ file **sr\_ronex\_flash\_LED\_with\_PWM.cpp** is located inside the
 **src** directory.
 
-\`\`\`c++ #include #include "sr\_ronex\_msgs/PWM.h"
+.. code-block:: c++
 
-void flash\_LED( ros::NodeHandle& n, const std::string& topic ) {
-ros::Publisher pub = n.advertise( topic, 1000 ); short unsigned int
-pwm\_period = 320; short unsigned int pwm\_on\_time\_0 = pwm\_period;
-short unsigned int pwm\_on\_time\_1 = 0;
+     #include <ros/ros.h>
+     #include "sr_ronex_msgs/PWM.h"
 
-| ros::Rate loop\_rate(100); while ( ros::ok() ) {
-|  pwm\_on\_time\_0 -= 10; if (pwm\_on\_time\_0 < 0) pwm\_on\_time\_0 =
-pwm\_period; sr\_ronex\_msgs::PWM msg; msg.pwm\_period = pwm\_period;
-msg.pwm\_on\_time\_0 = pwm\_on\_time\_0; msg.pwm\_on\_time\_1 =
-pwm\_on\_time\_1; pub.publish(msg);
-|  ros::spinOnce(); loop\_rate.sleep(); } }
+     void flash_LED( ros::NodeHandle& n, const std::string& topic )
+     {
+       ros::Publisher pub = n.advertise<sr_ronex_msgs::PWM>( topic, 1000 );
+       short unsigned int pwm_period = 320;
+       short unsigned int pwm_on_time_0 = pwm_period;
+       short unsigned int pwm_on_time_1 = 0;
 
-int main(int argc, char \*\*argv) { ros::init(argc, argv,
-"sr\_ronex\_flash\_LED\_with\_PWM"); ros::NodeHandle n; std::string
-topic = "/ronex/general\_io/12/command/pwm/0"; flash\_LED( n, topic );
-return 0; } \`\`\`
+       ros::Rate loop_rate(100);
+       while ( ros::ok() )
+       {
+	 pwm_on_time_0 -= 10;
+	 if (pwm_on_time_0 < 0)
+	   pwm_on_time_0 = pwm_period;
+	 sr_ronex_msgs::PWM msg;
+	 msg.pwm_period    = pwm_period;
+	 msg.pwm_on_time_0 = pwm_on_time_0;
+	 msg.pwm_on_time_1 = pwm_on_time_1;
+	 pub.publish(msg);
+	 ros::spinOnce();
+	 loop_rate.sleep();
+       }
+     }
+
+     int main(int argc, char **argv)
+     {
+       ros::init(argc, argv, "sr_ronex_flash_LED_with_PWM");
+       ros::NodeHandle n;
+       std::string topic = "/ronex/general_io/12/command/pwm/0";
+       flash_LED( n, topic );
+       return 0;
+     }
+
 
 The Code Explained
 ------------------
 
 Now lets have a look at the code:
 
-``c++ #include <ros/ros.h> #include "sr_ronex_msgs/PWM.h"`` First we
-load import appropriate modules and messages, including the standard
-ros.h header to create a ros node and get access to the topics, sleep
-function etc and the PWM message format we're going to publish.
+.. code-block:: c++
 
-``c++ int main(int argc, char **argv) {   ros::init(argc, argv, "sr_ronex_flash_LED_with_PWM");   ros::NodeHandle n;   std::string topic = "/ronex/general_io/12/command/pwm/0";    flash_LED( n, topic );   return 0; }``
+     #include <ros/ros.h>
+     #include "sr_ronex_msgs/PWM.h"
+
+First we load import appropriate modules and messages, including the standard ros.h header to create a ros node and get access to the topics, sleep function etc and the PWM message format we're going to publish.
+
+.. code-block:: c++
+
+     int main(int argc, char **argv)
+     {
+       ros::init(argc, argv, "sr_ronex_flash_LED_with_PWM");
+       ros::NodeHandle n;
+       std::string topic = "/ronex/general_io/12/command/pwm/0";
+       flash_LED( n, topic );
+       return 0;
+     }
+
 In the main function (at the bottom of the file) we initialise the ROS
 node that will publish the messages, and add a handle to this node. We
 then set up the topic to be published to (we assume the LED is connected
@@ -65,17 +89,33 @@ could be retrieved from the parameter server. To learn how to do this
 you can follow the [[Parse Parameter Server (CPP) Tutorial\|Parse
 Parameter Server (CPP)]].
 
-``c++ void flash_LED( ros::NodeHandle& n, const std::string& topic ) {   ros::Publisher pub = n.advertise<sr_ronex_msgs::PWM>( topic, 1000 );   short unsigned int pwm_period = 320;   short unsigned int pwm_on_time_0 = pwm_period;   short unsigned int pwm_on_time_1 = 0;``
+.. code-block:: c++
+
+     void flash_LED( ros::NodeHandle& n, const std::string& topic )
+     {
+       ros::Publisher pub = n.advertise<sr_ronex_msgs::PWM>( topic, 1000 );
+       short unsigned int pwm_period = 320;
+       short unsigned int pwm_on_time_0 = pwm_period;
+       short unsigned int pwm_on_time_1 = 0;
+
+
 The handle to the node we created in the main function and the name of
 the topic to be published to is passed to the flash\_LED function from
 the main function. The publisher is then initialised, with message
 format PWM, the topic name passed from main, and a queue size of 1000.
 We set the PWM period to 320, and then the on time for channel 0 to the
 same value. This means corresponds to a 100% duty cycle, meaning the LED
-will receive full power. Channel 1 is not used, so we set the on time to
-0.
+will receive full power. Channel 1 is not used, so we set the on time to 0.
 
-``c++   ros::Rate loop_rate(100);    while ( ros::ok() )   {        pwm_on_time_0 -= 10;     if (pwm_on_time_0 < 0)       pwm_on_time_0 = pwm_period;``
+.. code-block:: c++
+
+       ros::Rate loop_rate(100);
+       while ( ros::ok() )
+       {
+	 pwm_on_time_0 -= 10;
+	 if (pwm_on_time_0 < 0)
+	   pwm_on_time_0 = pwm_period;
+
 Next we create a rate variable which will be used in combination with a
 sleep to maintain a 100Hz rate for the following loop. We then have a
 while loop that runs continuously until ROS is shutdown (or the program
@@ -84,7 +124,18 @@ channel 0 on time, making the LED gradually dimmer. If the on time has
 reached 0 (i.e. the LED is completely off), we set it equal to PWM
 period again (full power).
 
-``c++     sr_ronex_msgs::PWM msg;     msg.pwm_period    = pwm_period;     msg.pwm_on_time_0 = pwm_on_time_0;     msg.pwm_on_time_1 = pwm_on_time_1;     pub.publish(msg);        ros::spinOnce();     loop_rate.sleep();``
+.. code-block:: c++
+
+	 sr_ronex_msgs::PWM msg;
+	 msg.pwm_period    = pwm_period;
+	 msg.pwm_on_time_0 = pwm_on_time_0;
+	 msg.pwm_on_time_1 = pwm_on_time_1;
+	 pub.publish(msg);
+	 ros::spinOnce();
+	 loop_rate.sleep();
+       }
+     }
+
 We then create a PWM message and populate it with the values we have
 just assigned, publish it, call spinOnce() to send out the command, and
 sleep for the required time to maintain a 100Hz rate before returning to
@@ -108,9 +159,9 @@ and set ``input_mode_0`` to ``false``.
 
 Once this is done we can run our C++ program:
 
-::
+.. code-block:: bash
 
-    $ rosrun sr_ronex_examples sr_ronex_flash_LED_with_PWM
+    rosrun sr_ronex_examples sr_ronex_flash_LED_with_PWM
 
 You should now see your LED flashing. You can try adjusting the
 pwm\_on\_time\_0 increments and sleep time to achieve different light

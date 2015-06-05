@@ -1,3 +1,6 @@
+Analogue to PWM Configuration
+=============================
+
 This tutorial explains the calculations for converting an analogue value
 from a potentiometer into a PWM value corresponding to the same angle
 for a servo motor, as described in this tutorial and video: `Youtube
@@ -52,4 +55,3 @@ Which is then apparent in the Python code:
 ::
 
     pwm.pwm_on_time_0 = int(2.6042*analogue[0] + 1600)
-

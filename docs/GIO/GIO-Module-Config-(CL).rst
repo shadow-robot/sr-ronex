@@ -1,3 +1,6 @@
+Configure GIO Module (command line)
+====================================
+
 To update the configuration of your GIO module, for example setting each
 channel as an input or output mode, you'll need to use the Dynamic
 Reconfigure interfaces. To do this from the command line we can call a
@@ -17,7 +20,7 @@ outputs:
 
     $ rosservice call /ronex/general_io/12/set_parameters "config:
       bools:
-      - {name: 'input_mode_0', value: false, name: 'input_mode_1', value: false, name: 'input_mode_2', value: false, name: 'input_mode_3', value: false}" 
+      - {name: 'input_mode_0', value: false, name: 'input_mode_1', value: false, name: 'input_mode_2', value: false, name: 'input_mode_3', value: false}"
 
 The service call will return the current state of the GIO parameters,
 alternatively you can view this information at any time by echoing the
@@ -26,4 +29,3 @@ relevant topic:
 ::
 
     $ rostopic list /ronex/general_io/12/parameter_updates
-

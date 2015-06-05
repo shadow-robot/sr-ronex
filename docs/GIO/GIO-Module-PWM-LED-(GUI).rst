@@ -1,3 +1,6 @@
+Flashing a LED (GUI)
+====================
+
 The ROS GUI contains a number of useful graphical tools which can be
 used to interact with your GIO module. In this example we will look at
 how to configure a PWM module to control an LED on digital channel 0.
@@ -9,5 +12,3 @@ GUI.
 We can then open the publisher plugin, select the topic and message
 type, then configure the message. Not that the box on the left hand side
 must be ticked in order to publish the message.
-
-
