@@ -1,6 +1,13 @@
 General System Overview
 =======================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+   Using-aliases-with-your-RoNeX
+
 This page describes some of the key parameters, services and topics in
 the RoNeX system. If you're unfamiliar with these concepts, you can read
 more about the ROS system architecture

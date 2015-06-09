@@ -1,6 +1,11 @@
 Analogue to PWM Configuration
 =============================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 This tutorial explains the calculations for converting an analogue value
 from a potentiometer into a PWM value corresponding to the same angle
 for a servo motor, as described in this tutorial and video: :doc:`Youtube

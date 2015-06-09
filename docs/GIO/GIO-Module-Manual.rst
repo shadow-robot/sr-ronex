@@ -1,6 +1,14 @@
 GIO Module
 ==========
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+   GIO-Module-System-Overview
+   GIO-Module-Tutorials
+
 This section will tell you everything you need to know to get started
 with a GIO module, including the interfaces provided and various ways to
 interact with the module through said interfaces.

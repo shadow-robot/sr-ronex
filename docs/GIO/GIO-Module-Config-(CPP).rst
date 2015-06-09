@@ -1,6 +1,11 @@
 Configure GIO Module (c++)
 ==========================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 This tutorial will walk you through the basics of calling the RoNeX
 /set\_parameters service in a C++ script to adjust your RoNeX
 configuration. If you are often executing different RoNeX scripts that

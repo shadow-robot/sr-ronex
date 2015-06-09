@@ -1,6 +1,12 @@
 Running RoNeX without superuser
 ===============================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 To be able to run the RoNeX driver as a normal Linux user (no superuser
 privileges), we provide you with a handy script.
 

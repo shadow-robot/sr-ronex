@@ -1,6 +1,12 @@
 RoNeX on Raspberry Pi
 =====================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 *This is highly experimental!*
 
 Using pre-built image

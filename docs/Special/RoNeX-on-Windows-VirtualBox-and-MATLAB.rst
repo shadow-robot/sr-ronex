@@ -1,6 +1,12 @@
 RoNeX on Windows with Matlab
 ============================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 This tutorial shows how to interact with RoNeX from MATLAB with minimal
 prior knowledge of Linux and ROS. RoNeX drivers run on Ubuntu within a
 VirtualBox virtual machine (A pre-configured VM image is available for

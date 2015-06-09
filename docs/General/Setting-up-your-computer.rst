@@ -1,6 +1,13 @@
 Setting up your computer
 ========================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+   Groovy Install
+
 The current RoNeX driver is based on `ROS <http://www.ros.org>`__. We
 recommend that you use a computer with Ubuntu LTS 14.04 ("Trusty") installed on it. You will need less than 1GB of additional
 disk space for all of the ROS components. Follow the instructions here:

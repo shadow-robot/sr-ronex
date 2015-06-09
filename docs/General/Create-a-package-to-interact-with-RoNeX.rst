@@ -1,6 +1,12 @@
 Create a package to interact with RoNeX
 =======================================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 In this tutorial, we will create a package called **my\_first\_package**
 (inside workspace **my\_first\_ws**) to interact with RoNeX. Make sure
 that you read the following tutorials first.

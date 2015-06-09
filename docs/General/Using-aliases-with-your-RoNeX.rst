@@ -1,6 +1,12 @@
 Using aliases with your RoNeX
 =============================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 You can give aliases (i.e., pseudonyms) to your RoNeX modules (such as
 General I/O modules). An alias will be used as a unique identifier for
 one specific RoNeX module instead of its serial number.

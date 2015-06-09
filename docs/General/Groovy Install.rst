@@ -1,6 +1,12 @@
 Groovy Install
 ==============
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 We assume you've installed ROS groovy `following those
 instructions <http://wiki.ros.org/groovy/Installation/Ubuntu>`__.
 

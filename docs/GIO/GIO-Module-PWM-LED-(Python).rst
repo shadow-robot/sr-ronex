@@ -1,6 +1,11 @@
 Flashing a LED (python)
 ========================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 This example demonstrates how to flash an LED using `PWM (Pulse Width
 Modulation) <http://en.wikipedia.org/wiki/Pulse-width_modulation>`__ by
 varying duty cycle (i.e., the amount of time in the period that the

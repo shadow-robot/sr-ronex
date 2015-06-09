@@ -1,6 +1,12 @@
 Accessing Module parameters [C++]
 ====================================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 The example demonstrates how to access RoNeX modules listed in the
 parameter server. For each module, the parameter server stores
 parameters such as its product\_id, product\_name, ronex\_id, path, and

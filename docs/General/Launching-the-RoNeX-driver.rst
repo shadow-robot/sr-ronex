@@ -1,6 +1,12 @@
 Launching the RoNeX driver
 ==========================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 To start the driver, you'll need elevated permissions. Run:
 
 ::

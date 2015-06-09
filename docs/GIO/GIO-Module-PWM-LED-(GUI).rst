@@ -1,6 +1,11 @@
 Flashing a LED (GUI)
 ====================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 The ROS GUI contains a number of useful graphical tools which can be
 used to interact with your GIO module. In this example we will look at
 how to configure a PWM module to control an LED on digital channel 0.

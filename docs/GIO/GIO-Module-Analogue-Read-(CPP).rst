@@ -1,6 +1,11 @@
 GIO - Read analogue inputs (C++)
 ==================================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 A General I/O Module consists of one GIO Node board and one GIO
 Peripheral board. Each module has 12 Analogue sampling channels (12bits,
 1kHz) (a GIO Node board has 6 analogue input channels, a GIO Peripheral

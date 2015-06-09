@@ -1,6 +1,14 @@
 SPI Module
 ==========
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+   SPI-Module-System-Overview
+
+
 This section will tell you everything you need to know to get started
 with an SPI module, including the interfaces provided and various ways
 to interact with the module through said interfaces.

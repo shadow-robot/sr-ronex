@@ -1,6 +1,12 @@
 Setting parameters from a launch file
 =====================================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 Configuration parameters of a ronex module can also be set from a
 user-defined launchfile, by using the dynparam set option.
 

@@ -1,6 +1,11 @@
 Accessing the RoNeX data directly from a controller
 ===================================================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 This tutorial shows how you can access RoNex data directly from a
 controller at 1kHz.
 

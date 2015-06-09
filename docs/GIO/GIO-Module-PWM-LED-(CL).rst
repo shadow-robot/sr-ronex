@@ -1,6 +1,11 @@
 Flashing a LED (command line)
 =============================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 ROS Terminal commands are a quick and easy way to see what's going on
 with your RoNeX module. If you need to run something over and over again
 you'll want to write a script or use the GUI, but for one off tests, or

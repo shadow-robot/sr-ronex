@@ -1,6 +1,12 @@
 Accessing Module parameters [Command Line]
 ==========================================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 The ROS parameter server stores details of each RoNeX module such as
 serial number, module type, module alias etc. These can be read using
 the rosparam commands as follows.

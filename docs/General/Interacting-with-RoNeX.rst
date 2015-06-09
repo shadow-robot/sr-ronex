@@ -1,6 +1,12 @@
 Interacting with RoNeX
 ======================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+
 There are four main methods to interact with RoNeX, this section will
 give a brief introduction to these methods.
 

@@ -1,6 +1,11 @@
 Configure GIO Module (command line)
 ====================================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 To update the configuration of your GIO module, for example setting each
 channel as an input or output mode, you'll need to use the Dynamic
 Reconfigure interfaces. To do this from the command line we can call a

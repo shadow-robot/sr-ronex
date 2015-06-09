@@ -1,6 +1,15 @@
 Special Use Cases
 ==================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
+   RoNeX-on-Windows-VirtualBox-and-MATLAB
+   Ronex-on-RaspberryPi
+
+
 This section explains how to use RoNeX in non standard ways, such as
 through a virtual machine, on an ARM device or through MATLAB.
 

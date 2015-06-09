@@ -1,6 +1,11 @@
 GIO - Read analogue inputs (Gui)
 ================================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 The best way to analyse data from an analogue input channel in the GUI
 is to use the Plot plugin, which will allow you to display the data in a
 graphical manner.

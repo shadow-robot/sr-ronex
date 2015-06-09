@@ -1,6 +1,11 @@
 Flashing a LED (C++)
 =====================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 This example demonstrates how to flash an LED using `PWM (Pulse Width Modulation) <http://en.wikipedia.org/wiki/Pulse-width_modulation>`__ by varying duty cycle (i.e., the amount of time in the period that the pulse is active or high).
 
 Note that General I/O (GIO) module consists of one GIO Node board and one GIO Peripheral board, so there are 12 digital I/O channels (a GIO Node board has 6 digital I/O channels, a GIO Peripheral board has also 6 digital I/O channels). PWM is available on all 12 digital channels.

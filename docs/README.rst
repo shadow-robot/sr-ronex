@@ -3,19 +3,18 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to RoNeX's documentation!
-=================================
+RoNeX
+=====
 
 .. toctree::
    :maxdepth: 2
    :glob:
    :hidden:
 
-   *
-   General/*
-   GIO/*
-   SPI/*
-   Special/*
+   General/General-RoNeX-Setup
+   GIO/GIO-Module-Manual
+   SPI/SPI-Module-Manual
+   Special/Special-Use-Cases
 
 
 RoNeX is an industrial strength fieldbus for robots, that allows you to

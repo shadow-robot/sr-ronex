@@ -1,6 +1,11 @@
 Control a Joint Based Robot
 ===========================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 
 If you're working with a joint based robot, thanks to RoNeX, you can
 control your whole robot with just a few lines of xml (simply adding

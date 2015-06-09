@@ -1,6 +1,11 @@
 Configure a ronex module using the GUI
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 -  Run the dynamic reconfigure GUI directly:
 
 ::

@@ -1,6 +1,11 @@
 Configure GIO Module (python)
 =============================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 This tutorial will walk you through the basics of using the dynamic
 reconfigure client in a python script to adjust your RoNeX
 configuration. If you are often executing different RoNeX scripts that

@@ -1,6 +1,11 @@
 GIO - Read analogue inputs (command line)
 =========================================
 
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+
 Viewing GIO analogue input data on the command line is incredibly
 simple. The rostopic echo command subscribes to the topic in question
 then displays an data received in the terminal window:
