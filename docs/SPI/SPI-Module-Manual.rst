@@ -7,6 +7,7 @@ SPI Module
    :hidden:
 
    SPI-Module-System-Overview
+   SPI-Tutorials
 
 
 This section will tell you everything you need to know to get started
@@ -29,3 +30,8 @@ familiarise yourself with the SPI module.
 
 First of all let's have a look through the interfaces the SPI module
 provides in the :doc:`SPI Module System Overview </SPI/SPI-Module-System-Overview>`.
+
+:doc:`SPI Tutorials </SPI/SPI-Tutorials>`
+--------------------------------------------------------------------
+
+This section includes examples of how to interact with your SPI Module.
