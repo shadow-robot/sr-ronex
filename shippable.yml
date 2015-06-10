@@ -21,7 +21,7 @@ before_script:
   - cd ~/workspace/sr-build-tools/ansible
 
 script:
-  - sudo ansible-playbook -v -i "localhost," -c local docker_site.yml --tags "shippable,install,create_workspace,update_dependencies,build,unit_tests" -e "shippable_repo_dir=$SHIPPABLE_REPO_DIR"
+  - sudo ansible-playbook -v -i "localhost," -c local docker_site.yml --tags "shippable,build_pr_only,install,create_workspace,update_dependencies,build,unit_tests" -e "shippable_repo_dir=$SHIPPABLE_REPO_DIR  shippable_is_pull_request=$PULL_REQUEST"
 
 after_success:
   - gcovr -r ~/workspace --xml-pretty > ${root_folder}/shippable/codecoverage/coverage.xml
