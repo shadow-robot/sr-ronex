@@ -7,7 +7,6 @@
     <arg name="ethercat_port" value="$(arg ethercat_port)"/>
   </include>
 
-  <node name="ronex_ctrl_spawner"
-	pkg="sr_ronex_controllers" type="load_passthrough_controllers.py" output="screen"/>
-
+  <!-- Loads the passthrough controllers -->
+  <include file="$(find sr_ronex_launch)/loaders/passthrough_controllers.launch"/>
 </launch>
