@@ -25,16 +25,16 @@ outputs:
 .. code-block:: bash
 
     rosservice call /ronex/general_io/12/set_parameters "config:
-  bools:
-  - {name: '', value: false}
-  ints:
-  - {name: '', value: 0}
-  strs:
-  - {name: '', value: ''}
-  doubles:
-  - {name: '', value: 0.0}
-  groups:
-  - {name: '', state: false, id: 0, parent: 0}"
+	 bools:
+	 - {name: '', value: false}
+	 ints:
+	 - {name: '', value: 0}
+	 strs:
+	 - {name: '', value: ''}
+	 doubles:
+	 - {name: '', value: 0.0}
+	 groups:
+	 - {name: '', state: false, id: 0, parent: 0}"
 
 The service call will return the current state of the GIO parameters,
 alternatively you can view this information at any time by echoing the
