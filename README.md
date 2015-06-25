@@ -1,4 +1,4 @@
-[![Build Status](https://api.shippable.com/projects/554b2991edd7f2c052e402cd/badge?branchName=indigo-devel)](https://app.shippable.com/projects/554b2991edd7f2c052e402cd) [![Code Health](https://landscape.io/github/shadow-robot/sr-ronex/indigo-devel/landscape.svg?style=flat)](https://landscape.io/github/shadow-robot/sr-ronex/indigo-devel) [![codecov.io](http://codecov.io/github/shadow-robot/sr-ronex/coverage.svg?branch=indigo-devel)](http://codecov.io/github/shadow-robot/sr-ronex?branch=indigo-devel)
+[![Build Status](https://api.shippable.com/projects/554b2991edd7f2c052e402cd/badge?branchName=indigo-devel)](https://app.shippable.com/projects/554b2991edd7f2c052e402cd) [![Documentation Status](https://readthedocs.org/projects/sr-ronex/badge)](http://sr-ronex.readthedocs.org/) [![Code Health](https://landscape.io/github/shadow-robot/sr-ronex/indigo-devel/landscape.svg?style=flat)](https://landscape.io/github/shadow-robot/sr-ronex/indigo-devel) [![codecov.io](http://codecov.io/github/shadow-robot/sr-ronex/coverage.svg?branch=indigo-devel)](http://codecov.io/github/shadow-robot/sr-ronex?branch=indigo-devel)
 
 sr-ronex
 ========
