@@ -2,6 +2,12 @@
 Changelog for package sr_ronex_controllers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* added more tests
+* added test coverage to the other available packages
+* sending packet and checking response per spi channel.
+
 0.10.0 (2015-04-07)
 -------------------
 
