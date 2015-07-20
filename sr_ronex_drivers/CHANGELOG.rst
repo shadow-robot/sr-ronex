@@ -2,8 +2,8 @@
 Changelog for package sr_ronex_drivers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.11.0 (2015-07-20)
+-------------------
 * fixing broken ronex driver test
 * adding test coverage to the other available packages
 

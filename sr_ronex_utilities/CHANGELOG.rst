@@ -2,8 +2,8 @@
 Changelog for package sr_ronex_utilities
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.11.0 (2015-07-20)
+-------------------
 * added tests
 
 0.10.0 (2015-04-07)

@@ -2,8 +2,8 @@
 Changelog for package sr_ronex_launch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.11.0 (2015-07-20)
+-------------------
 * added ethercat_grant for non sudo access
 * added launch file to load passthrough controllers
 * propagating the robot description to the ronex no controllers launch file (makes it easier to use in a robot launch file)
