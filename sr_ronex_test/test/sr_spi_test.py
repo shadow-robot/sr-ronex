@@ -93,10 +93,10 @@ class TestSPIWithHardware(unittest.TestCase):
 
         # Test 1, turn on all the digital outputs
         self.run_test_case([True, True, True, True, True, True],
-                           [[3947, 3942, 3180, 3941], [3951, 3940, 3180, 3940]], [3543, 3542, 3540, 3535, 3544, 3761])
+                           [[3947, 3942, 3180, 3941], [3951, 3940, 3180, 3940]], [3563, 3542, 3540, 3535, 3544, 3761])
         # Test 2, turn off DIO_0
         self.run_test_case([False, True, True, True, True, True],
-                           [[3950, 3830, 2415, 3941], [3951, 327, 3180, 3831]], [3543, 3542, 3540, 3438, 3445, 671])
+                           [[3950, 3830, 2415, 3941], [3951, 327, 3180, 3831]], [3563, 3542, 3540, 3438, 3445, 671])
         # Test 3, turn off DIO_1
         self.run_test_case([True, False, True, True, True, True],
                            [[3949, 326, 2415, 3941], [3951, 3833, 3188, 3831]], [3544, 3546, 3545, 3439, 310, 3666])
@@ -121,19 +121,19 @@ class TestSPIWithHardware(unittest.TestCase):
         for adc_number in range(len(self.spi_srv)):
             results.append(self.read_adc(adc_number, 0))
             self.assertAlmostEquals(results[adc_number], expected_as[0][adc_number],
-                                    msg="Testing channel 0 of " + str(adc_number) + "failed.", delta=30)
+                                    msg="Testing channel 0 of " + str(adc_number) + "failed (delta = " + str(results[adc_number] - expected_as[0][adc_number]) + " / received = " + str(results[adc_number]) + ").", delta=45)
 
         # check channel 1 of all the spi modules
         results = []
         for adc_number in range(len(self.spi_srv)):
             results.append(self.read_adc(adc_number, 1))
             self.assertAlmostEquals(results[adc_number], expected_as[1][adc_number],
-                                    msg="Testing channel 1 of " + str(adc_number) + "failed.", delta=30)
+                                    msg="Testing channel 1 of " + str(adc_number) + "failed (delta = " + str(results[adc_number] - expected_as[1][adc_number]) + " / received = " + str(results[adc_number]) + ").", delta=45)
 
         # check all the analogue inputs
         for analogue_id in range(0, 6):
             self.assertAlmostEquals(self.analogue_in[analogue_id], expected_analogue[analogue_id],
-                                    msg="Testing analogue input" + str(analogue_id) + "failed.", delta=30)
+                                    msg="Testing analogue input" + str(analogue_id) + "failed (delta = " + str(self.analogue_in[analogue_id] - expected_analogue[analogue_id]) + " / received = " + str(self.analogue_in[analogue_id]) + ").", delta=45)
 
     def set_DIO_states(self, digital_states):
         # set pre / post states
