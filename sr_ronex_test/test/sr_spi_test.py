@@ -121,7 +121,7 @@ class TestSPIWithHardware(unittest.TestCase):
         for adc_number in range(len(self.spi_srv)):
             results.append(self.read_adc(adc_number, 0))
             self.assertAlmostEquals(results[adc_number], expected_as[0][adc_number],
-                                    msg="Testing channel 0 of " + str(adc_number) + "failed (delta = " + str(results[adc_number] - expected_as[0][adc_number]) + " / received = "+str(results[adc_number]) + ").", delta=45)
+                                    msg="Testing channel 0 of " + str(adc_number) + "failed (delta = " + str(results[adc_number] - expected_as[0][adc_number]) + " / received = " + str(results[adc_number]) + ").", delta=45)
 
         # check channel 1 of all the spi modules
         results = []
