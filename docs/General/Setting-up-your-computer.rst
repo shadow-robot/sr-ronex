@@ -15,6 +15,13 @@ disk space for all of the ROS components. Follow the instructions here:
 Indigo <http://wiki.ros.org/indigo/Installation/Ubuntu>`__ to install ROS
 Indigo on Ubuntu - we recommend the ``ros-indigo-desktop-full`` package.
 
+Connecting RoNex
+----------------
+RoNex can be connected to your computer via an ethernet port, however if
+you are lacking spare ports, a USB 2.0 to Gigabit ethernet adapter can
+be used. We have tested RoNex with the StarTech.com USB 2.0 to Gigabit
+Ethernet NIC Network Adapter.
+
 Installing the drivers for ROS Indigo
 -------------------------------------
 
