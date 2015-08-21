@@ -1,11 +1,10 @@
 language: python
-build_image: shippableimages/ubuntu1404_python
 python:
   - 2.7
 
-#codecov token (encrypted)
+# codecov token and slack web hook URL (encrypted)
 env:
-  - secure: H0XZB72tgnQ6aERq9Q/Aycg1KP4LNCP//Yo9N5rc20ioqo25kMweddDQfyqnMkCqyLhca+uCcQw1HGWfYcus8DQzVPUIgntqBq7P13ag4kin1ym5BrYel5irPLnnt3CATH1/VLCMDoN+q9DnkbvDVPWwCWKzf6Vv5AsItyjb6cQi2jksk6exkC1Zv33h/0Mf/qFlMx5nLSUubuOkH9a0K5GmtFciSI2k/5d+K7RaB1PERFLTAcnAiRXxhd2O+dyMpnw5CEzODYDDm1Hekji7mOtOd4rmAvQWMkHGPRmJF4a/KfvX4W2hfZyoCSZIeAud+NLrmP0nvYWBVmqdVRvnCw==
+  - secure: 1aosZSYrFWGyuqotwoZyd6oc+TxghPlv/Y7Rv8fBzlghWX+WDNJVieSlQ5aIaIzT0VX3dd/Bf2Hb8V0Id/meZkzEudfCzdjzQDvgLDdhLy2aapKvggfNqVPk/bjJ/DXsD8oqxrKYsX0Jnz6IweYmnE80Q3OBvQXB6gLrzKPaghfYd6X8Xv/2Q8fsXJYfLKbOZ5+lWj2qIyghaDzee+8EOYstpHTFZXpF/9qUJQBwOdP5haHf3UpFwqRv/qsDHzziRQu0bF90jYHDBJpnXmfQWyppMLfQvjK6CqTsCNWZ4LEZj6woT+5aakF1ZEULeQi8ZZooTXxIGTDUF5Y+nu6Gdg==
 
 cache: true
 
@@ -16,6 +15,9 @@ install:
 script:
   - export toolset_branch="master"
   - export server_type="shippable"
-  - export used_modules="check_cache,install,create_workspace,code_style_check,unit_tests,codecov_tool"
+  - export used_modules="build_pr_only,check_cache,install,create_workspace,codecov_tool"
   - export remote_shell_script="https://raw.githubusercontent.com/shadow-robot/sr-build-tools/$toolset_branch/bin/sr-run-ci-build.sh"
   - curl -s "$( echo "$remote_shell_script" | sed 's/#/%23/g' )" | bash /dev/stdin "$toolset_branch" $server_type $used_modules
+
+after_failure:
+  - curl -X POST --data-urlencode "payload={\"channel\":\"#bots\", \"username\":\"shippable\", \"text\":\"[$SHIPPABLE_REPO_SLUG branch $BRANCH] <$BUILD_URL|Build $SHIPPABLE_BUILD_NUMBER> failed\", \"icon_emoji\":\":monkey_face:\"}" $SLACK_WEB_HOOK_URL
