@@ -25,7 +25,7 @@ find_package(catkin REQUIRED COMPONENTS
 include_directories(include ${catkin_INCLUDE_DIRS} )
 
 #add dynamic reconfigure api
-generate_dynamic_reconfigure_options(cfg/GeneralIO.cfg cfg/SPI.cfg cfg/ADC16.cfg cfg/ADC16_32pins.cfg cfg/ADC16_48pins.cfg)
+generate_dynamic_reconfigure_options(cfg/GeneralIO.cfg cfg/SPI.cfg cfg/ADC16.cfg)
 
 add_definitions(-Wall)
 add_library(sr_ronex_drivers

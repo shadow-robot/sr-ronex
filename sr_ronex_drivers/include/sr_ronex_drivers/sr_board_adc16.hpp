@@ -38,8 +38,6 @@
 
 #include <dynamic_reconfigure/server.h>
 #include "sr_ronex_drivers/ADC16Config.h"
-#include "sr_ronex_drivers/ADC16_32pinsConfig.h"
-#include "sr_ronex_drivers/ADC16_48pinsConfig.h"
 
 using namespace std;
 
@@ -94,7 +92,7 @@ protected:
   bool reg_flag_;
   //Switch for states of setting registers
   int reg_state_;
-
+  //Count for feedback
   int feedback_flag_;
 
   ///True if a stacker board is plugged in the RoNeX
@@ -103,17 +101,21 @@ protected:
   ///False to run digital pins as output, True to run as input
   std::vector<bool> input_mode_;
 
+  //Queue of commands to send to register
   std::queue<RONEX_COMMAND_02000008> command_queue_;
   std::queue<RONEX_COMMAND_02000008> queue_backup_;
 
   //1 for single ended adc, 2 for differential
   std::vector<int> pin_mode_;
 
+  //Number of stacks present
   int stack;
 
   //values_s0: first single ended pin values,
   //values_s1: second single ended pin values,
   //values_d: differential pin values
+  //fake_values: the additional bits sent
+  //padded: the addition of requested and fake values
   std::vector<unsigned short int> values_s0_;
   std::vector<unsigned short int> values_s1_;
   std::vector<unsigned short int> values_d_;
