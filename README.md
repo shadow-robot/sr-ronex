@@ -1,4 +1,10 @@
-[![Build Status](https://api.shippable.com/projects/554b2991edd7f2c052e402cd/badge?branchName=indigo-devel)](https://app.shippable.com/projects/554b2991edd7f2c052e402cd) [![Documentation Status](https://readthedocs.org/projects/sr-ronex/badge)](http://sr-ronex.readthedocs.org/) [![Code Health](https://landscape.io/github/shadow-robot/sr-ronex/indigo-devel/landscape.svg?style=flat)](https://landscape.io/github/shadow-robot/sr-ronex/indigo-devel) [![codecov.io](http://codecov.io/github/shadow-robot/sr-ronex/coverage.svg?branch=indigo-devel)](http://codecov.io/github/shadow-robot/sr-ronex?branch=indigo-devel)
+|     Service       |  Status  |
+| ----------------- | -------- |
+| Documentation     | [![Documentation Status](https://readthedocs.org/projects/sr-ronex/badge)](http://sr-ronex.readthedocs.org/) |
+| Code style checks | [![Circle CI](https://circleci.com/gh/shadow-robot/sr-ronex.svg?style=shield)](https://circleci.com/gh/shadow-robot/sr-ronex) |
+| Unit tests        | [![Build Status](https://img.shields.io/shippable/554b2991edd7f2c052e402cd.svg)](https://app.shippable.com/projects/554b2991edd7f2c052e402cd) |
+| Install tests     | [![Build Status](https://semaphoreci.com/api/v1/projects/b84707ef-b651-423c-bf5a-e21efe8bb8a0/530156/shields_badge.svg)](https://semaphoreci.com/shadow-robot/sr-ronex) |
+| Code Coverage     | [![codecov.io](http://codecov.io/github/shadow-robot/sr-ronex/coverage.svg?branch=indigo-devel)](http://codecov.io/github/shadow-robot/sr-ronex?branch=indigo-devel) |
 
 sr-ronex
 ========
