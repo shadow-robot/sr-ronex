@@ -187,9 +187,9 @@ void CommandToPWM::propagateToRonex(ros_ethercat_model::JointState *js)
     general_io_->command_.digital_[digital_pin_index_] = (js->commanded_effort_ < 0.0);
  }
 }
-}// namespace general_io
-}// namespace mapping
-}// namespace ronex
+}  // namespace general_io
+}  // namespace mapping
+}  // namespace ronex
 /* For the emacs weenies in the crowd.
 Local Variables:
 c-basic-offset: 2

@@ -62,12 +62,12 @@ private:
 
   ronex::GeneralIO* general_io_;
 
-  ///send commands to the RoNeX's digital I/O
+  /// send commands to the RoNeX's digital I/O
   std::vector<ros::Subscriber> digital_subscribers_;
-  ///send PWM commands to the RoNeX's
+  /// send PWM commands to the RoNeX's
   std::vector<ros::Subscriber> pwm_subscribers_;
 };
-}// namespace ronex
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

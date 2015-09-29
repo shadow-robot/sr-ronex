@@ -85,7 +85,7 @@ protected:
 private:
   bool new_command;
 };
-}// namespace ronex
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

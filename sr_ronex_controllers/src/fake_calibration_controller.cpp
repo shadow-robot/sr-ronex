@@ -69,7 +69,7 @@ void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
 {
   assert(joint_);
 
-  switch(state_)
+  switch (state_)
   {
   case INITIALIZED:
     state_ = BEGINNING;
@@ -78,7 +78,8 @@ void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
     joint_->calibrated_ = true;
     calib_msg_.data = true;
     state_ = CALIBRATED;
-    // We add the following line to delay for some time the first publish and allow the correct initialization of the subscribers in calibrate.py
+    // We add the following line to delay for some time the first publish and allow the correct initialization of the
+    // subscribers in calibrate.py
     last_publish_time_ = robot_->getTime();
     break;
   case CALIBRATED:

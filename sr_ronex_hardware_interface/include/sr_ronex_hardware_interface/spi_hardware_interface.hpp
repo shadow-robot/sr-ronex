@@ -60,7 +60,7 @@ public:
     command_->command_type = RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL;
 
     // set allocated CS pins to high (pre and post)
-    switch( spi_index )
+    switch ( spi_index )
     {
     case 0:
       command_->pin_output_states_pre |= PIN_OUTPUT_STATE_CS_0;
@@ -87,7 +87,7 @@ public:
     command_->spi_out[spi_index].num_bytes = 0;
   };
 };
-}
+}  // namespace ronex
 /* For the emacs weenies in the crowd.
 Local Variables:
    c-basic-offset: 2

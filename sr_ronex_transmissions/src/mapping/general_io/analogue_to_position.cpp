@@ -165,9 +165,9 @@ double AnalogueToPosition::compute_scaled_data_()
 {
   return general_io_->state_.analogue_[pin_index_]*scale_ + offset_;
 }
-}// namespace general_io
-}// namespace mapping
-}// namespace ronex
+}  // namespace general_io
+}  // namespace mapping
+}  // namespace ronex
 /* For the emacs weenies in the crowd.
    Local Variables:
    c-basic-offset: 2

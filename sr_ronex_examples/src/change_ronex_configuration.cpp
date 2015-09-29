@@ -91,7 +91,7 @@ int main(int argc, char **argv)
   // This class demonstrate how to change the configuration parameters of a running ronex module.
   ChangeRonexConfigurationExample example;
 
-  //Define the ronex id of the module to be configured
+  // Define the ronex id of the module to be configured
   std::string ronex_id = "test_ronex";
   std::string ronex_path = "/ronex/general_io/" + ronex_id + "/";
 

@@ -42,7 +42,7 @@ public:
   /**
    * This function is not doing anything as we're not propagating a status in this mapping.
    */
-  virtual void propagateFromRonex(ros_ethercat_model::JointState *js) {};
+  virtual void propagateFromRonex(ros_ethercat_model::JointState *js) {}
 
   /**
    * Propagating the specified joint command to the given PWM module.

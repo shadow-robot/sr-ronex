@@ -51,7 +51,7 @@ protected:
   EtherCAT_SlaveHandler *sh_;
   ros_ethercat_model::RobotState *hw_;
 };
-}
+}  // namespace sr_cod_decod
 
 
 #endif

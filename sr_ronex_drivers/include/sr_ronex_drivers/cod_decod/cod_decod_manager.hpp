@@ -46,15 +46,15 @@ public:
   void build_command(unsigned char *command_buffer);
 
 private:
-  ///This points to an object of a CodDecod child class. The actual type is decided in the construct function
-  ///based on the declared plugins, and on the product code and serial number read from the ethercat slave
+  /// This points to an object of a CodDecod child class. The actual type is decided in the construct function
+  /// based on the declared plugins, and on the product code and serial number read from the ethercat slave
   boost::shared_ptr<CodDecod> cod_decod_;
 
   ros::NodeHandle node_;
-  ///this ClassLoader allows us to get the list of the declared CodDecod classes and load the one that matches
-  ///the product code and serial number read from the ethercat slave
+  /// this ClassLoader allows us to get the list of the declared CodDecod classes and load the one that matches
+  /// the product code and serial number read from the ethercat slave
   pluginlib::ClassLoader<CodDecod> cod_decod_loader_;
 };
-}
+}  // namespace sr_cod_decod
 
 #endif

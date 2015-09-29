@@ -210,7 +210,7 @@ class TestRonexWithHardware(unittest.TestCase):
             expected = self.expected_analogue_values_b
 
         for ind, value in enumerate(expected):
-            self.assertAlmostEqual(value, analogue[ind], delta = 30)
+            self.assertAlmostEqual(value, analogue[ind], delta=30)
 
     def test_pwm_outputs(self):
 

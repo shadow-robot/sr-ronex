@@ -63,7 +63,7 @@ private:
 
   std_msgs::Bool calib_msg_;
 };
-}// namespace ronex
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

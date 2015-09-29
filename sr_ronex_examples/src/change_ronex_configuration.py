@@ -38,7 +38,7 @@ class ChangeRonexConfigurationExample(object):
         ronex_id = "test_ronex"
         ronex_path = "/ronex/general_io/" + ronex_id + "/"
         self.configure_ronex(ronex_path)
-        
+
     def configure_ronex(self, path):
         """
         In this example we are using the dynamic_reconfigure.client.

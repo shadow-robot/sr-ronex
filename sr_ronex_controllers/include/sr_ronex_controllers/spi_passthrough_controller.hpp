@@ -43,9 +43,9 @@ class SPIPassthroughController
 public:
   virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-  bool command_srv_cb( sr_ronex_msgs::SPI::Request &req,
+  bool command_srv_cb(sr_ronex_msgs::SPI::Request &req,
                        sr_ronex_msgs::SPI::Response &res,
-                       size_t spi_out_index );
+                       size_t spi_out_index);
 
   void dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level);
 
@@ -64,7 +64,7 @@ private:
   //Instantiating the services / dynamic reconfigure callbacks etc..
   void post_init_();
 };
-}// namespace ronex
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

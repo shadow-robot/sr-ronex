@@ -38,7 +38,7 @@ AnalogueToEffort::AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model:
 
 void AnalogueToEffort::propagateFromRonex(ros_ethercat_model::JointState *js)
 {
-  if( !is_initialized_ )
+  if ( !is_initialized_ )
     return;
 
   if( check_pin_in_bound_() )
@@ -46,9 +46,9 @@ void AnalogueToEffort::propagateFromRonex(ros_ethercat_model::JointState *js)
     js->effort_ = compute_scaled_data_();
   }
 }
-}// namespace general_io
-}// namespace mapping
-}// namespace ronex
+}  // namespace general_io
+}  // namespace mapping
+}  // namespace ronex
 /* For the emacs weenies in the crowd.
    Local Variables:
    c-basic-offset: 2

@@ -50,7 +50,7 @@ public:
   /**
    * This function is not doing anything as we're not propagating a command in this mapping.
    */
-  virtual void propagateToRonex(ros_ethercat_model::JointState *js) {};
+  virtual void propagateToRonex(ros_ethercat_model::JointState *js) {}
 
 protected:
   ///Pointer to the GeneralIO module we specified in the transmission.

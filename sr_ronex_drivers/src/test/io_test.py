@@ -52,7 +52,8 @@ class IoTest(object):
     The PWM outputs will be set to their lower frequency, and the digital inputs used to check the on-off period
     The analog output 0 will be wired to analog inputs 0 and 2, output 1 to inputs 1 and 3
 
-    Keep in mind that the test is intended to be run with the LEDs attached to the digital I/Os and the correct wiring of the analog I and O
+    Keep in mind that the test is intended to be run with the LEDs attached to the digital I/Os and the correct wiring
+    of the analog I and O
     """
 # Example of existing topics for a certain device
 # /device_0x05300424_0x00000016_PWM_outputs_command
@@ -68,11 +69,18 @@ class IoTest(object):
         self.device_SN = device_SN
         self.a_state_lock = Lock()
         self.d_state_lock = Lock()
-        self.analog_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN + "_analog_outputs_command", UInt16MultiArray, latch=True)
-        self.digital_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN + "_digital_outputs_command", BoolArray, latch=True)
-        self.PWM_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN + "_PWM_outputs_command", UInt16MultiArray, latch=True)
-        self.analog_state_subscriber_ = rospy.Subscriber("/device_" + PRODUCT_CODE + "_" + device_SN + "_analog_inputs_state", UInt16MultiArray, self.analog_state_callback)
-        self.digital_state_subscriber_ = rospy.Subscriber("/device_" + PRODUCT_CODE + "_" + device_SN + "_digital_inputs_state", BoolArray, self.digital_state_callback)
+        self.analog_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN +
+                                                        "_analog_outputs_command", UInt16MultiArray, latch=True)
+        self.digital_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN +
+                                                         "_digital_outputs_command", BoolArray, latch=True)
+        self.PWM_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN +
+                                                     "_PWM_outputs_command", UInt16MultiArray, latch=True)
+        self.analog_state_subscriber_ = rospy.Subscriber("/device_" + PRODUCT_CODE + "_" + device_SN +
+                                                         "_analog_inputs_state", UInt16MultiArray,
+                                                         self.analog_state_callback)
+        self.digital_state_subscriber_ = rospy.Subscriber("/device_" + PRODUCT_CODE + "_" + device_SN +
+                                                          "_digital_inputs_state", BoolArray,
+                                                          self.digital_state_callback)
 
         self.last_analog_state = None
         self.last_digital_state = None
@@ -95,14 +103,15 @@ class IoTest(object):
                     # detect the falling edge of the PWM signal
                     if value and not msg.data[i]:
                         if self.last_period_start_time[i] != 0.0:
-                            self.average_period[i] = (1- PERIOD_ALPHA) * self.average_period[i] + PERIOD_ALPHA * (rospy.get_time() - self.last_period_start_time[i])
+                            self.average_period[i] = (1- PERIOD_ALPHA) * self.average_period[i] + \
+                                                     PERIOD_ALPHA * (rospy.get_time() - self.last_period_start_time[i])
                         self.last_period_start_time[i] = rospy.get_time()
             self.last_digital_state = msg
 
     def check_digital_inputs(self, output_values):
         rospy.sleep(0.1)
         with self.d_state_lock:
-            if self.last_digital_state != None:
+            if self.last_digital_state is not None:
                 for i, value in enumerate(output_values):
                     if i & 1:                
                         if self.last_digital_state.data[i/2] != value:
@@ -132,20 +141,24 @@ class IoTest(object):
     def check_analog_inputs(self, output_values):
         rospy.sleep(0.1)
         with self.a_state_lock:
-            if self.last_analog_state != None:
+            if self.last_analog_state is not None:
                 for i, value in enumerate(output_values):
                     index = i
                     if (float(value) / float(self.last_analog_state.data[index])) > ANALOG_RATIO_UPPER or \
                        (float(value) / float(self.last_analog_state.data[index])) < ANALOG_RATIO_LOWER:
-                        rospy.logerr("Wrong value in analog input " + str(index) + " set: " + str(value) + " measured: " + str(self.last_analog_state.data[index]) + " ratio: " + str(float(value) / float(self.last_analog_state.data[index])))
+                        rospy.logerr("Wrong value in analog input " + str(index) + " set: " + str(value) +
+                                     " measured: " + str(self.last_analog_state.data[index]) + " ratio: " +
+                                     str(float(value) / float(self.last_analog_state.data[index])))
                         self.success = False
                     index = i + 2
                     if (float(value) / float(self.last_analog_state.data[index])) > ANALOG_RATIO_UPPER or \
                        (float(value) / float(self.last_analog_state.data[index])) < ANALOG_RATIO_LOWER:
-                        rospy.logerr("Wrong value in analog input " + str(index) + " set: " + str(value) + " measured: " + str(self.last_analog_state.data[index]) + " ratio: " + str(float(value) / float(self.last_analog_state.data[index])))
+                        rospy.logerr("Wrong value in analog input " + str(index) + " set: " + str(value) +
+                                     " measured: " + str(self.last_analog_state.data[index]) + " ratio: " +
+                                     str(float(value) / float(self.last_analog_state.data[index])))
                         self.success = False
             else:
-                rospy.logerr("No analog input data recived from: " + self.device_SN)
+                rospy.logerr("No analog input data received from: " + self.device_SN)
                 self.success = False	
 
     def test_analog_io_case(self, output_values):
@@ -204,7 +217,8 @@ class IoTest(object):
         if self.success:
             rospy.loginfo("NO ERRORS DETECTED. Product code: " + PRODUCT_CODE + " SN: " + self.device_SN)
         else:
-            rospy.logerr("TEST FAILED. ERRORS DETECTED!!!!!!!!!!!!!!!!!!!!!!!!!! Product code: " + PRODUCT_CODE + " SN: " + self.device_SN)
+            rospy.logerr("TEST FAILED. ERRORS DETECTED!!!!!!!!!!!!!!!!!!!!!!!!!! Product code: " + PRODUCT_CODE +
+                         " SN: " + self.device_SN)
 
 
 def main(argv):
@@ -219,8 +233,8 @@ def main(argv):
             sys.exit()
 
     if len(args) == 0:
-       print 'io_test.py <SN_device_1> ... <SN_device_N>'
-       sys.exit(2)
+        print 'io_test.py <SN_device_1> ... <SN_device_N>'
+        sys.exit(2)
 
     # init the ros node
     rospy.init_node('IO_test', anonymous=True)

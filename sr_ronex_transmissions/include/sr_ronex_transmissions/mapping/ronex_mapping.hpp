@@ -68,7 +68,7 @@ protected:
   virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot,
   const char* ronex_name) = 0;
 };
-}
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
    Local Variables:
