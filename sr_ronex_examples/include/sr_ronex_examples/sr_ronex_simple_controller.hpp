@@ -57,6 +57,6 @@ private:
 
   ronex::GeneralIO* general_io_;
 };
-}
+}// namespace ronex
 
 #endif /* _SR_RONEX_SIMPLE_CONTROLLER_HPP_ */

@@ -27,28 +27,28 @@
 
 namespace ronex
 {
-  namespace mapping
+namespace mapping
+{
+namespace general_io
+{
+AnalogueToEffort::AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot)
+  : AnalogueToPosition(mapping_el, robot)
+{
+}
+
+void AnalogueToEffort::propagateFromRonex(ros_ethercat_model::JointState *js)
+{
+  if( !is_initialized_ )
+    return;
+
+  if( check_pin_in_bound_() )
   {
-    namespace general_io
-    {
-      AnalogueToEffort::AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot)
-        : AnalogueToPosition(mapping_el, robot)
-      {
-      }
-
-      void AnalogueToEffort::propagateFromRonex(ros_ethercat_model::JointState *js)
-      {
-        if( !is_initialized_ )
-          return;
-
-        if( check_pin_in_bound_() )
-        {
-          js->effort_ = compute_scaled_data_();
-        }
-      }
-    }
+    js->effort_ = compute_scaled_data_();
   }
 }
+}// namespace general_io
+}// namespace mapping
+}// namespace ronex
 /* For the emacs weenies in the crowd.
    Local Variables:
    c-basic-offset: 2

@@ -43,7 +43,7 @@ protected:
 boost::ptr_vector<RonexMapping> ronex_mappings_;
 boost::ptr_vector<RonexMapping>::iterator ronex_iter_;
 };
-}
+}// namespace ronex
 
 /* For the emacs weenies in the crowd.
    Local Variables:

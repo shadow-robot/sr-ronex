@@ -98,7 +98,7 @@ namespace ronex
     std::string param;
 
     int ronex_parameter_id = 0;
-    while( true )
+    while ( true )
     {
       std::stringstream ss;
       ss << "/ronex/devices/" << ronex_parameter_id << "/ronex_id";

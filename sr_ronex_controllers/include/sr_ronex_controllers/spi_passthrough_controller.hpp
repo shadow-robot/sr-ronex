@@ -37,34 +37,34 @@
 
 namespace ronex
 {
-  class SPIPassthroughController
-    : public SPIBaseController
-  {
-  public:
-    virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+class SPIPassthroughController
+  : public SPIBaseController
+{
+public:
+  virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-    bool command_srv_cb( sr_ronex_msgs::SPI::Request &req,
-                         sr_ronex_msgs::SPI::Response &res,
-                         size_t spi_out_index );
+  bool command_srv_cb( sr_ronex_msgs::SPI::Request &req,
+                       sr_ronex_msgs::SPI::Response &res,
+                       size_t spi_out_index );
 
-    void dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level);
+  void dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level);
 
-  private:
-    std::vector<ros::ServiceServer> command_srv_;
+private:
+  std::vector<ros::ServiceServer> command_srv_;
 
-    //vector containing one command per spi output.
-    // Some parameters of these commands are updated through the dynamic reconfigure interface
-    // The data packet is updated from the service.
-    std::vector<SplittedSPICommand> standard_commands_;
+  //vector containing one command per spi output.
+  // Some parameters of these commands are updated through the dynamic reconfigure interface
+  // The data packet is updated from the service.
+  std::vector<SplittedSPICommand> standard_commands_;
 
-    ///Dynamic reconfigure server for setting the parameters of the driver
-    boost::scoped_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig> > dynamic_reconfigure_server_;
-    dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>::CallbackType function_cb_;
+  ///Dynamic reconfigure server for setting the parameters of the driver
+  boost::scoped_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig> > dynamic_reconfigure_server_;
+  dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>::CallbackType function_cb_;
 
-    //Instantiating the services / dynamic reconfigure callbacks etc..
-    void post_init_();
-  };
-}
+  //Instantiating the services / dynamic reconfigure callbacks etc..
+  void post_init_();
+};
+}// namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

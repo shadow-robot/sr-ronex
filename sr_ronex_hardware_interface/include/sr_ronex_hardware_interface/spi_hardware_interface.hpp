@@ -59,7 +59,7 @@ public:
   {
     command_->command_type = RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL;
 
-    //set allocated CS pins to high (pre and post)
+    // set allocated CS pins to high (pre and post)
     switch( spi_index )
     {
     case 0:
@@ -83,7 +83,7 @@ public:
       break;
     }
 
-    //setting num bytes to 0 for each SPI outputs
+    // setting num bytes to 0 for each SPI outputs
     command_->spi_out[spi_index].num_bytes = 0;
   };
 };

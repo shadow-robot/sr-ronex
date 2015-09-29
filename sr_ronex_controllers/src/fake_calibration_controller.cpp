@@ -25,7 +25,7 @@
 #include "sr_ronex_controllers/fake_calibration_controller.hpp"
 #include "pluginlib/class_list_macros.h"
 
-PLUGINLIB_EXPORT_CLASS( ronex::FakeCalibrationController, controller_interface::ControllerBase)
+PLUGINLIB_EXPORT_CLASS(ronex::FakeCalibrationController, controller_interface::ControllerBase)
 
 namespace ronex
 {
@@ -78,7 +78,7 @@ void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
     joint_->calibrated_ = true;
     calib_msg_.data = true;
     state_ = CALIBRATED;
-    //We add the following line to delay for some time the first publish and allow the correct initialization of the subscribers in calibrate.py
+    // We add the following line to delay for some time the first publish and allow the correct initialization of the subscribers in calibrate.py
     last_publish_time_ = robot_->getTime();
     break;
   case CALIBRATED:
@@ -98,7 +98,7 @@ void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
     break;
   }
 }
-}
+}// namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

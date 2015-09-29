@@ -32,54 +32,54 @@ namespace ronex
 {
 namespace mapping
 {
-  namespace general_io
-  {
-    class AnalogueToPosition
-      : public RonexMapping
-    {
-    public:
-      AnalogueToPosition(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
+namespace general_io
+{
+class AnalogueToPosition
+  : public RonexMapping
+{
+public:
+  AnalogueToPosition(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
 
-      /**
-       * Propagating the specified analogue pin data to the given joint position.
-       *
-       * @param js joint_state of the joint specified in the transmission
-       */
-      virtual void propagateFromRonex(ros_ethercat_model::JointState *js);
+  /**
+   * Propagating the specified analogue pin data to the given joint position.
+   *
+   * @param js joint_state of the joint specified in the transmission
+   */
+  virtual void propagateFromRonex(ros_ethercat_model::JointState *js);
 
-      /**
-       * This function is not doing anything as we're not propagating a command in this mapping.
-       */
-      virtual void propagateToRonex(ros_ethercat_model::JointState *js) {};
+  /**
+   * This function is not doing anything as we're not propagating a command in this mapping.
+   */
+  virtual void propagateToRonex(ros_ethercat_model::JointState *js) {};
 
-    protected:
-      ///Pointer to the GeneralIO module we specified in the transmission.
-      GeneralIO* general_io_;
-      ///index of the analogue pin
-      size_t pin_index_;
-      ///Is the pin inside the correct range?
-      bool pin_out_of_bound_;
+protected:
+  ///Pointer to the GeneralIO module we specified in the transmission.
+  GeneralIO* general_io_;
+  ///index of the analogue pin
+  size_t pin_index_;
+  ///Is the pin inside the correct range?
+  bool pin_out_of_bound_;
 
-      ///The user can apply a scaling and offset to the raw data.
-      double scale_, offset_;
+  ///The user can apply a scaling and offset to the raw data.
+  double scale_, offset_;
 
-      /**
-       * Computes the scaled data from the raw value.
-       * @return scaled data
-       */
-      double compute_scaled_data_();
+  /**
+   * Computes the scaled data from the raw value.
+   * @return scaled data
+   */
+  double compute_scaled_data_();
 
-      /**
-       * Check whether the pin is in the correct range.
-       * @return true if the pin is in the correct range
-       */
-      bool check_pin_in_bound_();
+  /**
+   * Check whether the pin is in the correct range.
+   * @return true if the pin is in the correct range
+   */
+  bool check_pin_in_bound_();
 
-      virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
-    };
-  }
-}
-}
+  virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
+};
+}// namespace general_io
+}// namespace mapping
+}// namespace ronex
 /* For the emacs weenies in the crowd.
    Local Variables:
    c-basic-offset: 2

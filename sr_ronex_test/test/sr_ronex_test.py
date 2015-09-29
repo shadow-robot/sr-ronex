@@ -95,7 +95,7 @@ class TestRonexWithHardware(unittest.TestCase):
 
     def init_clients_publishers_subscribers(self):
         basic = '/ronex/general_io/'
-        self.ronex_ids = [ self.ronex_devs[str(i)]['ronex_id'] for i in xrange(2) ]
+        self.ronex_ids = [self.ronex_devs[str(i)]['ronex_id'] for i in xrange(2)]
         ron = [basic + str(id) for id in self.ronex_ids]
 
         com_dig = '/command/digital/'

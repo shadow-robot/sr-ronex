@@ -32,24 +32,24 @@ namespace ronex
 {
 namespace mapping
 {
-  namespace general_io
-  {
-    class AnalogueToEffort
-      : public AnalogueToPosition
-    {
-    public:
-      AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
+namespace general_io
+{
+class AnalogueToEffort
+  : public AnalogueToPosition
+{
+public:
+  AnalogueToEffort(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
 
-      /**
-       * Propagating the specified analogue pin data to the given joint measured_effort.
-       *
-       * @param js joint_state of the joint specified in the transmission
-       */
-      virtual void propagateFromRonex(ros_ethercat_model::JointState *js);
-    };
-  }
-}
-}
+  /**
+   * Propagating the specified analogue pin data to the given joint measured_effort.
+   *
+   * @param js joint_state of the joint specified in the transmission
+   */
+  virtual void propagateFromRonex(ros_ethercat_model::JointState *js);
+};
+}// namespace general_io
+}// namespace mapping
+}// namespace ronex
 /* For the emacs weenies in the crowd.
    Local Variables:
    c-basic-offset: 2

@@ -61,7 +61,7 @@ static inline std::string build_name(const std::string &product_alias, const std
 {
   return std::string("/ronex/") + product_alias + '/' + ronex_id;
 }
-}
+}// namespace ronex
 
 /* For the emacs weenies in the crowd.
    Local Variables:

@@ -65,7 +65,8 @@ protected:
    * Timer callback for the transmission initialization. Stops the init_timer_ when the
    *  initialization is successful.
    */
-  virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name) = 0;
+  virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot,
+  const char* ronex_name) = 0;
 };
 }
 
