@@ -17,6 +17,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 add_message_files(FILES
     BoolArray.msg
     GeneralIOState.msg
+    ADC16State.msg
     PWM.msg
     SPIPacketIn.msg
     SPIState.msg
