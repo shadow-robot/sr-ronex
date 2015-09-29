@@ -44,7 +44,7 @@ SrBoardADC16::SrBoardADC16() :
 
 SrBoardADC16::~SrBoardADC16()
 {
-  //remove parameters from server
+  // remove parameters from server
   string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_ );
   ros::param::del(device_id);
 
@@ -59,7 +59,7 @@ void SrBoardADC16::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   sh_ = sh;
   serial_number_ = ronex::get_serial_number( sh );
 
-  //get the alias from the parameter server if it exists
+  // get the alias from the parameter server if it exists
   std::string path_to_alias, alias;
   path_to_alias = "/ronex/mapping/" + serial_number_;
   if( ros::param::get(path_to_alias, alias))
@@ -68,7 +68,7 @@ void SrBoardADC16::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   }
   else
   {
-    //no alias found, using the serial number directly.
+    // no alias found, using the serial number directly.
     ronex_id_ = serial_number_ ;
   }
 
@@ -170,7 +170,7 @@ int SrBoardADC16::initialize(hardware_interface::HardwareInterface *hw, bool all
 
   device_offset_ = sh_->get_ring_position();
 
-  //add the RoNeX ADC16 module to the hw interface
+  // add the RoNeX ADC16 module to the hw interface
   ros_ethercat_model::RobotState *robot_state = static_cast<ros_ethercat_model::RobotState*>(hw);
   robot_state->custom_hws_.insert(device_name_, new ronex::ADC16());
   adc16_ = static_cast<ronex::ADC16*>(robot_state->getCustomHW(device_name_));
@@ -178,7 +178,7 @@ int SrBoardADC16::initialize(hardware_interface::HardwareInterface *hw, bool all
   build_topics_();
 
   ROS_INFO_STREAM("Adding an ADC16 RoNeX module to the hardware interface: " << device_name_);
-  //Using the name of the ronex to prefix the state topic
+  // Using the name of the ronex to prefix the state topic
   feedback_flag_ = 0;
 
   return 0;
@@ -225,7 +225,7 @@ void SrBoardADC16::packCommand(unsigned char *buffer, bool halt, bool reset)
   else
   {
     command->command_type = RONEX_COMMAND_02000008_COMMAND_TYPE_NORMAL;
-    //digital command
+    // digital command
     feedback_flag_ = 0;
     for (size_t i = 0; i < adc16_->command_.digital_.size(); ++i)
     {
@@ -271,7 +271,7 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
     int count = 15;
     int bits_count = 0;
 
-    //pin order comes back the reverse of values on the data sheet, so 7->0 for differential and 15->0 for single
+    // pin order comes back the reverse of values on the data sheet, so 7->0 for differential and 15->0 for single
     for (int j = 0; j < stack; j++)
     {
       unsigned short int differential = values_d_[j];
@@ -320,7 +320,7 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
     if( adc16_->state_.analogue_.empty())
     {
       size_t nb_adc_pub;
-      //The publishers haven't been initialised yet.
+      // The publishers haven't been initialised yet.
       // Checking if the stacker board is plugged in or not
       // to determine the number of publishers.
       if (status_data->info_type.config_info.flags & RONEX_02000008_FLAGS_STACKER_0_PRESENT)
@@ -339,7 +339,7 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
         nb_adc_pub = NUM_ADC16_INPUTS;
       }
 
-      //resizing the ADC in the HardwareInterface
+      // resizing the ADC in the HardwareInterface
       adc16_->state_.analogue_.resize(NUM_ANALOGUE_INPUTS);
       adc16_->state_.digital_.resize(NUM_DIGITAL_IO);
       adc16_->state_.adc_.resize(nb_adc_pub);
@@ -348,31 +348,31 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
       input_mode_.assign(NUM_DIGITAL_IO, true);
       pin_mode_.assign(nb_adc_pub, 0);
 
-      //init the state message
+      // init the state message
       state_msg_.analogue.resize(NUM_ANALOGUE_INPUTS);
       state_msg_.digital.resize(NUM_DIGITAL_IO);
       state_msg_.adc.resize(nb_adc_pub);
       state_msg_.input_mode.resize(NUM_DIGITAL_IO);
 
-      //dynamic reconfigure server is instantiated here
+      // dynamic reconfigure server is instantiated here
       // as we need the different vectors to be initialised
       // before running the first configuration.
       dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::ADC16Config>(ros::NodeHandle(device_name_)));
       function_cb_ = boost::bind(&SrBoardADC16::dynamic_reconfigure_cb, this, _1, _2);
       dynamic_reconfigure_server_->setCallback(function_cb_);
-    } //end first time, the sizes are properly initialised, simply fill in the data
+    } // end first time, the sizes are properly initialised, simply fill in the data
 
     config_received_ = true;
   }
 
   adc16_->state_.command_type_ = status_data->command_type;
 
-  //publishing at 100Hz
+  // publishing at 100Hz
   if(cycle_count_ > 9)
   {
     state_msg_.header.stamp = ros::Time::now();
 
-    //update state message
+    // update state message
     for(size_t i=0; i < adc16_->state_.analogue_.size(); ++i)
     {
       state_msg_.analogue[i] = adc16_->state_.analogue_[i];
@@ -390,7 +390,7 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
 
     state_msg_.command_type = adc16_->state_.command_type_;
 
-    //publish
+    // publish
     if( state_publisher_->trylock() )
     {
       state_publisher_->msg_ = state_msg_;
@@ -419,7 +419,7 @@ void SrBoardADC16::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, u
 
 void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config, uint32_t level)
 {
-  //not very pretty but I couldnt think of an easy way to set them up
+  // not very pretty but I couldnt think of an easy way to set them up
   // (dynamic reconfigure doesn't seem to support arrays)
   if(adc16_->command_.digital_.size() > 0)
     input_mode_[0] = config.input_mode_0;
@@ -436,7 +436,7 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
 
   stack = 0;
 
-  //pins are paired for 1 mode of either differential or single ended configuration
+  // pins are paired for 1 mode of either differential or single ended configuration
   if(adc16_->state_.adc_.size() >= 16)
   {
     pin_mode_[0] = config.pins_0_1;
@@ -474,44 +474,44 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
     stack = 3;
   }
 
-  //set values for each of the 3 registers,
+  // set values for each of the 3 registers,
   values_s0_.assign(3, 0);
   values_s1_.assign(3, 0);
   values_d_.assign(3, 0);
-  //values to pad out the bits
+  // values to pad out the bits
   fake_values_s0_.assign(3, 0);
   fake_values_s1_.assign(3, 0);
-  //value that is sent, sum of user requested and padding
+  // value that is sent, sum of user requested and padding
   padded_s0_.assign(3, 0);
   padded_s1_.assign(3, 0);
 
   int bit = 1;
   int pin_count = (adc16_->state_.adc_.size()/(stack*2)) -1;
 
-  //set values for s1 and d, first set of 8 pins. NOTE the pin order is in the reverse order
-  //given on the data sheet for the chip 15->0 rather than 0->15
+  // set values for s1 and d, first set of 8 pins. NOTE the pin order is in the reverse order
+  // given on the data sheet for the chip 15->0 rather than 0->15
 
   for (int i = 0; i < stack; i++) //loop for each stack
   {
     for (signed int pin = 0; pin <= pin_count; pin++) //first 8 pins
     {
-      if (pin <= pin_count - 4) //4 pairs make up the 8 pins
+      if (pin <= pin_count - 4) // 4 pairs make up the 8 pins
       {
-        if (pin_mode_[pin] == 0) //no input
+        if (pin_mode_[pin] == 0) // no input
         {
           values_s1_[i] <<=2;
           values_d_[i] <<=1;
           fake_values_s1_[i] <<=2;
           fake_values_s1_[i] |= bit * 3;
         }
-        else if (pin_mode_[pin] == 1) //single ended ADC input
+        else if (pin_mode_[pin] == 1) // single ended ADC input
         {
           values_s1_[i] <<=2;
           values_d_[i] <<=1;
           fake_values_s1_[i] <<=2;
           values_s1_[i] |= bit * 3;
         }
-        else //differential ADC input
+        else // differential ADC input
         {
           values_s1_[i] <<=2;
           values_d_[i] <<=1;
@@ -521,7 +521,7 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
         }
       }
 
-      //set values for s0 and d, second set of 8 pins
+      // set values for s0 and d, second set of 8 pins
       else if (pin <= pin_count)
       {
         if (pin_mode_[pin] == 0) //no input
@@ -531,14 +531,14 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
           fake_values_s0_[i] <<=2;
           fake_values_s0_[i] |= bit * 3;
         }
-        else if (pin_mode_[pin] == 1) //single ended ADC input
+        else if (pin_mode_[pin] == 1) // single ended ADC input
         {
           values_s0_[i] <<=2;
           values_d_[i] <<=1;
           fake_values_s0_[i] <<=2;
           values_s0_[i] |= bit * 3;
         }
-        else //differential ADC input
+        else // differential ADC input
         {
           values_s0_[i] <<=2;
           values_d_[i] <<=1;
@@ -579,7 +579,7 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
   command.values[1] = values_d_[1];
   command.values[2] = values_d_[2];
 
-  //send last register values twice to catch all feedback (delayed by 1)
+  // send last register values twice to catch all feedback (delayed by 1)
   command_queue_.push(command);
   command_queue_.push(command);
 
@@ -590,7 +590,7 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
 
 void SrBoardADC16::build_topics_()
 {
-  //loading everything into the parameter server
+  // loading everything into the parameter server
   parameter_id_ = ronex::get_ronex_param_id("");
   std::stringstream param_path, tmp_param;
   param_path << "/ronex/devices/" << parameter_id_ << "/";
@@ -599,11 +599,11 @@ void SrBoardADC16::build_topics_()
   ros::param::set(param_path.str() + "product_name", product_alias_);
   ros::param::set(param_path.str() + "ronex_id", ronex_id_);
 
-  //the device is stored using path as the key in the CustomHW map
+  // the device is stored using path as the key in the CustomHW map
   ros::param::set(param_path.str() + "path", device_name_);
   ros::param::set(param_path.str() + "serial", serial_number_);
 
-  //Advertising the realtime state publisher
+  // Advertising the realtime state publisher
   state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::ADC16State>(node_, device_name_ + "/state", 1));
 }
 

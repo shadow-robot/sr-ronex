@@ -53,10 +53,10 @@ public:
   void dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config, uint32_t level);
 
 protected:
-  ///Replaces the product ID with a human readable product alias.
+  /// Replaces the product ID with a human readable product alias.
   static const std::string product_alias_;
 
-  ///A unique identifier for the ronex (either serial number or alias if provided)
+  /// A unique identifier for the ronex (either serial number or alias if provided)
   std::string ronex_id_;
 
   string reason_;
@@ -67,7 +67,7 @@ protected:
 
   ros::NodeHandle node_;
 
-  ///The ADC16 module which is added as a CustomHW to the hardware interface
+  /// The ADC16 module which is added as a CustomHW to the hardware interface
   ronex::ADC16 *adc16_;
 
   /**
@@ -76,46 +76,46 @@ protected:
    */
   short cycle_count_;
 
-  ///the digital commands sent at each cycle (updated when we call the topic)
+  /// the digital commands sent at each cycle (updated when we call the topic)
   int32u digital_commands_;
 
-  ///Name under which the RoNeX will appear (prefix the topics etc...)
+  /// Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;
   std::string serial_number_;
 
-  ///Offset of device position from first device
+  /// Offset of device position from first device
   int device_offset_;
 
-  //False if initial configuration has not been sent
+  // False if initial configuration has not been sent
   bool config_received_;
-  //True if registers are being set
+  // True if registers are being set
   bool reg_flag_;
-  //Switch for states of setting registers
+  //S witch for states of setting registers
   int reg_state_;
-  //Count for feedback
+  // Count for feedback
   int feedback_flag_;
 
-  ///True if a stacker board is plugged in the RoNeX
+  /// True if a stacker board is plugged in the RoNeX
   bool has_stacker_;
 
-  ///False to run digital pins as output, True to run as input
+  /// False to run digital pins as output, True to run as input
   std::vector<bool> input_mode_;
 
-  //Queue of commands to send to register
+  // Queue of commands to send to register
   std::queue<RONEX_COMMAND_02000008> command_queue_;
   std::queue<RONEX_COMMAND_02000008> queue_backup_;
 
-  //1 for single ended adc, 2 for differential
+  // 1 for single ended adc, 2 for differential
   std::vector<int> pin_mode_;
 
-  //Number of stacks present
+  // Number of stacks present
   int stack;
 
-  //values_s0: first single ended pin values,
-  //values_s1: second single ended pin values,
-  //values_d: differential pin values
-  //fake_values: the additional bits sent
-  //padded: the addition of requested and fake values
+  // values_s0: first single ended pin values,
+  // values_s1: second single ended pin values,
+  // values_d: differential pin values
+  // fake_values: the additional bits sent
+  // padded: the addition of requested and fake values
   std::vector<unsigned short int> values_s0_;
   std::vector<unsigned short int> values_s1_;
   std::vector<unsigned short int> values_d_;
@@ -130,20 +130,20 @@ protected:
 
   void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
 
-  ///publisher for the data.
+  /// publisher for the data.
   boost::scoped_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::ADC16State> > state_publisher_;
-  ///Temporary message
+  /// Temporary message
   sr_ronex_msgs::ADC16State state_msg_;
 
-  ///Dynamic reconfigure server for setting the parameters of the driver
+  /// Dynamic reconfigure server for setting the parameters of the driver
   boost::scoped_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::ADC16Config> > dynamic_reconfigure_server_;
 
   dynamic_reconfigure::Server<sr_ronex_drivers::ADC16Config>::CallbackType function_cb_;
 
-  ///building the topics for publishing the state.
+  /// building the topics for publishing the state.
   void build_topics_();
 
-  ///Id of this ronex on the parameter server
+  /// Id of this ronex on the parameter server
   int parameter_id_;
 };
 
