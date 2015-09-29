@@ -2,7 +2,7 @@
 
 # ####################################################################
 # Copyright (c) 2013, Shadow Robot Company, All rights reserved.
-# 
+#
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
@@ -23,15 +23,17 @@ import dynamic_reconfigure.client
 
 from time import sleep
 
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
 
 """
 This class demonstrate how to change the configuration parameters of a running ronex module.
 """
+
+
 class ChangeRonexConfigurationExample(object):
 
     def __init__(self):
-        #Define the ronex id of the module to be configured
+        # Define the ronex id of the module to be configured
         ronex_id = "test_ronex"
         ronex_path = "/ronex/general_io/" + ronex_id + "/"
         self.configure_ronex(ronex_path)
@@ -44,16 +46,16 @@ class ChangeRonexConfigurationExample(object):
         client = dynamic_reconfigure.client.Client(path)
         
         # calling update_configuration with a dictionary of changes to make
-        params = { 'input_mode_0' : False, 'input_mode_1' : False, 'pwm_period_0' : 200 , 'pwm_clock_divider' : 3000}
+        params = {'input_mode_0': False, 'input_mode_1': False, 'pwm_period_0': 200, 'pwm_clock_divider': 3000}
         config = client.update_configuration(params)
         
         # config now contains the full configuration of the node after the parameter update
 
 
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     rospy.init_node("change_ronex_configuration_py")
     ChangeRonexConfigurationExample()
 
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------

@@ -35,32 +35,32 @@
 
 namespace ronex
 {
-  static inline std::string get_serial_number(const EtherCAT_SlaveHandler *sh)
-  {
-    return boost::lexical_cast<std::string>(sh->get_serial());
-  }
+static inline std::string get_serial_number(const EtherCAT_SlaveHandler *sh)
+{
+  return boost::lexical_cast<std::string>(sh->get_serial());
+}
 
-  static inline std::string get_product_code(const EtherCAT_SlaveHandler *sh)
-  {
-    return boost::lexical_cast<std::string>(sh->get_product_code());
-  }
+static inline std::string get_product_code(const EtherCAT_SlaveHandler *sh)
+{
+  return boost::lexical_cast<std::string>(sh->get_product_code());
+}
 
-  /**
-   * Building the name of the RoNeX, to be stored in the CustomHW map
-   *  of the Hardware Interface. The name used is /ronex/product_name/SERIAL_NUMBER
-   *
-   * example: /ronex/general_io/1234
-   *
-   * @param sh the EtherCAT SlaveHandler (used to read the serial number)
-   * @param product_alias the human readable name for this RoNeX module
-   * @param ronex_id the unique id for the ronex (serial or alias)
-   *
-   * @return a name to be used in the CustomHW map.
-   */
-  static inline std::string build_name( const std::string &product_alias, const std::string &ronex_id)
-  {
-    return std::string("/ronex/") + product_alias + '/' + ronex_id;
-  }
+/**
+ * Building the name of the RoNeX, to be stored in the CustomHW map
+ *  of the Hardware Interface. The name used is /ronex/product_name/SERIAL_NUMBER
+ *
+ * example: /ronex/general_io/1234
+ *
+ * @param sh the EtherCAT SlaveHandler (used to read the serial number)
+ * @param product_alias the human readable name for this RoNeX module
+ * @param ronex_id the unique id for the ronex (serial or alias)
+ *
+ * @return a name to be used in the CustomHW map.
+ */
+static inline std::string build_name(const std::string &product_alias, const std::string &ronex_id)
+{
+  return std::string("/ronex/") + product_alias + '/' + ronex_id;
+}
 }
 
 /* For the emacs weenies in the crowd.

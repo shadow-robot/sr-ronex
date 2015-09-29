@@ -39,7 +39,7 @@ class SrSPI : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed = true);
 
   SrSPI();
   virtual ~SrSPI();

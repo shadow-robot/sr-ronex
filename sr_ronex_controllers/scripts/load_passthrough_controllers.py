@@ -22,6 +22,7 @@ from time import sleep
 
 from controller_manager_msgs.srv import LoadController, ListControllers, SwitchController, SwitchControllerRequest
 
+
 class LoadPassthroughControllers(object):
     """
     Load the passthrough controllers for all the RoNeXes present on the bus.

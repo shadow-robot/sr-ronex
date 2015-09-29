@@ -19,7 +19,7 @@
 
 import rospy
 from sr_ronex_msgs.msg import TCATState
-#from PyQt4.QtCore import *
+# from PyQt4.QtCore import *
 from PyQt4.QtGui import QMainWindow, QApplication, QWidget, QVBoxLayout
 
 import numpy

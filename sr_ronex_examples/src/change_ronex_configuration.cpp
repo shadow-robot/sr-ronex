@@ -39,7 +39,6 @@
 class ChangeRonexConfigurationExample
 {
 public:
-
   ChangeRonexConfigurationExample()
   {
   }

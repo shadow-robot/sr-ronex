@@ -37,26 +37,26 @@
 
 namespace ronex
 {
-  class SrRoNeXSimpleController
-    : public controller_interface::Controller<ros_ethercat_model::RobotState>
-  {
-  public:
-    SrRoNeXSimpleController();
-    virtual ~SrRoNeXSimpleController();
+class SrRoNeXSimpleController
+  : public controller_interface::Controller<ros_ethercat_model::RobotState>
+{
+public:
+  SrRoNeXSimpleController();
+  virtual ~SrRoNeXSimpleController();
 
-    virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+  virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-    virtual void starting(const ros::Time&);
+  virtual void starting(const ros::Time&);
 
-    virtual void update(const ros::Time&, const ros::Duration&);
+  virtual void update(const ros::Time&, const ros::Duration&);
 
-    virtual void stopping(const ros::Time&);
+  virtual void stopping(const ros::Time&);
 
-  private:
-    int loop_count_;
+private:
+  int loop_count_;
 
-    ronex::GeneralIO* general_io_;
-  };
+  ronex::GeneralIO* general_io_;
+};
 }
 
 #endif /* _SR_RONEX_SIMPLE_CONTROLLER_HPP_ */

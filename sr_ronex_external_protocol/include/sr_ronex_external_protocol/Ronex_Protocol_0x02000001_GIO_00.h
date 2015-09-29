@@ -18,7 +18,7 @@
 //! EtherCAT protocol for RoNeX General I/O stacker, 01.
 //! Works on Node revision 01
 
-#ifndef RONEX_PROTOCOL_0x02000001_GIO_H_INCLUDED
+#ifndef SR_RONEX_EXTERNAL_PROTOCOL_RONEX_PROTOCOL_0x02000001_GIO_00_H
 #define RONEX_PROTOCOL_0x02000001_GIO_H_INCLUDED
 
 #include "typedefs_shadow.h"

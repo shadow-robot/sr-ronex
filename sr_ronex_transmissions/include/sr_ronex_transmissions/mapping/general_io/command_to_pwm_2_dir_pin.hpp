@@ -28,44 +28,44 @@
 
 namespace ronex
 {
-  namespace mapping
+namespace mapping
+{
+  namespace general_io
   {
-    namespace general_io
+    class CommandToPWM2PinDir
+      : public CommandToPWM
     {
-      class CommandToPWM2PinDir
-        : public CommandToPWM
-      {
-      public:
-    	CommandToPWM2PinDir(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
-    	virtual ~CommandToPWM2PinDir(){};
+    public:
+      CommandToPWM2PinDir(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
+      virtual ~CommandToPWM2PinDir(){};
 
-    	/**
-         * This function is not doing anything as we're not propagating a status in this mapping.
-         */
-        virtual void propagateFromRonex(ros_ethercat_model::JointState *js) {};
+      /**
+       * This function is not doing anything as we're not propagating a status in this mapping.
+       */
+      virtual void propagateFromRonex(ros_ethercat_model::JointState *js) {};
 
-        /**
-         * Propagating the specified joint command to the given PWM module.
-         *
-         * @param js joint_state of the joint specified in the transmission
-         */
-        virtual void propagateToRonex(ros_ethercat_model::JointState *js);
+      /**
+       * Propagating the specified joint command to the given PWM module.
+       *
+       * @param js joint_state of the joint specified in the transmission
+       */
+      virtual void propagateToRonex(ros_ethercat_model::JointState *js);
 
-      protected:
-        ///digital pin index for the second motor direction digital pin
-        size_t digital_pin_index_2_;
+    protected:
+      ///digital pin index for the second motor direction digital pin
+      size_t digital_pin_index_2_;
 
-        /**
-         * Check whether the pwm_module_ and pin_index_ are in the correct ranges.
-         * @return true if the pins are in the correct ranges
-         */
-        bool check_pins_in_bound_();
+      /**
+       * Check whether the pwm_module_ and pin_index_ are in the correct ranges.
+       * @return true if the pins are in the correct ranges
+       */
+      bool check_pins_in_bound_();
 
-        virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
-        bool init_(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
-      };
-    }
+      virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
+      bool init_(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
+    };
   }
+}
 }
 
 /* For the emacs weenies in the crowd.

@@ -54,7 +54,7 @@ namespace ronex
    */
   static inline void set_bit(uint32_t &data, size_t index, bool value)
   {
-    //x8 because sizeof returns size in bytes not bits
+    // x8 because sizeof returns size in bytes not bits
     std::bitset<sizeof(uint32_t)*8> tmp(data);
     tmp.set(index, value);
     data = static_cast<uint32_t>(tmp.to_ulong());
@@ -69,7 +69,7 @@ namespace ronex
    */
   static inline void set_bit(uint16_t &data, size_t index, bool value)
   {
-    //x8 because sizeof returns size in bytes not bits
+    // x8 because sizeof returns size in bytes not bits
     std::bitset<sizeof(uint16_t)*8> tmp(data);
     tmp.set(index, value);
     data = static_cast<uint16_t>(tmp.to_ulong());
@@ -117,7 +117,7 @@ namespace ronex
       {
         if( ronex_id.compare("") != 0)
         {
-          //we were looking for a specific ronex and didn't find it -> return -1
+          // we were looking for a specific ronex and didn't find it -> return -1
           return -1;
         }
         return ronex_parameter_id;

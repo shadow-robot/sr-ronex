@@ -56,13 +56,13 @@ TEST(RonexUtils, set_bit)
 
 TEST(RonexUtils, get_ronex_param_id)
 {
-  //make sure we're running on a clean environment
+  // make sure we're running on a clean environment
   ros::param::del("/ronex");
-  //nothing in the parameter server -> ronex param id = 0
+  // nothing in the parameter server -> ronex param id = 0
   int ronex_param_id = get_ronex_param_id("");
   EXPECT_EQ(ronex_param_id, 0);
 
-  //This serial number is not present on the param server -> returns -1
+  // This serial number is not present on the param server -> returns -1
   ronex_param_id = get_ronex_param_id("1234");
   EXPECT_EQ( ronex_param_id, -1);
 
@@ -73,15 +73,15 @@ TEST(RonexUtils, get_ronex_param_id)
   ros::param::set("/ronex/devices/0/path", "/ronex/general_io/my_beautiful_ronex/");
   ros::param::set("/ronex/devices/0/serial", "1234");
 
-  //We now have a ronex with param id = 0 -> next free id is 1.
+  // We now have a ronex with param id = 0 -> next free id is 1.
   ronex_param_id = get_ronex_param_id("");
   EXPECT_EQ(ronex_param_id, 1);
 
-  //This ronex id is now present on the param server -> returns index = 0
+  // This ronex id is now present on the param server -> returns index = 0
   ronex_param_id = get_ronex_param_id("my_beautiful_ronex");
   EXPECT_EQ( ronex_param_id, 0);
 
-  //This ronex id doesn't exist - return -1
+  // This ronex id doesn't exist - return -1
   ronex_param_id = get_ronex_param_id("do_not_exist");
   EXPECT_EQ( ronex_param_id, -1);
 }
