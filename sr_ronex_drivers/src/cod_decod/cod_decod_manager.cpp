@@ -29,11 +29,14 @@
 #include "sr_ronex_drivers/cod_decod/cod_decod_std_io.hpp"
 #include <boost/foreach.hpp>
 #include <boost/regex.hpp>
+#include <string>
+#include <vector>
 
 namespace sr_cod_decod
 {
 
-  CodDecodManager::CodDecodManager(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
+  CodDecodManager::CodDecodManager(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh,
+  int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
     :cod_decod_loader_("sr_ronex_drivers", "sr_cod_decod::CodDecod")
   {
     uint32_t product_code = sh->get_product_code();
@@ -47,7 +50,8 @@ namespace sr_cod_decod
     //
     //   PLUGINLIB_EXPORT_CLASS(class_namespace::class_type, base_class_namespace::base_class_type)
     //
-    // For the CodDecodExample cod_decod example module to be use with e.g productID = 87032868 and serialNumber = 21, this statement would look something like:
+    // For the CodDecodExample cod_decod example module to be use with e.g productID = 87032868 and serialNumber = 21,
+    // this statement would look something like:
     //
     //  PLUGINLIB_EXPORT_CLASS(sr_cod_decod::CodDecodExample, sr_cod_decod::CodDecod);
     //
@@ -68,7 +72,8 @@ namespace sr_cod_decod
       {
         if (matching_class_name.size() != 0)
         {
-          ROS_ERROR("Found more than 1 CodDecod class for device with product code : %u (0x%X) and serial number : %u (0x%X)", product_code, product_code, serial, serial);
+          ROS_ERROR("Found more than 1 CodDecod class for device with product code : %u (0x%X) and serial number : "
+          "%u (0x%X)", product_code, product_code, serial, serial);
           ROS_ERROR("First class name = '%s'.  Second class name = '%s'",
                     class_name.c_str(), matching_class_name.c_str());
         }
@@ -78,22 +83,25 @@ namespace sr_cod_decod
 
     if (matching_class_name.size() != 0)
     {
-      //ROS_WARN("Using driver class '%s' for device with product code %d",
+      // ROS_WARN("Using driver class '%s' for device with product code %d",
       //         matching_class_name.c_str(), product_code);
-      try {
-        cod_decod_ = cod_decod_loader_.createInstance( matching_class_name );
+      try
+      {
+        cod_decod_ = cod_decod_loader_.createInstance(matching_class_name);
       }
       catch (pluginlib::LibraryLoadException &e)
       {
         cod_decod_.reset();
-        ROS_FATAL("Unable to load CodDecod plugin for slave #%d, product code: %u (0x%X), serial: %u (0x%X), revision: %d (0x%X)",
+        ROS_FATAL("Unable to load CodDecod plugin for slave #%d, product code: %u (0x%X), serial: %u (0x%X), "
+        "revision: %d (0x%X)",
                   slave, product_code, product_code, serial, serial, revision, revision);
         ROS_FATAL("%s", e.what());
       }
     }
     else
     {
-      ROS_INFO("Unable to find a dedicated CodDecod plugin for slave #%d, product code: %u (0x%X), serial: %u (0x%X), revision: %d (0x%X)",
+      ROS_INFO("Unable to find a dedicated CodDecod plugin for slave #%d, product code: %u (0x%X), serial: %u (0x%X), "
+      "revision: %d (0x%X)",
                 slave, product_code, product_code, serial, serial, revision, revision);
       ROS_INFO("Possible classes:");
       BOOST_FOREACH(const std::string &class_name, classes)
@@ -101,13 +109,15 @@ namespace sr_cod_decod
         ROS_INFO("  %s", class_name.c_str());
       }
       ROS_INFO("Loading the default CodDecod plugin: CodDecodStdIo");
-      try {
-        cod_decod_ = cod_decod_loader_.createInstance( "sr_ronex_drivers/87032868_0" );
+      try
+      {
+        cod_decod_ = cod_decod_loader_.createInstance("sr_ronex_drivers/87032868_0");
       }
       catch (pluginlib::LibraryLoadException &e)
       {
         cod_decod_.reset();
-        ROS_FATAL("Unable to load CodDecod plugin for slave #%d, product code: %u (0x%X), serial: %u (0x%X), revision: %d (0x%X)",
+        ROS_FATAL("Unable to load CodDecod plugin for slave #%d, product code: %u (0x%X), serial: %u (0x%X), "
+        "revision: %d (0x%X)",
                   slave, product_code, product_code, serial, serial, revision, revision);
         ROS_FATAL("%s", e.what());
       }
@@ -115,14 +125,14 @@ namespace sr_cod_decod
 
     if (cod_decod_ != NULL)
     {
-      cod_decod_->construct(hw, sh, n_digital_outputs, n_analog_outputs, n_digital_inputs, n_analog_inputs, n_PWM_outputs);
+      cod_decod_->construct(hw, sh, n_digital_outputs, n_analog_outputs, n_digital_inputs, n_analog_inputs,
+      n_PWM_outputs);
     }
-
   }
 
   void CodDecodManager::update(unsigned char *status_buffer)
   {
-    if(cod_decod_)
+    if (cod_decod_)
     {
       cod_decod_->update(status_buffer);
     }
@@ -130,10 +140,10 @@ namespace sr_cod_decod
 
   void CodDecodManager::build_command(unsigned char *command_buffer)
   {
-    if(cod_decod_)
+    if (cod_decod_)
     {
       cod_decod_->build_command(command_buffer);
     }
   }
 
-}
+}  // namespace srcod_decod

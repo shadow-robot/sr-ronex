@@ -34,6 +34,7 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
+#include <string>
 
 class SrSPI : public EthercatDevice
 {
@@ -66,7 +67,7 @@ protected:
    * A counter used to publish the data at 100Hz:
    *  count 10 cycles, then reset the cycle_count to 0.
    */
-  short cycle_count_;
+  int16_t cycle_count_;
 
   /// the digital commands sent at each cycle (updated when we call the topic)
   int32u digital_commands_;

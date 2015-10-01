@@ -103,7 +103,7 @@ class LoadPassthroughControllers(object):
         switch_controller = rospy.ServiceProxy('controller_manager/switch_controller', SwitchController)
 
         rospy.loginfo("Starting controllers: " + str(controllers_list))
-        
+
         # first list the available controllers
         available_controllers = None
         try:

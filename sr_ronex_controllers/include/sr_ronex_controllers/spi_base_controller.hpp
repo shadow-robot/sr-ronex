@@ -32,6 +32,9 @@
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 #include <queue>
+#include <utility>
+#include <string>
+#include <vector>
 
 namespace ronex
 {
@@ -42,7 +45,7 @@ struct SplittedSPICommand
   SplittedSPICommand() : packet()
   {}
 
-  SplittedSPICommand(SplittedSPICommand* copy_me)
+  explicit SplittedSPICommand(SplittedSPICommand* copy_me)
   {
     this->packet = copy_me->packet;
   }
@@ -66,7 +69,7 @@ public:
 protected:
   ros::NodeHandle node_;
 
-  ///prefix used for creating topics / services
+  /// prefix used for creating topics / services
   std::string topic_prefix_;
 
   int loop_count_;

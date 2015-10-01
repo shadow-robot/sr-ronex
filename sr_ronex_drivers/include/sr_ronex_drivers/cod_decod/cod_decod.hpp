@@ -32,6 +32,7 @@
 #include <diagnostic_updater/DiagnosticStatusWrapper.h>
 #include <ros_ethercat_hardware/ethercat_hardware.h>
 #include <pluginlib/class_list_macros.h>
+#include <vector>
 
 namespace sr_cod_decod
 {

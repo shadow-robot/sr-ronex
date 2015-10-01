@@ -24,6 +24,7 @@
 
 #include "sr_ronex_controllers/fake_calibration_controller.hpp"
 #include "pluginlib/class_list_macros.h"
+#include <string>
 
 PLUGINLIB_EXPORT_CLASS(ronex::FakeCalibrationController, controller_interface::ControllerBase)
 
@@ -99,7 +100,7 @@ void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
     break;
   }
 }
-}// namespace ronex
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

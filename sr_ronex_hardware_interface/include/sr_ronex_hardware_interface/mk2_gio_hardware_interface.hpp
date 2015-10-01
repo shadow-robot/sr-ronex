@@ -38,20 +38,20 @@ public:
 
   struct PWM
   {
-    unsigned short int period;
-    unsigned short int on_time_0;
-    unsigned short int on_time_1;
+    uint16_t period;
+    uint16_t on_time_0;
+    uint16_t on_time_1;
   };
 
   std::vector<PWM> pwm_;
-  unsigned short int pwm_clock_divider_;
+  uint16_t pwm_clock_divider_;
 };
 
 class GeneralIOState
 {
 public:
   std::vector<bool> digital_;
-  std::vector<unsigned short int> analogue_;
+  std::vector<uint16_t> analogue_;
 };
 
 /**
@@ -71,7 +71,7 @@ public:
   GeneralIOState state_;
   GeneralIOCommand command_;
 };
-}
+}  // namespace ronex
 /* For the emacs weenies in the crowd.
 Local Variables:
    c-basic-offset: 2

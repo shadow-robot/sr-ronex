@@ -33,6 +33,7 @@
 #include "std_msgs/Bool.h"
 #include <controller_interface/controller.h>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
+#include <string>
 
 namespace ronex
 {

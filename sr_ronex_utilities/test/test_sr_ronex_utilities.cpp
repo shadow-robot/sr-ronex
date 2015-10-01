@@ -24,10 +24,9 @@
 #include <stdint.h>
 #include <ros/ros.h>
 #include <gtest/gtest.h>
+#include <string>
 
 #include "sr_ronex_utilities/sr_ronex_utilities.hpp"
-using namespace std;
-using namespace ronex;
 
 TEST(RonexUtils, set_bit)
 {
@@ -48,10 +47,10 @@ TEST(RonexUtils, set_bit)
   EXPECT_EQ(data, 4294967295);
 
   set_bit(data, 1, true);
-  EXPECT_TRUE( check_bit(data, 1 ) );
+  EXPECT_TRUE(check_bit(data, 1 ));
 
   set_bit(data, 4, false);
-  EXPECT_FALSE( check_bit(data, 4 ) );
+  EXPECT_FALSE(check_bit(data, 4 ));
 }
 
 TEST(RonexUtils, get_ronex_param_id)
@@ -64,7 +63,7 @@ TEST(RonexUtils, get_ronex_param_id)
 
   // This serial number is not present on the param server -> returns -1
   ronex_param_id = get_ronex_param_id("1234");
-  EXPECT_EQ( ronex_param_id, -1);
+  EXPECT_EQ(ronex_param_id, -1);
 
   std::string param;
   ros::param::set("/ronex/devices/0/product_id", "0x20001");
@@ -79,21 +78,21 @@ TEST(RonexUtils, get_ronex_param_id)
 
   // This ronex id is now present on the param server -> returns index = 0
   ronex_param_id = get_ronex_param_id("my_beautiful_ronex");
-  EXPECT_EQ( ronex_param_id, 0);
+  EXPECT_EQ(ronex_param_id, 0);
 
   // This ronex id doesn't exist - return -1
   ronex_param_id = get_ronex_param_id("do_not_exist");
-  EXPECT_EQ( ronex_param_id, -1);
+  EXPECT_EQ(ronex_param_id, -1);
 }
 
 TEST(RonexUtils, get_ronex_devices_string)
 {
-  std::string keyA( "/ronex/devices/3/product_name" );
-  
+  std::string keyA("/ronex/devices/3/product_name");
+
   int ronex_parameter_id = 3;
   std::string part("product_name");
-  std::string keyB = get_ronex_devices_string( ronex_parameter_id, part );
-  
+  std::string keyB = get_ronex_devices_string(ronex_parameter_id, part);
+
   EXPECT_EQ(keyA, keyB);
 }
 

@@ -26,6 +26,7 @@
  **/
 
 #include "sr_ronex_drivers/cod_decod/cod_decod.hpp"
+#include <vector>
 
 namespace sr_cod_decod
 {
@@ -33,7 +34,8 @@ namespace sr_cod_decod
   {
   }
 
-  void CodDecod::construct(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
+  void CodDecod::construct(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs,
+  int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs)
   {
     sh_ = sh;
     hw_ = static_cast<ros_ethercat_model::RobotState*>(hw);
@@ -52,4 +54,4 @@ namespace sr_cod_decod
                                  diagnostic_updater::DiagnosticStatusWrapper &d)
   {
   }
-}
+}  // namespace sr_cod_decod

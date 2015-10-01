@@ -37,7 +37,7 @@ class CommandToPWM2PinDir
 {
 public:
   CommandToPWM2PinDir(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot);
-  virtual ~CommandToPWM2PinDir(){}
+  virtual ~CommandToPWM2PinDir() {}
 
   /**
    * This function is not doing anything as we're not propagating a status in this mapping.
@@ -52,7 +52,7 @@ public:
   virtual void propagateToRonex(ros_ethercat_model::JointState *js);
 
 protected:
-  ///digital pin index for the second motor direction digital pin
+  /// digital pin index for the second motor direction digital pin
   size_t digital_pin_index_2_;
 
   /**
@@ -61,12 +61,13 @@ protected:
    */
   bool check_pins_in_bound_();
 
-  virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
+  virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot,
+  const char* ronex_name);
   bool init_(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
 };
-}// namespace general_io
-}// namespace mapping
-}// namespace ronex
+}  // namespace general_io
+}  // namespace mapping
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
    Local Variables:

@@ -41,7 +41,7 @@ class PlotWindow(QMainWindow):
         self.setWindowTitle('Impulse Responses')
         self.create_main_frame()
 
-        self.setMinimumSize(1600,900)
+        self.setMinimumSize(1600, 900)
 
         self.on_draw()
 
@@ -67,7 +67,7 @@ class PlotWindow(QMainWindow):
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.main_frame)
         self.axes = []
-        for i in range(1,5):
+        for i in range(1, 5):
             self.axes.append(self.fig.add_subplot(4, 1, i))
         self.canvas.mpl_connect('pick_event', self.on_pick)
         self.mpl_toolbar = NavigationToolbar(self.canvas, self.main_frame)
@@ -82,7 +82,7 @@ class TCATPlot(PlotWindow):
     def __init__(self):
         PlotWindow.__init__(self)
 
-        self.window_size=20
+        self.window_size = 20
 
         rospy.init_node('visualizer', anonymous=True)
         self.subscriber = rospy.Subscriber("/ronex/tcat/1394812611/state", TCATState, self.plotResults, queue_size=1)
@@ -101,7 +101,7 @@ class TCATPlot(PlotWindow):
         for receiver, ax in zip(data.received_data, self.axes):
             ax.clear()
             ax.set_xlim([0, 64])
-            #ax.set_ylim([-32768,32768])
+            # ax.set_ylim([-32768,32768])
             y1 = []
             y2 = []
             y3 = []
@@ -115,14 +115,14 @@ class TCATPlot(PlotWindow):
                 x.append(x_value)
                 x_value = x_value + 1
 
-            #x = range(receiver*10, len(y1)+(receiver*10))
-            #x = range(0, len(y1))
-            ax.set_ylim([min(min(y2),min(y1)), max(y3)])
+            # x = range(receiver*10, len(y1)+(receiver*10))
+            # x = range(0, len(y1))
+            ax.set_ylim([min(min(y2), min(y1)), max(y3)])
             self.line1 = ax.plot(x, y1, c='#A0A0FF', label="real")
             self.line1 = ax.plot(x, y2, c='#A0FFA0', label="imag")
             self.line1 = ax.plot(x, y3, c='#A00000', label="magn")
-            ax.legend(loc=0, scatterpoints = 1)
-            #ax.set_title("Impulse Response["+str(receiver_index)+"]")
+            ax.legend(loc=0, scatterpoints=1)
+            # ax.set_title("Impulse Response["+str(receiver_index)+"]")
             receiver_index += 1
 
         self.canvas.draw()

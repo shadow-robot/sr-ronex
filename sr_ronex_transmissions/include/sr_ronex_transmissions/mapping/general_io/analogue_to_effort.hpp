@@ -47,9 +47,9 @@ public:
    */
   virtual void propagateFromRonex(ros_ethercat_model::JointState *js);
 };
-}// namespace general_io
-}// namespace mapping
-}// namespace ronex
+}  // namespace general_io
+}  // namespace mapping
+}  // namespace ronex
 /* For the emacs weenies in the crowd.
    Local Variables:
    c-basic-offset: 2

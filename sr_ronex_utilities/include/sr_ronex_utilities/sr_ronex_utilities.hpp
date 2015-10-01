@@ -28,6 +28,7 @@
 #include <bitset>
 #include <ros/ros.h>
 #include <boost/lexical_cast.hpp>
+#include <string>
 
 namespace ronex
 {
@@ -104,9 +105,9 @@ namespace ronex
       ss << "/ronex/devices/" << ronex_parameter_id << "/ronex_id";
       if (ros::param::get(ss.str(), param) )
       {
-        if( ronex_id.compare("") != 0 )
+        if ( ronex_id.compare("") != 0 )
         {
-          if( ronex_id.compare(param) == 0)
+          if ( ronex_id.compare(param) == 0)
           {
             return ronex_parameter_id;
           }
@@ -115,7 +116,7 @@ namespace ronex
       }
       else
       {
-        if( ronex_id.compare("") != 0)
+        if ( ronex_id.compare("") != 0)
         {
           // we were looking for a specific ronex and didn't find it -> return -1
           return -1;
@@ -134,15 +135,15 @@ namespace ronex
    * @param part Part of the key (e.g., "product_name").
    * @return The key (e.g., "/ronex/devices/2/product_name").
    **/
-   static inline std::string get_ronex_devices_string(int ronex_parameter_id, std::string part)
-   {
-     std::string key("/ronex/devices/");
-     key += boost::lexical_cast<std::string>(ronex_parameter_id);
-     key += "/";
-     key += part;
-     return key;
-   }
-}
+  static inline std::string get_ronex_devices_string(int ronex_parameter_id, std::string part)
+  {
+    std::string key("/ronex/devices/");
+    key += boost::lexical_cast<std::string>(ronex_parameter_id);
+    key += "/";
+    key += part;
+    return key;
+  }
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
    Local Variables:

@@ -35,6 +35,7 @@
 
 #include <std_msgs/Bool.h>
 #include <sr_ronex_msgs/PWM.h>
+#include <vector>
 
 namespace ronex
 {

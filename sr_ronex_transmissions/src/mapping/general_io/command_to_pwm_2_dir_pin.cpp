@@ -18,7 +18,8 @@
 /**
 * @file command_to_pwm.hpp
 * @author Toni Oliver <toni@shadowrobot.com>
-* @brief  Contains the data mapping one joint command to a pwm module. It uses 2 opposite direction pins (unlike CommandToPWM, that uses a single one)
+* @brief  Contains the data mapping one joint command to a pwm module. It uses 2 opposite direction pins (unlike
+* CommandToPWM, that uses a single one)
 **/
 
 #include "sr_ronex_transmissions/mapping/general_io/command_to_pwm_2_dir_pin.hpp"
@@ -35,7 +36,7 @@ namespace general_io
 CommandToPWM2PinDir::CommandToPWM2PinDir(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot)
   : CommandToPWM(mapping_el, robot)
 {
-  //Stop the timer created by the parent class constructor. It would call the wrong try_init_cb_ (wouldn't it?)
+  // Stop the timer created by the parent class constructor. It would call the wrong try_init_cb_ (wouldn't it?)
   init_timer_.stop();
 
   const char *ronex_name = mapping_el ? mapping_el->Attribute("ronex") : NULL;
@@ -46,18 +47,20 @@ CommandToPWM2PinDir::CommandToPWM2PinDir(TiXmlElement* mapping_el, ros_ethercat_
   }
 
   init_timer_ = nh_.createTimer(ros::Duration(0.01),
-                                boost::bind(&CommandToPWM2PinDir::try_init_cb_, this, _1, mapping_el, robot, ronex_name));
+                                boost::bind(&CommandToPWM2PinDir::try_init_cb_, this, _1, mapping_el,
+                                            robot, ronex_name));
 }
 
-bool CommandToPWM2PinDir::try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name)
+bool CommandToPWM2PinDir::try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el,
+                                       ros_ethercat_model::RobotState* robot, const char* ronex_name)
 {
-  if( !init_(mapping_el, robot, ronex_name) )
+  if ( !init_(mapping_el, robot, ronex_name) )
   {
     return false;
   }
 
   ROS_DEBUG_STREAM("RoNeX" << ronex_name << " is initialised now.");
-  //stopping timer
+  // stopping timer
   init_timer_.stop();
 
   is_initialized_ = true;
@@ -66,22 +69,22 @@ bool CommandToPWM2PinDir::try_init_cb_(const ros::TimerEvent&, TiXmlElement* map
 
 bool CommandToPWM2PinDir::init_(TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name)
 {
-  if( !CommandToPWM::init_(mapping_el, robot, ronex_name))
+  if ( !CommandToPWM::init_(mapping_el, robot, ronex_name))
   {
     return false;
   }
 
-  //read motor direction pin 2 index from urdf
+  // read motor direction pin 2 index from urdf
   const char *d_pin = mapping_el ? mapping_el->Attribute("direction_pin_2") : NULL;
   if (!d_pin)
   {
     ROS_ERROR("RonexTransmission transmission did not specify the direction pin 2.");
     return false;
   }
-  //convert to size_t
+  // convert to size_t
   try
   {
-    digital_pin_index_2_ = boost::lexical_cast<size_t>( d_pin );
+    digital_pin_index_2_ = boost::lexical_cast<size_t>(d_pin);
   }
   catch( boost::bad_lexical_cast const& )
   {
@@ -94,8 +97,8 @@ bool CommandToPWM2PinDir::init_(TiXmlElement* mapping_el, ros_ethercat_model::Ro
 
 bool CommandToPWM2PinDir::check_pins_in_bound_()
 {
-  //we ignore the first iteration as the array is not yet initialised.
-  if( first_iteration_ )
+  // we ignore the first iteration as the array is not yet initialised.
+  if ( first_iteration_ )
   {
     pin_out_of_bound_ = true;
     first_iteration_ = false;
@@ -104,12 +107,13 @@ bool CommandToPWM2PinDir::check_pins_in_bound_()
 
   pin_out_of_bound_ = !CommandToPWM::check_pins_in_bound_();
 
-  if( !pin_out_of_bound_ )
+  if ( !pin_out_of_bound_ )
   {
-    if( digital_pin_index_2_ > general_io_->command_.digital_.size() )
+    if ( digital_pin_index_2_ > general_io_->command_.digital_.size() )
     {
-      //size_t is always >= 0 so no need to check lower bound
-      ROS_ERROR_STREAM("Specified direction pin 2 is out of bound: " << digital_pin_index_2_ << " / max = " << general_io_->command_.digital_.size() << " , not propagating the command to the RoNeX.");
+      // size_t is always >= 0 so no need to check lower bound
+      ROS_ERROR_STREAM("Specified direction pin 2 is out of bound: " << digital_pin_index_2_ << " / max = " <<
+                               general_io_->command_.digital_.size() << " , not propagating the command to the RoNeX.");
       pin_out_of_bound_ = true;
       return false;
     }
@@ -121,21 +125,25 @@ bool CommandToPWM2PinDir::check_pins_in_bound_()
 
 void CommandToPWM2PinDir::propagateToRonex(ros_ethercat_model::JointState *js)
 {
-  if( !is_initialized_ )
+  if ( !is_initialized_ )
     return;
 
-  if( check_pins_in_bound_() )
+  if ( check_pins_in_bound_() )
   {
-    if( pwm_pin_index_ == 0 )
-      general_io_->command_.pwm_[pwm_module_].on_time_0 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * abs(js->commanded_effort_) ) / 100);
+    if ( pwm_pin_index_ == 0 )
+      general_io_->command_.pwm_[pwm_module_].on_time_0 =
+              static_cast<uint16_t>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) *
+                      abs(js->commanded_effort_) ) / 100);
     else
-      general_io_->command_.pwm_[pwm_module_].on_time_1 = static_cast<unsigned short int>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) * abs(js->commanded_effort_) ) / 100);
+      general_io_->command_.pwm_[pwm_module_].on_time_1 =
+              static_cast<uint16_t>((static_cast<double>(general_io_->command_.pwm_[pwm_module_].period) *
+                      abs(js->commanded_effort_) ) / 100);
 
     // This is assigned by convention: negative effort sets the direction pin to 1.
     general_io_->command_.digital_[digital_pin_index_] = (js->commanded_effort_ < 0.0);
     // The 2nd direction pin is the opposite of the first one
     general_io_->command_.digital_[digital_pin_index_2_] = !general_io_->command_.digital_[digital_pin_index_];
- }
+  }
 }
 }  // namespace general_io
 }  // namespace mapping

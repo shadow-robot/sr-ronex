@@ -45,11 +45,11 @@ class ChangeRonexConfigurationExample(object):
         It could also be done by calling the /ronex/general_io/X/set_parameters service directly (as in the c++ example)
         """
         client = dynamic_reconfigure.client.Client(path)
-        
+
         # calling update_configuration with a dictionary of changes to make
         params = {'input_mode_0': False, 'input_mode_1': False, 'pwm_period_0': 200, 'pwm_clock_divider': 3000}
         config = client.update_configuration(params)
-        
+
         # config now contains the full configuration of the node after the parameter update
 
 

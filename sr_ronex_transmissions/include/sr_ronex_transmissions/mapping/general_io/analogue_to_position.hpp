@@ -53,14 +53,14 @@ public:
   virtual void propagateToRonex(ros_ethercat_model::JointState *js) {}
 
 protected:
-  ///Pointer to the GeneralIO module we specified in the transmission.
+  /// Pointer to the GeneralIO module we specified in the transmission.
   GeneralIO* general_io_;
-  ///index of the analogue pin
+  /// index of the analogue pin
   size_t pin_index_;
-  ///Is the pin inside the correct range?
+  /// Is the pin inside the correct range?
   bool pin_out_of_bound_;
 
-  ///The user can apply a scaling and offset to the raw data.
+  /// The user can apply a scaling and offset to the raw data.
   double scale_, offset_;
 
   /**
@@ -75,11 +75,12 @@ protected:
    */
   bool check_pin_in_bound_();
 
-  virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot, const char* ronex_name);
+  virtual bool try_init_cb_(const ros::TimerEvent&, TiXmlElement* mapping_el, ros_ethercat_model::RobotState* robot,
+  const char* ronex_name);
 };
-}// namespace general_io
-}// namespace mapping
-}// namespace ronex
+}  // namespace general_io
+}  // namespace mapping
+}  // namespace ronex
 /* For the emacs weenies in the crowd.
    Local Variables:
    c-basic-offset: 2

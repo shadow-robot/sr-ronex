@@ -23,8 +23,9 @@
 
 #include "sr_ronex_examples/sr_ronex_simple_controller.hpp"
 #include "pluginlib/class_list_macros.h"
+#include <string>
 
-PLUGINLIB_EXPORT_CLASS( ronex::SrRoNeXSimpleController, controller_interface::ControllerBase)
+PLUGINLIB_EXPORT_CLASS(ronex::SrRoNeXSimpleController, controller_interface::ControllerBase)
 
 namespace ronex
 {
@@ -39,16 +40,16 @@ SrRoNeXSimpleController::~SrRoNeXSimpleController()
 
 bool SrRoNeXSimpleController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
 {
-  assert (robot);
-  
+  assert(robot);
+
   std::string path("/ronex/general_io/test_ronex");
-  general_io_ = static_cast<ronex::GeneralIO*>( robot->getCustomHW(path) );
-  if( general_io_ == NULL)
+  general_io_ = static_cast<ronex::GeneralIO*>(robot->getCustomHW(path));
+  if (general_io_ == NULL)
   {
     ROS_ERROR_STREAM("Could not find RoNeX module (i.e., test_ronex). The controller is not loaded.");
     return false;
   }
-  
+
   return true;
 }
 
@@ -62,7 +63,7 @@ void SrRoNeXSimpleController::update(const ros::Time&, const ros::Duration&)
   double position = general_io_->state_.analogue_[0];
   if (loop_count_++ % 100 == 0)
   {
-    ROS_INFO_STREAM( "Position = " << position );
+    ROS_INFO_STREAM("Position = " << position);
     loop_count_ = 0;
   }
 }
@@ -70,7 +71,7 @@ void SrRoNeXSimpleController::update(const ros::Time&, const ros::Duration&)
 void SrRoNeXSimpleController::stopping(const ros::Time&)
 {
   // Do nothing.
-} 
-
 }
+
+}  // namespace ronex
 

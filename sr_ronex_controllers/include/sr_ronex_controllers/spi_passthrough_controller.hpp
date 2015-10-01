@@ -28,6 +28,7 @@
 #include <ros/node_handle.h>
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <utility>
+#include <vector>
 
 #include "sr_ronex_controllers/spi_base_controller.hpp"
 #include <sr_ronex_msgs/SPI.h>
@@ -52,16 +53,16 @@ public:
 private:
   std::vector<ros::ServiceServer> command_srv_;
 
-  //vector containing one command per spi output.
+  // vector containing one command per spi output.
   // Some parameters of these commands are updated through the dynamic reconfigure interface
   // The data packet is updated from the service.
   std::vector<SplittedSPICommand> standard_commands_;
 
-  ///Dynamic reconfigure server for setting the parameters of the driver
+  /// Dynamic reconfigure server for setting the parameters of the driver
   boost::scoped_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig> > dynamic_reconfigure_server_;
   dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>::CallbackType function_cb_;
 
-  //Instantiating the services / dynamic reconfigure callbacks etc..
+  // Instantiating the services / dynamic reconfigure callbacks etc..
   void post_init_();
 };
 }  // namespace ronex

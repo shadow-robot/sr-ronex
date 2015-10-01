@@ -103,7 +103,7 @@ class IoTest(object):
                     # detect the falling edge of the PWM signal
                     if value and not msg.data[i]:
                         if self.last_period_start_time[i] != 0.0:
-                            self.average_period[i] = (1- PERIOD_ALPHA) * self.average_period[i] + \
+                            self.average_period[i] = (1 - PERIOD_ALPHA) * self.average_period[i] + \
                                                      PERIOD_ALPHA * (rospy.get_time() - self.last_period_start_time[i])
                         self.last_period_start_time[i] = rospy.get_time()
             self.last_digital_state = msg
@@ -113,7 +113,7 @@ class IoTest(object):
         with self.d_state_lock:
             if self.last_digital_state is not None:
                 for i, value in enumerate(output_values):
-                    if i & 1:                
+                    if i & 1:
                         if self.last_digital_state.data[i/2] != value:
                             rospy.logerr("Wrong value in digital input " + str(i/2))
                             self.success = False
@@ -159,7 +159,7 @@ class IoTest(object):
                         self.success = False
             else:
                 rospy.logerr("No analog input data received from: " + self.device_SN)
-                self.success = False	
+                self.success = False
 
     def test_analog_io_case(self, output_values):
         command_msg = UInt16MultiArray(None, output_values)
@@ -223,7 +223,7 @@ class IoTest(object):
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv,"h")
+        opts, args = getopt.getopt(argv, "h")
     except getopt.GetoptError:
         print 'io_test.py <SN_device_1> ... <SN_device_N>'
         sys.exit(2)
@@ -239,7 +239,7 @@ def main(argv):
     # init the ros node
     rospy.init_node('IO_test', anonymous=True)
     rospy.sleep(0.5)
- 
+
     for arg in args:
         io_test = IoTest(arg)
         io_test.run_test()
@@ -251,5 +251,3 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-
-
