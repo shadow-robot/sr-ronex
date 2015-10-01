@@ -43,7 +43,7 @@ class SrBoardMk2GIO : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed = true);
 
   SrBoardMk2GIO();
   virtual ~SrBoardMk2GIO();
@@ -74,7 +74,7 @@ protected:
    */
   int16_t cycle_count_;
 
-  ///the digital commands sent at each cycle (updated when we call the topic)
+  /// the digital commands sent at each cycle (updated when we call the topic)
   int32u digital_commands_;
 
   /// Name under which the RoNeX will appear (prefix the topics etc...)

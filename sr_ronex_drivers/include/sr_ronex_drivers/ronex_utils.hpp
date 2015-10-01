@@ -30,6 +30,7 @@
 #include <ros_ethercat_hardware/ethercat_device.h>
 #include <boost/lexical_cast.hpp>
 #include <ros/ros.h>
+#include <string>
 
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 
