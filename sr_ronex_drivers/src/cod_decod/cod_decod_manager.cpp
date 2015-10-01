@@ -146,4 +146,4 @@ namespace sr_cod_decod
     }
   }
 
-}  // namespace srcod_decod
+}  // namespace sr_cod_decod

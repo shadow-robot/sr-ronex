@@ -64,7 +64,7 @@ class DW1000SpiInterface(object):
         # removing the first item from the received packet of data
         return_data_packet = resp.data[1:]
 
-        print "SPI[", spi_out_index,"]: reading ", self.hexify_list(return_data_packet), " from address: ", address
+        print "SPI[", spi_out_index, "]: reading ", self.hexify_list(return_data_packet), " from address: ", address
 
         return return_data_packet
 
@@ -78,7 +78,7 @@ class DW1000SpiInterface(object):
 
         @return True if success, False otherwise
         """
-        print "SPI[",spi_out_index,"]: writing ", self.hexify_list(data_packet),"] to address: ",address
+        print "SPI[", spi_out_index, "]: writing ", self.hexify_list(data_packet), "] to address: ", address
         if address < 64:
             data_packet.insert(0, address + 0x80)
         else:

@@ -289,7 +289,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
   {
     state_msg_.header.stamp = ros::Time::now();
 
-    //update state message
+    // update state message
     for (size_t i=0; i < general_io_->state_.analogue_.size(); ++i)
     {
       state_msg_.analogue[i] = general_io_->state_.analogue_[i];

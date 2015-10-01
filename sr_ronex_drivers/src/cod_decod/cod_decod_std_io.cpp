@@ -105,7 +105,7 @@ namespace sr_cod_decod
     char buff[200];
     string topic;
 
-    snprintf(buff, 200, "device_0x%08X_0x%08X_digital_outputs_command",
+    snprintf(buff, sizeof(buff), "device_0x%08X_0x%08X_digital_outputs_command",
             sh_->get_product_code(),
             sh_->get_serial());
     topic = buff;
@@ -113,14 +113,14 @@ namespace sr_cod_decod
             (topic, 1, &CodDecodStdIo::digitalOutputCommandCB, this);
 
 
-    snprintf(buff, 200, "device_0x%08X_0x%08X_analog_outputs_command",
+    snprintf(buff, sizeof(buff), "device_0x%08X_0x%08X_analog_outputs_command",
             sh_->get_product_code(),
             sh_->get_serial());
     topic = buff;
     sub_analog_output_command_ = node_.subscribe<std_msgs::UInt16MultiArray>
             (topic, 1, &CodDecodStdIo::analogOutputCommandCB, this);
 
-    snprintf(buff, 200, "device_0x%08X_0x%08X_PWM_outputs_command",
+    snprintf(buff, sizeof(buff), "device_0x%08X_0x%08X_PWM_outputs_command",
             sh_->get_product_code(),
             sh_->get_serial());
         topic = buff;
@@ -128,7 +128,7 @@ namespace sr_cod_decod
             (topic, 1, &CodDecodStdIo::PWMOutputCommandCB, this);
 
 
-    snprintf(buff, 200, "device_0x%08X_0x%08X_digital_inputs_state",
+    snprintf(buff, sizeof(buff), "device_0x%08X_0x%08X_digital_inputs_state",
             sh_->get_product_code(),
             sh_->get_serial());
     topic = buff;
@@ -136,7 +136,7 @@ namespace sr_cod_decod
             new realtime_tools::RealtimePublisher<sr_ronex_msgs::BoolArray>(node_, topic, 1));
 
 
-    snprintf(buff, 200, "device_0x%08X_0x%08X_analog_inputs_state",
+    snprintf(buff, sizeof(buff), "device_0x%08X_0x%08X_analog_inputs_state",
             sh_->get_product_code(),
             sh_->get_serial());
     topic = buff;
@@ -175,7 +175,7 @@ namespace sr_cod_decod
 
     a_in_.data.clear();
 
-    //Read the analog inputs from the incoming buffer
+    // Read the analog inputs from the incoming buffer
     for (unsigned i = 0; i < n_analog_inputs_; i++)
     {
       a_in_.data.push_back(*(reinterpret_cast<uint16_t *>(buff_ptr)));
@@ -193,11 +193,11 @@ namespace sr_cod_decod
     // for debugging only
     char buff[300];
     char aux[3];
-    snprintf(buff, 300, "");
+    snprintf(buff, sizeof(buff), "");
     for (unsigned int i = 0; i < status_size_; i++)
     {
-      snprintf(aux, 3, "%02x", static_cast<uint16_t>(status_buffer[i]));
-      snprintf(buff, 300, aux, 3);
+      snprintf(aux, sizeof(aux), "%02x", static_cast<uint16_t>(status_buffer[i]));
+      snprintf(buff, sizeof(buff), aux, 3);
     }
     if (status_size_ > 0)
     {
@@ -262,11 +262,11 @@ namespace sr_cod_decod
     // for debugging only
     char buff[300];
     char aux[3];
-    snprintf(buff, 300, "");
+    snprintf(buff, sizeof(buff), "");
     for (unsigned int i = 0; i < command_size_; i++)
     {
-      snprintf(aux, 3, "%02x", static_cast<uint16_t>(command_buffer[i]));
-      snprintf(buff, 300, aux, 3);
+      snprintf(aux, sizeof(aux), "%02x", static_cast<uint16_t>(command_buffer[i]));
+      snprintf(buff, sizeof(buff), aux, 3);
     }
     if (command_size_ > 0)
     {
@@ -357,7 +357,6 @@ namespace sr_cod_decod
   void CodDecodStdIo::add_diagnostics(std::vector<diagnostic_msgs::DiagnosticStatus> &vec,
                                  diagnostic_updater::DiagnosticStatusWrapper &d)
   {
-
   }
   void CodDecodStdIo::setPinAsDigitalInput(sr_cod_decod_std_io::DigitalIo pin)
   {

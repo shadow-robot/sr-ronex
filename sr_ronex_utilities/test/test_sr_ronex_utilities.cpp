@@ -47,10 +47,10 @@ TEST(RonexUtils, set_bit)
   EXPECT_EQ(data, 4294967295);
 
   set_bit(data, 1, true);
-  EXPECT_TRUE(check_bit(data, 1 ));
+  EXPECT_TRUE(check_bit(data, 1));
 
   set_bit(data, 4, false);
-  EXPECT_FALSE(check_bit(data, 4 ));
+  EXPECT_FALSE(check_bit(data, 4));
 }
 
 TEST(RonexUtils, get_ronex_param_id)

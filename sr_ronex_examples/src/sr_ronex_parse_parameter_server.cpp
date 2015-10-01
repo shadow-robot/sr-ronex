@@ -80,7 +80,7 @@ private:
       ros::param::get(product_id_key, product_id);
 
       std::string product_name;
-      std::string product_name_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("product_name") );
+      std::string product_name_key = ronex::get_ronex_devices_string(ronex_parameter_id, std::string("product_name"));
       ros::param::get(product_name_key, product_name);
 
       // Path looks like "/ronex/general_io/2", where 2 is a ronex_id.
@@ -96,7 +96,7 @@ private:
       std::string serial_key = ronex::get_ronex_devices_string(ronex_parameter_id, std::string("serial"));
       ros::param::get(serial_key, serial);
 
-      ROS_INFO_STREAM("*** General I/O module " << ronex_parameter_id << " ***" );
+      ROS_INFO_STREAM("*** General I/O module " << ronex_parameter_id << " ***");
       ROS_INFO_STREAM("product_id   = " << product_id);
       ROS_INFO_STREAM("product_name = " << product_name);
       ROS_INFO_STREAM("ronex_id     = " << ronex_id);

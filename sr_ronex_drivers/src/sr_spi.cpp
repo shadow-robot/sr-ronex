@@ -37,7 +37,7 @@ PLUGINLIB_EXPORT_CLASS(SrSPI, EthercatDevice);
 
 using boost::lexical_cast;
 
-const string SrSPI::product_alias_ = PRODUCT_NAME;
+const char SrSPI::product_alias_[] = PRODUCT_NAME;
 
 SrSPI::SrSPI() :
   node_("~"), cycle_count_(0)
@@ -208,7 +208,7 @@ void SrSPI::packCommand(unsigned char *buffer, bool halt, bool reset)
     if ( command->spi_out[spi_index].num_bytes != 0)
     {
       ostringstream ss;
-      ss << "SPI out ["<<spi_index<<"]: Sending non null command("
+      ss << "SPI out [" << spi_index << "]: Sending non null command("
       <<static_cast<unsigned int>(command->spi_out[spi_index].num_bytes) << "): -> ";
 
       for (unsigned int i = 0; i < static_cast<unsigned int>(command->spi_out[spi_index].num_bytes); ++i)

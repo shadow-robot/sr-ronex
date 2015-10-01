@@ -194,7 +194,7 @@ bool SrTCAT::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
   ROS_DEBUG_STREAM("   command type:    " << status_data->command_type <<
                            " ("<< RONEX_COMMAND_02000003_COMMAND_TYPE_NORMAL <<")");
   ROS_DEBUG_STREAM("   receiver number: " << status_data->receiver_number);
-  ROS_DEBUG_STREAM("   seq number:      " << status_data->sequence_number << " ("<<previous_sequence_number_ << ")");
+  ROS_DEBUG_STREAM("   seq number:      " << status_data->sequence_number << " (" << previous_sequence_number_ << ")");
 
   if ( status_data->command_type == RONEX_COMMAND_02000003_COMMAND_TYPE_NORMAL)
   {

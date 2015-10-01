@@ -52,7 +52,7 @@ namespace ronex
 
     joint_ = robot->getJointState(jel->Attribute("name"));
 
-    // TODO: Modify the ros_ethercat_model so that a transmission is not expected to have an actuator
+    // TODO(shadow): Modify the ros_ethercat_model so that a transmission is not expected to have an actuator
     // (currently the ronex mappings don't use actuators, they access a ronex::GeneralIO object directly)
     actuator_ = new ros_ethercat_model::Actuator();
     actuator_->name_ = "Dummy_actuator_" + std::string(jel->Attribute("name"));
