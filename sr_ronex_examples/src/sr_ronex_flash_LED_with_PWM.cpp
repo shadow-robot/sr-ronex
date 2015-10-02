@@ -41,7 +41,7 @@ class SrRonexFindGeneralIOModule
 public:
   SrRonexFindGeneralIOModule() {}
   ~SrRonexFindGeneralIOModule() {}
-  
+
 public:
   /**
    * Find the path of the General I/O module with the given ronex_id.
@@ -50,37 +50,37 @@ public:
    * @param path The path of the module.
    * @return True if the module is found and the path is set. Otherwise, false.
    **/
-  bool get_path_( const unsigned int& ronex_id_as_int, std::string& path )
+  bool get_path_(const unsigned int& ronex_id_as_int, std::string& path)
   {
     std::string ronex_id = this->to_string_(ronex_id_as_int);
-    
+
     // Wait until there's at least one General I/O module.
     ros::Rate loop_rate(10);
     std::string param;
     while ( ros::param::get("/ronex/devices/0/ronex_id", param ) == false )
     {
-      ROS_INFO_STREAM( "Waiting for General I/O module to be loaded properly.\n" );
+      ROS_INFO_STREAM("Waiting for General I/O module to be loaded properly.\n");
       loop_rate.sleep();
     }
-    
-    // When -1 is returned, the module with the given id is not present on the parameter server. 
+
+    // When -1 is returned, the module with the given id is not present on the parameter server.
     // Note that ronex parameter id starts from zero.
     int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
     if ( ronex_parameter_id == -1 )
     {
-      ROS_ERROR_STREAM( "Did not find the General I/O module with ronex_id " << ronex_id << ".\n" );
-      return false; // Failed to set path.
+      ROS_ERROR_STREAM("Did not find the General I/O module with ronex_id " << ronex_id << ".\n");
+      return false;  // Failed to set path.
     }
-    
+
     // The module is present on the parameter server and ronex_parameter_id
     // contains the id on which the module is stored on the parameter server.
-    
-    std::string path_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("path") );
-    ros::param::get( path_key, path );
 
-    return true; // Path is set.
+    std::string path_key = ronex::get_ronex_devices_string(ronex_parameter_id, std::string("path"));
+    ros::param::get(path_key, path);
+
+    return true;  // Path is set.
   }
-  
+
 private:
   /**
    * Convert the given integer into a string.
@@ -102,33 +102,33 @@ private:
  * @param n A ROS node handle.
  * @param topic For example "/ronex/general_io/1/command/0".
  */
-void flash_LED( ros::NodeHandle& n, const std::string& topic )
+void flash_LED(ros::NodeHandle& n, const std::string& topic)
 {
-  ros::Publisher pub = n.advertise<sr_ronex_msgs::PWM>( topic, 1000 );
-  
-  short unsigned int pwm_period = 320;
+  ros::Publisher pub = n.advertise<sr_ronex_msgs::PWM>(topic, 1000);
+
+  uint16_t pwm_period = 320;
   // Start with a 100% duty cycle.
-  short unsigned int pwm_on_time_0 = pwm_period;
+  uint16_t pwm_on_time_0 = pwm_period;
   // The second output is not used.
-  short unsigned int pwm_on_time_1 = 0;
-  
-  ros::Rate loop_rate(100); 
+  uint16_t pwm_on_time_1 = 0;
+
+  ros::Rate loop_rate(100);
   while ( ros::ok() )
-  {   
+  {
     // Flash the light...
     pwm_on_time_0 -= 10;
     if (pwm_on_time_0 == 0 || pwm_on_time_0 > pwm_period)
       pwm_on_time_0 = pwm_period;
-    
+
     sr_ronex_msgs::PWM msg;
     msg.pwm_period    = pwm_period;
     msg.pwm_on_time_0 = pwm_on_time_0;
     msg.pwm_on_time_1 = pwm_on_time_1;
-    
-    // The publish() function sends the message. 
+
+    // The publish() function sends the message.
     // The parameter is the message object.
     pub.publish(msg);
-    
+
     ros::spinOnce();
     loop_rate.sleep();
   }
@@ -145,31 +145,32 @@ int main(int argc, char **argv)
 {
   // Initialize ROS with a unique node name.
   ros::init(argc, argv, "sr_ronex_flash_LED_with_PWM");
-  
-  // Create a handle to this process' node. 
+
+  // Create a handle to this process' node.
   ros::NodeHandle n;
 
-  std::cout << "Please configure D0 pin of your ronex module as output (you can use plugin Dynamic Reconfigure in rqt): \n";
-  
+  std::cout <<
+          "Please configure D0 pin of your ronex module as output (you can use plugin Dynamic Reconfigure in rqt): \n";
+
   // Get the path of the General I/O module with the given ronex id.
   // Note that you may have to set the value of ronex_id,
   // depending on which General I/O board the LED is connected to.
   std::string input = "";
-  unsigned int ronex_id; 
+  unsigned int ronex_id;
   std::cout << "Please enter the ronex id: ";
   std::getline(std::cin, input);
   ronex_id = boost::lexical_cast<unsigned int>(input);
   std::string path;
   SrRonexFindGeneralIOModule findModule;
-  if ( findModule.get_path_( ronex_id, path ) ) 
+  if ( findModule.get_path_( ronex_id, path ) )
   {
     // Always use the first digital I/O channel to flash the LED light.
     // For example "/ronex/general_io/1" + "/command/pwm/0".
-    std::string topic = path + "/command/pwm/0"; 
-    ROS_INFO_STREAM( "Topic = " << topic << "\n" );
-    flash_LED( n, topic );
+    std::string topic = path + "/command/pwm/0";
+    ROS_INFO_STREAM("Topic = " << topic << "\n");
+    flash_LED(n, topic);
   }
-  
+
   return 0;
 }
 

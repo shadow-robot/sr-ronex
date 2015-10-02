@@ -32,25 +32,27 @@
 #include <diagnostic_updater/DiagnosticStatusWrapper.h>
 #include <ros_ethercat_hardware/ethercat_hardware.h>
 #include <pluginlib/class_list_macros.h>
+#include <vector>
 
 namespace sr_cod_decod
 {
-  class CodDecod
-  {
-  public:
-    CodDecod();
-    virtual ~CodDecod() {}
+class CodDecod
+{
+public:
+  CodDecod();
+  virtual ~CodDecod() {}
 
-    virtual void construct(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs, int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
-    virtual void update(unsigned char *status_buffer);
-    virtual void build_command(unsigned char *command_buffer);
-    virtual void add_diagnostics(std::vector<diagnostic_msgs::DiagnosticStatus> &vec,
-                                     diagnostic_updater::DiagnosticStatusWrapper &d);
-  protected:
-    EtherCAT_SlaveHandler *sh_;
-    ros_ethercat_model::RobotState *hw_;
-  };
-}
+  virtual void construct(hardware_interface::HardwareInterface *hw, EtherCAT_SlaveHandler *sh, int n_digital_outputs,
+  int n_analog_outputs, int n_digital_inputs, int n_analog_inputs, int n_PWM_outputs);
+  virtual void update(unsigned char *status_buffer);
+  virtual void build_command(unsigned char *command_buffer);
+  virtual void add_diagnostics(std::vector<diagnostic_msgs::DiagnosticStatus> &vec,
+                                   diagnostic_updater::DiagnosticStatusWrapper &d);
+protected:
+  EtherCAT_SlaveHandler *sh_;
+  ros_ethercat_model::RobotState *hw_;
+};
+}  // namespace sr_cod_decod
 
 
 #endif

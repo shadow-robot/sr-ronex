@@ -31,9 +31,8 @@
 #include <ros/ros.h>
 #include <gtest/gtest.h>
 #include <tinyxml.h>
+#include <string>
 
-using namespace std;
-using namespace ronex;
 
 TEST(RonexEthercatDrivers, build_name )
 {
@@ -54,12 +53,13 @@ TEST(RonexEthercatDrivers, constructor )
   EC_Logic logic;
   EtherCAT_PD_Buffer pdbuf(&logic, &dll);
 
-  EtherCAT_SlaveHandler sh(0, 0, 0, serial,EC_FixedStationAddress( (uint16_t) 0 ), &fmmu, &pdcfg, &mbxcfg, &dll, &logic, &pdbuf);
+  EtherCAT_SlaveHandler sh(0, 0, 0, serial, EC_FixedStationAddress((uint16_t) 0), &fmmu, &pdcfg, &mbxcfg, &dll, &logic,
+                           &pdbuf);
 
   SrBoardMk2GIO sbm;
 
   int add = 0;
-  sbm.construct( &sh, add );
+  sbm.construct(&sh, add);
 
   ros::NodeHandle nh;
   string xml_string;
@@ -69,7 +69,7 @@ TEST(RonexEthercatDrivers, constructor )
   TiXmlElement *root = urdf_xml.FirstChildElement("robot");
   ros_ethercat_model::RobotState hw(root);
 
-  int retsbm = sbm.initialize( static_cast<hardware_interface::HardwareInterface*>(&hw) );
+  int retsbm = sbm.initialize(static_cast<hardware_interface::HardwareInterface*>(&hw));
   ASSERT_EQ(0, retsbm);
 }
 

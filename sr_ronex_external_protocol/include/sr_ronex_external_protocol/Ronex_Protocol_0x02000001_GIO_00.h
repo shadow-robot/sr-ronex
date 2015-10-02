@@ -34,8 +34,8 @@
                                                                             // -------------------------
 #define RONEX_COMMAND_02000001_MASTER_CLOCK_SPEED_HZ        64000000        //!< Master clock. This is divided down to create the PWM clock.
 #define RONEX_COMMAND_02000001_ADC_SAMPLE_RATE_HZ               1000        //!< Maximum possible ADC sample rate. Don't send EtherCAT packets faster than this.
-#define NUM_ANALOGUE_INPUTS                                       12        
-#define ANALOGUE_INPUT_RESOLUTION                                 12        //!< 
+#define NUM_ANALOGUE_INPUTS                                       12
+#define ANALOGUE_INPUT_RESOLUTION                                 12        //!<
 #define ANALOGUE_INPUT_JUSTIFICATION                           RIGHT
 #define NUM_ANALOGUE_OUTPUTS                                       0
 #define ANALOGUE_OUTPUT_RESOLUTION                                 0

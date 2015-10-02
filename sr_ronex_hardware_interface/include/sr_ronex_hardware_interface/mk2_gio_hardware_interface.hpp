@@ -31,47 +31,47 @@
 
 namespace ronex
 {
-  class GeneralIOCommand
+class GeneralIOCommand
+{
+public:
+  std::vector<bool> digital_;
+
+  struct PWM
   {
-  public:
-    std::vector<bool> digital_;
-
-    struct PWM
-    {
-      unsigned short int period;
-      unsigned short int on_time_0;
-      unsigned short int on_time_1;
-    };
-
-    std::vector<PWM> pwm_;
-    unsigned short int pwm_clock_divider_;
+    uint16_t period;
+    uint16_t on_time_0;
+    uint16_t on_time_1;
   };
 
-  class GeneralIOState
-  {
-  public:
-    std::vector<bool> digital_;
-    std::vector<unsigned short int> analogue_;
-  };
+  std::vector<PWM> pwm_;
+  uint16_t pwm_clock_divider_;
+};
 
-  /**
-   * This contains the command and state to be stored as a
-   *  CustomHW in the pr2 hardware interface. Makes it possible
-   *  to access the RoNeX data from the controllers as well as
-   *  the driver.
-   *
-   * The command and state are a slightly higher level representation
-   *  of the definitions used in the protocol header:
-   *    sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h
-   */
-  class GeneralIO
-    : public ros_ethercat_model::CustomHW
-  {
-  public:
-    GeneralIOState state_;
-    GeneralIOCommand command_;
-  };
-}
+class GeneralIOState
+{
+public:
+  std::vector<bool> digital_;
+  std::vector<uint16_t> analogue_;
+};
+
+/**
+ * This contains the command and state to be stored as a
+ *  CustomHW in the pr2 hardware interface. Makes it possible
+ *  to access the RoNeX data from the controllers as well as
+ *  the driver.
+ *
+ * The command and state are a slightly higher level representation
+ *  of the definitions used in the protocol header:
+ *    sr_ronex_external_protocol/Ronex_Protocol_0x02000001_GIO_00.h
+ */
+class GeneralIO
+  : public ros_ethercat_model::CustomHW
+{
+public:
+  GeneralIOState state_;
+  GeneralIOCommand command_;
+};
+}  // namespace ronex
 /* For the emacs weenies in the crowd.
 Local Variables:
    c-basic-offset: 2

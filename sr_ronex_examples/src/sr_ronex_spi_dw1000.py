@@ -17,10 +17,13 @@
 # License along with this library.
 # ####################################################################
 
-import roslib; roslib.load_manifest('sr_ronex_examples')
+import roslib
 import rospy
 from time import sleep
 from sr_ronex_msgs.srv import SPI
+
+roslib.load_manifest('sr_ronex_examples')
+
 
 class DW1000SpiInterface(object):
     """
@@ -55,13 +58,13 @@ class DW1000SpiInterface(object):
         try:
             resp = self.spi_srvs_[spi_out_index](data_packet)
         except rospy.ServiceException, e:
-            rospy.logerr("Service call failed: %s"%e)
+            rospy.logerr("Service call failed: %s" % e)
             return None
 
-        #removing the first item from the received packet of data
+        # removing the first item from the received packet of data
         return_data_packet = resp.data[1:]
 
-        print "SPI[",spi_out_index,"]: reading ",self.hexify_list(return_data_packet), " from address: ",address
+        print "SPI[", spi_out_index, "]: reading ", self.hexify_list(return_data_packet), " from address: ", address
 
         return return_data_packet
 
@@ -75,7 +78,7 @@ class DW1000SpiInterface(object):
 
         @return True if success, False otherwise
         """
-        print "SPI[",spi_out_index,"]: writing ", self.hexify_list(data_packet),"] to address: ",address
+        print "SPI[", spi_out_index, "]: writing ", self.hexify_list(data_packet), "] to address: ", address
         if address < 64:
             data_packet.insert(0, address + 0x80)
         else:
@@ -85,7 +88,7 @@ class DW1000SpiInterface(object):
         try:
             resp = self.spi_srvs_[spi_out_index](data_packet)
         except rospy.ServiceException, e:
-            rospy.logerr("Service call failed: %s"%e)
+            rospy.logerr("Service call failed: %s" % e)
             return False
 
         print " ... OK data written"
@@ -94,7 +97,7 @@ class DW1000SpiInterface(object):
     def hexify_list(self, l):
         hex_l = []
         for item in l:
-            hex_l.append( str(hex(int(item))) )
+            hex_l.append(str(hex(int(item))))
         return hex_l
 
 
@@ -104,13 +107,9 @@ if __name__ == "__main__":
     dw1000 = DW1000SpiInterface()
 
     print "--- new write"
-    success = dw1000.write_register(0, 0x03, [1,1,1,1])
-    packet = dw1000.read_register(0, 0x03, [0,1,2,3])
+    success = dw1000.write_register(0, 0x03, [1, 1, 1, 1])
+    packet = dw1000.read_register(0, 0x03, [0, 1, 2, 3])
 
     print "--- new write"
-    success = dw1000.write_register(0, 0x03, [0x01,0x20,0x30, 0x40])
-    packet = dw1000.read_register(0, 0x03, [1,1,1,1])
-
-
-
-
+    success = dw1000.write_register(0, 0x03, [0x01, 0x20, 0x30, 0x40])
+    packet = dw1000.read_register(0, 0x03, [1, 1, 1, 1])

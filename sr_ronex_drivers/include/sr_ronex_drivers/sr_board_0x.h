@@ -25,13 +25,12 @@
  *         of device should inherit from this class.
  **/
 
-#ifndef SR_BOARD_0X_H
-#define SR_BOARD_0X_H
+#ifndef SR_RONEX_DRIVERS_SR_BOARD_0X_H
+#define SR_RONEX_DRIVERS_SR_BOARD_0X_H
 
 #include <sr_ronex_drivers/standard_ethercat_device.h>
 
 #include <vector>
-using namespace std;
 
 
 class SrBoard0X : public StandardEthercatDevice
@@ -40,10 +39,9 @@ public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
 
 protected:
-
   void packCommand(unsigned char *buffer, bool halt, bool reset);
   bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 };
 
-#endif /* SR_BOARD_0X_H */
+#endif  // SR_RONEX_DRIVERS_SR_BOARD_0X_H
 

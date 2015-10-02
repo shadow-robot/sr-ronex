@@ -35,39 +35,40 @@
 
 #include <std_msgs/Bool.h>
 #include <sr_ronex_msgs/PWM.h>
+#include <vector>
 
 namespace ronex
 {
-  class GeneralIOPassthroughController
-    : public controller_interface::Controller<ros_ethercat_model::RobotState>
-  {
-  public:
-    GeneralIOPassthroughController();
+class GeneralIOPassthroughController
+  : public controller_interface::Controller<ros_ethercat_model::RobotState>
+{
+public:
+  GeneralIOPassthroughController();
 
-    virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+  virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-    /*!
-     * \brief Issues commands to the joint. Should be called at regular intervals
-     */
-    virtual void update(const ros::Time&, const ros::Duration&) {}
+  /*!
+   * \brief Issues commands to the joint. Should be called at regular intervals
+   */
+  virtual void update(const ros::Time&, const ros::Duration&) {}
 
-    void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
+  void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 
-    void pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index);
+  void pwm_commands_cb(const sr_ronex_msgs::PWMConstPtr& msg, int index);
 
-  private:
-    ros::NodeHandle node_;
+private:
+  ros::NodeHandle node_;
 
-    int loop_count_;
+  int loop_count_;
 
-    ronex::GeneralIO* general_io_;
+  ronex::GeneralIO* general_io_;
 
-    ///send commands to the RoNeX's digital I/O
-    std::vector<ros::Subscriber> digital_subscribers_;
-    ///send PWM commands to the RoNeX's
-    std::vector<ros::Subscriber> pwm_subscribers_;
-  };
-}
+  /// send commands to the RoNeX's digital I/O
+  std::vector<ros::Subscriber> digital_subscribers_;
+  /// send PWM commands to the RoNeX's
+  std::vector<ros::Subscriber> pwm_subscribers_;
+};
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

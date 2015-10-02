@@ -17,14 +17,18 @@
 # License along with this library.
 # ####################################################################
 
-import roslib; roslib.load_manifest('sr_ronex_examples')
+import roslib
 import rospy
 from time import sleep
 from sr_ronex_msgs.msg import PWM
 
-#--------------------------------------------------------------------------------
+roslib.load_manifest('sr_ronex_examples')
+
+# --------------------------------------------------------------------------------
 
 # Flash a LED light with PWM.
+
+
 def flashLED(topic):
     pwm_period = 320
     # Start with a 100% duty cycle.
@@ -32,7 +36,7 @@ def flashLED(topic):
     # The second output is not used.
     pwm_on_time_1 = 0
 
-    pub = rospy.Publisher( topic, PWM )
+    pub = rospy.Publisher(topic, PWM)
     while not rospy.is_shutdown():
         # Flash the light...
         pwm_on_time_0 -= 10
@@ -41,18 +45,20 @@ def flashLED(topic):
 
         # Set the PWM data.
         pwm = PWM()
-        pwm.pwm_period    = pwm_period
+        pwm.pwm_period = pwm_period
         pwm.pwm_on_time_0 = pwm_on_time_0
         pwm.pwm_on_time_1 = pwm_on_time_1
 
-        pub.publish( pwm )
-        rospy.sleep( 0.01 )
+        pub.publish(pwm)
+        rospy.sleep(0.01)
 
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
 
 """
 This class demonstrates how to find the General I/O module with the given ronex_id.
 """
+
+
 class SrRonexFindGeneralIOModule(object):
 
     def __init__(self, ronex_id):
@@ -87,7 +93,7 @@ class SrRonexFindGeneralIOModule(object):
                 path = ronex_param_ids[key]["path"]
                 return path
 
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------
 
 """
 Assume that your RoNeX consists of a Bridge (IN) module, and one or multiple General I/O module(s).
@@ -100,11 +106,11 @@ if __name__ == "__main__":
 
     # Note that you may have to set the value of ronex_id,
     # depending on which General I/O board the LED is connected to.
-    ronex_id = raw_input( "Please enter the ronex id: " )
-    findModule = SrRonexFindGeneralIOModule( str(ronex_id) )
+    ronex_id = raw_input("Please enter the ronex id: ")
+    findModule = SrRonexFindGeneralIOModule(str(ronex_id))
     path = findModule.get_path()
 
-    if path != None:
+    if path is not None:
         # Always use the first digital I/O channel to flash the LED light.
         # For example "/ronex/general_io/1" + "/command/pwm/0".
         topic = path + "/command/pwm/0"
@@ -116,4 +122,4 @@ if __name__ == "__main__":
     else:
         rospy.loginfo("Failed to find the General I/O module with the given ronex_id %s.", ronex_id)
 
-#--------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------

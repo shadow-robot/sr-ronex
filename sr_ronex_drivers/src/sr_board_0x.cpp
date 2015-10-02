@@ -32,7 +32,7 @@
 
 #include <math.h>
 
-//TODO only for testing purposes (it will be read from eeprom)
+// TODO(shadow): only for testing purposes (it will be read from eeprom)
 #define ETHERCAT_COMMAND_DATA_ADDRESS               0x1000
 
 PLUGINLIB_EXPORT_CLASS(SrBoard0X, EthercatDevice);
@@ -41,10 +41,11 @@ void SrBoard0X::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
   sh_ = sh;
 
-  //TODO only for testing Shadow Robot boards. We read the number of inputs and outputs from the second half of the product code
-  //This should ideally be done in standard_ethercat_device in construct, by reading the inputs and outputs
-  //parameters from the eeprom of the ethercat device.
-  //This is not implemented yet neither in the driver nor in the slave (shadow board) firmware
+  // TODO(shadow): only for testing Shadow Robot boards. We read the number of inputs and outputs from the second half
+  // of the product code
+  // This should ideally be done in standard_ethercat_device in construct, by reading the inputs and outputs
+  // parameters from the eeprom of the ethercat device.
+  // This is not implemented yet neither in the driver nor in the slave (shadow board) firmware
   n_digital_outputs = ((sh->get_product_code() & 0x00000F00) >>  8) * 2;
   n_digital_inputs = ((sh->get_product_code() & 0x00000F00) >>  8);
   n_analog_outputs = ((sh->get_product_code() & 0x000000F0) >>  4);
@@ -66,31 +67,31 @@ void SrBoard0X::construct(EtherCAT_SlaveHandler *sh, int &start_address)
   //
   // This is for data going TO the board
   //
-  ROS_INFO("First FMMU (command) : start_address : 0x%08X ; size : %3d bytes ; phy addr : 0x%08X", command_base_, command_size_,
-           static_cast<int>(ETHERCAT_COMMAND_DATA_ADDRESS) );
-  EC_FMMU *commandFMMU = new EC_FMMU( command_base_,                                                  // Logical Start Address    (in ROS address space?)
+  ROS_INFO("First FMMU (command) : start_address : 0x%08X ; size : %3d bytes ; phy addr : 0x%08X", command_base_,
+           command_size_, static_cast<int>(ETHERCAT_COMMAND_DATA_ADDRESS) );
+  EC_FMMU *commandFMMU = new EC_FMMU( command_base_,                  // Logical Start Address   (in ROS address space?)
                                       command_size_,
-                                      0x00,                                                           // Logical Start Bit
-                                      0x07,                                                           // Logical End Bit
-                                      ETHERCAT_COMMAND_DATA_ADDRESS,                                  // Physical Start Address   (in ET1200 address space?)
-                                      0x00,                                                           // Physical Start Bit
-                                      false,                                                          // Read Enable
-                                      true,                                                           // Write Enable
-                                      true                                                            // Channel Enable
-                                     );
+                                      0x00,                           // Logical Start Bit
+                                      0x07,                           // Logical End Bit
+                                      ETHERCAT_COMMAND_DATA_ADDRESS,  // Physical Start Address(in ET1200 addr space?)
+                                      0x00,                           // Physical Start Bit
+                                      false,                          // Read Enable
+                                      true,                           // Write Enable
+                                      true);                          // Channel Enable
 
 
   // WARNING!!!
   // We are leaving (command_size_ * 4) bytes in the physical memory of the device, but strictly we only need to
   // leave (command_size_ * 3). This change should be done in the firmware as well, otherwise it won't work.
-  // This triple buffer is needed in the ethercat devices to work in EC_BUFFERED mode (in opposition to the other mode EC_QUEUED, the so called mailbox mode)
+  // This triple buffer is needed in the ethercat devices to work in EC_BUFFERED mode (in opposition to the other mode
+  // EC_QUEUED, the so called mailbox mode)
 
   // ETHERCAT_STATUS_DATA
   //
   // This is for data coming FROM the board
   //
-  ROS_INFO("Second FMMU (status) : start_address : 0x%08X ; size : %3d bytes ; phy addr : 0x%08X", status_base_, status_size_,
-           static_cast<int>(ETHERCAT_COMMAND_DATA_ADDRESS + command_size_) );
+  ROS_INFO("Second FMMU (status) : start_address : 0x%08X ; size : %3d bytes ; phy addr : 0x%08X", status_base_,
+           status_size_, static_cast<int>(ETHERCAT_COMMAND_DATA_ADDRESS + command_size_) );
   EC_FMMU *statusFMMU = new EC_FMMU(  status_base_,
                                       status_size_,
                                       0x00,
@@ -111,8 +112,8 @@ void SrBoard0X::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
   EtherCAT_PD_Config *pd = new EtherCAT_PD_Config(2);
 
-  (*pd)[0] = EC_SyncMan(ETHERCAT_COMMAND_DATA_ADDRESS,                             command_size_,    EC_BUFFERED, EC_WRITTEN_FROM_MASTER);
-  (*pd)[1] = EC_SyncMan(ETHERCAT_COMMAND_DATA_ADDRESS + (command_size_ * 4),              status_size_,     EC_BUFFERED);
+  (*pd)[0] = EC_SyncMan(ETHERCAT_COMMAND_DATA_ADDRESS, command_size_, EC_BUFFERED, EC_WRITTEN_FROM_MASTER);
+  (*pd)[1] = EC_SyncMan(ETHERCAT_COMMAND_DATA_ADDRESS + (command_size_ * 4), status_size_, EC_BUFFERED);
 
 
   (*pd)[0].ChannelEnable = true;
@@ -137,7 +138,7 @@ bool SrBoard0X::unpackState(unsigned char *this_buffer, unsigned char *prev_buff
 {
   unsigned char *status_data_ptr;
 
-  //Pointer to the beginning of the status data in the buffer
+  // Pointer to the beginning of the status data in the buffer
   status_data_ptr = this_buffer + command_size_;
 
   cod_decod_manager_->update(status_data_ptr);
