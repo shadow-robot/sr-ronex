@@ -24,6 +24,7 @@
 
 #include "sr_ronex_controllers/adc16_passthrough_controller.hpp"
 #include "pluginlib/class_list_macros.h"
+#include <string>
 
 PLUGINLIB_EXPORT_CLASS(ronex::ADC16PassthroughController, controller_interface::ControllerBase)
 
@@ -39,46 +40,52 @@ bool ADC16PassthroughController::init(ros_ethercat_model::RobotState* robot, ros
   node_ = n;
 
   std::string ronex_id;
-  if (!node_.getParam("ronex_id", ronex_id)) {
+  if (!node_.getParam("ronex_id", ronex_id))
+  {
     ROS_ERROR("No RoNeX ID given (namespace: %s)", node_.getNamespace().c_str());
     return false;
   }
 
-  //get the path from the parameters
+  // get the path from the parameters
   std::string path;
   int parameter_id = get_ronex_param_id(ronex_id);
   {
-    if( parameter_id == -1 )
+    if (parameter_id == -1)
     {
-      ROS_ERROR_STREAM("Could not find the RoNeX id in the parameter server: " << ronex_id << " not loading the controller.");
+      ROS_ERROR_STREAM("Could not find the RoNeX id in the parameter server: " << ronex_id <<
+                               " not loading the controller.");
       return false;
     }
     else
     {
       std::stringstream ss;
       ss << "/ronex/devices/" << parameter_id << "/path";
-      if( !ros::param::get(ss.str(), path) )
+      if (!ros::param::get(ss.str(), path))
       {
-        ROS_ERROR_STREAM("Couldn't read the parameter " << ss.str() << " from the parameter server. Not loading the controller.");
+        ROS_ERROR_STREAM("Couldn't read the parameter " << ss.str() <<
+                                 " from the parameter server. Not loading the controller.");
         return false;
       }
     }
   }
 
-  adc16_ = static_cast<ronex::ADC16*>( robot->getCustomHW(path) );
-  if( adc16_ == NULL)
+  adc16_ = static_cast<ronex::ADC16*>(robot->getCustomHW(path));
+  if ( adc16_ == NULL)
   {
     ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");
     return false;
   }
 
-  //init the subscribers
+  // init the subscribers
   std::stringstream sub_topic;
-  for( size_t i=0; i < adc16_->command_.digital_.size(); ++i)
+  for (size_t i = 0; i < adc16_->command_.digital_.size(); ++i)
   {
     sub_topic.str("");
     sub_topic << path << "/command/digital/" << i;
-    digital_subscribers_.push_back(node_.subscribe<std_msgs::Bool>(sub_topic.str(), 1, boost::bind(&ADC16PassthroughController::digital_commands_cb, this, _1,  i )));
+    digital_subscribers_.push_back(
+            node_.subscribe<std_msgs::Bool>(sub_topic.str(), 1,
+                                            boost::bind(&ADC16PassthroughController::digital_commands_cb,
+                                                        this, _1,  i )));
   }
 
   return true;
@@ -89,7 +96,7 @@ void ADC16PassthroughController::digital_commands_cb(const std_msgs::BoolConstPt
   adc16_->command_.digital_[index] = msg->data;
 }
 
-}
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

@@ -29,6 +29,7 @@
 #include <iomanip>
 #include <boost/lexical_cast.hpp>
 #include <math.h>
+#include <string>
 
 #include "sr_ronex_drivers/ronex_utils.hpp"
 
@@ -45,7 +46,7 @@ SrBoardADC16::SrBoardADC16() :
 SrBoardADC16::~SrBoardADC16()
 {
   // remove parameters from server
-  string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_ );
+  string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_);
   ros::param::del(device_id);
 
   string adc16_device_name = "/ronex/adc16/" + serial_number_;
@@ -57,22 +58,22 @@ SrBoardADC16::~SrBoardADC16()
 void SrBoardADC16::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
   sh_ = sh;
-  serial_number_ = ronex::get_serial_number( sh );
+  serial_number_ = ronex::get_serial_number(sh);
 
   // get the alias from the parameter server if it exists
   std::string path_to_alias, alias;
   path_to_alias = "/ronex/mapping/" + serial_number_;
-  if( ros::param::get(path_to_alias, alias))
+  if ( ros::param::get(path_to_alias, alias))
   {
     ronex_id_ = alias;
   }
   else
   {
     // no alias found, using the serial number directly.
-    ronex_id_ = serial_number_ ;
+    ronex_id_ = serial_number_;
   }
 
-  device_name_ = ronex::build_name( product_alias_, ronex_id_ );
+  device_name_ = ronex::build_name(product_alias_, ronex_id_);
 
   command_base_  = start_address;
   command_size_  = COMMAND_ARRAY_SIZE_BYTES;
@@ -97,8 +98,8 @@ void SrBoardADC16::construct(EtherCAT_SlaveHandler *sh, int &start_address)
     ROS_INFO("Using EC_QUEUED");
   }
 
-  ROS_INFO("First FMMU (command) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", command_base_, command_size_,
-           static_cast<int>(COMMAND_ADDRESS) );
+  ROS_INFO("First FMMU (command) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", command_base_,
+           command_size_, static_cast<int>(COMMAND_ADDRESS) );
   EC_FMMU *commandFMMU = new EC_FMMU( command_base_,            // Logical Start Address    (in ROS address space?)
                                       command_size_,
                                       0x00,                   // Logical Start Bit
@@ -107,21 +108,22 @@ void SrBoardADC16::construct(EtherCAT_SlaveHandler *sh, int &start_address)
                                       0x00,                   // Physical Start Bit
                                       false,                   // Read Enable
                                       true,                    // Write Enable
-                                      true                     // Channel Enable
-    );
+                                      true);                     // Channel Enable
+
 
 
   // WARNING!!!
   // We are leaving (command_size_ * 4) bytes in the physical memory of the device, but strictly we only need to
   // leave (command_size_ * 3). This change should be done in the firmware as well, otherwise it won't work.
-  // This triple buffer is needed in the ethercat devices to work in EC_BUFFERED mode (in opposition to the other mode EC_QUEUED, the so called mailbox mode)
+  // This triple buffer is needed in the ethercat devices to work in EC_BUFFERED mode (in opposition to the other mode
+  // EC_QUEUED, the so called mailbox mode)
 
   // ETHERCAT_STATUS_DATA
   //
   // This is for data coming FROM the board
   //
-  ROS_INFO("Second FMMU (status) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", status_base_, status_size_,
-           static_cast<int>(STATUS_ADDRESS) );
+  ROS_INFO("Second FMMU (status) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", status_base_,
+           status_size_, static_cast<int>(STATUS_ADDRESS) );
   EC_FMMU *statusFMMU = new EC_FMMU(  status_base_,
                                       status_size_,
                                       0x00,
@@ -186,22 +188,22 @@ int SrBoardADC16::initialize(hardware_interface::HardwareInterface *hw, bool all
 
 void SrBoardADC16::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
-  RONEX_COMMAND_02000008* command = (RONEX_COMMAND_02000008*)(buffer);
+  RONEX_COMMAND_02000008* command = reinterpret_cast<RONEX_COMMAND_02000008*>(buffer);
 
-  if (! config_received_)
+  if (!config_received_)
   {
     command->command_type = RONEX_COMMAND_02000008_COMMAND_TYPE_GET_CONFIG_INFO;
   }
   else if (reg_flag_)
   {
-    switch(reg_state_)
+    switch (reg_state_)
     {
       case 0:
         if (!command_queue_.empty())
         {
           command->command_type = RONEX_COMMAND_02000008_COMMAND_TYPE_SET_REG_VAL;
           command->address = command_queue_.front().address;
-          for(int i = 0; i < 3; ++i )
+          for (int i = 0; i < 3; ++i )
           {
             command->values[i] = command_queue_.front().values[i];
           }
@@ -247,22 +249,22 @@ void SrBoardADC16::packCommand(unsigned char *buffer, bool halt, bool reset)
 
 bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
 {
-  RONEX_STATUS_02000008* status_data = (RONEX_STATUS_02000008 *)(this_buffer+  command_size_);
+  RONEX_STATUS_02000008* status_data = reinterpret_cast<RONEX_STATUS_02000008 *>(this_buffer+  command_size_);
 
   // Checking that the received command type matches RONEX_COMMAND_02000001_COMMAND_TYPE_NORMAL
   // (the one that was used in the command). The ronex firmware will answer with whatever command type we send.
   // The purpose of this is to filter those status_data structures that come filled with zeros due to the jitter
-  // in the realtime loop. The jitter causes that the host tries to read the status when the microcontroller in the ronex
-  // module has not finished writing it to memory yet.
+  // in the realtime loop. The jitter causes that the host tries to read the status when the microcontroller in the
+  // ronex module has not finished writing it to memory yet.
 
-  if(status_data->command_type == RONEX_COMMAND_02000008_COMMAND_TYPE_NORMAL)
+  if (status_data->command_type == RONEX_COMMAND_02000008_COMMAND_TYPE_NORMAL)
   {
-    for(size_t i = 0; i < adc16_->state_.analogue_.size(); ++i )
+    for (size_t i = 0; i < adc16_->state_.analogue_.size(); ++i )
     {
       adc16_->state_.analogue_[i] = status_data->info_type.status_data.analogue_in[i];
     }
 
-    for(size_t i = 0; i < adc16_->state_.digital_.size(); ++i )
+    for (size_t i = 0; i < adc16_->state_.digital_.size(); ++i )
     {
       adc16_->state_.digital_[i] = ronex::check_bit(status_data->info_type.status_data.pin_input_states_DIO, i);
     }
@@ -274,12 +276,12 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
     // pin order comes back the reverse of values on the data sheet, so 7->0 for differential and 15->0 for single
     for (int j = 0; j < stack; j++)
     {
-      unsigned short int differential = values_d_[j];
-      unsigned short int single_ended = (values_s1_[j] << 8) | values_s0_[j];
-      unsigned short int padded_single_ended = (padded_s1_[j] << 8) | padded_s0_[j];
+      uint16_t differential = values_d_[j];
+      uint16_t single_ended = (values_s1_[j] << 8) | values_s0_[j];
+      uint16_t padded_single_ended = (padded_s1_[j] << 8) | padded_s0_[j];
       for (int n = 0; n < 8; n++)
       {
-        if(differential & mask << n)
+        if (differential & mask << n)
         {
           adc16_->state_.adc_[count] = status_data->info_type.status_data.adc16[bits_count].U16;
           adc16_->state_.adc_[count -1] = status_data->info_type.status_data.adc16[bits_count].U16;
@@ -287,37 +289,37 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
         }
         count = count -2;
       }
-      count = ((j + 1) * 16) - 1; //start at 15, 31 or 47
+      count = ((j + 1) * 16) - 1;  // start at 15, 31 or 47
       for (int n = 0; n < 16; n++)
       {
-        if(single_ended & mask << n)
+        if (single_ended & mask << n)
         {
           adc16_->state_.adc_[count] = status_data->info_type.status_data.adc16[bits_count].U16;
           bits_count += 1;
         }
-        else if(padded_single_ended & mask << n)
+        else if (padded_single_ended & mask << n)
         {
           bits_count += 1;
         }
-        count -=1;
+        count -= 1;
       }
     }
   }
-  else if(status_data->command_type == RONEX_COMMAND_02000008_COMMAND_TYPE_SET_REG_VAL)
+  else if (status_data->command_type == RONEX_COMMAND_02000008_COMMAND_TYPE_SET_REG_VAL)
   {
     adc16_->state_.address_ = status_data->info_type.register_feedback.address;
 
     // check the feedback address value against the flag number, if feedback incorrect, reset queue
-    if(((feedback_flag_ == 2) & (adc16_->state_.address_ != 4)) | ((feedback_flag_ == 3) & (adc16_->state_.address_ != 5)) |
-    ((feedback_flag_ == 4) & (adc16_->state_.address_ != 3)))
+    if (((feedback_flag_ == 2) & (adc16_->state_.address_ != 4)) | ((feedback_flag_ == 3) &
+            (adc16_->state_.address_ != 5)) | ((feedback_flag_ == 4) & (adc16_->state_.address_ != 3)))
     {
       reg_state_ = 0;
       command_queue_ = queue_backup_;
     }
   }
-  else if(status_data->command_type == RONEX_COMMAND_02000008_COMMAND_TYPE_GET_CONFIG_INFO)
+  else if (status_data->command_type == RONEX_COMMAND_02000008_COMMAND_TYPE_GET_CONFIG_INFO)
   {
-    if( adc16_->state_.analogue_.empty())
+    if ( adc16_->state_.analogue_.empty())
     {
       size_t nb_adc_pub;
       // The publishers haven't been initialised yet.
@@ -357,10 +359,11 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
       // dynamic reconfigure server is instantiated here
       // as we need the different vectors to be initialised
       // before running the first configuration.
-      dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::ADC16Config>(ros::NodeHandle(device_name_)));
+      dynamic_reconfigure_server_.reset(
+              new dynamic_reconfigure::Server<sr_ronex_drivers::ADC16Config>(ros::NodeHandle(device_name_)));
       function_cb_ = boost::bind(&SrBoardADC16::dynamic_reconfigure_cb, this, _1, _2);
       dynamic_reconfigure_server_->setCallback(function_cb_);
-    } // end first time, the sizes are properly initialised, simply fill in the data
+    }  // end first time, the sizes are properly initialised, simply fill in the data
 
     config_received_ = true;
   }
@@ -368,22 +371,22 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
   adc16_->state_.command_type_ = status_data->command_type;
 
   // publishing at 100Hz
-  if(cycle_count_ > 9)
+  if (cycle_count_ > 9)
   {
     state_msg_.header.stamp = ros::Time::now();
 
     // update state message
-    for(size_t i=0; i < adc16_->state_.analogue_.size(); ++i)
+    for (size_t i = 0; i < adc16_->state_.analogue_.size(); ++i)
     {
       state_msg_.analogue[i] = adc16_->state_.analogue_[i];
     }
 
-    for(size_t i=0; i < adc16_->state_.digital_.size(); ++i)
+    for (size_t i = 0; i < adc16_->state_.digital_.size(); ++i)
     {
       state_msg_.digital[i] = adc16_->state_.digital_[i];
       state_msg_.input_mode[i] = input_mode_[i];
     }
-    for(size_t i=0; i < adc16_->state_.adc_.size(); ++i)
+    for (size_t i = 0; i < adc16_->state_.adc_.size(); ++i)
     {
       state_msg_.adc[i] = adc16_->state_.adc_[i];
     }
@@ -391,7 +394,7 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
     state_msg_.command_type = adc16_->state_.command_type_;
 
     // publish
-    if( state_publisher_->trylock() )
+    if ( state_publisher_->trylock() )
     {
       state_publisher_->msg_ = state_msg_;
       state_publisher_->unlockAndPublish();
@@ -411,7 +414,7 @@ void SrBoardADC16::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, u
   d.hardware_id = serial_number_;
 
   d.clear();
-  if(has_stacker_)
+  if (has_stacker_)
     d.addf("Stacker Board", "True");
   else
     d.addf("Stacker Board", "False");
@@ -421,23 +424,23 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
 {
   // not very pretty but I couldnt think of an easy way to set them up
   // (dynamic reconfigure doesn't seem to support arrays)
-  if(adc16_->command_.digital_.size() > 0)
+  if (adc16_->command_.digital_.size() > 0)
     input_mode_[0] = config.input_mode_0;
-  if(adc16_->command_.digital_.size() > 1)
+  if (adc16_->command_.digital_.size() > 1)
     input_mode_[1] = config.input_mode_1;
-  if(adc16_->command_.digital_.size() > 2)
+  if (adc16_->command_.digital_.size() > 2)
     input_mode_[2] = config.input_mode_2;
-  if(adc16_->command_.digital_.size() > 3)
+  if (adc16_->command_.digital_.size() > 3)
     input_mode_[3] = config.input_mode_3;
-  if(adc16_->command_.digital_.size() > 4)
+  if (adc16_->command_.digital_.size() > 4)
     input_mode_[4] = config.input_mode_4;
-  if(adc16_->command_.digital_.size() > 5)
+  if (adc16_->command_.digital_.size() > 5)
     input_mode_[5] = config.input_mode_5;
 
   stack = 0;
 
   // pins are paired for 1 mode of either differential or single ended configuration
-  if(adc16_->state_.adc_.size() >= 16)
+  if (adc16_->state_.adc_.size() >= 16)
   {
     pin_mode_[0] = config.pins_0_1;
     pin_mode_[1] = config.pins_2_3;
@@ -449,7 +452,7 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
     pin_mode_[7] = config.pins_14_15;
     stack = 1;
   }
-  if(adc16_->state_.adc_.size() >= 32)
+  if (adc16_->state_.adc_.size() >= 32)
   {
     pin_mode_[8] = config.pins_16_17;
     pin_mode_[9] = config.pins_18_19;
@@ -461,7 +464,7 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
     pin_mode_[15] = config.pins_30_31;
     stack = 2;
   }
-  if(adc16_->state_.adc_.size() == 48)
+  if (adc16_->state_.adc_.size() == 48)
   {
     pin_mode_[16] = config.pins_32_33;
     pin_mode_[17] = config.pins_34_35;
@@ -491,27 +494,27 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
   // set values for s1 and d, first set of 8 pins. NOTE the pin order is in the reverse order
   // given on the data sheet for the chip 15->0 rather than 0->15
 
-  for (int i = 0; i < stack; i++) //loop for each stack
+  for (int i = 0; i < stack; i++)  // loop for each stack
   {
-    for (signed int pin = 0; pin <= pin_count; pin++) //first 8 pins
+    for (signed int pin = 0; pin <= pin_count; pin++)  // first 8 pins
     {
-      if (pin <= pin_count - 4) // 4 pairs make up the 8 pins
+      if (pin <= pin_count - 4)  // 4 pairs make up the 8 pins
       {
-        if (pin_mode_[pin] == 0) // no input
+        if (pin_mode_[pin] == 0)  // no input
         {
           values_s1_[i] <<=2;
           values_d_[i] <<=1;
           fake_values_s1_[i] <<=2;
           fake_values_s1_[i] |= bit * 3;
         }
-        else if (pin_mode_[pin] == 1) // single ended ADC input
+        else if (pin_mode_[pin] == 1)  // single ended ADC input
         {
           values_s1_[i] <<=2;
           values_d_[i] <<=1;
           fake_values_s1_[i] <<=2;
           values_s1_[i] |= bit * 3;
         }
-        else // differential ADC input
+        else  // differential ADC input
         {
           values_s1_[i] <<=2;
           values_d_[i] <<=1;
@@ -524,21 +527,21 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
       // set values for s0 and d, second set of 8 pins
       else if (pin <= pin_count)
       {
-        if (pin_mode_[pin] == 0) //no input
+        if (pin_mode_[pin] == 0)  //no input
         {
           values_s0_[i] <<=2;
           values_d_[i] <<=1;
           fake_values_s0_[i] <<=2;
           fake_values_s0_[i] |= bit * 3;
         }
-        else if (pin_mode_[pin] == 1) // single ended ADC input
+        else if (pin_mode_[pin] == 1)  // single ended ADC input
         {
           values_s0_[i] <<=2;
           values_d_[i] <<=1;
           fake_values_s0_[i] <<=2;
           values_s0_[i] |= bit * 3;
         }
-        else // differential ADC input
+        else  // differential ADC input
         {
           values_s0_[i] <<=2;
           values_d_[i] <<=1;
@@ -604,7 +607,8 @@ void SrBoardADC16::build_topics_()
   ros::param::set(param_path.str() + "serial", serial_number_);
 
   // Advertising the realtime state publisher
-  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::ADC16State>(node_, device_name_ + "/state", 1));
+  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::ADC16State>(node_, device_name_ +
+          "/state", 1));
 }
 
 /* For the emacs weenies in the crowd.

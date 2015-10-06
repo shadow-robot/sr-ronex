@@ -34,35 +34,36 @@
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 
 #include <std_msgs/Bool.h>
+#include <vector>
 
 namespace ronex
 {
-  class ADC16PassthroughController
-    : public controller_interface::Controller<ros_ethercat_model::RobotState>
-  {
-  public:
-    ADC16PassthroughController();
+class ADC16PassthroughController
+  : public controller_interface::Controller<ros_ethercat_model::RobotState>
+{
+public:
+  ADC16PassthroughController();
 
-    virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+  virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-    /*!
-     * \brief Issues commands to the joint. Should be called at regular intervals
-     */
-    virtual void update(const ros::Time&, const ros::Duration&) {}
+  /*!
+   * \brief Issues commands to the joint. Should be called at regular intervals
+   */
+  virtual void update(const ros::Time&, const ros::Duration&) {}
 
-    void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
+  void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 
-  private:
-    ros::NodeHandle node_;
+private:
+  ros::NodeHandle node_;
 
-    int loop_count_;
+  int loop_count_;
 
-    ronex::ADC16* adc16_;
+  ronex::ADC16* adc16_;
 
-    ///send commands to the RoNeX's digital I/O
-    std::vector<ros::Subscriber> digital_subscribers_;
-  };
-}
+  /// send commands to the RoNeX's digital I/O
+  std::vector<ros::Subscriber> digital_subscribers_;
+};
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

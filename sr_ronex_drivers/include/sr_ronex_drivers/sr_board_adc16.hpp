@@ -35,17 +35,17 @@
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 #include <queue>
+#include <string>
 
 #include <dynamic_reconfigure/server.h>
 #include "sr_ronex_drivers/ADC16Config.h"
 
-using namespace std;
 
 class SrBoardADC16 : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed = true);
 
   SrBoardADC16();
   virtual ~SrBoardADC16();
@@ -74,7 +74,7 @@ protected:
    * A counter used to publish the data at 100Hz:
    *  count 10 cycles, then reset the cycle_count to 0.
    */
-  short cycle_count_;
+  int16_t cycle_count_;
 
   /// the digital commands sent at each cycle (updated when we call the topic)
   int32u digital_commands_;
@@ -90,7 +90,7 @@ protected:
   bool config_received_;
   // True if registers are being set
   bool reg_flag_;
-  //S witch for states of setting registers
+  // Switch for states of setting registers
   int reg_state_;
   // Count for feedback
   int feedback_flag_;
@@ -116,13 +116,13 @@ protected:
   // values_d: differential pin values
   // fake_values: the additional bits sent
   // padded: the addition of requested and fake values
-  std::vector<unsigned short int> values_s0_;
-  std::vector<unsigned short int> values_s1_;
-  std::vector<unsigned short int> values_d_;
-  std::vector<unsigned short int> fake_values_s0_;
-  std::vector<unsigned short int> fake_values_s1_;
-  std::vector<unsigned short int> padded_s0_;
-  std::vector<unsigned short int> padded_s1_;
+  std::vector<uint16_t> values_s0_;
+  std::vector<uint16_t> values_s1_;
+  std::vector<uint16_t> values_d_;
+  std::vector<uint16_t> fake_values_s0_;
+  std::vector<uint16_t> fake_values_s1_;
+  std::vector<uint16_t> padded_s0_;
+  std::vector<uint16_t> padded_s1_;
 
 
   void packCommand(unsigned char *buffer, bool halt, bool reset);

@@ -78,7 +78,8 @@ class LoadPassthroughControllers(object):
                                 "sr_ronex_controllers/SPIPassthroughController")
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
             elif ronex_id[1] == "adc16":
-                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type", "sr_ronex_controllers/ADC16PassthroughController")
+                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type",
+                                "sr_ronex_controllers/ADC16PassthroughController")
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
             else:
                 rospy.logwarn("RoNeX["+ronex_id[0]+"] type not recognized: "+ronex_id[1] +

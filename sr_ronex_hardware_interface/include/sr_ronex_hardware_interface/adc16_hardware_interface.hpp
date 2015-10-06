@@ -31,44 +31,44 @@
 
 namespace ronex
 {
-  class ADC16Command
-  {
-  public:
-    std::vector<bool> digital_;
-    unsigned short int address_;
-    std::vector<unsigned short int> values_;
-    unsigned short int command_type_;
-  };
+class ADC16Command
+{
+public:
+  std::vector<bool> digital_;
+  uint16_t address_;
+  std::vector<uint16_t> values_;
+  uint16_t command_type_;
+};
 
-  class ADC16State
-  {
-  public:
-    std::vector<bool> digital_;
-    std::vector<unsigned short int> analogue_;
-    std::vector<unsigned short int> adc_;
-    unsigned short int address_;
-    std::vector<unsigned short int> values_;
-    unsigned short int command_type_;
-  };
+class ADC16State
+{
+public:
+  std::vector<bool> digital_;
+  std::vector<uint16_t> analogue_;
+  std::vector<uint16_t> adc_;
+  uint16_t address_;
+  std::vector<uint16_t> values_;
+  uint16_t command_type_;
+};
 
-  /**
-   * This contains the command and state to be stored as a
-   *  CustomHW in the pr2 hardware interface. Makes it possible
-   *  to access the RoNeX data from the controllers as well as
-   *  the driver.
-   *
-   * The command and state are a slightly higher level representation
-   *  of the definitions used in the protocol header:
-   *    sr_ronex_external_protocol/Ronex_Protocol_0x02000008_ADC16_00.h
-   */
-  class ADC16
-    : public ros_ethercat_model::CustomHW
-  {
-  public:
-    ADC16State state_;
-    ADC16Command command_;
-  };
-}
+/**
+ * This contains the command and state to be stored as a
+ *  CustomHW in the pr2 hardware interface. Makes it possible
+ *  to access the RoNeX data from the controllers as well as
+ *  the driver.
+ *
+ * The command and state are a slightly higher level representation
+ *  of the definitions used in the protocol header:
+ *    sr_ronex_external_protocol/Ronex_Protocol_0x02000008_ADC16_00.h
+ */
+class ADC16
+  : public ros_ethercat_model::CustomHW
+{
+public:
+  ADC16State state_;
+  ADC16Command command_;
+};
+}  // namespace ronex
 /* For the emacs weenies in the crowd.
 Local Variables:
    c-basic-offset: 2
