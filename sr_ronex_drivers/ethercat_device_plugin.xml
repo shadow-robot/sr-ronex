@@ -23,7 +23,7 @@
       RoNeX - SPI module
     </description>
   </class>
-   <class name="sr_ronex_drivers/33554440" type="SrBoardADC16" base_class_type="EthercatDevice">
+  <class name="sr_ronex_drivers/33554440" type="SrBoardADC16" base_class_type="EthercatDevice">
     <description>
       RoNeX - ADC module
     </description>
