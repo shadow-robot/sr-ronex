@@ -33,8 +33,9 @@
 #include <tinyxml.h>
 #include <string>
 
+using ronex::build_name;
 
-TEST(RonexEthercatDrivers, build_name )
+TEST(RonexEthercatDrivers, build_name)
 {
   string expected = "/ronex/general_io/beautiful_ronex";
   string result = build_name("general_io", "beautiful_ronex");
@@ -42,7 +43,7 @@ TEST(RonexEthercatDrivers, build_name )
   ASSERT_EQ(0, res);
 }
 
-TEST(RonexEthercatDrivers, constructor )
+TEST(RonexEthercatDrivers, constructor)
 {
   const uint32_t serial = 55662211;
 

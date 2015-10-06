@@ -32,117 +32,117 @@
 
 namespace ronex
 {
-  /**
-   * Checks if the bit is set for the given index.
-   *
-   * @param data The var containing the different bits.
-   * @param index The index for which we're checking the bit.
-   *
-   * @return true if bit at index is set in data.
-   */
-  static inline bool check_bit(uint16_t data, size_t index)
-  {
-    // x8 because sizeof returns size in bytes not bits
-    return std::bitset<sizeof(uint16_t)*8>(data).test(index);
-  }
+/**
+ * Checks if the bit is set for the given index.
+ *
+ * @param data The var containing the different bits.
+ * @param index The index for which we're checking the bit.
+ *
+ * @return true if bit at index is set in data.
+ */
+static inline bool check_bit(uint16_t data, size_t index)
+{
+  // x8 because sizeof returns size in bytes not bits
+  return std::bitset<sizeof(uint16_t)*8>(data).test(index);
+}
 
-  /**
-   * Sets the given bit to the given value.
-   *
-   * @param data The var containing the different bits.
-   * @param index The index for which we're setting the bit.
-   * @param value The value we want the bit to take
-   */
-  static inline void set_bit(uint32_t &data, size_t index, bool value)
-  {
-    // x8 because sizeof returns size in bytes not bits
-    std::bitset<sizeof(uint32_t)*8> tmp(data);
-    tmp.set(index, value);
-    data = static_cast<uint32_t>(tmp.to_ulong());
-  }
+/**
+ * Sets the given bit to the given value.
+ *
+ * @param data The var containing the different bits.
+ * @param index The index for which we're setting the bit.
+ * @param value The value we want the bit to take
+ */
+static inline void set_bit(uint32_t &data, size_t index, bool value)
+{
+  // x8 because sizeof returns size in bytes not bits
+  std::bitset<sizeof(uint32_t)*8> tmp(data);
+  tmp.set(index, value);
+  data = static_cast<uint32_t>(tmp.to_ulong());
+}
 
-  /**
-   * Sets the given bit to the given value.
-   *
-   * @param data The var containing the different bits.
-   * @param index The index for which we're setting the bit.
-   * @param value The value we want the bit to take
-   */
-  static inline void set_bit(uint16_t &data, size_t index, bool value)
-  {
-    // x8 because sizeof returns size in bytes not bits
-    std::bitset<sizeof(uint16_t)*8> tmp(data);
-    tmp.set(index, value);
-    data = static_cast<uint16_t>(tmp.to_ulong());
-  }
+/**
+ * Sets the given bit to the given value.
+ *
+ * @param data The var containing the different bits.
+ * @param index The index for which we're setting the bit.
+ * @param value The value we want the bit to take
+ */
+static inline void set_bit(uint16_t &data, size_t index, bool value)
+{
+  // x8 because sizeof returns size in bytes not bits
+  std::bitset<sizeof(uint16_t)*8> tmp(data);
+  tmp.set(index, value);
+  data = static_cast<uint16_t>(tmp.to_ulong());
+}
 
-   /**
-   * Checks the ronexes already present on the parameter server and returns an id on which
-   *  the given ronex is stored on the parameter server.
-   *
-   * The parameter server contains:
-   *  /ronex/0/product_id = "0x200001"
-   *  /ronex/0/produc_name = "general_io"
-   *  /ronex/0/ronex_id = "my_beautiful_ronex" or serial if no alias
-   *  /ronex/0/path = "/ronex/general_io/my_beautiful_ronex"
-   *  /ronex/0/serial = "1234"
-   *
-   *  /ronex/1/...
-   *
-   * @param ronex_id Either the alias or the serial number if no alias is specified.
-   *                 If empty string given, then returns the first available id.
-   * @return the index of the ronex in the parameter server. -1 if not found.
-   *         or the next free index if ronex_id == ""
-   */
-  static inline int get_ronex_param_id(std::string ronex_id)
-  {
-    std::string param;
+ /**
+ * Checks the ronexes already present on the parameter server and returns an id on which
+ *  the given ronex is stored on the parameter server.
+ *
+ * The parameter server contains:
+ *  /ronex/0/product_id = "0x200001"
+ *  /ronex/0/produc_name = "general_io"
+ *  /ronex/0/ronex_id = "my_beautiful_ronex" or serial if no alias
+ *  /ronex/0/path = "/ronex/general_io/my_beautiful_ronex"
+ *  /ronex/0/serial = "1234"
+ *
+ *  /ronex/1/...
+ *
+ * @param ronex_id Either the alias or the serial number if no alias is specified.
+ *                 If empty string given, then returns the first available id.
+ * @return the index of the ronex in the parameter server. -1 if not found.
+ *         or the next free index if ronex_id == ""
+ */
+static inline int get_ronex_param_id(std::string ronex_id)
+{
+  std::string param;
 
-    int ronex_parameter_id = 0;
-    while ( true )
+  int ronex_parameter_id = 0;
+  while ( true )
+  {
+    std::stringstream ss;
+    ss << "/ronex/devices/" << ronex_parameter_id << "/ronex_id";
+    if (ros::param::get(ss.str(), param) )
     {
-      std::stringstream ss;
-      ss << "/ronex/devices/" << ronex_parameter_id << "/ronex_id";
-      if (ros::param::get(ss.str(), param) )
+      if ( ronex_id.compare("") != 0 )
       {
-        if ( ronex_id.compare("") != 0 )
+        if ( ronex_id.compare(param) == 0)
         {
-          if ( ronex_id.compare(param) == 0)
-          {
-            return ronex_parameter_id;
-          }
+          return ronex_parameter_id;
         }
-        ++ronex_parameter_id;
       }
-      else
-      {
-        if ( ronex_id.compare("") != 0)
-        {
-          // we were looking for a specific ronex and didn't find it -> return -1
-          return -1;
-        }
-        return ronex_parameter_id;
-      }
+      ++ronex_parameter_id;
     }
-
-    return -1;
+    else
+    {
+      if ( ronex_id.compare("") != 0)
+      {
+        // we were looking for a specific ronex and didn't find it -> return -1
+        return -1;
+      }
+      return ronex_parameter_id;
+    }
   }
 
-  /**
-   * Construct a string for e.g., ros::param::get as the key.
-   *
-   * @param ronex_parameter_id Part of the key (e.g., 2).
-   * @param part Part of the key (e.g., "product_name").
-   * @return The key (e.g., "/ronex/devices/2/product_name").
-   **/
-  static inline std::string get_ronex_devices_string(int ronex_parameter_id, std::string part)
-  {
-    std::string key("/ronex/devices/");
-    key += boost::lexical_cast<std::string>(ronex_parameter_id);
-    key += "/";
-    key += part;
-    return key;
-  }
+  return -1;
+}
+
+/**
+ * Construct a string for e.g., ros::param::get as the key.
+ *
+ * @param ronex_parameter_id Part of the key (e.g., 2).
+ * @param part Part of the key (e.g., "product_name").
+ * @return The key (e.g., "/ronex/devices/2/product_name").
+ **/
+static inline std::string get_ronex_devices_string(int ronex_parameter_id, std::string part)
+{
+  std::string key("/ronex/devices/");
+  key += boost::lexical_cast<std::string>(ronex_parameter_id);
+  key += "/";
+  key += part;
+  return key;
+}
 }  // namespace ronex
 
 /* For the emacs weenies in the crowd.
