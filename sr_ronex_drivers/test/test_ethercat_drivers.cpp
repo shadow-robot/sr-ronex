@@ -33,7 +33,7 @@
 #include <tinyxml.h>
 #include <string>
 
-using ronex::build_name
+using ronex::build_name;
 
 TEST(RonexEthercatDrivers, build_name)
 {
