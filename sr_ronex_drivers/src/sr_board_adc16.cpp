@@ -232,7 +232,6 @@ void SrBoardADC16::packCommand(unsigned char *buffer, bool halt, bool reset)
     for (size_t i = 0; i < adc16_->command_.digital_.size(); ++i)
     {
       if (input_mode_[i])
-
       {
         // Just set the pin to input mode, gets read in the status
         ronex::set_bit(digital_commands_, i*2, 1);
@@ -319,7 +318,7 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
   }
   else if (status_data->command_type == RONEX_COMMAND_02000008_COMMAND_TYPE_GET_CONFIG_INFO)
   {
-    if ( adc16_->state_.analogue_.empty())
+    if (adc16_->state_.analogue_.empty())
     {
       size_t nb_adc_pub;
       // The publishers haven't been initialised yet.
