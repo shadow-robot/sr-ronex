@@ -28,7 +28,7 @@
 
 #include "sr_ronex_utilities/sr_ronex_utilities.hpp"
 
-TEST(RonexUtils, set_bit)
+TEST(RonexUtils, ronex::set_bit)
 {
   uint32_t data = 0;
   set_bit(data, 1, true);
@@ -53,7 +53,7 @@ TEST(RonexUtils, set_bit)
   EXPECT_FALSE(check_bit(data, 4));
 }
 
-TEST(RonexUtils, get_ronex_param_id)
+TEST(RonexUtils, ronex::get_ronex_param_id)
 {
   // make sure we're running on a clean environment
   ros::param::del("/ronex");
@@ -85,7 +85,7 @@ TEST(RonexUtils, get_ronex_param_id)
   EXPECT_EQ(ronex_param_id, -1);
 }
 
-TEST(RonexUtils, get_ronex_devices_string)
+TEST(RonexUtils, ronex::get_ronex_devices_string)
 {
   std::string keyA("/ronex/devices/3/product_name");
 
