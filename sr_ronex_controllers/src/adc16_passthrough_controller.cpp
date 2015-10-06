@@ -85,7 +85,7 @@ bool ADC16PassthroughController::init(ros_ethercat_model::RobotState* robot, ros
     digital_subscribers_.push_back(
             node_.subscribe<std_msgs::Bool>(sub_topic.str(), 1,
                                             boost::bind(&ADC16PassthroughController::digital_commands_cb,
-                                                        this, _1,  i )));
+                                                        this, _1,  i)));
   }
 
   return true;

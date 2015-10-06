@@ -527,7 +527,7 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
       // set values for s0 and d, second set of 8 pins
       else if (pin <= pin_count)
       {
-        if (pin_mode_[pin] == 0)  //no input
+        if (pin_mode_[pin] == 0)  // no input
         {
           values_s0_[i] <<=2;
           values_d_[i] <<=1;
