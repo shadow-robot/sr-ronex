@@ -28,9 +28,10 @@
 
 #include "sr_ronex_utilities/sr_ronex_utilities.hpp"
 
-using ronex::set_bit
-using ronex::get_ronex_param_id
-using ronex::get_ronex_devices_string
+using ronex::set_bit;
+using ronex::check_bit;
+using ronex::get_ronex_param_id;
+using ronex::get_ronex_devices_string;
 
 TEST(RonexUtils, set_bit)
 {
