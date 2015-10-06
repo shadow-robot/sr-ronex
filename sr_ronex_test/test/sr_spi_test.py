@@ -18,7 +18,12 @@
 
 from controller_manager_msgs.srv import ListControllers
 import dynamic_reconfigure.client
-import rospy, sys, getopt, unittest, rostest, os
+import rospy
+import sys
+import getopt
+import unittest
+import rostest
+import os
 from sr_ronex_msgs.srv import SPI
 from sr_ronex_msgs.srv import SPIRequest
 from sr_ronex_msgs.msg import SPIState
@@ -27,6 +32,8 @@ from threading import Lock
 from numpy import uint8
 
 from time import sleep
+
+
 class TestSPIWithHardware(unittest.TestCase):
     '''
     A class used to test the Shadow Robot SPI HW.
@@ -35,7 +42,7 @@ class TestSPIWithHardware(unittest.TestCase):
     def setUp(self):
         self.find_spi_ronexes()
 
-        self.controllers_list = ["ronex_" + ronex_id + "_passthrough" for ronex_id in self.ronex_ids ]
+        self.controllers_list = ["ronex_" + ronex_id + "_passthrough" for ronex_id in self.ronex_ids]
 
         self.init_service_servers()
         self.state_lock = Lock()
@@ -62,7 +69,7 @@ class TestSPIWithHardware(unittest.TestCase):
 
         self.assertEqual(len(self.ronex_devs), 1, 'Error. Connect a ronex bridge with at least 1 spi module.')
 
-        self.ronex_ids = [self.ronex_devs[0]['ronex_id'] ]
+        self.ronex_ids = [self.ronex_devs[0]['ronex_id']]
 
     def generalIOState_callback(self, data):
         # Note that the type of data.analogue is tuple.
@@ -71,7 +78,7 @@ class TestSPIWithHardware(unittest.TestCase):
     def init_service_servers(self):
         # testing first spi ronex connected
         ronex = "/ronex/spi/" + str(self.ronex_devs[0]["ronex_id"])
-        self.spi_srv = [ rospy.ServiceProxy(ronex + "/command/passthrough/" + str(i), SPI) for i in xrange(4)]
+        self.spi_srv = [rospy.ServiceProxy(ronex + "/command/passthrough/" + str(i), SPI) for i in xrange(4)]
         self.dyn_rcf_client = dynamic_reconfigure.client.Client(ronex)
         # subscribing to analogue input topic
         topic = ronex + "/state"
@@ -87,7 +94,9 @@ class TestSPIWithHardware(unittest.TestCase):
         available_controllers = list_controllers()
 
         for ctrl in available_controllers.controller:
-            self.assertTrue(ctrl.name in self.controllers_list, msg="Available controllers: "+str(available_controllers.controller) + " / expected controller: " +str(self.controllers_list) )
+            self.assertTrue(ctrl.name in self.controllers_list,
+                            msg="Available controllers: " + str(available_controllers.controller) +
+                                " / expected controller: " + str(self.controllers_list))
 
     def test_all_cases(self):
 
@@ -121,19 +130,25 @@ class TestSPIWithHardware(unittest.TestCase):
         for adc_number in range(len(self.spi_srv)):
             results.append(self.read_adc(adc_number, 0))
             self.assertAlmostEquals(results[adc_number], expected_as[0][adc_number],
-                                    msg="Testing channel 0 of " + str(adc_number) + "failed (delta = " + str(results[adc_number] - expected_as[0][adc_number]) + " / received = " + str(results[adc_number]) + ").", delta=45)
+                                    msg="Testing channel 0 of " + str(adc_number) + "failed (delta = " +
+                                        str(results[adc_number] - expected_as[0][adc_number]) + " / received = " +
+                                        str(results[adc_number]) + ").", delta=45)
 
         # check channel 1 of all the spi modules
         results = []
         for adc_number in range(len(self.spi_srv)):
             results.append(self.read_adc(adc_number, 1))
             self.assertAlmostEquals(results[adc_number], expected_as[1][adc_number],
-                                    msg="Testing channel 1 of " + str(adc_number) + "failed (delta = " + str(results[adc_number] - expected_as[1][adc_number]) + " / received = " + str(results[adc_number]) + ").", delta=45)
+                                    msg="Testing channel 1 of " + str(adc_number) + "failed (delta = " +
+                                        str(results[adc_number] - expected_as[1][adc_number]) + " / received = " +
+                                        str(results[adc_number]) + ").", delta=45)
 
         # check all the analogue inputs
         for analogue_id in range(0, 6):
             self.assertAlmostEquals(self.analogue_in[analogue_id], expected_analogue[analogue_id],
-                                    msg="Testing analogue input" + str(analogue_id) + "failed (delta = " + str(self.analogue_in[analogue_id] - expected_analogue[analogue_id]) + " / received = " + str(self.analogue_in[analogue_id]) + ").", delta=45)
+                                    msg="Testing analogue input" + str(analogue_id) + "failed (delta = " +
+                                        str(self.analogue_in[analogue_id] - expected_analogue[analogue_id]) +
+                                        " / received = " + str(self.analogue_in[analogue_id]) + ").", delta=45)
 
     def set_DIO_states(self, digital_states):
         # set pre / post states

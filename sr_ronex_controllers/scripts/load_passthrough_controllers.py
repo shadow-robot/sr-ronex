@@ -22,6 +22,7 @@ from time import sleep
 
 from controller_manager_msgs.srv import LoadController, ListControllers, SwitchController, SwitchControllerRequest
 
+
 class LoadPassthroughControllers(object):
     """
     Load the passthrough controllers for all the RoNeXes present on the bus.
@@ -69,16 +70,19 @@ class LoadPassthroughControllers(object):
         """
         for ronex_id in ronex_ids:
             if ronex_id[1] == "general_io":
-                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type", "sr_ronex_controllers/GeneralIOPassthroughController")
+                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type",
+                                "sr_ronex_controllers/GeneralIOPassthroughController")
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
             elif ronex_id[1] == "spi":
-                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type", "sr_ronex_controllers/SPIPassthroughController")
+                rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type",
+                                "sr_ronex_controllers/SPIPassthroughController")
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
             elif ronex_id[1] == "adc16":
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type", "sr_ronex_controllers/ADC16PassthroughController")
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
             else:
-                rospy.logwarn("RoNeX["+ronex_id[0]+"] type not recognized: "+ronex_id[1]+" -> not loading any controllers for that RoNeX")
+                rospy.logwarn("RoNeX["+ronex_id[0]+"] type not recognized: "+ronex_id[1] +
+                              " -> not loading any controllers for that RoNeX")
 
     def load_and_start_ctrl(self, ronex_ids):
         """
@@ -102,7 +106,7 @@ class LoadPassthroughControllers(object):
         switch_controller = rospy.ServiceProxy('controller_manager/switch_controller', SwitchController)
 
         rospy.loginfo("Starting controllers: " + str(controllers_list))
-        
+
         # first list the available controllers
         available_controllers = None
         try:

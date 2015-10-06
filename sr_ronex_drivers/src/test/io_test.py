@@ -2,7 +2,7 @@
 
 # ####################################################################
 # Copyright (c) 2013, Shadow Robot Company, All rights reserved.
-# 
+#
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation; either
@@ -17,13 +17,16 @@
 # License along with this library.
 # ####################################################################
 
-import roslib; roslib.load_manifest('sr_ronex_drivers')
+import roslib
 import rospy
-import sys, getopt
+import sys
+import getopt
 
 from threading import Lock
 from sr_ronex_msgs.msg import BoolArray
 from std_msgs.msg import UInt16MultiArray
+
+roslib.load_manifest('sr_ronex_drivers')
 
 PRODUCT_CODE = "0x05300424"
 DIGITAL_IO_WAIT = 0.5
@@ -34,6 +37,7 @@ ANALOG_RATIO_LOWER = 1.0
 PERIOD_ALPHA = 0.01
 MAX_PWM_PERIOD = 0.008
 MIN_PWM_PERIOD = 0.005
+
 
 class IoTest(object):
     """
@@ -48,14 +52,15 @@ class IoTest(object):
     The PWM outputs will be set to their lower frequency, and the digital inputs used to check the on-off period
     The analog output 0 will be wired to analog inputs 0 and 2, output 1 to inputs 1 and 3
 
-    Keep in mind that the test is intended to be run with the LEDs attached to the digital I/Os and the correct wiring of the analog I and O
+    Keep in mind that the test is intended to be run with the LEDs attached to the digital I/Os and the correct wiring
+    of the analog I and O
     """
-#Example of existing topics for a certain device
-#/device_0x05300424_0x00000016_PWM_outputs_command
-#/device_0x05300424_0x00000016_analog_inputs_state
-#/device_0x05300424_0x00000016_analog_outputs_command
-#/device_0x05300424_0x00000016_digital_inputs_state
-#/device_0x05300424_0x00000016_digital_outputs_command
+# Example of existing topics for a certain device
+# /device_0x05300424_0x00000016_PWM_outputs_command
+# /device_0x05300424_0x00000016_analog_inputs_state
+# /device_0x05300424_0x00000016_analog_outputs_command
+# /device_0x05300424_0x00000016_digital_inputs_state
+# /device_0x05300424_0x00000016_digital_outputs_command
 
     def __init__(self, device_SN):
         rospy.loginfo("Testing device. Product code: " + PRODUCT_CODE + " SN: " + device_SN)
@@ -64,24 +69,29 @@ class IoTest(object):
         self.device_SN = device_SN
         self.a_state_lock = Lock()
         self.d_state_lock = Lock()
-        self.analog_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN + "_analog_outputs_command", UInt16MultiArray, latch=True)
-        self.digital_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN + "_digital_outputs_command", BoolArray, latch=True)
-        self.PWM_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN + "_PWM_outputs_command", UInt16MultiArray, latch=True)
-        self.analog_state_subscriber_ = rospy.Subscriber("/device_" + PRODUCT_CODE + "_" + device_SN + "_analog_inputs_state", UInt16MultiArray, self.analog_state_callback)
-        self.digital_state_subscriber_ = rospy.Subscriber("/device_" + PRODUCT_CODE + "_" + device_SN + "_digital_inputs_state", BoolArray, self.digital_state_callback)
+        self.analog_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN +
+                                                        "_analog_outputs_command", UInt16MultiArray, latch=True)
+        self.digital_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN +
+                                                         "_digital_outputs_command", BoolArray, latch=True)
+        self.PWM_command_publisher = rospy.Publisher("/device_" + PRODUCT_CODE + "_" + device_SN +
+                                                     "_PWM_outputs_command", UInt16MultiArray, latch=True)
+        self.analog_state_subscriber_ = rospy.Subscriber("/device_" + PRODUCT_CODE + "_" + device_SN +
+                                                         "_analog_inputs_state", UInt16MultiArray,
+                                                         self.analog_state_callback)
+        self.digital_state_subscriber_ = rospy.Subscriber("/device_" + PRODUCT_CODE + "_" + device_SN +
+                                                          "_digital_inputs_state", BoolArray,
+                                                          self.digital_state_callback)
 
         self.last_analog_state = None
         self.last_digital_state = None
         self.last_period_start_time = [0.0, 0.0, 0.0, 0.0]
         self.average_period = [0.0, 0.0, 0.0, 0.0]
 
-        #Initialize the PWM outputs to 0 to avoid interference with the digital output testing
+        # Initialize the PWM outputs to 0 to avoid interference with the digital output testing
         command_msg = UInt16MultiArray(None, [0, 0, 0, 0, 0, 0, 0, 0])
         self.PWM_command_publisher.publish(command_msg)
         rospy.sleep(0.2)
-       
-        
-        
+
     def analog_state_callback(self, msg):
         with self.a_state_lock:
             self.last_analog_state = msg
@@ -90,20 +100,20 @@ class IoTest(object):
         with self.d_state_lock:
             if self.PWM_testing:
                 for i, value in enumerate(self.last_digital_state.data):
-                    #detect the falling edge of the PWM signal
+                    # detect the falling edge of the PWM signal
                     if value and not msg.data[i]:
                         if self.last_period_start_time[i] != 0.0:
-                            self.average_period[i] = (1- PERIOD_ALPHA) * self.average_period[i] + PERIOD_ALPHA * (rospy.get_time() - self.last_period_start_time[i])
+                            self.average_period[i] = (1 - PERIOD_ALPHA) * self.average_period[i] + \
+                                                     PERIOD_ALPHA * (rospy.get_time() - self.last_period_start_time[i])
                         self.last_period_start_time[i] = rospy.get_time()
             self.last_digital_state = msg
-     
 
     def check_digital_inputs(self, output_values):
         rospy.sleep(0.1)
         with self.d_state_lock:
-            if self.last_digital_state != None:
+            if self.last_digital_state is not None:
                 for i, value in enumerate(output_values):
-                    if i & 1:                
+                    if i & 1:
                         if self.last_digital_state.data[i/2] != value:
                             rospy.logerr("Wrong value in digital input " + str(i/2))
                             self.success = False
@@ -131,22 +141,25 @@ class IoTest(object):
     def check_analog_inputs(self, output_values):
         rospy.sleep(0.1)
         with self.a_state_lock:
-            if self.last_analog_state != None:
+            if self.last_analog_state is not None:
                 for i, value in enumerate(output_values):
                     index = i
                     if (float(value) / float(self.last_analog_state.data[index])) > ANALOG_RATIO_UPPER or \
                        (float(value) / float(self.last_analog_state.data[index])) < ANALOG_RATIO_LOWER:
-                        rospy.logerr("Wrong value in analog input " + str(index) + " set: " + str(value) + " measured: " + str(self.last_analog_state.data[index]) + " ratio: " + str(float(value) / float(self.last_analog_state.data[index])))
+                        rospy.logerr("Wrong value in analog input " + str(index) + " set: " + str(value) +
+                                     " measured: " + str(self.last_analog_state.data[index]) + " ratio: " +
+                                     str(float(value) / float(self.last_analog_state.data[index])))
                         self.success = False
                     index = i + 2
                     if (float(value) / float(self.last_analog_state.data[index])) > ANALOG_RATIO_UPPER or \
                        (float(value) / float(self.last_analog_state.data[index])) < ANALOG_RATIO_LOWER:
-                        rospy.logerr("Wrong value in analog input " + str(index) + " set: " + str(value) + " measured: " + str(self.last_analog_state.data[index]) + " ratio: " + str(float(value) / float(self.last_analog_state.data[index])))
+                        rospy.logerr("Wrong value in analog input " + str(index) + " set: " + str(value) +
+                                     " measured: " + str(self.last_analog_state.data[index]) + " ratio: " +
+                                     str(float(value) / float(self.last_analog_state.data[index])))
                         self.success = False
             else:
-                rospy.logerr("No analog input data recived from: " + self.device_SN)
-                self.success = False	
-
+                rospy.logerr("No analog input data received from: " + self.device_SN)
+                self.success = False
 
     def test_analog_io_case(self, output_values):
         command_msg = UInt16MultiArray(None, output_values)
@@ -177,7 +190,7 @@ class IoTest(object):
         command_msg = UInt16MultiArray(None, output_values)
         self.PWM_testing = True
         self.PWM_command_publisher.publish(command_msg)
-        #self.check_digital_inputs(output_values)
+        # self.check_digital_inputs(output_values)
         rospy.sleep(PWM_O_WAIT)
         for i, value in enumerate(self.average_period):
             if value > MAX_PWM_PERIOD or value < MIN_PWM_PERIOD:
@@ -190,27 +203,27 @@ class IoTest(object):
         self.test_PWM_o_case([0xFFFE, 0x8000, 0xFFFE, 0x8000, 0xFFFE, 0x8000, 0xFFFE, 0x8000])
         rospy.loginfo("PWM outputs test ended")
 
-
     def ramp(self):
         for i in range(0, 65535, 0x100):
             command_msg = UInt16MultiArray(None, [i, i])
             self.analog_command_publisher.publish(command_msg)
             rospy.sleep(0.03)
-            
 
     def run_test(self):
         self.test_digital_ios()
         self.test_analog_ios()
         self.test_PWM_outputs()
-        #self.ramp()
+        # self.ramp()
         if self.success:
             rospy.loginfo("NO ERRORS DETECTED. Product code: " + PRODUCT_CODE + " SN: " + self.device_SN)
         else:
-            rospy.logerr("TEST FAILED. ERRORS DETECTED!!!!!!!!!!!!!!!!!!!!!!!!!! Product code: " + PRODUCT_CODE + " SN: " + self.device_SN)
+            rospy.logerr("TEST FAILED. ERRORS DETECTED!!!!!!!!!!!!!!!!!!!!!!!!!! Product code: " + PRODUCT_CODE +
+                         " SN: " + self.device_SN)
+
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv,"h")
+        opts, args = getopt.getopt(argv, "h")
     except getopt.GetoptError:
         print 'io_test.py <SN_device_1> ... <SN_device_N>'
         sys.exit(2)
@@ -220,24 +233,21 @@ def main(argv):
             sys.exit()
 
     if len(args) == 0:
-       print 'io_test.py <SN_device_1> ... <SN_device_N>'
-       sys.exit(2)
+        print 'io_test.py <SN_device_1> ... <SN_device_N>'
+        sys.exit(2)
 
     # init the ros node
     rospy.init_node('IO_test', anonymous=True)
     rospy.sleep(0.5)
- 
+
     for arg in args:
         io_test = IoTest(arg)
         io_test.run_test()
 
     rospy.loginfo("I/O test ended")
     # subscribe until interrupted
-    #rospy.spin()
-
+    # rospy.spin()
 
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-
-

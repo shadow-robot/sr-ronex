@@ -24,6 +24,7 @@
 //-------------------------------------------------------------------------------
 
 #include <string>
+#include <vector>
 #include <ros/ros.h>
 #include <ros/console.h>
 #include <boost/lexical_cast.hpp>
@@ -41,7 +42,7 @@ class SrRonexFindGeneralIOModule
 public:
   SrRonexFindGeneralIOModule() {}
   ~SrRonexFindGeneralIOModule() {}
-  
+
 public:
   /**
    * Find the path of the General I/O module with the given ronex_id.
@@ -50,37 +51,37 @@ public:
    * @param path The path of the module.
    * @return True if the module is found and the path is set. Otherwise, false.
    **/ 
-  bool get_path_( const short unsigned int& ronex_id_as_int, std::string& path )
+  bool get_path_(const uint16_t& ronex_id_as_int, std::string& path)
   {
     std::string ronex_id = this->to_string_(ronex_id_as_int);
-    
+
     // Wait until there's at least one General I/O module.
     ros::Rate loop_rate(10);
     std::string param;
     while ( ros::param::get("/ronex/devices/0/ronex_id", param ) == false )
     {
-      ROS_INFO_STREAM( "Waiting for General I/O module to be loaded properly.\n" );
+      ROS_INFO_STREAM("Waiting for General I/O module to be loaded properly.\n");
       loop_rate.sleep();
     }
 
-    // When -1 is returned, the module with the given id is not present on the parameter server. 
+    // When -1 is returned, the module with the given id is not present on the parameter server.
     // Note that ronex parameter id starts from zero.
     int ronex_parameter_id = ronex::get_ronex_param_id(ronex_id);
     if ( ronex_parameter_id == -1 )
     {
-      ROS_ERROR_STREAM( "Did not find the General I/O module with ronex_id " << ronex_id << ".\n" );
-      return false; // Failed to set path.
+      ROS_ERROR_STREAM("Did not find the General I/O module with ronex_id " << ronex_id << ".\n");
+      return false;  // Failed to set path.
     }
-    
+
     // The module is present on the parameter server and ronex_parameter_id
     // contains the id on which the module is stored on the parameter server.
-    
-    std::string path_key = ronex::get_ronex_devices_string( ronex_parameter_id, std::string("path") );
-    ros::param::get( path_key, path );
 
-    return true; // Path is set.
+    std::string path_key = ronex::get_ronex_devices_string(ronex_parameter_id, std::string("path"));
+    ros::param::get(path_key, path);
+
+    return true;  // Path is set.
   }
-  
+
 private:
   /**
    * Convert the given integer into a string.
@@ -103,10 +104,10 @@ private:
  **/
 void generalIOState_callback(const sr_ronex_msgs::GeneralIOState::ConstPtr& msg)
 {
-  const std::vector<short unsigned int> &analogue = msg->analogue;
+  const std::vector<uint16_t > &analogue = msg->analogue;
   const size_t len = analogue.size();
   for (size_t k = 0; k < len; k++)
-    ROS_INFO_STREAM( "analogue[" << k << "] = " << analogue[k] << "\n" );
+    ROS_INFO_STREAM("analogue[" << k << "] = " << analogue[k] << "\n");
 }
 
 //-------------------------------------------------------------------------------
@@ -118,14 +119,14 @@ int main(int argc, char **argv)
 {
   // Initialize ROS with a unique node name.
   ros::init(argc, argv, "sr_ronex_read_analog_data");
-  
-  // Create a handle to this process' node. 
+
+  // Create a handle to this process' node.
   ros::NodeHandle n;
 
   // Get the path of the General I/O module with the given ronex id.
   // Note that you may have to set the value of ronex_id,
   // depending on which General I/O board the input device is connected to.
-  short unsigned int ronex_id; 
+  uint16_t ronex_id;
   std::cout << "Please enter the ronex id: ";
   std::cin >> ronex_id;
   std::string path;
@@ -138,11 +139,11 @@ int main(int argc, char **argv)
      * parameter to the subscribe() function is the size of the message queue.
      **/
     // For example "/ronex/general_io/1" + "/state"
-    std::string topic = path + "/state"; 
-    ros::Subscriber sub = n.subscribe( topic.c_str(), 
+    std::string topic = path + "/state";
+    ros::Subscriber sub = n.subscribe(topic.c_str(),
                                        1000,
                                        generalIOState_callback);
-    
+
     /**
      * ros::spin() will enter a loop, pumping callbacks.  With this version, all
      * callbacks will be called from within this thread (the main one).  ros::spin()
@@ -150,7 +151,7 @@ int main(int argc, char **argv)
      **/
     ros::spin();
   }
-  
+
   return 0;
 }
 

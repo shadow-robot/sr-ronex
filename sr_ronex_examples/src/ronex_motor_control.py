@@ -20,6 +20,7 @@
 from rospy import get_param, loginfo, Subscriber, Publisher, init_node, is_shutdown, sleep
 from sr_ronex_msgs.msg import PWM, GeneralIOState
 
+
 class SrRonexFindGeneralIOModule(object):
     """
     This class demonstrates how to find the General I/O module with the given ronex_id.
@@ -53,8 +54,10 @@ class SrRonexFindGeneralIOModule(object):
             if self.ronex_id == device["ronex_id"]:
                 return device["path"]
 
+
 def general_io_state_cb(data, controller):
     controller.analog = data.analogue[0]
+
 
 class SpeedController():
     def __init__(self):

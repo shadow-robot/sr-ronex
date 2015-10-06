@@ -29,6 +29,7 @@
 #include <iomanip>
 #include <boost/lexical_cast.hpp>
 #include <math.h>
+#include <string>
 
 #include "sr_ronex_drivers/ronex_utils.hpp"
 
@@ -44,8 +45,8 @@ SrBoardMk2GIO::SrBoardMk2GIO() :
 
 SrBoardMk2GIO::~SrBoardMk2GIO()
 {
-  //remove parameters from server
-  string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_ );
+  // remove parameters from server
+  string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_);
   ros::param::del(device_id);
 
   string general_io_name = "/ronex/general_io/" + serial_number_;
@@ -57,22 +58,22 @@ SrBoardMk2GIO::~SrBoardMk2GIO()
 void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
   sh_ = sh;
-  serial_number_ = ronex::get_serial_number( sh );
+  serial_number_ = ronex::get_serial_number(sh);
 
-  //get the alias from the parameter server if it exists
+  // get the alias from the parameter server if it exists
   std::string path_to_alias, alias;
   path_to_alias = "/ronex/mapping/" + serial_number_;
-  if( ros::param::get(path_to_alias, alias))
+  if ( ros::param::get(path_to_alias, alias))
   {
     ronex_id_ = alias;
   }
   else
   {
-    //no alias found, using the serial number directly.
-    ronex_id_ = serial_number_ ;
+    // no alias found, using the serial number directly.
+    ronex_id_ = serial_number_;
   }
 
-  device_name_ = ronex::build_name( product_alias_, ronex_id_ );
+  device_name_ = ronex::build_name(product_alias_, ronex_id_);
 
   command_base_  = start_address;
   command_size_  = COMMAND_ARRAY_SIZE_BYTES;
@@ -97,31 +98,32 @@ void SrBoardMk2GIO::construct(EtherCAT_SlaveHandler *sh, int &start_address)
     ROS_INFO("Using EC_QUEUED");
   }
 
-  ROS_INFO("First FMMU (command) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", command_base_, command_size_,
-           static_cast<int>(COMMAND_ADDRESS) );
-  EC_FMMU *commandFMMU = new EC_FMMU( command_base_,            // Logical Start Address    (in ROS address space?)
+  ROS_INFO("First FMMU (command) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", command_base_,
+           command_size_, static_cast<int>(COMMAND_ADDRESS) );
+  EC_FMMU *commandFMMU = new EC_FMMU( command_base_,          // Logical Start Address    (in ROS address space?)
                                       command_size_,
                                       0x00,                   // Logical Start Bit
                                       0x07,                   // Logical End Bit
                                       COMMAND_ADDRESS,        // Physical Start Address   (in ET1200 address space?)
                                       0x00,                   // Physical Start Bit
-                                      false,                   // Read Enable
-                                      true,                    // Write Enable
-                                      true                     // Channel Enable
-    );
+                                      false,                  // Read Enable
+                                      true,                   // Write Enable
+                                      true);                  // Channel Enable
+
 
 
   // WARNING!!!
   // We are leaving (command_size_ * 4) bytes in the physical memory of the device, but strictly we only need to
   // leave (command_size_ * 3). This change should be done in the firmware as well, otherwise it won't work.
-  // This triple buffer is needed in the ethercat devices to work in EC_BUFFERED mode (in opposition to the other mode EC_QUEUED, the so called mailbox mode)
+  // This triple buffer is needed in the ethercat devices to work in EC_BUFFERED mode (in opposition to the other mode
+  // EC_QUEUED, the so called mailbox mode)
 
   // ETHERCAT_STATUS_DATA
   //
   // This is for data coming FROM the board
   //
-  ROS_INFO("Second FMMU (status) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", status_base_, status_size_,
-           static_cast<int>(STATUS_ADDRESS) );
+  ROS_INFO("Second FMMU (status) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", status_base_,
+           status_size_, static_cast<int>(STATUS_ADDRESS) );
   EC_FMMU *statusFMMU = new EC_FMMU(  status_base_,
                                       status_size_,
                                       0x00,
@@ -170,7 +172,7 @@ int SrBoardMk2GIO::initialize(hardware_interface::HardwareInterface *hw, bool al
 
   device_offset_ = sh_->get_ring_position();
 
-  //add the RoNeX to the hw interface
+  // add the RoNeX to the hw interface
   ros_ethercat_model::RobotState *robot_state = static_cast<ros_ethercat_model::RobotState*>(hw);
   robot_state->custom_hws_.insert(device_name_, new ronex::GeneralIO());
   general_io_ = static_cast<ronex::GeneralIO*>(robot_state->getCustomHW(device_name_));
@@ -178,18 +180,18 @@ int SrBoardMk2GIO::initialize(hardware_interface::HardwareInterface *hw, bool al
   build_topics_();
 
   ROS_INFO_STREAM("Adding a general_io RoNeX module to the hardware interface: " << device_name_);
-  //Using the name of the ronex to prefix the state topic
+  // Using the name of the ronex to prefix the state topic
 
   return 0;
 }
 
 void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
-  RONEX_COMMAND_02000001* command = (RONEX_COMMAND_02000001*)(buffer);
+  RONEX_COMMAND_02000001* command = reinterpret_cast<RONEX_COMMAND_02000001*>(buffer);
 
   command->command_type = RONEX_COMMAND_02000001_COMMAND_TYPE_NORMAL;
 
-  //digital command
+  // digital command
   for (size_t i = 0; i < general_io_->command_.digital_.size(); ++i)
   {
     if (input_mode_[i])
@@ -206,7 +208,7 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
 
   command->digital_out = static_cast<int32u>(digital_commands_);
 
-  //PWM command
+  // PWM command
   for (size_t i = 0; i < general_io_->command_.pwm_.size(); ++i)
   {
     command->pwm_module[i].pwm_period = general_io_->command_.pwm_[i].period;
@@ -219,19 +221,19 @@ void SrBoardMk2GIO::packCommand(unsigned char *buffer, bool halt, bool reset)
 
 bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
 {
-  RONEX_STATUS_02000001* status_data = (RONEX_STATUS_02000001 *)(this_buffer+  command_size_);
+  RONEX_STATUS_02000001* status_data = reinterpret_cast<RONEX_STATUS_02000001 *>(this_buffer+  command_size_);
 
   // Checking that the received command type matches RONEX_COMMAND_02000001_COMMAND_TYPE_NORMAL
   // (the one that was used in the command). The ronex firmware will answer with whatever command type we send.
   // The purpose of this is to filter those status_data structures that come filled with zeros due to the jitter
-  // in the realtime loop. The jitter causes that the host tries to read the status when the microcontroller in the ronex
-  // module has not finished writing it to memory yet.
-  if( status_data->command_type == RONEX_COMMAND_02000001_COMMAND_TYPE_NORMAL)
+  // in the realtime loop. The jitter causes that the host tries to read the status when the microcontroller in the
+  // ronex module has not finished writing it to memory yet.
+  if ( status_data->command_type == RONEX_COMMAND_02000001_COMMAND_TYPE_NORMAL)
   {
-    if( general_io_->state_.analogue_.empty())
+    if ( general_io_->state_.analogue_.empty())
     {
       size_t nb_analogue_pub, nb_digital_io, nb_pwm_modules;
-      //The publishers haven't been initialised yet.
+      // The publishers haven't been initialised yet.
       // Checking if the stacker board is plugged in or not
       // to determine the number of publishers.
       if (status_data->flags & RONEX_02000001_FLAGS_STACKER_0_PRESENT)
@@ -249,7 +251,7 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
         nb_pwm_modules = NUM_PWM_MODULES / 2;
       }
 
-      //resizing the GeneralIO in the HardwareInterface
+      // resizing the GeneralIO in the HardwareInterface
       general_io_->state_.analogue_.resize(nb_analogue_pub);
       general_io_->state_.digital_.resize(nb_digital_io);
       general_io_->command_.digital_.resize(nb_digital_io);
@@ -257,42 +259,43 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
       input_mode_.assign(nb_digital_io, true);
 
-      //init the state message
+      // init the state message
       state_msg_.analogue.resize(nb_analogue_pub);
       state_msg_.digital.resize(nb_digital_io);
       state_msg_.input_mode.resize(nb_digital_io);
 
-      //dynamic reconfigure server is instantiated here
+      // dynamic reconfigure server is instantiated here
       // as we need the different vectors to be initialised
       // before running the first configuration.
-      dynamic_reconfigure_server_.reset(new dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig>(ros::NodeHandle(device_name_)));
+      dynamic_reconfigure_server_.reset(
+              new dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig>(ros::NodeHandle(device_name_)));
       function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
       dynamic_reconfigure_server_->setCallback(function_cb_);
-    } //end first time, the sizes are properly initialised, simply fill in the data
+    }  // end first time, the sizes are properly initialised, simply fill in the data
 
-    for(size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
+    for (size_t i = 0; i < general_io_->state_.analogue_.size(); ++i )
     {
       general_io_->state_.analogue_[i] = status_data->analogue_in[i];
     }
 
-    for(size_t i = 0; i < general_io_->state_.digital_.size(); ++i )
+    for (size_t i = 0; i < general_io_->state_.digital_.size(); ++i )
     {
       general_io_->state_.digital_[i] = ronex::check_bit(status_data->digital_in, i);
     }
   }
 
-  //publishing at 100Hz
-  if(cycle_count_ > 9)
+  // publishing at 100Hz
+  if (cycle_count_ > 9)
   {
     state_msg_.header.stamp = ros::Time::now();
 
-    //update state message
-    for(size_t i=0; i < general_io_->state_.analogue_.size(); ++i)
+    // update state message
+    for (size_t i=0; i < general_io_->state_.analogue_.size(); ++i)
     {
       state_msg_.analogue[i] = general_io_->state_.analogue_[i];
     }
 
-    for(size_t i=0; i < general_io_->state_.digital_.size(); ++i)
+    for (size_t i = 0; i < general_io_->state_.digital_.size(); ++i)
     {
       state_msg_.digital[i] = general_io_->state_.digital_[i];
       state_msg_.input_mode[i] = input_mode_[i];
@@ -300,8 +303,8 @@ bool SrBoardMk2GIO::unpackState(unsigned char *this_buffer, unsigned char *prev_
 
     state_msg_.pwm_clock_divider = general_io_->command_.pwm_clock_divider_;
 
-    //publish
-    if( state_publisher_->trylock() )
+    // publish
+    if ( state_publisher_->trylock() )
     {
       state_publisher_->msg_ = state_msg_;
       state_publisher_->unlockAndPublish();
@@ -321,7 +324,7 @@ void SrBoardMk2GIO::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, 
   d.hardware_id = serial_number_;
 
   d.clear();
-  if(has_stacker_)
+  if (has_stacker_)
     d.addf("Stacker Board", "True");
   else
     d.addf("Stacker Board", "False");
@@ -332,50 +335,50 @@ void SrBoardMk2GIO::dynamic_reconfigure_cb(sr_ronex_drivers::GeneralIOConfig &co
 {
   general_io_->command_.pwm_clock_divider_ = static_cast<int16u>(config.pwm_clock_divider);
 
-  //not very pretty but I couldnt think of an easy way to set them up
+  // not very pretty but I couldnt think of an easy way to set them up
   // (dynamic reconfigure doesn't seem to support arrays)
-  if(general_io_->command_.digital_.size() > 0)
+  if (general_io_->command_.digital_.size() > 0)
     input_mode_[0] = config.input_mode_0;
-  if(general_io_->command_.digital_.size() > 1)
+  if (general_io_->command_.digital_.size() > 1)
     input_mode_[1] = config.input_mode_1;
-  if(general_io_->command_.digital_.size() > 2)
+  if (general_io_->command_.digital_.size() > 2)
     input_mode_[2] = config.input_mode_2;
-  if(general_io_->command_.digital_.size() > 3)
+  if (general_io_->command_.digital_.size() > 3)
     input_mode_[3] = config.input_mode_3;
-  if(general_io_->command_.digital_.size() > 4)
+  if (general_io_->command_.digital_.size() > 4)
     input_mode_[4] = config.input_mode_4;
-  if(general_io_->command_.digital_.size() > 5)
+  if (general_io_->command_.digital_.size() > 5)
     input_mode_[5] = config.input_mode_5;
-  if(general_io_->command_.digital_.size() > 6)
+  if (general_io_->command_.digital_.size() > 6)
     input_mode_[6] = config.input_mode_6;
-  if(general_io_->command_.digital_.size() > 7)
+  if (general_io_->command_.digital_.size() > 7)
     input_mode_[7] = config.input_mode_7;
-  if(general_io_->command_.digital_.size() > 8)
+  if (general_io_->command_.digital_.size() > 8)
     input_mode_[8] = config.input_mode_8;
-  if(general_io_->command_.digital_.size() > 9)
+  if (general_io_->command_.digital_.size() > 9)
     input_mode_[9] = config.input_mode_9;
-  if(general_io_->command_.digital_.size() > 10)
+  if (general_io_->command_.digital_.size() > 10)
     input_mode_[10] = config.input_mode_10;
-  if(general_io_->command_.digital_.size() > 11)
+  if (general_io_->command_.digital_.size() > 11)
     input_mode_[11] = config.input_mode_11;
 
-  if( general_io_->command_.pwm_.size() > 0 )
+  if ( general_io_->command_.pwm_.size() > 0 )
     general_io_->command_.pwm_[0].period = static_cast<int16u>(config.pwm_period_0);
-  if( general_io_->command_.pwm_.size() > 1 )
+  if ( general_io_->command_.pwm_.size() > 1 )
     general_io_->command_.pwm_[1].period = static_cast<int16u>(config.pwm_period_1);
-  if( general_io_->command_.pwm_.size() > 2 )
+  if ( general_io_->command_.pwm_.size() > 2 )
     general_io_->command_.pwm_[2].period = static_cast<int16u>(config.pwm_period_2);
-  if( general_io_->command_.pwm_.size() > 3 )
+  if ( general_io_->command_.pwm_.size() > 3 )
     general_io_->command_.pwm_[3].period = static_cast<int16u>(config.pwm_period_3);
-  if( general_io_->command_.pwm_.size() > 4 )
+  if ( general_io_->command_.pwm_.size() > 4 )
     general_io_->command_.pwm_[4].period = static_cast<int16u>(config.pwm_period_4);
-  if( general_io_->command_.pwm_.size() > 5 )
+  if ( general_io_->command_.pwm_.size() > 5 )
     general_io_->command_.pwm_[5].period = static_cast<int16u>(config.pwm_period_5);
 }
 
 void SrBoardMk2GIO::build_topics_()
 {
-  //loading everything into the parameter server
+  // loading everything into the parameter server
   parameter_id_ = ronex::get_ronex_param_id("");
   std::stringstream param_path, tmp_param;
   param_path << "/ronex/devices/" << parameter_id_ << "/";
@@ -384,12 +387,13 @@ void SrBoardMk2GIO::build_topics_()
   ros::param::set(param_path.str() + "product_name", product_alias_);
   ros::param::set(param_path.str() + "ronex_id", ronex_id_);
 
-  //the device is stored using path as the key in the CustomHW map
+  // the device is stored using path as the key in the CustomHW map
   ros::param::set(param_path.str() + "path", device_name_);
   ros::param::set(param_path.str() + "serial", serial_number_);
 
-  //Advertising the realtime state publisher
-  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState>(node_, device_name_ + "/state", 1));
+  // Advertising the realtime state publisher
+  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::GeneralIOState>(node_, device_name_ +
+          "/state", 1));
 }
 
 /* For the emacs weenies in the crowd.

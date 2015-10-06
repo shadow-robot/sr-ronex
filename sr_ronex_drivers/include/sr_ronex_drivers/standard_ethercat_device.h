@@ -25,18 +25,18 @@
  *         should inherit from this class.
  **/
 
-#ifndef STANDARD_ETHERCAT_DEVICE_H
-#define STANDARD_ETHERCAT_DEVICE_H
+#ifndef SR_RONEX_DRIVERS_STANDARD_ETHERCAT_DEVICE_H
+#define SR_RONEX_DRIVERS_STANDARD_ETHERCAT_DEVICE_H
 
 #include <ros_ethercat_hardware/ethercat_hardware.h>
 #include "realtime_tools/realtime_publisher.h"
 #include "sr_ronex_drivers/cod_decod/cod_decod_manager.hpp"
-
+#include <string>
 
 class StandardEthercatDevice : public EthercatDevice
 {
 public:
-  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed = true);
 
 protected:
   string reason_;
@@ -54,8 +54,7 @@ protected:
   int n_PWM_outputs;
 
   boost::scoped_ptr<sr_cod_decod::CodDecodManager> cod_decod_manager_;
-
 };
 
-#endif /* STANDARD_ETHERCAT_DEVICE_H */
+#endif  // SR_RONEX_DRIVERS_STANDARD_ETHERCAT_DEVICE_H
 

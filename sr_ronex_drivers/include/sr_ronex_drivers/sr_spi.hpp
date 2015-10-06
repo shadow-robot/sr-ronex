@@ -34,21 +34,22 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
+#include <string>
 
 class SrSPI : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
-  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed=true);
+  virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed = true);
 
   SrSPI();
   virtual ~SrSPI();
 
 protected:
-  ///Replaces the product ID with a human readable product alias.
-  static const std::string product_alias_;
+  /// Replaces the product ID with a human readable product alias.
+  static const char product_alias_[];
 
-  ///A unique identifier for the ronex (either serial number or alias if provided)
+  /// A unique identifier for the ronex (either serial number or alias if provided)
   std::string ronex_id_;
 
   std::string reason_;
@@ -59,26 +60,26 @@ protected:
 
   ros::NodeHandle node_;
 
-  ///The SPI module which is added as a CustomHW to the hardware interface
+  /// The SPI module which is added as a CustomHW to the hardware interface
   ronex::SPI* spi_;
 
   /**
    * A counter used to publish the data at 100Hz:
    *  count 10 cycles, then reset the cycle_count to 0.
    */
-  short cycle_count_;
+  int16_t cycle_count_;
 
-  ///the digital commands sent at each cycle (updated when we call the topic)
+  /// the digital commands sent at each cycle (updated when we call the topic)
   int32u digital_commands_;
 
-  ///Name under which the RoNeX will appear (prefix the topics etc...)
+  /// Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;
   std::string serial_number_;
 
-  ///Offset of device position from first device
+  /// Offset of device position from first device
   int device_offset_;
 
-  ///False to run digital pins as output, True to run as input
+  /// False to run digital pins as output, True to run as input
   std::vector<bool> input_mode_;
 
   void packCommand(unsigned char *buffer, bool halt, bool reset);
@@ -86,15 +87,15 @@ protected:
 
   void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
 
-  ///publisher for the data.
+  /// publisher for the data.
   boost::scoped_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::SPIState> > state_publisher_;
-  ///Temporary message
+  /// Temporary message
   sr_ronex_msgs::SPIState state_msg_;
 
-  ///building the topics for publishing the state.
+  /// building the topics for publishing the state.
   void build_topics_();
 
-  ///Id of this ronex on the parameter server
+  /// Id of this ronex on the parameter server
   int parameter_id_;
 };
 

@@ -32,60 +32,63 @@
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 #include <queue>
+#include <utility>
+#include <string>
+#include <vector>
 
 namespace ronex
 {
-  struct SplittedSPICommand
+struct SplittedSPICommand
+{
+  SPI_PACKET_OUT packet;
+
+  SplittedSPICommand() : packet()
+  {}
+
+  explicit SplittedSPICommand(SplittedSPICommand* copy_me)
   {
-    SPI_PACKET_OUT packet;
-    
-    SplittedSPICommand() : packet()
-    {}
+    this->packet = copy_me->packet;
+  }
+};
 
-    SplittedSPICommand(SplittedSPICommand* copy_me)
-    {
-      this->packet = copy_me->packet;
-    }
-  };
+class SPIBaseController
+  : public controller_interface::Controller<ros_ethercat_model::RobotState>
+{
+public:
+  SPIBaseController();
 
-  class SPIBaseController
-    : public controller_interface::Controller<ros_ethercat_model::RobotState>
-  {
-  public:
-    SPIBaseController();
+  virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-    virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+  virtual void starting(const ros::Time&);
 
-    virtual void starting(const ros::Time&);
+  /*!
+   * \brief Issues commands to the joint. Should be called at regular intervals
+   */
+  virtual void update(const ros::Time&, const ros::Duration&);
 
-    /*!
-     * \brief Issues commands to the joint. Should be called at regular intervals
-     */
-    virtual void update(const ros::Time&, const ros::Duration&);
+protected:
+  ros::NodeHandle node_;
 
-  protected:
-    ros::NodeHandle node_;
+  /// prefix used for creating topics / services
+  std::string topic_prefix_;
 
-    ///prefix used for creating topics / services
-    std::string topic_prefix_;
+  int loop_count_;
 
-    int loop_count_;
+  ronex::SPI* spi_;
 
-    ronex::SPI* spi_;
+  std::vector<std::queue<SplittedSPICommand*> > command_queue_;
+  std::vector<std::queue<std::pair<SplittedSPICommand*, SPI_PACKET_IN* > > > status_queue_;
 
-    std::vector<std::queue<SplittedSPICommand*> > command_queue_;
-    std::vector<std::queue<std::pair<SplittedSPICommand*, SPI_PACKET_IN* > > > status_queue_;
+  uint16_t     cmd_pin_output_states_pre_;
+  uint16_t     cmd_pin_output_states_post_;
 
-    uint16_t     cmd_pin_output_states_pre_;
-    uint16_t     cmd_pin_output_states_post_;
+  bool pre_init_(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-    bool pre_init_(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
-
-    void copy_splitted_to_cmd_(uint16_t spi_index);
-  private:
-    bool new_command;
-  };
-}
+  void copy_splitted_to_cmd_(uint16_t spi_index);
+private:
+  bool new_command;
+};
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:

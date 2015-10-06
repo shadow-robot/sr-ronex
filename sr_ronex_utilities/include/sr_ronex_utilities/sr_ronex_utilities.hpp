@@ -28,6 +28,7 @@
 #include <bitset>
 #include <ros/ros.h>
 #include <boost/lexical_cast.hpp>
+#include <string>
 
 namespace ronex
 {
@@ -54,7 +55,7 @@ namespace ronex
    */
   static inline void set_bit(uint32_t &data, size_t index, bool value)
   {
-    //x8 because sizeof returns size in bytes not bits
+    // x8 because sizeof returns size in bytes not bits
     std::bitset<sizeof(uint32_t)*8> tmp(data);
     tmp.set(index, value);
     data = static_cast<uint32_t>(tmp.to_ulong());
@@ -69,7 +70,7 @@ namespace ronex
    */
   static inline void set_bit(uint16_t &data, size_t index, bool value)
   {
-    //x8 because sizeof returns size in bytes not bits
+    // x8 because sizeof returns size in bytes not bits
     std::bitset<sizeof(uint16_t)*8> tmp(data);
     tmp.set(index, value);
     data = static_cast<uint16_t>(tmp.to_ulong());
@@ -98,15 +99,15 @@ namespace ronex
     std::string param;
 
     int ronex_parameter_id = 0;
-    while( true )
+    while ( true )
     {
       std::stringstream ss;
       ss << "/ronex/devices/" << ronex_parameter_id << "/ronex_id";
-      if(ros::param::get(ss.str(), param) )
+      if (ros::param::get(ss.str(), param) )
       {
-        if( ronex_id.compare("") != 0 )
+        if ( ronex_id.compare("") != 0 )
         {
-          if( ronex_id.compare(param) == 0)
+          if ( ronex_id.compare(param) == 0)
           {
             return ronex_parameter_id;
           }
@@ -115,9 +116,9 @@ namespace ronex
       }
       else
       {
-        if( ronex_id.compare("") != 0)
+        if ( ronex_id.compare("") != 0)
         {
-          //we were looking for a specific ronex and didn't find it -> return -1
+          // we were looking for a specific ronex and didn't find it -> return -1
           return -1;
         }
         return ronex_parameter_id;
@@ -134,15 +135,15 @@ namespace ronex
    * @param part Part of the key (e.g., "product_name").
    * @return The key (e.g., "/ronex/devices/2/product_name").
    **/
-   static inline std::string get_ronex_devices_string(int ronex_parameter_id, std::string part)
-   {
-     std::string key("/ronex/devices/");
-     key += boost::lexical_cast<std::string>(ronex_parameter_id);
-     key += "/";
-     key += part;
-     return key;
-   }
-}
+  static inline std::string get_ronex_devices_string(int ronex_parameter_id, std::string part)
+  {
+    std::string key("/ronex/devices/");
+    key += boost::lexical_cast<std::string>(ronex_parameter_id);
+    key += "/";
+    key += part;
+    return key;
+  }
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
    Local Variables:

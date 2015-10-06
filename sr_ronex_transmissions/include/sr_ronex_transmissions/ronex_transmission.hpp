@@ -31,19 +31,19 @@
 
 namespace ronex
 {
-  class RonexTransmission : public ros_ethercat_model::Transmission
-  {
-  public:
-    bool initXml(TiXmlElement *elt, ros_ethercat_model::RobotState *robot);
+class RonexTransmission : public ros_ethercat_model::Transmission
+{
+public:
+bool initXml(TiXmlElement *elt, ros_ethercat_model::RobotState *robot);
 
-    void propagatePosition();
-    void propagateEffort();
+void propagatePosition();
+void propagateEffort();
 
-  protected:
-    boost::ptr_vector<RonexMapping> ronex_mappings_;
-    boost::ptr_vector<RonexMapping>::iterator ronex_iter_;
-  };
-}
+protected:
+boost::ptr_vector<RonexMapping> ronex_mappings_;
+boost::ptr_vector<RonexMapping>::iterator ronex_iter_;
+};
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
    Local Variables:

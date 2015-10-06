@@ -24,81 +24,83 @@
 
 #include "sr_ronex_controllers/fake_calibration_controller.hpp"
 #include "pluginlib/class_list_macros.h"
+#include <string>
 
-PLUGINLIB_EXPORT_CLASS( ronex::FakeCalibrationController, controller_interface::ControllerBase)
+PLUGINLIB_EXPORT_CLASS(ronex::FakeCalibrationController, controller_interface::ControllerBase)
 
 namespace ronex
 {
-  FakeCalibrationController::FakeCalibrationController()
-    : robot_(NULL), last_publish_time_(0), state_(INITIALIZED),
-      joint_(NULL)
+FakeCalibrationController::FakeCalibrationController()
+  : robot_(NULL), last_publish_time_(0), state_(INITIALIZED),
+    joint_(NULL)
+{
+}
+
+bool FakeCalibrationController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
+{
+  robot_ = robot;
+  node_ = n;
+  // Joint
+
+  std::string joint_name;
+  if (!node_.getParam("joint", joint_name))
   {
+    ROS_ERROR("No joint given (namespace: %s)", node_.getNamespace().c_str());
+    return false;
   }
-
-  bool FakeCalibrationController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
+  if (!(joint_ = robot->getJointState(joint_name)))
   {
-    robot_ = robot;
-    node_ = n;
-    // Joint
-
-    std::string joint_name;
-    if (!node_.getParam("joint", joint_name))
-    {
-      ROS_ERROR("No joint given (namespace: %s)", node_.getNamespace().c_str());
-      return false;
-    }
-    if (!(joint_ = robot->getJointState(joint_name)))
-    {
-      ROS_ERROR("Could not find joint %s (namespace: %s)",
-                joint_name.c_str(), node_.getNamespace().c_str());
-      return false;
-    }
-    joint_name_ = joint_name;
-
-    // "Calibrated" topic
-    pub_calibrated_.reset(
-      new realtime_tools::RealtimePublisher<std_msgs::Bool>(node_, "/calibrated", 1));
-
-    return true;
+    ROS_ERROR("Could not find joint %s (namespace: %s)",
+              joint_name.c_str(), node_.getNamespace().c_str());
+    return false;
   }
+  joint_name_ = joint_name;
 
-  /*!
-   * \brief Sets the joint to calibrated = true; Also publishes true to the calibrated topic
-   */
-  void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
+  // "Calibrated" topic
+  pub_calibrated_.reset(
+    new realtime_tools::RealtimePublisher<std_msgs::Bool>(node_, "/calibrated", 1));
+
+  return true;
+}
+
+/*!
+ * \brief Sets the joint to calibrated = true; Also publishes true to the calibrated topic
+ */
+void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
+{
+  assert(joint_);
+
+  switch (state_)
   {
-    assert(joint_);
-
-    switch(state_)
+  case INITIALIZED:
+    state_ = BEGINNING;
+    break;
+  case BEGINNING:
+    joint_->calibrated_ = true;
+    calib_msg_.data = true;
+    state_ = CALIBRATED;
+    // We add the following line to delay for some time the first publish and allow the correct initialization of the
+    // subscribers in calibrate.py
+    last_publish_time_ = robot_->getTime();
+    break;
+  case CALIBRATED:
+    if (pub_calibrated_)
     {
-    case INITIALIZED:
-      state_ = BEGINNING;
-      break;
-    case BEGINNING:
-      joint_->calibrated_ = true;
-      calib_msg_.data = true;
-      state_ = CALIBRATED;
-      //We add the following line to delay for some time the first publish and allow the correct initialization of the subscribers in calibrate.py
-      last_publish_time_ = robot_->getTime();
-      break;
-    case CALIBRATED:
-      if (pub_calibrated_)
+      if (last_publish_time_ + ros::Duration(0.5) < robot_->getTime())
       {
-        if (last_publish_time_ + ros::Duration(0.5) < robot_->getTime())
+        assert(pub_calibrated_);
+        if (pub_calibrated_->trylock())
         {
-          assert(pub_calibrated_);
-          if (pub_calibrated_->trylock())
-          {
-            last_publish_time_ = robot_->getTime();
-            pub_calibrated_->msg_ = calib_msg_;
-            pub_calibrated_->unlockAndPublish();
-          }
+          last_publish_time_ = robot_->getTime();
+          pub_calibrated_->msg_ = calib_msg_;
+          pub_calibrated_->unlockAndPublish();
         }
       }
-      break;
     }
+    break;
   }
 }
+}  // namespace ronex
 
 /* For the emacs weenies in the crowd.
 Local Variables:
