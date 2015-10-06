@@ -203,7 +203,7 @@ void SrBoardADC16::packCommand(unsigned char *buffer, bool halt, bool reset)
         {
           command->command_type = RONEX_COMMAND_02000008_COMMAND_TYPE_SET_REG_VAL;
           command->address = command_queue_.front().address;
-          for (int i = 0; i < 3; ++i )
+          for (int i = 0; i < 3; ++i)
           {
             command->values[i] = command_queue_.front().values[i];
           }
@@ -259,12 +259,12 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
 
   if (status_data->command_type == RONEX_COMMAND_02000008_COMMAND_TYPE_NORMAL)
   {
-    for (size_t i = 0; i < adc16_->state_.analogue_.size(); ++i )
+    for (size_t i = 0; i < adc16_->state_.analogue_.size(); ++i)
     {
       adc16_->state_.analogue_[i] = status_data->info_type.status_data.analogue_in[i];
     }
 
-    for (size_t i = 0; i < adc16_->state_.digital_.size(); ++i )
+    for (size_t i = 0; i < adc16_->state_.digital_.size(); ++i)
     {
       adc16_->state_.digital_[i] = ronex::check_bit(status_data->info_type.status_data.pin_input_states_DIO, i);
     }
