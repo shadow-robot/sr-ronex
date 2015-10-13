@@ -18,7 +18,7 @@
 /**
  * @file   sr_board_adc16.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @brief Driver for the RoNeX @SHADOW_HUMAN_READABLE_MODULE_NAME_SHADOW@ module.
+ * @brief Driver for the RoNeX AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME module.
  **/
 
 #pragma once
