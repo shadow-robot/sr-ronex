@@ -121,7 +121,7 @@ workspace, named rostest.m
 .. code-block:: matlab
 
     rosinit('http://192.168.0.14:11311')
-    sub = rossubscriber('/ronex/general_io/1409578750/state', @my_function, 'Buffersize', 10))
+    sub = rossubscriber('/ronex/general_io/12/state', @my_function, 'Buffersize', 10))
 
     i = 'a';
     while i ~= 'q'
@@ -162,7 +162,7 @@ Support package you downloaded. We'll start by looking at rostest.m:
 .. code-block:: matlab
 
     rosinit('http://192.168.0.14:11311')
-    sub = rossubscriber('/ronex/general_io/1409578750/state', @my_function, 'Buffersize', 10)
+    sub = rossubscriber('/ronex/general_io/12/state', @my_function, 'Buffersize', 10)
 
 All of the ROS setup is done in these three lines. In the first a ROS
 node is defined (the user could choose an appropriate name),
