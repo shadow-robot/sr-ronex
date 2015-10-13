@@ -28,8 +28,7 @@ Installing VirtualBox + RoNeX Image
 First download + install VirtualBox. The latest install file can be
 downloaded from: https://www.virtualbox.org/wiki/Downloads
 
-Next download our **ROS\_RoNeX.ova** Virtual Machine image, which has Ubuntu
-12.04, ROS Hydro and RoNeX drivers pre-installed. https://whereweputourimage.com
+Next install a Virtual Machine image with Ubuntu, ROS and the RoNeX drivers.
 
 Configure VirtualBox
 --------------------
@@ -121,14 +120,15 @@ workspace, named rostest.m
 
 .. code-block:: matlab
 
-    node = rosmatlab.node('my_data_listener_node','http://192.168.0.14:11311');
-    subscriber = rosmatlab.subscriber('/ronex/general_io/12/state','sr_ronex_msgs/GeneralIOState',10,node);
-    subscriber.setOnNewMessageListeners({@my_function});
+    rosinit('http://192.168.0.14:11311')
+    sub = rossubscriber('/ronex/general_io/12/state', @my_function, 'Buffersize', 10))
+
     i = 'a';
     while i ~= 'q'
         i = input('q to quit', 's')
     end
-    node.removeSubscriber(subscriber);
+
+    rosshutdown
     clear;
 
 This code should be copied into a file named my\_function.m, in the same
@@ -136,9 +136,9 @@ directory as rostest.m
 
 .. code-block:: matlab
 
-    function my_function(message)
-    mydata = message.getAnalogue();
-    disp (mydata(1));
+    function my_function(~, message)
+        mydata = message.Analogue;
+        disp (mydata(1));
     end
 
 Modifying the MATLAB Code
@@ -150,7 +150,7 @@ Ubuntu in the ROS configuration step.
 
 .. code-block:: matlab
 
-    node = rosmatlab.node('my_data_listener_node','http://192.168.0.14:11311');
+    rosinit('http://192.168.0.14:11311')
 
 The Code Explained
 ------------------
@@ -161,23 +161,21 @@ Support package you downloaded. We'll start by looking at rostest.m:
 
 .. code-block:: matlab
 
-    node = rosmatlab.node('matlab_ronex_listener','http://192.168.0.14:11311');
-    subscriber = rosmatlab.subscriber('/ronex/general_io/12/state','sr_ronex_msgs/GeneralIOState',10,node);
-    subscriber.setOnNewMessageListeners({@my_function});
+    rosinit('http://192.168.0.14:11311')
+    sub = rossubscriber('/ronex/general_io/12/state', @my_function, 'Buffersize', 10)
 
 All of the ROS setup is done in these three lines. In the first a ROS
-node is defined with an appropriate name, in this case
-'matlab\_ronex\_listener', and the address of the ROS master.
+node is defined (the user could choose an appropriate name),
+with the address of the ROS master.
 
 Secondly a subscriber is defined to receive messages on the specified
-topic, in the specified message format. The RoNeX message formats are
-included in the MATLAB ROS package by default, so we don't have to worry
-about custom messages. We set a queue size of 10, this may need to be
-increased on slower machines so they don't miss messages. The subscriber
-is then bound to the node that we just defined.
-
-Finally we set the callback function for the subscriber, i.e. whenever a
+topic. The RoNeX message formats are included in the MATLAB ROS package
+by default, so we don't have to worry about custom messages.
+We set the callback function for the subscriber, i.e. whenever a
 valid message is received on the topic, this function is executed.
+
+Finally we set a queue size of 10, this may need to be
+increased on slower machines so they don't miss messages.
 
 .. code-block:: matlab
 
@@ -192,28 +190,29 @@ will move on to shutdown the node.
 
 .. code-block:: matlab
 
-    node.removeSubscriber(subscriber);
+    rosshutdown
     clear;
 
-Once the quit message has been received, the subscriber is removed from
-the node, then everything is removed from the variable workspace using
+Once the quit message has been received, the node is shutdown and
+then everything is removed from the variable workspace using
 the clear command.
 
 Next we will look at the my\_function.m file:
 
 .. code-block:: matlab
 
-    function my_function(message)
-    mydata = message.getAnalogue();
-    disp (mydata(1));
+    function my_function(~, message)
+        mydata = message.Analogue;
+        disp (mydata(1));
     end
 
 This function is called every time a message is received on the
 corresponding topic, and is passed the message as an input argument.
-MATLAB automatically creates a get function for each field in its
-standard message formats. The RoNeX state message has an analogue field,
-so we can use the getAnalogue() function to extract this data (we could
-similarly use getDigital()).
+MATLAB allows to access the fields of the message but renames them to a 
+camel case format instead of the lower case with underscores that is usual in ROS.
+The RoNeX state message has an analogue field,
+so we can access the Analogue field in the message (we could
+similarly access Digital).
 
 Once we have the data, as the potentiometer is connected to channel 0,
 we are interested in the first value in the array, so we display this
