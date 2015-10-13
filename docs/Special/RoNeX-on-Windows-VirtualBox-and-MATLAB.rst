@@ -28,8 +28,7 @@ Installing VirtualBox + RoNeX Image
 First download + install VirtualBox. The latest install file can be
 downloaded from: https://www.virtualbox.org/wiki/Downloads
 
-Next download our **ROS\_RoNeX.ova** Virtual Machine image, which has Ubuntu
-12.04, ROS Hydro and RoNeX drivers pre-installed. https://whereweputourimage.com
+Next install a Virtual Machine image with Ubuntu, ROS and the RoNeX drivers.
 
 Configure VirtualBox
 --------------------
