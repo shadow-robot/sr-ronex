@@ -62,7 +62,7 @@ class DriverGenerator(object):
         # for CMake
         self._substitutions["#AUTOMATIC_GENERATOR_INSERT_ABOVE"] = \
             "src/" + self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"] +\
-            ".cpp\n#AUTOMATIC_GENERATOR_INSERT_ABOVE"
+            ".cpp\n    #AUTOMATIC_GENERATOR_INSERT_ABOVE"
 
         # for ethercat_device_plugin.xml
         # convert the product id to int
@@ -73,12 +73,11 @@ class DriverGenerator(object):
     <description>
       RoNeX - AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME module
     </description>
-  </class>
-            """
+  </class>"""
         # replace the different infos from the template above
         self._substitutions["<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"] = \
             self._substitute(self._substitutions["<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"]) +\
-            "  <!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"
+            "\n  <!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"
 
     def generate_cpp_code(self, template_path, new_file_path):
         """
