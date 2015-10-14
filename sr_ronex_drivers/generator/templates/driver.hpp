@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+ * Copyright (c) 2015, Shadow Robot Company, All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,7 @@
  */
 
 /**
- * @file   sr_board_adc16.hpp
+ * @file   AUTOMATIC_GENERATOR_FILE_NAME.hpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
  * @brief Driver for the RoNeX AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME module.
  **/
@@ -35,14 +35,14 @@
 #include <dynamic_reconfigure/server.h>
 
 
-class SrBoardADC16 : public EthercatDevice
+class SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
   virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed = true);
 
-  SrBoardADC16();
-  virtual ~SrBoardADC16();
+  SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME();
+  virtual ~SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME();
 
 protected:
   /// Replaces the product ID with a human readable product alias.
@@ -100,34 +100,10 @@ protected:
   // Number of stacks present
   int stack;
 
-  // values_s0: first single ended pin values,
-  // values_s1: second single ended pin values,
-  // values_d: differential pin values
-  // fake_values: the additional bits sent
-  // padded: the addition of requested and fake values
-  std::vector<uint16_t> values_s0_;
-  std::vector<uint16_t> values_s1_;
-  std::vector<uint16_t> values_d_;
-  std::vector<uint16_t> fake_values_s0_;
-  std::vector<uint16_t> fake_values_s1_;
-  std::vector<uint16_t> padded_s0_;
-  std::vector<uint16_t> padded_s1_;
-
-
   void packCommand(unsigned char *buffer, bool halt, bool reset);
   bool unpackState(unsigned char *this_buffer, unsigned char *prev_buffer);
 
   void diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer);
-
-  /// publisher for the data.
-  boost::scoped_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::ADC16State> > state_publisher_;
-  /// Temporary message
-  sr_ronex_msgs::ADC16State state_msg_;
-
-  /// Dynamic reconfigure server for setting the parameters of the driver
-  boost::scoped_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::ADC16Config> > dynamic_reconfigure_server_;
-
-  dynamic_reconfigure::Server<sr_ronex_drivers::ADC16Config>::CallbackType function_cb_;
 
   /// building the topics for publishing the state.
   void build_topics_();

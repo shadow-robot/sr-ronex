@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+ * Copyright (c) 2015, Shadow Robot Company, All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,12 +16,12 @@
  */
 
 /**
- * @file   sr_board_adc16.cpp
+ * @file   AUTOMATIC_GENERATOR_FILE_NAME.cpp
  * @author Ugo Cupcic <ugo@shadowrobot.com>
- * @brief  Driver for the RoNeX ADC16 module.
+ * @brief  Driver for the RoNeX AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME module.
  **/
 
-#include <sr_ronex_drivers/sr_board_adc16.hpp>
+#include <sr_ronex_drivers/AUTOMATIC_GENERATOR_FILE_NAME.hpp>
 #include <ros_ethercat_model/robot_state.hpp>
 #include <ros_ethercat_hardware/ethercat_hardware.h>
 
@@ -33,17 +33,17 @@
 
 #include "sr_ronex_drivers/ronex_utils.hpp"
 
-PLUGINLIB_EXPORT_CLASS(SrBoardADC16, EthercatDevice);
+PLUGINLIB_EXPORT_CLASS(SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME, EthercatDevice);
 
-const std::string SrBoardADC16::product_alias_ = "adc16";
+const std::string SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::product_alias_ = "AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME";
 using boost::lexical_cast;
 
 
-SrBoardADC16::SrBoardADC16() :
+SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME() :
   node_("~"), cycle_count_(0), has_stacker_(false)
 {}
 
-SrBoardADC16::~SrBoardADC16()
+SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::~SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME()
 {
   // remove parameters from server
   string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_);
@@ -55,7 +55,7 @@ SrBoardADC16::~SrBoardADC16()
   string controller_name = "/ronex_" + serial_number_ + "_passthrough";
 }
 
-void SrBoardADC16::construct(EtherCAT_SlaveHandler *sh, int &start_address)
+void SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
   sh_ = sh;
   serial_number_ = ronex::get_serial_number(sh);
@@ -157,10 +157,10 @@ void SrBoardADC16::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 
   sh->set_pd_config(pd);
 
-  ROS_INFO("Finished constructing the SrBoardADC16 driver");
+  ROS_INFO("Finished constructing the SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME driver");
 }
 
-int SrBoardADC16::initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
+int SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
 {
   digital_commands_ = 0;
   ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
@@ -186,67 +186,13 @@ int SrBoardADC16::initialize(hardware_interface::HardwareInterface *hw, bool all
   return 0;
 }
 
-void SrBoardADC16::packCommand(unsigned char *buffer, bool halt, bool reset)
+void SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_02000008* command = reinterpret_cast<RONEX_COMMAND_02000008*>(buffer);
 
-  if (!config_received_)
-  {
-    command->command_type = RONEX_COMMAND_02000008_COMMAND_TYPE_GET_CONFIG_INFO;
-  }
-  else if (reg_flag_)
-  {
-    switch (reg_state_)
-    {
-      case 0:
-        if (!command_queue_.empty())
-        {
-          command->command_type = RONEX_COMMAND_02000008_COMMAND_TYPE_SET_REG_VAL;
-          command->address = command_queue_.front().address;
-          for (int i = 0; i < 3; ++i)
-          {
-            command->values[i] = command_queue_.front().values[i];
-          }
-          feedback_flag_ += 1;
-          command_queue_.pop();
-        }
-        else
-        {
-          command->command_type = RONEX_COMMAND_02000008_COMMAND_TYPE_WRITE_REGS;
-          reg_state_ = 1;
-          feedback_flag_ += 1;
-        }
-        break;
-      case 1:
-        command->command_type = RONEX_COMMAND_02000008_COMMAND_TYPE_NORMAL;
-        reg_flag_ = false;
-        break;
-    }
-  }
-
-  else
-  {
-    command->command_type = RONEX_COMMAND_02000008_COMMAND_TYPE_NORMAL;
-    // digital command
-    feedback_flag_ = 0;
-    for (size_t i = 0; i < adc16_->command_.digital_.size(); ++i)
-    {
-      if (input_mode_[i])
-      {
-        // Just set the pin to input mode, gets read in the status
-        ronex::set_bit(digital_commands_, i*2, 1);
-      }
-      else
-      { // Output
-        ronex::set_bit(digital_commands_, i*2, 0);
-        ronex::set_bit(digital_commands_, i*2+1, adc16_->command_.digital_[i]);
-      }
-    }
-    command->pin_output_states = static_cast<int32u>(digital_commands_);
-  }
 }
 
-bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
+bool SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
 {
   RONEX_STATUS_02000008* status_data = reinterpret_cast<RONEX_STATUS_02000008 *>(this_buffer+  command_size_);
 
@@ -360,7 +306,7 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
       // before running the first configuration.
       dynamic_reconfigure_server_.reset(
               new dynamic_reconfigure::Server<sr_ronex_drivers::ADC16Config>(ros::NodeHandle(device_name_)));
-      function_cb_ = boost::bind(&SrBoardADC16::dynamic_reconfigure_cb, this, _1, _2);
+      function_cb_ = boost::bind(&SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::dynamic_reconfigure_cb, this, _1, _2);
       dynamic_reconfigure_server_->setCallback(function_cb_);
     }  // end first time, the sizes are properly initialised, simply fill in the data
 
@@ -406,7 +352,7 @@ bool SrBoardADC16::unpackState(unsigned char *this_buffer, unsigned char *prev_b
   return true;
 }
 
-void SrBoardADC16::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer)
+void SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer)
 {
   d.name = device_name_;
   d.summary(d.OK, "OK");
@@ -419,7 +365,7 @@ void SrBoardADC16::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, u
     d.addf("Stacker Board", "False");
 }
 
-void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config, uint32_t level)
+void SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config, uint32_t level)
 {
   // not very pretty but I couldnt think of an easy way to set them up
   // (dynamic reconfigure doesn't seem to support arrays)
@@ -590,7 +536,7 @@ void SrBoardADC16::dynamic_reconfigure_cb(sr_ronex_drivers::ADC16Config &config,
 }
 
 
-void SrBoardADC16::build_topics_()
+void SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::build_topics_()
 {
   // loading everything into the parameter server
   parameter_id_ = ronex::get_ronex_param_id("");
