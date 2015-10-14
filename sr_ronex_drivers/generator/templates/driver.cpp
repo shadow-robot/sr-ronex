@@ -49,8 +49,8 @@ SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::~SrBoardAUTOMATIC_GENERATOR_REPL
   string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_);
   ros::param::del(device_id);
 
-  string AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME_LOWER_device_name = "/ronex/AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME_LOWER/" + serial_number_;
-  ros::param::del(AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME_LOWER_device_name);
+  string AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME_device_name = "/ronex/AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME/" + serial_number_;
+  ros::param::del(AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME_device_name);
 
   string controller_name = "/ronex_" + serial_number_ + "_passthrough";
 }
