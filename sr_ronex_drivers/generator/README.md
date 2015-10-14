@@ -1,14 +1,8 @@
 # Automatic RoNeX driver generator
 
+This generates a skeleton for the RoNeX drivers. To run it, run the following command, making sure you replace the module name and product id:
+
 ```
-AUTOMATIC_GENERATOR_REPLACE_PRODUCT_ID
-
-AUTOMATIC_GENERATOR_FILE_NAME
-
-AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME
-
-<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->
-
-# AUTOMATIC_GENERATOR_INSERT_ABOVE #
-
+roscd sr_ronex_drivers/generator
+./generate_driver.py -m module_name -p 0x020000009
 ```
