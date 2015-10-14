@@ -28,16 +28,74 @@ class DriverGenerator(object):
     _substitutions = {}
 
     def __init__(self, module_name, product_id):
+        print "Generating a driver skeleton for the RoNeX module[" + product_id + "]: " + module_name
+
         self._module_name = module_name
         self._product_id = product_id
 
         self.build_substitutions()
 
+        # generates the header
+        header_path = "../include/sr_ronex_drivers/" + \
+                      self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"]+".hpp"
+        self.generate_cpp_code("templates/driver.hpp", header_path)
+
+        # generates the cpp
+        source_path = "../src/" + \
+                      self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"]+".cpp"
+        self.generate_cpp_code("templates/driver.cpp", source_path)
+
+        # add the cpp to the CMakeLists
+        self.generate_cmake()
+
     def build_substitutions(self):
         """
         Creates a dictionary for the substitutions needed in the templates.
         """
-        self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"] = "sr_board_" + self._module_name
+        # for cpp and hpp
+        self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"] = "sr_board_" + self._module_name.lower()
+        self._substitutions["AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME"] = self._module_name.upper()
+
+        # for CMake
+        self._substitutions["#AUTOMATIC_GENERATOR_INSERT_ABOVE"] = \
+            "src/" + self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"] +\
+            ".cpp\n#AUTOMATIC_GENERATOR_INSERT_ABOVE"
+
+    def generate_cpp_code(self, template_path, new_file_path):
+        """
+        Opens the cpp templates, do the proper substitutions and write the result to the correct file.
+        """
+        print "Generating : " + new_file_path
+
+        with open(template_path, "r") as template, \
+                open(new_file_path, "w") as new_file:
+            for line in template:
+                new_file.write(self._substitute(line))
+
+    def generate_cmake(self):
+        """
+        Adds the cpp file to the cmake.
+        """
+        print "Adding src/" + self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"] + ".cpp to CMakeLists.txt"
+
+        new_lines = []
+        with open("../CMakeLists.txt", "r") as cmake_read:
+            for line in cmake_read:
+                new_lines.append(self._substitute(line))
+
+        with open("../CMakeLists.txt", "w") as cmake_write:
+            cmake_write.writelines(new_lines)
+
+
+    def _substitute(self, line):
+        """
+        Substitutes the values from the _substitutions dict in the given line
+        @param line a line from the template
+        @return the modified line
+        """
+        for keyword, replace_with in self._substitutions.iteritems():
+            line = line.replace(keyword, replace_with)
+        return line
 
 
 if __name__ == "__main__":
