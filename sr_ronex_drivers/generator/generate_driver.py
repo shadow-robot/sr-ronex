@@ -48,6 +48,9 @@ class DriverGenerator(object):
         # add the cpp to the CMakeLists
         self.generate_cmake()
 
+        # add the required lines to the plugin.xml
+        self.generate_plugin_xml()
+
     def build_substitutions(self):
         """
         Creates a dictionary for the substitutions needed in the templates.
@@ -60,6 +63,24 @@ class DriverGenerator(object):
         self._substitutions["#AUTOMATIC_GENERATOR_INSERT_ABOVE"] = \
             "src/" + self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"] +\
             ".cpp\n#AUTOMATIC_GENERATOR_INSERT_ABOVE"
+
+        # for ethercat_device_plugin.xml
+        # convert the product id to int
+        self._substitutions["AUTOMATIC_GENERATOR_PRODUCT_ID"] = str(int(self._product_id, 16))
+        # just a template
+        self._substitutions["\n<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"] = \
+            """
+              <class name="sr_ronex_drivers/AUTOMATIC_GENERATOR_PRODUCT_ID" type="SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME" base_class_type="EthercatDevice">
+                <description>
+                  RoNeX - AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME module
+                </description>
+              </class>
+
+            """
+        # replace the different infos from the template above
+        self._substitutions["\n<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"] = \
+            self._substitute(self._substitutions["\n<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"]) +\
+            "\n<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"
 
     def generate_cpp_code(self, template_path, new_file_path):
         """
@@ -86,6 +107,19 @@ class DriverGenerator(object):
         with open("../CMakeLists.txt", "w") as cmake_write:
             cmake_write.writelines(new_lines)
 
+    def generate_plugin_xml(self):
+        """
+        Adds the required lines to the plugin xml
+        """
+        print "Adding lines to the ethercat_device_plugins.xml"
+
+        new_lines = []
+        with open("../ethercat_device_plugin.xml", "r") as plugin_xml_read:
+            for line in plugin_xml_read:
+                new_lines.append(self._substitute(line))
+
+        with open("../ethercat_device_plugin.xml", "w") as plugin_xml_write:
+            plugin_xml_write.writelines(new_lines)
 
     def _substitute(self, line):
         """
