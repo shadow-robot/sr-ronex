@@ -34,6 +34,8 @@
 
 #include <dynamic_reconfigure/server.h>
 
+#include <sr_ronex_external_protocol/Ronex_Protocol_0xAUTOMATIC_GENERATOR_REPLACE_PRODUCT_ID_AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME_00.h>
+
 
 class SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME : public EthercatDevice
 {
@@ -65,9 +67,6 @@ protected:
    */
   int16_t cycle_count_;
 
-  /// the digital commands sent at each cycle (updated when we call the topic)
-  int32u digital_commands_;
-
   /// Name under which the RoNeX will appear (prefix the topics etc...)
   std::string device_name_;
   std::string serial_number_;
@@ -75,27 +74,8 @@ protected:
   /// Offset of device position from first device
   int device_offset_;
 
-  // False if initial configuration has not been sent
-  bool config_received_;
-  // True if registers are being set
-  bool reg_flag_;
-  // Switch for states of setting registers
-  int reg_state_;
-  // Count for feedback
-  int feedback_flag_;
-
   /// True if a stacker board is plugged in the RoNeX
   bool has_stacker_;
-
-  /// False to run digital pins as output, True to run as input
-  std::vector<bool> input_mode_;
-
-  // Queue of commands to send to register
-  std::queue<RONEX_COMMAND_02000008> command_queue_;
-  std::queue<RONEX_COMMAND_02000008> queue_backup_;
-
-  // 1 for single ended adc, 2 for differential
-  std::vector<int> pin_mode_;
 
   // Number of stacks present
   int stack;

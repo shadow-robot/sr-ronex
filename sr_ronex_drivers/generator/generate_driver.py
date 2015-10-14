@@ -58,6 +58,9 @@ class DriverGenerator(object):
         # for cpp and hpp
         self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"] = "sr_board_" + self._module_name.lower()
         self._substitutions["AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME"] = self._module_name.upper()
+        self._substitutions["AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME_LOWER"] = self._module_name.lower()
+        # product id without the "0x"
+        self._substitutions["AUTOMATIC_GENERATOR_REPLACE_PRODUCT_ID"] = self._product_id[2:]
 
         # for CMake
         self._substitutions["#AUTOMATIC_GENERATOR_INSERT_ABOVE"] = \
