@@ -68,19 +68,17 @@ class DriverGenerator(object):
         # convert the product id to int
         self._substitutions["AUTOMATIC_GENERATOR_PRODUCT_ID"] = str(int(self._product_id, 16))
         # just a template
-        self._substitutions["\n<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"] = \
-            """
-              <class name="sr_ronex_drivers/AUTOMATIC_GENERATOR_PRODUCT_ID" type="SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME" base_class_type="EthercatDevice">
-                <description>
-                  RoNeX - AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME module
-                </description>
-              </class>
-
+        self._substitutions["<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"] = \
+            """<class name="sr_ronex_drivers/AUTOMATIC_GENERATOR_PRODUCT_ID" type="SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME" base_class_type="EthercatDevice">
+    <description>
+      RoNeX - AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME module
+    </description>
+  </class>
             """
         # replace the different infos from the template above
-        self._substitutions["\n<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"] = \
-            self._substitute(self._substitutions["\n<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"]) +\
-            "\n<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"
+        self._substitutions["<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"] = \
+            self._substitute(self._substitutions["<!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"]) +\
+            "  <!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->"
 
     def generate_cpp_code(self, template_path, new_file_path):
         """
