@@ -38,12 +38,12 @@ class DriverGenerator(object):
         # generates the header
         header_path = "../include/sr_ronex_drivers/" + \
                       self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"]+".hpp"
-        self.generate_cpp_code("templates/driver.hpp", header_path)
+        self.generate_cpp_code("templates/driver.header", header_path)
 
         # generates the cpp
         source_path = "../src/" + \
                       self._substitutions["AUTOMATIC_GENERATOR_FILE_NAME"]+".cpp"
-        self.generate_cpp_code("templates/driver.cpp", source_path)
+        self.generate_cpp_code("templates/driver.source", source_path)
 
         # add the cpp to the CMakeLists
         self.generate_cmake()
