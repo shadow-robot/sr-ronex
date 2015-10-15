@@ -187,7 +187,6 @@ int SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::initialize(hardware_interfac
 void SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_AUTOMATIC_GENERATOR_REPLACE_PRODUCT_ID* command = reinterpret_cast<RONEX_COMMAND_AUTOMATIC_GENERATOR_REPLACE_PRODUCT_ID*>(buffer);
-
 }
 
 bool SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
