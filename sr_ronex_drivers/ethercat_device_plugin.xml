@@ -28,6 +28,8 @@
       RoNeX - ADC module
     </description>
   </class>
+  <!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->
+
   <class name="sr_ronex_drivers/33554432" type="StandardEthercatDevice" base_class_type="EthercatDevice">
     <description>
       RoNeX - Bridge module mk3

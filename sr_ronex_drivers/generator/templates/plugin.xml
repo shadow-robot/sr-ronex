@@ -1,0 +1,5 @@
+<class name="sr_ronex_drivers/AUTOMATIC_GENERATOR_PRODUCT_ID" type="SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME" base_class_type="EthercatDevice">
+    <description>
+      RoNeX - AUTOMATIC_GENERATOR_REPLACE_MODULE_NAME module
+    </description>
+  </class>

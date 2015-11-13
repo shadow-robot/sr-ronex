@@ -38,6 +38,7 @@ add_library(sr_ronex_drivers
     src/cod_decod/cod_decod_manager.cpp
     src/cod_decod/cod_decod.cpp
     src/cod_decod/cod_decod_std_io.cpp
+    #AUTOMATIC_GENERATOR_INSERT_ABOVE
 )
 target_link_libraries(sr_ronex_drivers ${catkin_LIBRARIES})
 
