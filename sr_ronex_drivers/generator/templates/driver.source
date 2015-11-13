@@ -102,13 +102,13 @@ void SrBoardAUTOMATIC_GENERATOR_REPLACE_MODULE_NAME::construct(EtherCAT_SlaveHan
            command_size_, static_cast<int>(COMMAND_ADDRESS) );
   EC_FMMU *commandFMMU = new EC_FMMU( command_base_,            // Logical Start Address    (in ROS address space?)
                                       command_size_,
-                                      0x00,                   // Logical Start Bit
-                                      0x07,                   // Logical End Bit
-                                      COMMAND_ADDRESS,        // Physical Start Address   (in ET1200 address space?)
-                                      0x00,                   // Physical Start Bit
-                                      false,                   // Read Enable
-                                      true,                    // Write Enable
-                                      true);                     // Channel Enable
+                                      0x00,                     // Logical Start Bit
+                                      0x07,                     // Logical End Bit
+                                      COMMAND_ADDRESS,          // Physical Start Address   (in ET1200 address space?)
+                                      0x00,                     // Physical Start Bit
+                                      false,                    // Read Enable
+                                      true,                     // Write Enable
+                                      true);                    // Channel Enable
 
 
 
