@@ -1,5 +1,6 @@
 <launch>
   <arg name="robot_description" default="$(find sr_ronex_launch)/loaders/ronex.urdf.xacro"/>
+  <arg name="robot_description_param" default="robot_description"/>
 
-  <param name="robot_description" command="$(find xacro)/xacro.py '$(arg robot_description)'" />
+  <param name="$(arg robot_description_param)" command="$(find xacro)/xacro.py '$(arg robot_description)'" />
 </launch>
