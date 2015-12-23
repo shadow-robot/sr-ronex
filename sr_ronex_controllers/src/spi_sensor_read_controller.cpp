@@ -23,6 +23,7 @@
 #include "sr_ronex_controllers/spi_sensor_read_controller.h"
 #include "pluginlib/class_list_macros.h"
 #include "std_msgs/Float64.h"
+#include <utility>
 
 PLUGINLIB_EXPORT_CLASS(ronex::SPISensorReadController, controller_interface::ControllerBase)
 
@@ -83,7 +84,8 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
       {
         status_queue_[spi_channel_].front().second =
                 new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_channel_]);
-        unsigned int high_byte = static_cast<unsigned int>(status_queue_[spi_channel_].front().second->data_bytes[0] & 0x3F);
+        unsigned int high_byte =
+            static_cast<unsigned int>(status_queue_[spi_channel_].front().second->data_bytes[0] & 0x3F);
         unsigned int low_byte = static_cast<unsigned int>(status_queue_[spi_channel_].front().second->data_bytes[1]);
         ROS_DEBUG_STREAM("sensor value is " << (high_byte << 8 | low_byte));
         sensor_msg_.data = static_cast<double>((high_byte << 8 | low_byte) *360) / 16384;
@@ -105,7 +107,7 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
   try
   {
     status_queue_[spi_channel_].push(std::pair<SplittedSPICommand*, SPI_PACKET_IN*>());
-    status_queue_[spi_channel_].front().first = command_queue_[1].front();
+    status_queue_[spi_channel_].front().first = command_queue_[spi_channel_].front();
 
     // now we copy the command to the hardware interface
     copy_splitted_to_cmd_(spi_channel_);
@@ -115,10 +117,8 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
   catch(...)
   {
     ROS_ERROR_STREAM("something really bad happened");
-
   }
   command_queue_[spi_channel_].pop();
-
 }
 
 void SPISensorReadController::dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level)
