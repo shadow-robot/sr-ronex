@@ -1,10 +1,25 @@
 /*
- * spi_sensor_read_controller.h
+ * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
  *
- *  Created on: 22 Dec 2015
- *      Author: vahid
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
  */
 
+/**
+ * @file   spi_sensor_controller.h
+ * @author Vahid Aminzadeh <vahid@shadowrobot.com>
+ * @brief  a controller to read the rotary sensor connected to SPI ronex
+ **/
 #ifndef SR_RONEX_SR_RONEX_CONTROLLERS_SPI_SENSOR_READ_CONTROLLER_H_
 #define SR_RONEX_SR_RONEX_CONTROLLERS_SPI_SENSOR_READ_CONTROLLER_H_
 
