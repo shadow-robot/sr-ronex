@@ -1,0 +1,12 @@
+<launch>
+  <!-- Allows to specify the ethernet interface to be used. It defaults to the value of the env var ETHERCAT_PORT -->
+  <arg name="ethercat_port" default="$(optenv ETHERCAT_PORT eth0)" />
+
+  <!-- Loads the robot description -->
+  <include file="$(find sr_ronex_launch)/launch/sr_ronex_no_controllers.launch">
+    <arg name="ethercat_port" value="$(arg ethercat_port)"/>
+  </include>
+
+  <!-- Loads the passthrough controllers -->
+  <include file="$(find sr_ronex_launch)/loaders/spi_sensor_controllers.launch"/>
+</launch>
