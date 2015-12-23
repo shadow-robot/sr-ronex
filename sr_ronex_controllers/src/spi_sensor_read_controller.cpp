@@ -20,7 +20,6 @@
  * @author Vahid Aminzadeh <vahid@shadowrobot.com>
  * @brief  a controller to read the rotary sensor connected to SPI ronex
  **/
-
 #include "sr_ronex_controllers/spi_sensor_read_controller.h"
 #include "pluginlib/class_list_macros.h"
 #include "std_msgs/Float64.h"
@@ -32,7 +31,6 @@ namespace ronex
 const size_t SPISensorReadController::spi_channel_ = 1;
 const size_t SPISensorReadController::sensor_message_length_ = 2;
 const size_t SPISensorReadController::spi_mode_ = 1;
-
 
 bool SPISensorReadController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
 {
@@ -56,10 +54,15 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
   {
     first_run_ = false;
     sr_ronex_drivers::SPIConfig config;
-    spi_->command_->command_type = static_cast<int16u>(config.command_type);
+    spi_->command_->command_type = static_cast<int16u>(1);
 
     // setting up spi
-    standard_commands_[spi_channel_].packet.SPI_config = spi_mode_;
+    standard_commands_[spi_channel_].packet.SPI_config = 0;
+    standard_commands_[spi_channel_].packet.clock_divider = static_cast<int16u>(16);
+    standard_commands_[spi_channel_].packet.SPI_config |= static_cast<int16u>(0);
+    standard_commands_[spi_channel_].packet.SPI_config |= 0;
+    standard_commands_[spi_channel_].packet.SPI_config |= 0;
+    standard_commands_[spi_channel_].packet.inter_byte_gap = 0;
   }
   // the command will be sent at the end of the iteration,
   // removing the command from the queue but not freeing the

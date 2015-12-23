@@ -86,8 +86,6 @@ protected:
 
   void copy_splitted_to_cmd_(uint16_t spi_index);
   bool new_command;
-// private:
-
 };
 }  // namespace ronex
 

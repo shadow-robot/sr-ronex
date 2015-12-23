@@ -43,10 +43,6 @@ class SPISensorReadController
 public:
   virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-  bool command_srv_cb(sr_ronex_msgs::SPI::Request &req,
-                       sr_ronex_msgs::SPI::Response &res,
-                       size_t spi_out_index);
-
   void dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level);
   void update(const ros::Time&, const ros::Duration&);
 
@@ -67,8 +63,6 @@ private:
   boost::scoped_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig> > dynamic_reconfigure_server_;
   dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>::CallbackType function_cb_;
   bool first_run_;
-  // Instantiating the services / dynamic reconfigure callbacks etc..
-  void post_init_();
 };
 }  // namespace ronex
 
