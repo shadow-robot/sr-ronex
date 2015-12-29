@@ -174,12 +174,13 @@ int SrBoardDC_MOTOR_SMALL::initialize(hardware_interface::HardwareInterface *hw,
 
   // add the RoNeX DC_MOTOR_SMALL module to the hw interface
   ros_ethercat_model::RobotState *robot_state = static_cast<ros_ethercat_model::RobotState*>(hw);
+  robot_state->custom_hws_.insert(device_name_, new ronex::DCMotor());
+  dc_motor_small_ = static_cast<ronex::DCMotor*>(robot_state->getCustomHW(device_name_));
 
   build_topics_();
 
   ROS_INFO_STREAM("Adding an DC_MOTOR_SMALL RoNeX module to the hardware interface: " << device_name_);
   // Using the name of the ronex to prefix the state topic
-  feedback_flag_ = 0;
 
   return 0;
 }
@@ -187,15 +188,126 @@ int SrBoardDC_MOTOR_SMALL::initialize(hardware_interface::HardwareInterface *hw,
 void SrBoardDC_MOTOR_SMALL::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_02000009* command = reinterpret_cast<RONEX_COMMAND_02000009*>(buffer);
+
+  command->command_type = RONEX_COMMAND_02000009_COMMAND_TYPE_NORMAL;
+
+  for (size_t i = 0; i < dc_motor_small_->command_.digital_.size(); ++i)
+  {
+    if (input_mode_[i])
+    {
+    // Just set the pin to input mode, gets read in the status
+    ronex::set_bit(digital_commands_, i*2, 1);
+    }
+    else
+    { // Output
+    ronex::set_bit(digital_commands_, i*2, 0);
+    ronex::set_bit(digital_commands_, i*2+1, dc_motor_small_->command_.digital_[i]);
+    }
+  }
+  command->pin_output_states_DIO = static_cast<int16u>(digital_commands_);
+
+  for (size_t i = 0; i < dc_motor_small_->command_.motor_packet_command_.size(); ++i)
+  {
+    command->motor_packet_command[i].flags = dc_motor_small_->command_.motor_packet_command_[i].flags;
+    command->motor_packet_command[i].onTime = dc_motor_small_->command_.motor_packet_command_[i].on_time;
+    command->motor_packet_command[i].period = dc_motor_small_->command_.motor_packet_command_[i].period;
+  }
 }
 
 bool SrBoardDC_MOTOR_SMALL::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
 {
   RONEX_STATUS_02000009* status_data = reinterpret_cast<RONEX_STATUS_02000009 *>(this_buffer+  command_size_);
 
+  if (status_data->command_type == RONEX_COMMAND_02000009_COMMAND_TYPE_NORMAL)
+  {
+    if (dc_motor_small_->state_.analogue_.empty())
+    {
+      size_t nb_analogue_pub, nb_digital_io, nb_motor_packet;
+      // The publishers haven't been initialised yet.
+      // Checking if the stacker board is plugged in or not
+      // to determine the number of publishers.
+      if (/*status_data->flags &*/ RONEX_02000009_FLAGS_STACKER_0_PRESENT)
+      {
+        has_stacker_ = true;
+        nb_analogue_pub = NUM_ANALOGUE_INPUTS*2;
+        nb_digital_io = NUM_DIGITAL_IO*2;
+        nb_motor_packet = 2; // TODO(vahid): change these too.
+
+      }
+      else
+      {
+        has_stacker_ = false;
+        nb_analogue_pub = NUM_ANALOGUE_INPUTS;
+        nb_digital_io = NUM_DIGITAL_IO;
+        nb_motor_packet = 4;
+
+      }
+
+      // resizing the elements in the HardwareInterface
+      dc_motor_small_->state_.analogue_.resize(nb_analogue_pub);
+      dc_motor_small_->state_.digital_.resize(nb_digital_io);
+      dc_motor_small_->command_.digital_.resize(nb_digital_io);
+      dc_motor_small_->command_.motor_packet_command_.resize(nb_motor_packet);
+
+      input_mode_.assign(nb_digital_io, true);
+
+      // init the state message
+      state_msg_.analogue.resize(nb_analogue_pub);
+      state_msg_.digital.resize(nb_digital_io);
+      state_msg_.input_mode.resize(nb_digital_io);
+
+      // dynamic reconfigure server is instantiated here
+      // as we need the different vectors to be initialised
+      // before running the first configuration.
+//        dynamic_reconfigure_server_.reset(
+//                new dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig>(ros::NodeHandle(device_name_)));
+//        function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
+//        dynamic_reconfigure_server_->setCallback(function_cb_);
+    }  // end first time, the sizes are properly initialised, simply fill in the data
+
+    for (size_t i = 0; i < dc_motor_small_->state_.analogue_.size(); ++i )
+    {
+      dc_motor_small_->state_.analogue_[i] = status_data->analogue_in[i];
+    }
+
+    for (size_t i = 0; i < dc_motor_small_->state_.digital_.size(); ++i )
+    {
+      dc_motor_small_->state_.digital_[i] = ronex::check_bit(status_data->pin_input_states_DIO, i);
+    }
+    for (size_t i = 0; i < dc_motor_small_->state_.motor_packet_status_.size(); ++i)
+    {
+      dc_motor_small_->state_.motor_packet_status_[i].flags = status_data->motor_packet_status[i].flags;
+      dc_motor_small_->state_.motor_packet_status_[i].quadrature = status_data->motor_packet_status[i].quadrature;
+    }
+  }
   // publishing at 100Hz
   if (cycle_count_ > 9)
   {
+    state_msg_.header.stamp = ros::Time::now();
+
+    // update state message
+    for (size_t i = 0; i < dc_motor_small_->state_.analogue_.size(); ++i)
+    {
+      state_msg_.analogue[i] = dc_motor_small_->state_.analogue_[i];
+    }
+
+    for (size_t i = 0; i < dc_motor_small_->state_.digital_.size(); ++i)
+    {
+      state_msg_.digital[i] = dc_motor_small_->state_.digital_[i];
+      state_msg_.input_mode[i] = input_mode_[i];
+    }
+
+    for (size_t i = 0; i < dc_motor_small_->state_.motor_packet_status_.size(); ++i)
+    {
+//      state_msg_.motor_packet_status[i] = dc_motor_small_->state_.motor_packet_status_[i];
+    }
+    // publish
+    if ( state_publisher_->trylock() )
+    {
+      state_publisher_->msg_ = state_msg_;
+      state_publisher_->unlockAndPublish();
+    }
+
     cycle_count_ = 0;
   }
 
@@ -216,13 +328,30 @@ void SrBoardDC_MOTOR_SMALL::diagnostics(diagnostic_updater::DiagnosticStatusWrap
     d.addf("Stacker Board", "False");
 }
 
-void SrBoardDC_MOTOR_SMALL::dynamic_reconfigure_cb(sr_ronex_drivers::DC_MOTOR_SMALLConfig &config, uint32_t level)
-{
-}
+// TODO(vahid): complete this after making the config file
+// void SrBoardDC_MOTOR_SMALL::dynamic_reconfigure_cb(sr_ronex_drivers::DC_MOTOR_SMALLConfig &config, uint32_t level)
+// {
+// }
 
 
 void SrBoardDC_MOTOR_SMALL::build_topics_()
 {
+  // loading everything into the parameter server
+  parameter_id_ = ronex::get_ronex_param_id("");
+  std::stringstream param_path, tmp_param;
+  param_path << "/ronex/devices/" << parameter_id_ << "/";
+  tmp_param << ronex::get_product_code(sh_);
+  ros::param::set(param_path.str() + "product_id", tmp_param.str());
+  ros::param::set(param_path.str() + "product_name", product_alias_);
+  ros::param::set(param_path.str() + "ronex_id", ronex_id_);
+
+  // the device is stored using path as the key in the CustomHW map
+  ros::param::set(param_path.str() + "path", device_name_);
+  ros::param::set(param_path.str() + "serial", serial_number_);
+
+  // Advertising the realtime state publisher
+  state_publisher_.reset(new realtime_tools::RealtimePublisher<sr_ronex_msgs::DCMotorState>(node_, device_name_ +
+          "/state", 1));
 }
 
 /* For the emacs weenies in the crowd.
