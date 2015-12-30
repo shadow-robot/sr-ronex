@@ -39,14 +39,14 @@
 #include "sr_ronex_hardware_interface/DC_motor_small_hardware_interface.hpp"
 
 
-class SrBoardDC_MOTOR_SMALL : public EthercatDevice
+class SrBoardDCMOTORSMALL : public EthercatDevice
 {
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
   virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed = true);
 
-  SrBoardDC_MOTOR_SMALL();
-  virtual ~SrBoardDC_MOTOR_SMALL();
+  SrBoardDCMOTORSMALL();
+  virtual ~SrBoardDCMOTORSMALL();
 
 protected:
   /// Replaces the product ID with a human readable product alias.

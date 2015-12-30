@@ -21,7 +21,8 @@
  * @brief  Driver for the RoNeX DC_MOTOR_SMALL module.
  **/
 
-#include <sr_ronex_drivers/sr_board_dc_motor_small.hpp>
+#include "../include/sr_ronex_drivers/sr_board_dc_motor_small.hpp"
+
 #include <ros_ethercat_model/robot_state.hpp>
 #include <ros_ethercat_hardware/ethercat_hardware.h>
 
@@ -33,17 +34,17 @@
 
 #include "sr_ronex_drivers/ronex_utils.hpp"
 
-PLUGINLIB_EXPORT_CLASS(SrBoardDC_MOTOR_SMALL, EthercatDevice);
+PLUGINLIB_EXPORT_CLASS(SrBoardDCMOTORSMALL, EthercatDevice);
 
-const std::string SrBoardDC_MOTOR_SMALL::product_alias_ = "DC_MOTOR_SMALL";
+const std::string SrBoardDCMOTORSMALL::product_alias_ = "DC_MOTOR_SMALL";
 using boost::lexical_cast;
 
 
-SrBoardDC_MOTOR_SMALL::SrBoardDC_MOTOR_SMALL() :
+SrBoardDCMOTORSMALL::SrBoardDCMOTORSMALL() :
   node_("~"), cycle_count_(0), has_stacker_(false)
 {}
 
-SrBoardDC_MOTOR_SMALL::~SrBoardDC_MOTOR_SMALL()
+SrBoardDCMOTORSMALL::~SrBoardDCMOTORSMALL()
 {
   // remove parameters from server
   string device_id = "/ronex/devices/" + lexical_cast<string>(parameter_id_);
@@ -55,7 +56,7 @@ SrBoardDC_MOTOR_SMALL::~SrBoardDC_MOTOR_SMALL()
   string controller_name = "/ronex_" + serial_number_ + "_passthrough";
 }
 
-void SrBoardDC_MOTOR_SMALL::construct(EtherCAT_SlaveHandler *sh, int &start_address)
+void SrBoardDCMOTORSMALL::construct(EtherCAT_SlaveHandler *sh, int &start_address)
 {
   sh_ = sh;
   serial_number_ = ronex::get_serial_number(sh);
@@ -160,7 +161,7 @@ void SrBoardDC_MOTOR_SMALL::construct(EtherCAT_SlaveHandler *sh, int &start_addr
   ROS_INFO("Finished constructing the SrBoardDC_MOTOR_SMALL driver");
 }
 
-int SrBoardDC_MOTOR_SMALL::initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
+int SrBoardDCMOTORSMALL::initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed)
 {
   digital_commands_ = 0;
   ROS_INFO("Device #%02d: Product code: %u (%#010X) , Serial #: %u (%#010X)",
@@ -185,7 +186,7 @@ int SrBoardDC_MOTOR_SMALL::initialize(hardware_interface::HardwareInterface *hw,
   return 0;
 }
 
-void SrBoardDC_MOTOR_SMALL::packCommand(unsigned char *buffer, bool halt, bool reset)
+void SrBoardDCMOTORSMALL::packCommand(unsigned char *buffer, bool halt, bool reset)
 {
   RONEX_COMMAND_02000009* command = reinterpret_cast<RONEX_COMMAND_02000009*>(buffer);
 
@@ -214,7 +215,7 @@ void SrBoardDC_MOTOR_SMALL::packCommand(unsigned char *buffer, bool halt, bool r
   }
 }
 
-bool SrBoardDC_MOTOR_SMALL::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
+bool SrBoardDCMOTORSMALL::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
 {
   RONEX_STATUS_02000009* status_data = reinterpret_cast<RONEX_STATUS_02000009 *>(this_buffer+  command_size_);
 
@@ -315,7 +316,7 @@ bool SrBoardDC_MOTOR_SMALL::unpackState(unsigned char *this_buffer, unsigned cha
   return true;
 }
 
-void SrBoardDC_MOTOR_SMALL::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer)
+void SrBoardDCMOTORSMALL::diagnostics(diagnostic_updater::DiagnosticStatusWrapper &d, unsigned char *buffer)
 {
   d.name = device_name_;
   d.summary(d.OK, "OK");
@@ -334,7 +335,7 @@ void SrBoardDC_MOTOR_SMALL::diagnostics(diagnostic_updater::DiagnosticStatusWrap
 // }
 
 
-void SrBoardDC_MOTOR_SMALL::build_topics_()
+void SrBoardDCMOTORSMALL::build_topics_()
 {
   // loading everything into the parameter server
   parameter_id_ = ronex::get_ronex_param_id("");
