@@ -12,12 +12,12 @@
 
 #include <controller_interface/controller.h>
 #include <ros_ethercat_model/robot_state.hpp>
-#include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
+#include <sr_ronex_hardware_interface/DC_motor_small_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
 
 #include <std_msgs/Bool.h>
-#include <sr_ronex_msgs/PWM.h>
+#include "sr_ronex_msgs/MotorPacketStatus.h"
 #include <vector>
 
 namespace ronex
@@ -37,6 +37,8 @@ public:
 
   void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 
+  void motor_packet_cb(const sr_ronex_msgs::MotorPacketStatusConstPtr &msg, int index);
+
 private:
   ros::NodeHandle node_;
 
@@ -46,6 +48,10 @@ private:
 
   /// send commands to the RoNeX's digital I/O
   std::vector<ros::Subscriber> digital_subscribers_;
+
+  /// send commands to the RoNeX's Motor controllers
+  std::vector<ros::Subscriber> motor_command_subscribers_;
+
 };
 }  // namespace ronex
 #endif /* SR_RONEX_SR_RONEX_CONTROLLERS_INCLUDE_DC_MOTOR_SMALL_CONTROLLER_H_ */

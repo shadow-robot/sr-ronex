@@ -27,6 +27,7 @@ add_library(sr_ronex_controllers
     src/spi_base_controller.cpp
     src/spi_passthrough_controller.cpp
     src/adc16_passthrough_controller.cpp
+    src/DC_motor_small_passthrough_controller.cpp
 )
 add_dependencies(sr_ronex_controllers ${catkin_EXPORTED_TARGETS})
 target_link_libraries(sr_ronex_controllers ${catkin_LIBRARIES})
