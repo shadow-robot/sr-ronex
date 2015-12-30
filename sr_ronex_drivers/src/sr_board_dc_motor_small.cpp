@@ -196,13 +196,13 @@ void SrBoardDCMOTORSMALL::packCommand(unsigned char *buffer, bool halt, bool res
   {
     if (input_mode_[i])
     {
-    // Just set the pin to input mode, gets read in the status
-    ronex::set_bit(digital_commands_, i*2, 1);
+      // Just set the pin to input mode, gets read in the status
+      ronex::set_bit(digital_commands_, i*2, 1);
     }
     else
     { // Output
-    ronex::set_bit(digital_commands_, i*2, 0);
-    ronex::set_bit(digital_commands_, i*2+1, dc_motor_small_->command_.digital_[i]);
+      ronex::set_bit(digital_commands_, i*2, 0);
+      ronex::set_bit(digital_commands_, i*2+1, dc_motor_small_->command_.digital_[i]);
     }
   }
   command->pin_output_states_DIO = static_cast<int16u>(digital_commands_);
@@ -227,12 +227,12 @@ bool SrBoardDCMOTORSMALL::unpackState(unsigned char *this_buffer, unsigned char 
       // The publishers haven't been initialised yet.
       // Checking if the stacker board is plugged in or not
       // to determine the number of publishers.
-      if (/*status_data->flags &*/ RONEX_02000009_FLAGS_STACKER_0_PRESENT)
+      if (/*status_data->flags &*/ RONEX_02000009_FLAGS_STACKER_1_PRESENT)
       {
         has_stacker_ = true;
         nb_analogue_pub = NUM_ANALOGUE_INPUTS*2;
         nb_digital_io = NUM_DIGITAL_IO*2;
-        nb_motor_packet = 2; // TODO(vahid): change these too.
+        nb_motor_packet = 4; // TODO(vahid): change these too.
 
       }
       else
@@ -240,13 +240,14 @@ bool SrBoardDCMOTORSMALL::unpackState(unsigned char *this_buffer, unsigned char 
         has_stacker_ = false;
         nb_analogue_pub = NUM_ANALOGUE_INPUTS;
         nb_digital_io = NUM_DIGITAL_IO;
-        nb_motor_packet = 4;
+        nb_motor_packet = 2;
 
       }
 
       // resizing the elements in the HardwareInterface
       dc_motor_small_->state_.analogue_.resize(nb_analogue_pub);
       dc_motor_small_->state_.digital_.resize(nb_digital_io);
+      dc_motor_small_->state_.motor_packet_status_.resize(nb_motor_packet);
       dc_motor_small_->command_.digital_.resize(nb_digital_io);
       dc_motor_small_->command_.motor_packet_command_.resize(nb_motor_packet);
 
@@ -256,14 +257,15 @@ bool SrBoardDCMOTORSMALL::unpackState(unsigned char *this_buffer, unsigned char 
       state_msg_.analogue.resize(nb_analogue_pub);
       state_msg_.digital.resize(nb_digital_io);
       state_msg_.input_mode.resize(nb_digital_io);
+      state_msg_.motor_status.resize(nb_motor_packet);
 
       // dynamic reconfigure server is instantiated here
       // as we need the different vectors to be initialised
       // before running the first configuration.
-//        dynamic_reconfigure_server_.reset(
-//                new dynamic_reconfigure::Server<sr_ronex_drivers::GeneralIOConfig>(ros::NodeHandle(device_name_)));
-//        function_cb_ = boost::bind(&SrBoardMk2GIO::dynamic_reconfigure_cb, this, _1, _2);
-//        dynamic_reconfigure_server_->setCallback(function_cb_);
+      dynamic_reconfigure_server_.reset(
+              new dynamic_reconfigure::Server<sr_ronex_drivers::DCMotorConfig>(ros::NodeHandle(device_name_)));
+      function_cb_ = boost::bind(&SrBoardDCMOTORSMALL::dynamic_reconfigure_cb, this, _1, _2);
+      dynamic_reconfigure_server_->setCallback(function_cb_);
     }  // end first time, the sizes are properly initialised, simply fill in the data
 
     for (size_t i = 0; i < dc_motor_small_->state_.analogue_.size(); ++i )
@@ -300,7 +302,8 @@ bool SrBoardDCMOTORSMALL::unpackState(unsigned char *this_buffer, unsigned char 
 
     for (size_t i = 0; i < dc_motor_small_->state_.motor_packet_status_.size(); ++i)
     {
-//      state_msg_.motor_packet_status[i] = dc_motor_small_->state_.motor_packet_status_[i];
+      state_msg_.motor_status[i].flags= dc_motor_small_->state_.motor_packet_status_[i].flags;
+      state_msg_.motor_status[i].quadrature= dc_motor_small_->state_.motor_packet_status_[i].quadrature;
     }
     // publish
     if ( state_publisher_->trylock() )
@@ -329,11 +332,21 @@ void SrBoardDCMOTORSMALL::diagnostics(diagnostic_updater::DiagnosticStatusWrappe
     d.addf("Stacker Board", "False");
 }
 
-// TODO(vahid): complete this after making the config file
-// void SrBoardDC_MOTOR_SMALL::dynamic_reconfigure_cb(sr_ronex_drivers::DC_MOTOR_SMALLConfig &config, uint32_t level)
-// {
-// }
-
+void SrBoardDCMOTORSMALL::dynamic_reconfigure_cb(sr_ronex_drivers::DCMotorConfig &config, uint32_t level)
+{
+  if (dc_motor_small_->command_.digital_.size() > 0)
+    input_mode_[0] = config.input_mode_0;
+  if (dc_motor_small_->command_.digital_.size() > 1)
+    input_mode_[1] = config.input_mode_1;
+  if (dc_motor_small_->command_.digital_.size() > 2)
+    input_mode_[2] = config.input_mode_2;
+  if (dc_motor_small_->command_.digital_.size() > 3)
+    input_mode_[3] = config.input_mode_3;
+  if (dc_motor_small_->command_.digital_.size() > 4)
+    input_mode_[4] = config.input_mode_4;
+  if (dc_motor_small_->command_.digital_.size() > 5)
+    input_mode_[5] = config.input_mode_5;
+}
 
 void SrBoardDCMOTORSMALL::build_topics_()
 {

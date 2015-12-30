@@ -37,6 +37,7 @@
 #include <sr_ronex_external_protocol/Ronex_Protocol_0x02000009_DC_Motor_Small_00.h>
 
 #include "sr_ronex_hardware_interface/DC_motor_small_hardware_interface.hpp"
+#include "sr_ronex_drivers/DCMotorConfig.h"
 
 
 class SrBoardDCMOTORSMALL : public EthercatDevice
@@ -44,6 +45,8 @@ class SrBoardDCMOTORSMALL : public EthercatDevice
 public:
   virtual void construct(EtherCAT_SlaveHandler *sh, int &start_address);
   virtual int initialize(hardware_interface::HardwareInterface *hw, bool allow_unprogrammed = true);
+
+  void dynamic_reconfigure_cb(sr_ronex_drivers::DCMotorConfig &config, uint32_t level);
 
   SrBoardDCMOTORSMALL();
   virtual ~SrBoardDCMOTORSMALL();
@@ -96,6 +99,13 @@ protected:
   boost::scoped_ptr<realtime_tools::RealtimePublisher<sr_ronex_msgs::DCMotorState> > state_publisher_;
   /// Temporary message
   sr_ronex_msgs::DCMotorState state_msg_;
+
+  /// Dynamic reconfigure server for setting the parameters of the driver
+  boost::scoped_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::DCMotorConfig> > dynamic_reconfigure_server_;
+
+  dynamic_reconfigure::Server<sr_ronex_drivers::DCMotorConfig>::CallbackType function_cb_;
+
+
   /// building the topics for publishing the state.
   void build_topics_();
 
