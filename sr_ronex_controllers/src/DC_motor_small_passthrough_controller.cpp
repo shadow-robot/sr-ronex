@@ -6,7 +6,7 @@
  */
 
 #include <sr_ronex_controllers/DC_motor_small_passthrough_controller.h>
-#include "sr_ronex_msgs/MotorPacketStatus.h"
+#include "sr_ronex_msgs/MotorPacketCommand.h"
 
 namespace ronex
 {
@@ -74,7 +74,7 @@ bool DCMotorSmallPassthroughController::init(ros_ethercat_model::RobotState* rob
     sub_topic.str("");
     sub_topic << path << "/command/motor_packet_command/" << i;
     motor_command_subscribers_.push_back(
-                node_.subscribe<sr_ronex_msgs::MotorPacketStatus>(sub_topic.str(), 1,
+                node_.subscribe<sr_ronex_msgs::MotorPacketCommand>(sub_topic.str(), 1,
                                                 boost::bind(&DCMotorSmallPassthroughController::motor_packet_cb,
                                                             this, _1,  i)));
   }
@@ -87,9 +87,11 @@ void DCMotorSmallPassthroughController::digital_commands_cb(const std_msgs::Bool
   dc_motor_small_->command_.digital_[index] = msg->data;
 }
 
-void DCMotorSmallPassthroughController::motor_packet_cb(const sr_ronex_msgs::MotorPacketStatusConstPtr &msg, int index)
+void DCMotorSmallPassthroughController::motor_packet_cb(const sr_ronex_msgs::MotorPacketCommandConstPtr &msg, int index)
 {
-  dc_motor_small_->command_.motor_packet_command_[0] = msg->
-}
 
+  dc_motor_small_->command_.motor_packet_command_[index].flags = msg->flags;
+  dc_motor_small_->command_.motor_packet_command_[index].on_time = msg->onTime;
+  dc_motor_small_->command_.motor_packet_command_[index].period = msg->period;
+}
 }  // namespace ronex

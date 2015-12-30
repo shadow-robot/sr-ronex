@@ -18,6 +18,7 @@
 
 #include <std_msgs/Bool.h>
 #include "sr_ronex_msgs/MotorPacketStatus.h"
+#include "sr_ronex_msgs/MotorPacketCommand.h"
 #include <vector>
 
 namespace ronex
@@ -37,7 +38,7 @@ public:
 
   void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 
-  void motor_packet_cb(const sr_ronex_msgs::MotorPacketStatusConstPtr &msg, int index);
+  void motor_packet_cb(const sr_ronex_msgs::MotorPacketCommandConstPtr &msg, int index);
 
 private:
   ros::NodeHandle node_;
