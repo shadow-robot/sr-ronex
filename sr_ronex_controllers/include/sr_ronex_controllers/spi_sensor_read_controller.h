@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Shadow Robot Company, All rights reserved.
+ * Copyright (c) 2016, Shadow Robot Company, All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -47,7 +47,8 @@ public:
   void update(const ros::Time&, const ros::Duration&);
 
 private:
-  static const size_t spi_channel_;
+  int spi_channel_;
+  static const int default_spi_channel_;
   static const size_t sensor_message_length_;
   static const size_t spi_mode_;
 
@@ -59,9 +60,7 @@ private:
   // The data packet is updated from the service.
   std::vector<SplittedSPICommand> standard_commands_;
 
-  /// Dynamic reconfigure server for setting the parameters of the driver
-  boost::scoped_ptr<dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig> > dynamic_reconfigure_server_;
-  dynamic_reconfigure::Server<sr_ronex_drivers::SPIConfig>::CallbackType function_cb_;
+  std::vector<uint16_t> chip_select_masks_;
   bool first_run_;
 };
 }  // namespace ronex
