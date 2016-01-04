@@ -58,7 +58,7 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
     spi_->command_->command_type = static_cast<int16u>(1);
 
     // setting up spi
-    standard_commands_[spi_channel_].packet.SPI_config = 0;
+    standard_commands_[spi_channel_].packet.SPI_config = 1;
     standard_commands_[spi_channel_].packet.clock_divider = static_cast<int16u>(16);
     standard_commands_[spi_channel_].packet.SPI_config |= static_cast<int16u>(0);
     standard_commands_[spi_channel_].packet.SPI_config |= 0;
