@@ -25,6 +25,7 @@
 #include "std_msgs/Float64.h"
 #include <utility>
 #include <stdexcept>
+#include <string>
 
 PLUGINLIB_EXPORT_CLASS(ronex::SPISensorReadController, controller_interface::ControllerBase)
 
@@ -78,7 +79,6 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
     standard_commands_[spi_channel_].packet.SPI_config |= 0;
     standard_commands_[spi_channel_].packet.inter_byte_gap = 0;
     cmd_pin_output_states_post_ |= chip_select_masks_[spi_channel_];
-
   }
   // the command will be sent at the end of the iteration,
   // removing the command from the queue but not freeing the

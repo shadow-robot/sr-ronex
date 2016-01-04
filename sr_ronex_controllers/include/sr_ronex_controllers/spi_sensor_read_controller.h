@@ -20,8 +20,8 @@
  * @author Vahid Aminzadeh <vahid@shadowrobot.com>
  * @brief  a controller to read the rotary sensor connected to SPI ronex
  **/
-#ifndef SR_RONEX_SR_RONEX_CONTROLLERS_SPI_SENSOR_READ_CONTROLLER_H
-#define SR_RONEX_SR_RONEX_CONTROLLERS_SPI_SENSOR_READ_CONTROLLER_H
+#ifndef SR_RONEX_CONTROLLERS_SPI_SENSOR_READ_CONTROLLER_H
+#define SR_RONEX_CONTROLLERS_SPI_SENSOR_READ_CONTROLLER_H
 
 #include <ros/node_handle.h>
 #include <boost/ptr_container/ptr_vector.hpp>
@@ -71,4 +71,4 @@ Local Variables:
 End:
 */
 
-#endif // SR_RONEX_SR_RONEX_CONTROLLERS_SPI_SENSOR_READ_CONTROLLER_H
+#endif  // SR_RONEX_SR_RONEX_CONTROLLERS_SPI_SENSOR_READ_CONTROLLER_H
