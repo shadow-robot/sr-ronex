@@ -50,8 +50,12 @@ bool SPISensorReadController::init(ros_ethercat_model::RobotState* robot, ros::N
         "and smaller than number of SPI outputs");
   }
   standard_commands_.assign(NUM_SPI_OUTPUTS, SplittedSPICommand());
-  standard_commands_[spi_channel_].packet.num_bytes = sensor_message_length_;  // change this
-  sensor_data_publisher_ = n.advertise<std_msgs::Float64>("sensor_message", 1);
+  standard_commands_[spi_channel_].packet.num_bytes = sensor_message_length_;
+  std::string ronex_id;
+  node_.getParam("ronex_id", ronex_id);
+  std::stringstream topic_name;
+  topic_name << "sensor_message_" << ronex_id << "_" << spi_channel_;
+  sensor_data_publisher_ = n.advertise<std_msgs::Float64>(topic_name.str(), 1);
 
   first_run_ = true;
 

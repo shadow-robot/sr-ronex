@@ -7,6 +7,11 @@
     <arg name="ethercat_port" value="$(arg ethercat_port)"/>
   </include>
 
-  <!-- Loads the passthrough controllers -->
-  <include file="$(find sr_ronex_launch)/loaders/spi_sensor_controllers.launch"/>
+ <!-- loading controller parameters -->
+  <rosparam file="$(find sr_ronex_controllers)/config/spi_sensor_read_controller.yaml" command="load"/>
+
+  <!-- launching the controller -->
+  <node name="SPI_sensor_controller_spawner"
+            pkg="controller_manager" type="spawner" output="screen"
+            args="--shutdown-timeout=1.0 ronex_spi_sensor_controller"/>
 </launch>

@@ -1,0 +1,4 @@
+ronex_spi_sensor_controller:
+  type: sr_ronex_controllers/SPISensorReadController
+  SPI_ronex_channel: 1
+  ronex_id: '1384351611'
