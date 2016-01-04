@@ -85,6 +85,7 @@ protected:
   bool pre_init_(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
   void copy_splitted_to_cmd_(uint16_t spi_index);
+protected:
   bool new_command;
 };
 }  // namespace ronex
