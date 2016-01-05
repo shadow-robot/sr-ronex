@@ -31,7 +31,7 @@ PLUGINLIB_EXPORT_CLASS(ronex::SPISensorReadController, controller_interface::Con
 
 namespace ronex
 {
-const int default_spi_channel_ = 1;
+const int SPISensorReadController::default_spi_channel_ = 1;
 const size_t SPISensorReadController::sensor_message_length_ = 2;
 const size_t SPISensorReadController::spi_mode_ = 1;
 
@@ -44,7 +44,7 @@ bool SPISensorReadController::init(ros_ethercat_model::RobotState* robot, ros::N
   chip_select_masks_[1] = PIN_OUTPUT_STATE_CS_1;
   chip_select_masks_[2] = PIN_OUTPUT_STATE_CS_2;
   chip_select_masks_[3] = PIN_OUTPUT_STATE_CS_3;
-  n.param<int>("SPI_sensor_channel", spi_channel_, 1);
+  n.param<int>("SPI_sensor_channel", spi_channel_, default_spi_channel_);
   if (spi_channel_ < 0 || spi_channel_ > NUM_SPI_OUTPUTS)
   {
     throw std::invalid_argument("spi channel parameter should be larger than or equal 0 "
