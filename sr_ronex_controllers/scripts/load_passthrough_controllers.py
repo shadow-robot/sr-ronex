@@ -81,9 +81,9 @@ class LoadPassthroughControllers(object):
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type",
                                 "sr_ronex_controllers/ADC16PassthroughController")
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
-            elif ronex_id[1] == "dc_motor_small":
+            elif ronex_id[1] == "DC_MOTOR_SMALL":
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/type",
-                                "sr_ronex_controllers/DCMotorPassthroughController")
+                                "sr_ronex_controllers/DCMotorSmallPassthroughController")
                 rospy.set_param("/ronex_" + ronex_id[0] + "_passthrough/ronex_id", ronex_id[0])
             else:
                 rospy.logwarn("RoNeX["+ronex_id[0]+"] type not recognized: "+ronex_id[1] +
