@@ -72,4 +72,4 @@ private:
   std::vector<ros::Subscriber> motor_command_subscribers_;
 };
 }  // namespace ronex
-#endif /* SR_RONEX_CONTROLLERS_DC_MOTOR_SMALL_PASSTHROUGH_CONTROLLER_H */
+#endif  // SR_RONEX_CONTROLLERS_DC_MOTOR_SMALL_PASSTHROUGH_CONTROLLER_H
