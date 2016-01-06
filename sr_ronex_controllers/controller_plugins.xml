@@ -16,4 +16,7 @@
      type="ronex::ADC16PassthroughController"
      base_class_type="controller_interface::ControllerBase" />
 
+  <class name="sr_ronex_controllers/SPISensorReadController"
+     type="ronex::SPISensorReadController"
+     base_class_type="controller_interface::ControllerBase" />
 </library>
