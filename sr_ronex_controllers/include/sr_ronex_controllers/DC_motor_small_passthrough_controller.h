@@ -36,6 +36,8 @@ public:
    */
   virtual void update(const ros::Time&, const ros::Duration&) {}
 
+  virtual void stopping(const ros::Time& time);
+
   void digital_commands_cb(const std_msgs::BoolConstPtr& msg, int index);
 
   void motor_packet_cb(const sr_ronex_msgs::MotorPacketCommandConstPtr &msg, int index);

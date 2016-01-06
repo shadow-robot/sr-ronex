@@ -17,6 +17,6 @@
      base_class_type="controller_interface::ControllerBase" />
 
   <class name="sr_ronex_controllers/DCMotorSmallPassthroughController"
-     type="ronex::ADC16PassthroughController"
+     type="ronex::DCMotorSmallPassthroughController"
      base_class_type="controller_interface::ControllerBase" />
 </library>

@@ -218,34 +218,26 @@ void SrBoardDCMOTORSMALL::packCommand(unsigned char *buffer, bool halt, bool res
 bool SrBoardDCMOTORSMALL::unpackState(unsigned char *this_buffer, unsigned char *prev_buffer)
 {
   RONEX_STATUS_02000009* status_data = reinterpret_cast<RONEX_STATUS_02000009 *>(this_buffer+  command_size_);
-  ROS_WARN_STREAM("here here 0 " << status_data->command_type << " which should be " << RONEX_COMMAND_02000009_COMMAND_TYPE_NORMAL);
   if (status_data->command_type == RONEX_COMMAND_02000009_COMMAND_TYPE_NORMAL)
   {
-    ROS_WARN_STREAM("here here 1");
     if (dc_motor_small_->state_.analogue_.empty())
     {
-      ROS_WARN_STREAM("here here 2");
       size_t nb_analogue_pub, nb_digital_io, nb_motor_packet;
       // The publishers haven't been initialised yet.
       // Checking if the stacker board is plugged in or not
       // to determine the number of publishers.
-      if (/*status_data->flags &*/ RONEX_02000009_FLAGS_STACKER_1_PRESENT)
+      nb_analogue_pub = NUM_ANALOGUE_INPUTS;
+      nb_digital_io = NUM_DIGITAL_IO;
+      if (status_data->motor_packet_status[0].flags & RONEX_02000009_FLAGS_STACKER_1_PRESENT)
       {
         has_stacker_ = true;
-        nb_analogue_pub = NUM_ANALOGUE_INPUTS*2;
-        nb_digital_io = NUM_DIGITAL_IO*2;
-        nb_motor_packet = 4; // TODO(vahid): change these too.
-
+        nb_motor_packet = 2;
       }
       else
       {
         has_stacker_ = false;
-        nb_analogue_pub = NUM_ANALOGUE_INPUTS;
-        nb_digital_io = NUM_DIGITAL_IO;
-        nb_motor_packet = 2;
-
+        nb_motor_packet = 1;
       }
-
       // resizing the elements in the HardwareInterface
       dc_motor_small_->state_.analogue_.resize(nb_analogue_pub);
       dc_motor_small_->state_.digital_.resize(nb_digital_io);

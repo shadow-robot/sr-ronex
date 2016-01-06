@@ -7,6 +7,10 @@
 
 #include <sr_ronex_controllers/DC_motor_small_passthrough_controller.h>
 #include "sr_ronex_msgs/MotorPacketCommand.h"
+#include "pluginlib/class_list_macros.h"
+
+
+PLUGINLIB_EXPORT_CLASS(ronex::DCMotorSmallPassthroughController, controller_interface::ControllerBase)
 
 namespace ronex
 {
@@ -93,5 +97,15 @@ void DCMotorSmallPassthroughController::motor_packet_cb(const sr_ronex_msgs::Mot
   dc_motor_small_->command_.motor_packet_command_[index].flags = msg->flags;
   dc_motor_small_->command_.motor_packet_command_[index].on_time = msg->onTime;
   dc_motor_small_->command_.motor_packet_command_[index].period = msg->period;
+}
+void DCMotorSmallPassthroughController::stopping(const ros::Time& time)
+{
+  for (size_t index = 0; index < dc_motor_small_->command_.motor_packet_command_.size(); ++index)
+  {
+    ROS_INFO_STREAM("Stopping DC motor");
+    dc_motor_small_->command_.motor_packet_command_[index].flags = 0;
+    dc_motor_small_->command_.motor_packet_command_[index].on_time = 0;
+    dc_motor_small_->command_.motor_packet_command_[index].period = 0;
+  }
 }
 }  // namespace ronex
