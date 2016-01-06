@@ -24,7 +24,7 @@
 #include <sr_ronex_controllers/DC_motor_small_passthrough_controller.h>
 #include "sr_ronex_msgs/MotorPacketCommand.h"
 #include "pluginlib/class_list_macros.h"
-
+#include <string>
 
 PLUGINLIB_EXPORT_CLASS(ronex::DCMotorSmallPassthroughController, controller_interface::ControllerBase)
 
@@ -109,7 +109,6 @@ void DCMotorSmallPassthroughController::digital_commands_cb(const std_msgs::Bool
 
 void DCMotorSmallPassthroughController::motor_packet_cb(const sr_ronex_msgs::MotorPacketCommandConstPtr &msg, int index)
 {
-
   dc_motor_small_->command_.motor_packet_command_[index].flags = msg->flags;
   dc_motor_small_->command_.motor_packet_command_[index].on_time = msg->onTime;
   dc_motor_small_->command_.motor_packet_command_[index].period = msg->period;

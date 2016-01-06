@@ -21,8 +21,8 @@
  * @brief Controller for the RoNeX DC_MOTOR_SMALL module.
  **/
 
-#ifndef SR_RONEX_SR_RONEX_CONTROLLERS_INCLUDE_DC_MOTOR_SMALL_CONTROLLER_H_
-#define SR_RONEX_SR_RONEX_CONTROLLERS_INCLUDE_DC_MOTOR_SMALL_CONTROLLER_H_
+#ifndef SR_RONEX_CONTROLLERS_DC_MOTOR_SMALL_PASSTHROUGH_CONTROLLER_H
+#define SR_RONEX_CONTROLLERS_DC_MOTOR_SMALL_PASSTHROUGH_CONTROLLER_H
 
 #include <ros/node_handle.h>
 
@@ -70,7 +70,6 @@ private:
 
   /// send commands to the RoNeX's Motor controllers
   std::vector<ros::Subscriber> motor_command_subscribers_;
-
 };
 }  // namespace ronex
-#endif /* SR_RONEX_SR_RONEX_CONTROLLERS_INCLUDE_DC_MOTOR_SMALL_CONTROLLER_H_ */
+#endif /* SR_RONEX_CONTROLLERS_DC_MOTOR_SMALL_PASSTHROUGH_CONTROLLER_H */

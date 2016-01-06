@@ -296,8 +296,8 @@ bool SrBoardDCMOTORSMALL::unpackState(unsigned char *this_buffer, unsigned char 
 
     for (size_t i = 0; i < dc_motor_small_->state_.motor_packet_status_.size(); ++i)
     {
-      state_msg_.motor_status[i].flags= dc_motor_small_->state_.motor_packet_status_[i].flags;
-      state_msg_.motor_status[i].quadrature= dc_motor_small_->state_.motor_packet_status_[i].quadrature;
+      state_msg_.motor_status[i].flags = dc_motor_small_->state_.motor_packet_status_[i].flags;
+      state_msg_.motor_status[i].quadrature = dc_motor_small_->state_.motor_packet_status_[i].quadrature;
     }
     // publish
     if ( state_publisher_->trylock() )
