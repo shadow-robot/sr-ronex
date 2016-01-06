@@ -1,9 +1,25 @@
 /*
- * DCMotorSmallController.cpp
+ * Copyright (c) 2016, Shadow Robot Company, All rights reserved.
  *
- *  Created on: 29 Dec 2015
- *      Author: hand
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library.
  */
+
+/**
+ * @file   DC_motor_small_passthrough_controller.cpp
+ * @author Vahid Aminzadeh <vahid@shadowrobot.com>
+ * @brief Controller for the RoNeX DC_MOTOR_SMALL module.
+ **/
 
 #include <sr_ronex_controllers/DC_motor_small_passthrough_controller.h>
 #include "sr_ronex_msgs/MotorPacketCommand.h"

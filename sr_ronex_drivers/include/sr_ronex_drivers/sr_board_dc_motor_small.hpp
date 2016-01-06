@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Shadow Robot Company, All rights reserved.
+ * Copyright (c) 2016, Shadow Robot Company, All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,7 @@
 
 /**
  * @file   sr_board_dc_motor_small.hpp
- * @author Ugo Cupcic <ugo@shadowrobot.com>
+ * @author Vahid Aminzadeh <vahid@shadowrobot.com>
  * @brief Driver for the RoNeX DC_MOTOR_SMALL module.
  **/
 
