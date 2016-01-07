@@ -28,19 +28,19 @@
     #define __attribute__(x)
 #endif
 
-#define RONEX_COMMAND_02000009_MASTER_CLOCK_SPEED_HZ        64000000        //!< Master clock. This is divided down to create the SPI clock.
-#define RONEX_COMMAND_02000009_ADC_SAMPLE_RATE_HZ               1000        //!< Maximum possible ADC sample rate. Don't send EtherCAT packets faster than this.
-#define NUM_ANALOGUE_INPUTS                                        6        
-#define ANALOGUE_INPUT_RESOLUTION                                 12        //!< 
-#define ANALOGUE_INPUT_JUSTIFICATION                           RIGHT
-#define NUM_ANALOGUE_OUTPUTS                                       0
-#define ANALOGUE_OUTPUT_RESOLUTION                                 0
-#define ANALOGUE_OUTPUT_JUSTIFICATION                          RIGHT
-#define NUM_DIGITAL_IO                                             6
-#define PRODUCT_NAME                                 "dc_motor_small"
-#define PRODUCT_ID                                        0x02000009
-#define MAXIMUM_NUM_STACKERS                                       2
-#define STACKER_TYPE                                               4            //!< range [1..13]
+#define RONEX_COMMAND_02000009_MASTER_CLOCK_SPEED_HZ                 64000000        //!< Master clock. This is divided down to create the SPI clock.
+#define RONEX_COMMAND_02000009_ADC_SAMPLE_RATE_HZ                        1000        //!< Maximum possible ADC sample rate. Don't send EtherCAT packets faster than this.
+#define NUM_ANALOGUE_INPUTS_02000009                                        6
+#define ANALOGUE_INPUT_RESOLUTION_02000009                                 12        //!<
+#define ANALOGUE_INPUT_JUSTIFICATION_02000009                           RIGHT
+#define NUM_ANALOGUE_OUTPUTS_02000009                                       0
+#define ANALOGUE_OUTPUT_RESOLUTION_02000009                                 0
+#define ANALOGUE_OUTPUT_JUSTIFICATION_02000009                          RIGHT
+#define NUM_DIGITAL_IO_02000009                                             6
+#define PRODUCT_NAME_02000009                                 "dc_motor_small"
+#define PRODUCT_ID_02000009                                        0x02000009
+#define MAXIMUM_NUM_STACKERS_02000009                                       2
+#define STACKER_TYPE_02000009                                               4            //!< range [1..13]
 
 
 //! Command Types
@@ -133,22 +133,22 @@ typedef struct
 }__attribute__((packed)) RONEX_STATUS_02000009;     // 24 bytes
 
 
-#define COMMAND_ARRAY_SIZE_BYTES    (sizeof(RONEX_COMMAND_02000009))
-#define COMMAND_ARRAY_SIZE_WORDS    (sizeof(RONEX_COMMAND_02000009)/2)
-#define STATUS_ARRAY_SIZE_BYTES     (sizeof(RONEX_STATUS_02000009))
-#define STATUS_ARRAY_SIZE_WORDS     (sizeof(RONEX_STATUS_02000009)/2)
+#define COMMAND_ARRAY_SIZE_BYTES_02000009    (sizeof(RONEX_COMMAND_02000009))
+#define COMMAND_ARRAY_SIZE_WORDS_02000009    (sizeof(RONEX_COMMAND_02000009)/2)
+#define STATUS_ARRAY_SIZE_BYTES_02000009     (sizeof(RONEX_STATUS_02000009))
+#define STATUS_ARRAY_SIZE_WORDS_02000009     (sizeof(RONEX_STATUS_02000009)/2)
 
-#define COMMAND_ARRAY_EXPECTED_SIZE_BYTES       16
-#define STATUS_ARRAY_EXPECTED_SIZE_BYTES        24
+#define COMMAND_ARRAY_EXPECTED_SIZE_BYTES_02000009       16
+#define STATUS_ARRAY_EXPECTED_SIZE_BYTES_02000009        24
                                                                             // Queued (Mailbox)
                                                                             // Syncmanager Definitions
                                                                             // -----------------------
 #define PROTOCOL_TYPE   EC_QUEUED                                           //  Synchronous communication
-#define COMMAND_ADDRESS 0x1000                                              //!< ET1200 address containing the Command Structure
-#define STATUS_ADDRESS  (COMMAND_ADDRESS+sizeof(RONEX_COMMAND_02000009) *4) //!< ET1200 address containing the Status  Structure
+#define COMMAND_ADDRESS_02000009 0x1000                                              //!< ET1200 address containing the Command Structure
+#define STATUS_ADDRESS_02000009  (COMMAND_ADDRESS_02000009+sizeof(RONEX_COMMAND_02000009) *4) //!< ET1200 address containing the Status  Structure
 
-#define RONEX_COMMAND_STRUCT        RONEX_COMMAND_02000009                  //!< Required for et1200_interface.h to be generic
-#define RONEX_STATUS_STRUCT         RONEX_STATUS_02000009                   //!< Required for et1200_interface.h to be generic
+#define RONEX_COMMAND_STRUCT_02000009        RONEX_COMMAND_02000009                  //!< Required for et1200_interface.h to be generic
+#define RONEX_STATUS_STRUCT_02000009         RONEX_STATUS_02000009                   //!< Required for et1200_interface.h to be generic
 
 
 
