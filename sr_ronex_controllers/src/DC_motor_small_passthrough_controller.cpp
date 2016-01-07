@@ -124,3 +124,9 @@ void DCMotorSmallPassthroughController::stopping(const ros::Time& time)
   }
 }
 }  // namespace ronex
+
+/* For the emacs weenies in the crowd.
+Local Variables:
+   c-basic-offset: 2
+End:
+*/
