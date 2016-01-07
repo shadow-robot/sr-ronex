@@ -28,6 +28,12 @@
       RoNeX - ADC module
     </description>
   </class>
+  <class name="sr_ronex_drivers/33554441" type="SrBoardDCMOTORSMALL" base_class_type="EthercatDevice">
+    <description>
+      RoNeX - DC_MOTOR_SMALL module
+    </description>
+  </class>
+
   <!-- AUTOMATIC_GENERATOR_INSERT_ABOVE -->
 
   <class name="sr_ronex_drivers/33554432" type="StandardEthercatDevice" base_class_type="EthercatDevice">

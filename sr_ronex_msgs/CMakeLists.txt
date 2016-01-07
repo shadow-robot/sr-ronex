@@ -24,6 +24,9 @@ add_message_files(FILES
     TCATState.msg
     ReceiverData.msg
     ImpulseSample.msg
+    MotorPacketStatus.msg
+    DCMotorState.msg
+    MotorPacketCommand.msg
 )
 add_service_files(FILES SPI.srv)
 

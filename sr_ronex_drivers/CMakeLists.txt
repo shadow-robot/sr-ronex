@@ -25,7 +25,7 @@ find_package(catkin REQUIRED COMPONENTS
 include_directories(include ${catkin_INCLUDE_DIRS} )
 
 #add dynamic reconfigure api
-generate_dynamic_reconfigure_options(cfg/GeneralIO.cfg cfg/SPI.cfg cfg/ADC16.cfg)
+generate_dynamic_reconfigure_options(cfg/GeneralIO.cfg cfg/SPI.cfg cfg/ADC16.cfg cfg/DCMotor.cfg)
 
 add_definitions(-Wall)
 add_library(sr_ronex_drivers
@@ -38,6 +38,7 @@ add_library(sr_ronex_drivers
     src/cod_decod/cod_decod_manager.cpp
     src/cod_decod/cod_decod.cpp
     src/cod_decod/cod_decod_std_io.cpp
+    src/sr_board_dc_motor_small.cpp
     #AUTOMATIC_GENERATOR_INSERT_ABOVE
 )
 target_link_libraries(sr_ronex_drivers ${catkin_LIBRARIES})

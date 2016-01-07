@@ -135,4 +135,8 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
   }
   command_queue_[spi_channel_].pop();
 }
+double SPISensorReadController::get_sensor_value()
+{
+  return sensor_msg_.data;
+}
 } /* namespace ronex */
