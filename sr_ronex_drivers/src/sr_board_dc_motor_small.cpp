@@ -77,11 +77,11 @@ void SrBoardDCMOTORSMALL::construct(EtherCAT_SlaveHandler *sh, int &start_addres
   device_name_ = ronex::build_name(product_alias_, ronex_id_);
 
   command_base_  = start_address;
-  command_size_  = COMMAND_ARRAY_SIZE_BYTES;
+  command_size_  = COMMAND_ARRAY_SIZE_BYTES_02000009;
 
   start_address += command_size_;
   status_base_   = start_address;
-  status_size_   = STATUS_ARRAY_SIZE_BYTES;
+  status_size_   = STATUS_ARRAY_SIZE_BYTES_02000009;
 
   start_address += status_size_;
 
@@ -100,12 +100,12 @@ void SrBoardDCMOTORSMALL::construct(EtherCAT_SlaveHandler *sh, int &start_addres
   }
 
   ROS_INFO("First FMMU (command) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", command_base_,
-           command_size_, static_cast<int>(COMMAND_ADDRESS) );
+           command_size_, static_cast<int>(COMMAND_ADDRESS_02000009) );
   EC_FMMU *commandFMMU = new EC_FMMU( command_base_,            // Logical Start Address    (in ROS address space?)
                                       command_size_,
                                       0x00,                     // Logical Start Bit
                                       0x07,                     // Logical End Bit
-                                      COMMAND_ADDRESS,          // Physical Start Address   (in ET1200 address space?)
+                                      COMMAND_ADDRESS_02000009,          // Physical Start Address   (in ET1200 address space?)
                                       0x00,                     // Physical Start Bit
                                       false,                    // Read Enable
                                       true,                     // Write Enable
@@ -124,12 +124,12 @@ void SrBoardDCMOTORSMALL::construct(EtherCAT_SlaveHandler *sh, int &start_addres
   // This is for data coming FROM the board
   //
   ROS_INFO("Second FMMU (status) : Logical address: 0x%08X ; size: %3d bytes ; ET1200 address: 0x%08X", status_base_,
-           status_size_, static_cast<int>(STATUS_ADDRESS) );
+           status_size_, static_cast<int>(STATUS_ADDRESS_02000009) );
   EC_FMMU *statusFMMU = new EC_FMMU(  status_base_,
                                       status_size_,
                                       0x00,
                                       0x07,
-                                      STATUS_ADDRESS,
+                                      STATUS_ADDRESS_02000009,
                                       0x00,
                                       true,
                                       false,
@@ -146,8 +146,8 @@ void SrBoardDCMOTORSMALL::construct(EtherCAT_SlaveHandler *sh, int &start_addres
   EtherCAT_PD_Config *pd = new EtherCAT_PD_Config(2);
 
 // SyncMan takes the physical address
-  (*pd)[0] = EC_SyncMan(COMMAND_ADDRESS,              command_size_,    PROTOCOL_TYPE, EC_WRITTEN_FROM_MASTER);
-  (*pd)[1] = EC_SyncMan(STATUS_ADDRESS,               status_size_,     PROTOCOL_TYPE);
+  (*pd)[0] = EC_SyncMan(COMMAND_ADDRESS_02000009,              command_size_,    PROTOCOL_TYPE, EC_WRITTEN_FROM_MASTER);
+  (*pd)[1] = EC_SyncMan(STATUS_ADDRESS_02000009,               status_size_,     PROTOCOL_TYPE);
 
 
   (*pd)[0].ChannelEnable = true;
@@ -226,8 +226,8 @@ bool SrBoardDCMOTORSMALL::unpackState(unsigned char *this_buffer, unsigned char 
       // The publishers haven't been initialised yet.
       // Checking if the stacker board is plugged in or not
       // to determine the number of publishers.
-      nb_analogue_pub = NUM_ANALOGUE_INPUTS;
-      nb_digital_io = NUM_DIGITAL_IO;
+      nb_analogue_pub = NUM_ANALOGUE_INPUTS_02000009;
+      nb_digital_io = NUM_DIGITAL_IO_02000009;
       if (status_data->motor_packet_status[0].flags & RONEX_02000009_FLAGS_STACKER_1_PRESENT)
       {
         has_stacker_ = true;
