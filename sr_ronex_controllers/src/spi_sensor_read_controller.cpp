@@ -78,6 +78,7 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
     standard_commands_[spi_channel_].packet.SPI_config |= 0;
     standard_commands_[spi_channel_].packet.SPI_config |= 0;
     standard_commands_[spi_channel_].packet.inter_byte_gap = 0;
+    cmd_pin_output_states_pre_ = 0;
     cmd_pin_output_states_post_ |= chip_select_masks_[spi_channel_];
   }
   // the command will be sent at the end of the iteration,
