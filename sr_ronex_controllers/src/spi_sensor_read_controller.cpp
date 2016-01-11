@@ -140,4 +140,9 @@ double SPISensorReadController::get_sensor_value()
 {
   return sensor_msg_.data;
 }
+
+int SPISensorReadController::get_spi_channel()
+{
+  return spi_channel_;
+}
 } /* namespace ronex */
