@@ -46,6 +46,8 @@ public:
   void dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level);
   void update(const ros::Time&, const ros::Duration&);
   double get_sensor_value();
+  int get_spi_channel();
+
 
 private:
   int spi_channel_;
