@@ -33,7 +33,7 @@
 
 #include <dynamic_reconfigure/server.h>
 #include "sr_ronex_drivers/SPIConfig.h"
-#include "std_msgs/Float64.h"
+#include "std_msgs/Float64MultiArray.h"
 
 namespace ronex
 {
@@ -43,19 +43,18 @@ class SPISensorReadController
 public:
   virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
-  void dynamic_reconfigure_cb(sr_ronex_drivers::SPIConfig &config, uint32_t level);
   void update(const ros::Time&, const ros::Duration&);
-  double get_sensor_value();
-  int get_spi_channel();
+  std::vector<double> get_sensor_value();
+  std::vector<int> get_spi_channel();
 
 
 private:
-  int spi_channel_;
+  std::vector<int> spi_channel_;
   static const int default_spi_channel_;
   static const size_t sensor_message_length_;
   static const size_t spi_mode_;
 
-  std_msgs::Float64 sensor_msg_;
+  std_msgs::Float64MultiArray sensor_msg_;
   std::vector<ros::ServiceServer> command_srv_;
   ros::Publisher sensor_data_publisher_;
   // vector containing one command per spi output.

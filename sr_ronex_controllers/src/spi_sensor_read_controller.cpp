@@ -22,7 +22,7 @@
  **/
 #include "sr_ronex_controllers/spi_sensor_read_controller.h"
 #include "pluginlib/class_list_macros.h"
-#include "std_msgs/Float64.h"
+#include "std_msgs/Float64MultiArray.h"
 #include <utility>
 #include <stdexcept>
 #include <string>
@@ -44,19 +44,35 @@ bool SPISensorReadController::init(ros_ethercat_model::RobotState* robot, ros::N
   chip_select_masks_[1] = PIN_OUTPUT_STATE_CS_1;
   chip_select_masks_[2] = PIN_OUTPUT_STATE_CS_2;
   chip_select_masks_[3] = PIN_OUTPUT_STATE_CS_3;
-  n.param<int>("SPI_sensor_channel", spi_channel_, default_spi_channel_);
-  if (spi_channel_ < 0 || spi_channel_ > NUM_SPI_OUTPUTS)
-  {
-    throw std::invalid_argument("spi channel parameter should be larger than or equal 0 "
-        "and smaller than number of SPI outputs");
-  }
-  standard_commands_.assign(NUM_SPI_OUTPUTS, SplittedSPICommand());
-  standard_commands_[spi_channel_].packet.num_bytes = sensor_message_length_;
   std::string ronex_id;
   node_.getParam("ronex_id", ronex_id);
   std::stringstream topic_name;
-  topic_name << "sensor_message_" << ronex_id << "_" << spi_channel_;
-  sensor_data_publisher_ = n.advertise<std_msgs::Float64>(topic_name.str(), 1);
+  topic_name << "sensor_message_" << ronex_id;
+  standard_commands_.assign(NUM_SPI_OUTPUTS, SplittedSPICommand());
+
+  if (!n.hasParam("SPI_sensor_channel"))
+  {
+    ROS_WARN_STREAM("No SPI channel is defined. Will assumes a single channel " << default_spi_channel_);
+    spi_channel_.push_back(default_spi_channel_);
+  }
+  else
+  {
+    n.getParam("SPI_sensor_channel", spi_channel_);
+  }
+  for (std::vector<int>::const_iterator channel_iter = spi_channel_.begin(); channel_iter != spi_channel_.end();
+        ++channel_iter)
+  {
+    if (*channel_iter < 0 || *channel_iter > NUM_SPI_OUTPUTS)
+    {
+      ROS_FATAL("spi channel parameter should be larger than or equal 0 "
+                "and smaller than number of SPI outputs");
+      return false;
+    }
+    standard_commands_[*channel_iter].packet.num_bytes = sensor_message_length_;
+    topic_name << "_" << *channel_iter;
+  }
+
+  sensor_data_publisher_ = n.advertise<std_msgs::Float64MultiArray>(topic_name.str(), 1);
 
   first_run_ = true;
 
@@ -68,80 +84,91 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
   if (first_run_)  // configuring the channel for communication
   {
     first_run_ = false;
-    sr_ronex_drivers::SPIConfig config;
     spi_->command_->command_type = static_cast<int16u>(1);
 
     // setting up spi
-    standard_commands_[spi_channel_].packet.SPI_config = 1;
-    standard_commands_[spi_channel_].packet.clock_divider = static_cast<int16u>(16);
-    standard_commands_[spi_channel_].packet.SPI_config |= static_cast<int16u>(0);
-    standard_commands_[spi_channel_].packet.SPI_config |= 0;
-    standard_commands_[spi_channel_].packet.SPI_config |= 0;
-    standard_commands_[spi_channel_].packet.inter_byte_gap = 0;
-    cmd_pin_output_states_pre_ = 0;
-    cmd_pin_output_states_post_ |= chip_select_masks_[spi_channel_];
+    for (std::vector<int>::const_iterator channel_iter = spi_channel_.begin(); channel_iter != spi_channel_.end();
+          ++channel_iter)
+    {
+      standard_commands_[*channel_iter].packet.SPI_config = 1;
+      standard_commands_[*channel_iter].packet.clock_divider = static_cast<int16u>(16);
+      standard_commands_[*channel_iter].packet.SPI_config |= static_cast<int16u>(0);
+      standard_commands_[*channel_iter].packet.SPI_config |= 0;
+      standard_commands_[*channel_iter].packet.SPI_config |= 0;
+      standard_commands_[*channel_iter].packet.inter_byte_gap = 0;
+      cmd_pin_output_states_pre_ = 0;
+      cmd_pin_output_states_post_ |= chip_select_masks_[*channel_iter];
+    }
   }
   // the command will be sent at the end of the iteration,
   // removing the command from the queue but not freeing the
   // memory yet
-  if (status_queue_[spi_channel_].size() > 0)
+  sensor_msg_.data.resize(spi_channel_.size());
+  for (std::vector<int>::const_iterator channel_iter = spi_channel_.begin(); channel_iter != spi_channel_.end();
+        ++channel_iter)
   {
-    if (status_queue_[spi_channel_].front().second == NULL)
+    if (status_queue_[*channel_iter].size() > 0)
     {
-      if (new_command)
+      if (status_queue_[*channel_iter].front().second == NULL)
       {
-        new_command = false;
-        spi_->nullify_command(spi_channel_);
-      }
+        if (new_command)
+        {
+          new_command = false;
+          spi_->nullify_command(*channel_iter);
+        }
 
-      // the response has not been received. If the command type is NORMAL
-      // then the response can be updated (it's INVALID until the SPI responds)
-      if (spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL)
-      {
-        status_queue_[spi_channel_].front().second =
-                new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_channel_]);
-        unsigned int high_byte =
-            static_cast<unsigned int>(status_queue_[spi_channel_].front().second->data_bytes[0] & 0x3F);
-        unsigned int low_byte = static_cast<unsigned int>(status_queue_[spi_channel_].front().second->data_bytes[1]);
-        ROS_DEBUG_STREAM("sensor value is " << (high_byte << 8 | low_byte));
-        sensor_msg_.data = static_cast<double>((high_byte << 8 | low_byte) *360) / 16384;
-        sensor_data_publisher_.publish(sensor_msg_);
+        // the response has not been received. If the command type is NORMAL
+        // then the response can be updated (it's INVALID until the SPI responds)
+        if (spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL)
+        {
+          status_queue_[*channel_iter].front().second =
+                  new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[*channel_iter]);
+          unsigned int high_byte =
+              static_cast<unsigned int>(status_queue_[*channel_iter].front().second->data_bytes[0] & 0x3F);
+          unsigned int low_byte =
+              static_cast<unsigned int>(status_queue_[*channel_iter].front().second->data_bytes[1]);
+          ROS_DEBUG_STREAM("sensor value is " << (high_byte << 8 | low_byte));
+          // channel_iter - spi_channel_.begin() is the index of channel_iter in vector
+          sensor_msg_.data[channel_iter - spi_channel_.begin()] =
+              (static_cast<double>((high_byte << 8 | low_byte) *360) / 16384);
+        }
       }
+      status_queue_[*channel_iter].pop();
     }
-    status_queue_[spi_channel_].pop();
-  }
-  try
-  {
-    standard_commands_[spi_channel_].packet.data_bytes[0] = 0xFF;
-    standard_commands_[spi_channel_].packet.data_bytes[1] = 0xFF;
-    command_queue_[spi_channel_].push(&standard_commands_[spi_channel_]);
-  }
-  catch(...)
-  {
-    ROS_ERROR_STREAM("something bad happened");
-  }
-  try
-  {
-    status_queue_[spi_channel_].push(std::pair<SplittedSPICommand*, SPI_PACKET_IN*>());
-    status_queue_[spi_channel_].front().first = command_queue_[spi_channel_].front();
+    try
+    {
+      standard_commands_[*channel_iter].packet.data_bytes[0] = 0xFF;
+      standard_commands_[*channel_iter].packet.data_bytes[1] = 0xFF;
+      command_queue_[*channel_iter].push(&standard_commands_[*channel_iter]);
+    }
+    catch(...)
+    {
+      ROS_ERROR_STREAM("something bad happened");
+    }
+    try
+    {
+      status_queue_[*channel_iter].push(std::pair<SplittedSPICommand*, SPI_PACKET_IN*>());
+      status_queue_[*channel_iter].front().first = command_queue_[*channel_iter].front();
 
-    // now we copy the command to the hardware interface
-    copy_splitted_to_cmd_(spi_channel_);
+      // now we copy the command to the hardware interface
+      copy_splitted_to_cmd_(*channel_iter);
 
-    new_command = true;
+      new_command = true;
+    }
+    catch(...)
+    {
+      ROS_ERROR_STREAM("error while copy_splitted_to_cmd_");
+    }
+    command_queue_[*channel_iter].pop();
   }
-  catch(...)
-  {
-    ROS_ERROR_STREAM("error while copy_splitted_to_cmd_");
-  }
-  command_queue_[spi_channel_].pop();
+  sensor_data_publisher_.publish(sensor_msg_);
 }
-double SPISensorReadController::get_sensor_value()
+std::vector<double> SPISensorReadController::get_sensor_value()
 {
   return sensor_msg_.data;
 }
 
-int SPISensorReadController::get_spi_channel()
+std::vector<int> SPISensorReadController::get_spi_channel()
 {
   return spi_channel_;
 }
