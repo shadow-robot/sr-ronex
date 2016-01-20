@@ -72,8 +72,8 @@ bool SPISensorReadController::init(ros_ethercat_model::RobotState* robot, ros::N
     topic_name << "_" << *channel_iter;
   }
 
-  sensor_data_publisher_ = n.advertise<std_msgs::Float64MultiArray>(topic_name.str(), 1);
-
+  sensor_data_publisher_.init(n, topic_name.str(), 1);
+  publisher_counter_ = 0;
   first_run_ = true;
 
   return true;
@@ -161,7 +161,16 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
     }
     command_queue_[*channel_iter].pop();
   }
-  sensor_data_publisher_.publish(sensor_msg_);
+
+  if (publisher_counter_ % 10 == 0)
+  {
+    if(sensor_data_publisher_.trylock())
+    {
+      sensor_data_publisher_.msg_ = sensor_msg_;
+      sensor_data_publisher_.unlockAndPublish();
+    }
+  }
+  publisher_counter_++;
 }
 std::vector<double> SPISensorReadController::get_sensor_value()
 {

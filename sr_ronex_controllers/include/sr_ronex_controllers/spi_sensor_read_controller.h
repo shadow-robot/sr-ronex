@@ -56,7 +56,8 @@ private:
 
   std_msgs::Float64MultiArray sensor_msg_;
   std::vector<ros::ServiceServer> command_srv_;
-  ros::Publisher sensor_data_publisher_;
+  size_t publisher_counter_;
+  realtime_tools::RealtimePublisher<std_msgs::Float64MultiArray> sensor_data_publisher_;
   // vector containing one command per spi output.
   // Some parameters of these commands are updated through the dynamic reconfigure interface
   // The data packet is updated from the service.
