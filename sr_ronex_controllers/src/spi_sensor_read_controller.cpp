@@ -52,7 +52,7 @@ bool SPISensorReadController::init(ros_ethercat_model::RobotState* robot, ros::N
 
   if (!n.hasParam("SPI_sensor_channel"))
   {
-    ROS_WARN_STREAM("No SPI channel is defined. Will assumes a single channel " << default_spi_channel_);
+    ROS_WARN_STREAM("No SPI channel is defined. Will assume a single channel " << default_spi_channel_);
     spi_channel_.push_back(default_spi_channel_);
   }
   else
