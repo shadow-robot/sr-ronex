@@ -53,10 +53,12 @@ private:
   static const int default_spi_channel_;
   static const size_t sensor_message_length_;
   static const size_t spi_mode_;
+  static const double publish_rate_;
+
 
   std_msgs::Float64MultiArray sensor_msg_;
   std::vector<ros::ServiceServer> command_srv_;
-  ros::Publisher sensor_data_publisher_;
+  realtime_tools::RealtimePublisher<std_msgs::Float64MultiArray> sensor_data_publisher_;
   // vector containing one command per spi output.
   // Some parameters of these commands are updated through the dynamic reconfigure interface
   // The data packet is updated from the service.
@@ -64,6 +66,7 @@ private:
 
   std::vector<uint16_t> chip_select_masks_;
   bool first_run_;
+  ros::Time last_publish_time_;
 };
 }  // namespace ronex
 

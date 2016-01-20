@@ -105,7 +105,7 @@ void SrBoardDCMOTORSMALL::construct(EtherCAT_SlaveHandler *sh, int &start_addres
                                       command_size_,
                                       0x00,                     // Logical Start Bit
                                       0x07,                     // Logical End Bit
-                                      COMMAND_ADDRESS_02000009,          // Physical Start Address   (in ET1200 address space?)
+                                      COMMAND_ADDRESS_02000009,  // Physical Start Address  (in ET1200 address space?)
                                       0x00,                     // Physical Start Bit
                                       false,                    // Read Enable
                                       true,                     // Write Enable
