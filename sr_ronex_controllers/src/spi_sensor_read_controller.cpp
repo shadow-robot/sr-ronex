@@ -26,6 +26,7 @@
 #include <utility>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 PLUGINLIB_EXPORT_CLASS(ronex::SPISensorReadController, controller_interface::ControllerBase)
 
@@ -164,7 +165,7 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
 
   if (publisher_counter_ % 10 == 0)
   {
-    if(sensor_data_publisher_.trylock())
+    if (sensor_data_publisher_.trylock())
     {
       sensor_data_publisher_.msg_ = sensor_msg_;
       sensor_data_publisher_.unlockAndPublish();
