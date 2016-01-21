@@ -1,0 +1,33 @@
+<launch>
+  <!-- Allows to specify the ethernet interface to be used. It defaults to the value of the env var ETHERCAT_PORT -->
+  <arg name="ethercat_port" default="$(optenv ETHERCAT_PORT eth0)"/>
+  <arg name="robot_description" default="$(find sr_ronex_launch)/loaders/ronex.urdf.xacro"/>
+  <arg name="robot_description_param" default="robot_description"/>
+
+  <!-- Set to true for debugging -->
+  <arg name="debug" default="false"/>
+
+  <!-- Loads the robot description -->
+  <include file="$(find sr_ronex_launch)/loaders/load_ronex_model.launch">
+    <arg name="robot_description" value="$(arg robot_description)"/>
+    <arg name="robot_description_param" value="$(arg robot_description_param)"/>
+  </include>
+
+  <rosparam>
+    robot_hardware:
+    - ethercat_robot_hw
+    ethercat_robot_hw:
+      type: ros_ethercat_model/RosEthercat
+      robot_description_param: robot_description
+      ethercat_port: eth1
+  </rosparam>
+
+  <!-- etherCAT -->
+  <group if="$(arg debug)">
+      <node name="ronex" pkg="ros_control_robot" type="ros_control_robot" args="" output="screen" launch-prefix="gdb -ex run -args"/>
+  </group>
+  <group unless="$(arg debug)">
+      <node name="ronex" pkg="ros_control_robot" type="ros_control_robot" args="" output="screen" launch-prefix="ethercat_grant"/>
+  </group>
+
+</launch>
