@@ -1,0 +1,18 @@
+<launch>
+  <!-- Allows to specify the ethernet interface to be used. It defaults to the value of the env var ETHERCAT_PORT -->
+  <arg name="ethercat_port" default="$(optenv ETHERCAT_PORT eth0)" />
+  <arg name="robot_description" default="$(find sr_ronex_launch)/loaders/ronex.urdf.xacro"/>
+
+  <!-- Set to true for debugging -->
+  <arg name="debug" default="false"/>
+  	
+  <!-- Loads the robot description -->
+  <include file="$(find sr_ronex_launch)/launch/sr_ronex_no_controllers_ros_control_robot.launch">
+    <arg name="ethercat_port" value="$(arg ethercat_port)"/>
+    <arg name="robot_description" value="$(arg robot_description)"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+  <!-- Loads the passthrough controllers -->
+  <include file="$(find sr_ronex_launch)/loaders/passthrough_controllers.launch"/>
+</launch>
