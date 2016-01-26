@@ -47,13 +47,15 @@ public:
   std::vector<double> get_sensor_value();
   std::vector<int> get_spi_channel();
 
+protected:
+  ros::Time last_publish_time_;
+  static const double publish_rate_;
 
 private:
   std::vector<int> spi_channel_;
   static const int default_spi_channel_;
   static const size_t sensor_message_length_;
   static const size_t spi_mode_;
-  static const double publish_rate_;
 
 
   std_msgs::Float64MultiArray sensor_msg_;
@@ -66,7 +68,6 @@ private:
 
   std::vector<uint16_t> chip_select_masks_;
   bool first_run_;
-  ros::Time last_publish_time_;
 };
 }  // namespace ronex
 
