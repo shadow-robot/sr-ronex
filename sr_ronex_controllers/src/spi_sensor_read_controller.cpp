@@ -132,7 +132,7 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
           ROS_DEBUG_STREAM("sensor value is " << (high_byte << 8 | low_byte));
           // channel_iter - spi_channel_.begin() is the index of channel_iter in vector
           sensor_msg_.data[channel_iter - spi_channel_.begin()] =
-              (static_cast<double>((high_byte << 8 | low_byte) *360) / 16384);
+              (static_cast<double>((high_byte << 8 | low_byte) *2.0*M_PI) / 16384);
         }
       }
       status_queue_[*channel_iter].pop();
