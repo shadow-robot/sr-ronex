@@ -97,10 +97,11 @@ class TestSPIWithHardware():
         available_controllers = list_controllers()
 
         for ctrl in available_controllers.controller:
-            self.assertTrue(ctrl.name in self.controllers_list,
-                            msg="Available controllers: " + str(available_controllers.controller) +
-                                " / expected controller: " + str(self.controllers_list))
-
+            if ctrl.name not in self.controllers_list:
+                rospy.loginfo("Available controllers: " + str(available_controllers.controller) +
+                    " / expected controller: " + str(self.controllers_list))
+                return False
+        
 
     def test_all_cases(self):
 
@@ -209,4 +210,5 @@ if __name__ == '__main__':
     rospy.init_node('sr_spi_test')
     spi_test = TestSPIWithHardware()
     spi_test.setUp()
-    
+    if spi_test.test_if_controllers_are_loaded():
+        rospy.loginfo("Controllers loaded")
