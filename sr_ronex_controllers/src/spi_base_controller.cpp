@@ -80,6 +80,16 @@ bool SPIBaseController::pre_init_(ros_ethercat_model::RobotState* robot, ros::No
     return false;
   }
 
+  // prealocating memory for the command and statues queues
+  for (uint16_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
+  {
+    command_queue_[spi_index] = boost::circular_buffer<SplittedSPICommand>(NUM_BUFFER_ELEMENTS);
+    status_queue_[spi_index] = boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > >(NUM_BUFFER_ELEMENTS);
+    for (uint16_t buffer_index = 0; buffer_index < NUM_BUFFER_ELEMENTS; ++buffer_index)
+    {
+      status_queue_[spi_index][buffer_index].second.received = false;
+    }
+  }
   return true;
 }
 
@@ -98,10 +108,12 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
     // Check if we need to update a status
     if ( status_queue_[spi_index].size() > 0)
     {
-      if ( status_queue_[spi_index].front().second == NULL )
+      ROS_ERROR_STREAM("Updating spi_index: "<< spi_index <<" new command: "<< new_command << " len=" << status_queue_[spi_index].size());
+      if ( status_queue_[spi_index].back().second.received == false )
       {
         if (new_command)
         {
+          ROS_ERROR_STREAM("new command true");
           new_command = false;
           spi_->nullify_command(spi_index);
           continue;
@@ -111,22 +123,31 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
         // then the response can be updated (it's INVALID until the SPI responds)
         if ( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL )
         {
-          status_queue_[spi_index].front().second =
-                  new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
+          ROS_ERROR_STREAM("command normal");
+          status_queue_[spi_index].back().second.received = true;
+          status_queue_[spi_index].back().second.packet = SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
         }
+        else
+          ROS_ERROR_STREAM("command NOT normal");
       }
+      else
+        ROS_ERROR_STREAM("status not null");
     }
     // if no available command then send the NULL command
     if ( command_queue_[spi_index].empty() )
+    {
       spi_->nullify_command(spi_index);
+    }
     else
     {
       // sending the available command
 
-      // first we add the pointer to the command onto the status queue - the status is still NULL
+      // first we add the pointer to the command onto the status queue - the status received flag is still false
       // as we haven't received the response yet.
-      status_queue_[spi_index].push(std::pair<SplittedSPICommand*, SPI_PACKET_IN*>());
-      status_queue_[spi_index].front().first = command_queue_[spi_index].front();
+      ROS_ERROR_STREAM("sending available cmd");
+      status_queue_[spi_index].push_back(std::pair<SplittedSPICommand, SPI_PACKET_IN>());
+      status_queue_[spi_index].back().first = command_queue_[spi_index].front();
+      status_queue_[spi_index].back().second.received = false;
 
       // now we copy the command to the hardware interface
       copy_splitted_to_cmd_(spi_index);
@@ -136,7 +157,8 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
       // the command will be sent at the end of the iteration,
       // removing the command from the queue but not freeing the
       // memory yet
-      command_queue_[spi_index].pop();
+      ROS_ERROR_STREAM("pop cmd");
+      command_queue_[spi_index].pop_front();
     }
   }
 }
@@ -167,13 +189,13 @@ void SPIBaseController::copy_splitted_to_cmd_(uint16_t spi_index)
   spi_->command_->pin_output_states_post |= (cmd_pin_output_states_post_ & bit_mask_one_CS_bit);
 
   // copying the packet data
-  spi_->command_->spi_out[spi_index].clock_divider = command_queue_[spi_index].front()->packet.clock_divider;
-  spi_->command_->spi_out[spi_index].SPI_config = command_queue_[spi_index].front()->packet.SPI_config;
-  spi_->command_->spi_out[spi_index].inter_byte_gap = command_queue_[spi_index].front()->packet.inter_byte_gap;
-  spi_->command_->spi_out[spi_index].num_bytes = command_queue_[spi_index].front()->packet.num_bytes;
+  spi_->command_->spi_out[spi_index].clock_divider = command_queue_[spi_index].front().packet.clock_divider;
+  spi_->command_->spi_out[spi_index].SPI_config = command_queue_[spi_index].front().packet.SPI_config;
+  spi_->command_->spi_out[spi_index].inter_byte_gap = command_queue_[spi_index].front().packet.inter_byte_gap;
+  spi_->command_->spi_out[spi_index].num_bytes = command_queue_[spi_index].front().packet.num_bytes;
 
   for (size_t i = 0; i < SPI_TRANSACTION_MAX_SIZE; ++i)
-    spi_->command_->spi_out[spi_index].data_bytes[i] = command_queue_[spi_index].front()->packet.data_bytes[i];
+    spi_->command_->spi_out[spi_index].data_bytes[i] = command_queue_[spi_index].front().packet.data_bytes[i];
 }
 }  // namespace ronex
 

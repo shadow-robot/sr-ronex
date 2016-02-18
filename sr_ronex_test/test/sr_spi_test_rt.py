@@ -72,7 +72,6 @@ class TestSPIWithHardware():
             rospy.loginfo('Error. Connect a ronex bridge with at least 1 spi module.')
 
         self.ronex_ids = [self.ronex_devs[0]['ronex_id']]
-        print "self.ronex_ids", self.ronex_ids
 
     def generalIOState_callback(self, data):
         # Note that the type of data.analogue is tuple.
@@ -95,69 +94,25 @@ class TestSPIWithHardware():
     def test_if_controllers_are_loaded(self):
         list_controllers = rospy.ServiceProxy('controller_manager/list_controllers', ListControllers)
         available_controllers = list_controllers()
-
+        print available_controllers
         for ctrl in available_controllers.controller:
             if ctrl.name not in self.controllers_list:
                 rospy.loginfo("Available controllers: " + str(available_controllers.controller) +
                     " / expected controller: " + str(self.controllers_list))
                 return False
         
+        return True
 
-    def test_all_cases(self):
-
-        # Test 1, turn on all the digital outputs
-        self.run_test_case([True, True, True, True, True, True],
-                           [[3947, 3942, 3180, 3941], [3951, 3940, 3180, 3940]], [3563, 3542, 3540, 3535, 3544, 3761])
-#         # Test 2, turn off DIO_0
-#         self.run_test_case([False, True, True, True, True, True],
-#                            [[3950, 3830, 2415, 3941], [3951, 327, 3180, 3831]], [3563, 3542, 3540, 3438, 3445, 671])
-#         # Test 3, turn off DIO_1
-#         self.run_test_case([True, False, True, True, True, True],
-#                            [[3949, 326, 2415, 3941], [3951, 3833, 3188, 3831]], [3544, 3546, 3545, 3439, 310, 3666])
-#         # Test 4, turn off DIO_2
-#         self.run_test_case([True, True, False, True, True, True],
-#                            [[3950, 3832, 2415, 3943], [3949, 3833, 3187, 325]], [3547, 3546, 3545, 310, 3445, 3668])
-#         # Test 5, turn off DIO_3
-#         self.run_test_case([True, True, True, False, True, True],
-#                            [[3842, 3942, 3180, 327], [3842, 3945, 2423, 3942]], [3449, 3449, 312, 3534, 3542, 3762])
-#         # Test 6, turn off DIO_4
-#         self.run_test_case([True, True, True, True, False, True],
-#                            [[3842, 3944, 3181, 3831], [322, 3943, 2420, 3941]], [3450, 306, 3442, 3534, 3544, 3758])
-#         # Test 7, turn off DIO_5
-#         self.run_test_case([True, True, True, True, True, False],
-#                            [[323, 3943, 3180, 3831], [3843, 3943, 2419, 3942]], [308, 3446, 3445, 3536, 3542, 3761])
-
-    def run_test_case(self, digital_states, expected_as, expected_analogue):
+    def run_one_case(self, digital_states, expected_as):
         success = True
         self.set_DIO_states(digital_states)
         # check channel 0 of all the spi modules
         results = []
-        for adc_number in range(len(self.spi_srv)):
-            results.append(self.read_adc(adc_number, 0))
-            rospy.loginfo("Testing channel 0 of " + str(adc_number) + "failed (delta = " + 
-                          str(results[adc_number] - expected_as[0][adc_number]) +
-                          " / received = " + str(results[adc_number])+
-                          " / expected = " + str(expected_as[0][adc_number]))
-#             self.assertAlmostEquals(results[adc_number], expected_as[0][adc_number],
-#                                     msg="Testing channel 0 of " + str(adc_number) + "failed (delta = " +
-#                                         str(results[adc_number] - expected_as[0][adc_number]) + " / received = " +
-#                                         str(results[adc_number]) + ").", delta=45)
-
-        # check channel 1 of all the spi modules
-        results = []
-        for adc_number in range(len(self.spi_srv)):
-            results.append(self.read_adc(adc_number, 1))
-            self.assertAlmostEquals(results[adc_number], expected_as[1][adc_number],
-                                    msg="Testing channel 1 of " + str(adc_number) + "failed (delta = " +
-                                        str(results[adc_number] - expected_as[1][adc_number]) + " / received = " +
-                                        str(results[adc_number]) + ").", delta=45)
-
-        # check all the analogue inputs
-        for analogue_id in range(0, 6):
-            self.assertAlmostEquals(self.analogue_in[analogue_id], expected_analogue[analogue_id],
-                                    msg="Testing analogue input" + str(analogue_id) + "failed (delta = " +
-                                        str(self.analogue_in[analogue_id] - expected_analogue[analogue_id]) +
-                                        " / received = " + str(self.analogue_in[analogue_id]) + ").", delta=45)
+        #for adc_number in range(len(self.spi_srv)):
+        adc_number = 0
+        results.append(self.read_adc(adc_number, 0))
+        
+        rospy.loginfo("received = " + str(results[adc_number]))
 
     def set_DIO_states(self, digital_states):
         # set pre / post states
@@ -190,7 +145,7 @@ class TestSPIWithHardware():
         spi_res = None
         # The SPI response is generated only after the first packet is
         # sent so we need to send a message twice.
-        for i in range(2):
+        for i in range(1):
             try:
                 spi_res = self.spi_srv[adc_number](req)
             except rospy.ServiceException as exc:
@@ -212,3 +167,8 @@ if __name__ == '__main__':
     spi_test.setUp()
     if spi_test.test_if_controllers_are_loaded():
         rospy.loginfo("Controllers loaded")
+    else:
+        rospy.loginfo("No Controllers loaded")
+    for i in range(10):
+        spi_test.run_one_case([False, True, True, True, True, True],
+                              [[3947, 3942, 3180, 3941], [3951, 3940, 3180, 3940]])

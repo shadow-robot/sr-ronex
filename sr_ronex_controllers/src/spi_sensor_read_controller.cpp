@@ -111,7 +111,7 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
   {
     if (status_queue_[*channel_iter].size() > 0)
     {
-      if (status_queue_[*channel_iter].front().second == NULL)
+      if (status_queue_[spi_index].back().second.received == false)
       {
         if (new_command)
         {
@@ -123,25 +123,26 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
         // then the response can be updated (it's INVALID until the SPI responds)
         if (spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL)
         {
-          status_queue_[*channel_iter].front().second =
-                  new SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[*channel_iter]);
+          status_queue_[*channel_iter].back().second.received = true;
+          status_queue_[*channel_iter].back().second.packet =
+              SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[*channel_iter]);
           unsigned int high_byte =
-              static_cast<unsigned int>(status_queue_[*channel_iter].front().second->data_bytes[0] & 0x3F);
+              static_cast<unsigned int>(status_queue_[*channel_iter].back().second.data_bytes[0] & 0x3F);
           unsigned int low_byte =
-              static_cast<unsigned int>(status_queue_[*channel_iter].front().second->data_bytes[1]);
+              static_cast<unsigned int>(status_queue_[*channel_iter].back().second.data_bytes[1]);
           ROS_DEBUG_STREAM("sensor value is " << (high_byte << 8 | low_byte));
           // channel_iter - spi_channel_.begin() is the index of channel_iter in vector
           sensor_msg_.data[channel_iter - spi_channel_.begin()] =
               (static_cast<double>((high_byte << 8 | low_byte) *2.0*M_PI) / 16384);
         }
       }
-      status_queue_[*channel_iter].pop();
+      status_queue_[*channel_iter].pop_front();
     }
     try
     {
       standard_commands_[*channel_iter].packet.data_bytes[0] = 0xFF;
       standard_commands_[*channel_iter].packet.data_bytes[1] = 0xFF;
-      command_queue_[*channel_iter].push(&standard_commands_[*channel_iter]);
+      command_queue_[*channel_iter].push_back(standard_commands_[*channel_iter]);
     }
     catch(...)
     {
@@ -149,8 +150,9 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
     }
     try
     {
-      status_queue_[*channel_iter].push(std::pair<SplittedSPICommand*, SPI_PACKET_IN*>());
-      status_queue_[*channel_iter].front().first = command_queue_[*channel_iter].front();
+      status_queue_[*channel_iter].push_back(std::pair<SplittedSPICommand*, SPI_PACKET_IN*>());
+      status_queue_[*channel_iter].back().first = command_queue_[*channel_iter].front();
+      status_queue_[*channel_iter].back().second.received = false;
 
       // now we copy the command to the hardware interface
       copy_splitted_to_cmd_(*channel_iter);
@@ -161,7 +163,7 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
     {
       ROS_ERROR_STREAM("error while copy_splitted_to_cmd_");
     }
-    command_queue_[*channel_iter].pop();
+    command_queue_[*channel_iter].pop_front();
   }
 
   if (publish_rate_ > 0.0 && last_publish_time_ + ros::Duration(1.0/publish_rate_) < time)

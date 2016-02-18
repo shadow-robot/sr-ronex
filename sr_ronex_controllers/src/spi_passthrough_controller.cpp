@@ -75,7 +75,7 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
   }
 
   // pushing to the command queue to be sent through etherCAT
-  command_queue_[spi_out_index].push(&standard_commands_[spi_out_index]);
+  command_queue_[spi_out_index].push_back(standard_commands_[spi_out_index]);
 
   // wait for the response to be received
   bool not_received = true;
@@ -84,41 +84,39 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
     // sleep roughly 1ms to wait for new etherCAT packet to be received.
     usleep(1000);
 
-    for (size_t i = 0; i < status_queue_.size(); ++i)
+    if (!status_queue_[spi_out_index].empty())
     {
-      if (!status_queue_[i].empty())
+      if ( status_queue_[spi_out_index].front().first == standard_commands_[spi_out_index] )
       {
-        if ( status_queue_[i].front().first == &standard_commands_[spi_out_index] )
+        if ( status_queue_[spi_out_index].front().second != NULL)
         {
-          if ( status_queue_[i].front().second != NULL)
+          // found the status command corresponding to the command we sent
+          // updating the response
+          for (size_t j = 0; j < req.data.size(); ++j)
           {
-            // found the status command corresponding to the command we sent
-            // updating the response
-            for (size_t j = 0; j < req.data.size(); ++j)
+            std::ostringstream hex;
+            try
             {
-              std::ostringstream hex;
-              try
-              {
-                hex << static_cast<unsigned int>(status_queue_[i].front().second->data_bytes[j]);
-              }
-                catch(...)
-              {
-                ROS_ERROR_STREAM("Can't cast to uint.");
-                hex << "bad_data";
-              }
-              res.data.push_back(hex.str());
+              hex << static_cast<unsigned int>(status_queue_[spi_out_index].front().second.data_bytes[j]);
             }
-            not_received = false;
-
-            // we used the status (sent it back to the user through the service
-            // response -> popping from the queue
-            status_queue_[i].pop();
-
-            break;
+              catch(...)
+            {
+              ROS_ERROR_STREAM("Can't cast to uint.");
+              hex << "bad_data";
+            }
+            res.data.push_back(hex.str());
           }
+          not_received = false;
+
+          // we used the status (sent it back to the user through the service
+          // response -> popping from the queue
+          status_queue_[spi_out_index].pop_front();
+
+          break;
         }
       }
     }
+
   }
   return true;
 }
