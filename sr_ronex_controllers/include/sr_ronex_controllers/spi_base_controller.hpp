@@ -37,7 +37,7 @@
 #include <vector>
 #include <boost/circular_buffer.hpp>
 
-#define NUM_BUFFER_ELEMENTS 32
+#define NUM_BUFFER_ELEMENTS 100
 
 namespace ronex
 {
@@ -57,6 +57,7 @@ struct SplittedSPICommand
 struct SPIResponse
 {
   bool received;
+  int loop_number;
   SPI_PACKET_IN packet;
 };
 

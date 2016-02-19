@@ -106,31 +106,33 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
     // Check if we need to update a status
     if ( status_queue_[spi_index].size() > 0)
     {
-      //ROS_ERROR_STREAM("Updating spi_index: "<< spi_index <<" new command: "<< new_command[spi_index] << " len=" << status_queue_[spi_index].size());
+      ROS_ERROR_STREAM("Updating spi_index: "<< spi_index <<" new command: "<< new_command[spi_index] << " len=" << status_queue_[spi_index].size());
       //ROS_ERROR_STREAM("Response received:" << status_queue_[spi_index].back().second.received);
-      if ( status_queue_[spi_index].back().second.received == false )
+      ROS_ERROR_STREAM("loop_count_"<< loop_count_);
+      if ( status_queue_[spi_index].front().second.received == false )
       {
-        if (new_command[spi_index])
-        {
-          //ROS_ERROR_STREAM("new command true");
-          new_command[spi_index] = false;
-          spi_->nullify_command(spi_index);
-          continue;
-        }
+        ROS_ERROR_STREAM("loop number:"<< status_queue_[spi_index].back().second.loop_number);
+//        if (new_command[spi_index])
+//        {
+//          ROS_ERROR_STREAM("new command true");
+//          new_command[spi_index] = false;
+//          spi_->nullify_command(spi_index);
+//          continue;
+//        }
 
         // the response has not been received. If the command type is NORMAL
         // then the response can be updated (it's INVALID until the SPI responds)
         if ( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL )
         {
-          //ROS_ERROR_STREAM("command normal");
+          ROS_ERROR_STREAM("command normal");
           status_queue_[spi_index].back().second.received = true;
           status_queue_[spi_index].back().second.packet = SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
         }
-        //else
-        //  ROS_ERROR_STREAM("command NOT normal");
+        else
+          ROS_ERROR_STREAM("command NOT normal");
       }
-      //else
-      //  ROS_ERROR_STREAM("status not null");
+      else
+        ROS_ERROR_STREAM("status not null");
     }
     // if no available command then send the NULL command
     if ( command_queue_[spi_index].empty() )
@@ -143,10 +145,11 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
 
       // first we add the pointer to the command onto the status queue - the status received flag is still false
       // as we haven't received the response yet.
-      //ROS_ERROR_STREAM("sending available cmd");
+      ROS_ERROR_STREAM("sending available cmd");
       status_queue_[spi_index].push(std::pair<SplittedSPICommand, SPIResponse>());
       status_queue_[spi_index].back().first = command_queue_[spi_index].front();
       status_queue_[spi_index].back().second.received = false;
+      status_queue_[spi_index].back().second.loop_number = loop_count_;
 
       // now we copy the command to the hardware interface
       copy_splitted_to_cmd_(spi_index);
@@ -156,10 +159,11 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
       // the command will be sent at the end of the iteration,
       // removing the command from the queue but not freeing the
       // memory yet
-      //ROS_ERROR_STREAM("pop cmd");
+      ROS_ERROR_STREAM("pop cmd");
       command_queue_[spi_index].pop();
     }
   }
+  loop_count_++;
 }
 
 void SPIBaseController::copy_splitted_to_cmd_(uint16_t spi_index)

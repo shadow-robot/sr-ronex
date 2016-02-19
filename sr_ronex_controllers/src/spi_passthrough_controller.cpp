@@ -86,7 +86,7 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
 
     if (status_queue_[spi_out_index].size() > 0)
     {
-      //ROS_ERROR_STREAM("PT: sq not empty. size: "<<status_queue_[spi_out_index].size());
+      ROS_ERROR_STREAM("PT: sq not empty. size: "<<status_queue_[spi_out_index].size());
       // check if the commands are the same comparing the data_bytes array
       if (std::equal(status_queue_[spi_out_index].front().first.packet.data_bytes,
           status_queue_[spi_out_index].front().first.packet.data_bytes +
@@ -94,10 +94,10 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
           sizeof *status_queue_[spi_out_index].front().first.packet.data_bytes,
           standard_commands_[spi_out_index].packet.data_bytes))
       {
-        //ROS_ERROR_STREAM("PT: command found");
+        ROS_ERROR_STREAM("PT: command found");
         if ( status_queue_[spi_out_index].front().second.received == true)
         {
-          //ROS_ERROR_STREAM("PT: response is true");
+          ROS_ERROR_STREAM("PT: response is true");
           // found the status command corresponding to the command we sent
           // updating the response
           for (size_t j = 0; j < req.data.size(); ++j)
@@ -118,8 +118,9 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
 
           // we used the status (sent it back to the user through the service
           // response -> popping from the queue
+          ROS_ERROR_STREAM("just before pop.");
           status_queue_[spi_out_index].pop();
-
+          ROS_ERROR_STREAM("just after pop.");
           break;
         }
       }
