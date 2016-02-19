@@ -108,11 +108,10 @@ class TestSPIWithHardware():
         self.set_DIO_states(digital_states)
         # check channel 0 of all the spi modules
         results = []
-        #for adc_number in range(len(self.spi_srv)):
-        adc_number = 0
-        results.append(self.read_adc(adc_number, 0))
-        
-        rospy.loginfo("received = " + str(results[adc_number]))
+        for adc_number in range(len(self.spi_srv)):
+            #adc_number = 1
+            results.append(self.read_adc(adc_number, 0))
+            rospy.loginfo("received = " + str(results))
 
     def set_DIO_states(self, digital_states):
         # set pre / post states
@@ -149,8 +148,8 @@ class TestSPIWithHardware():
             try:
                 spi_res = self.spi_srv[adc_number](req)
             except rospy.ServiceException as exc:
-                self.assertTrue(False, "Failed to send data to "+str(adc_number) +
-                                " channel "+str(channel_number)+" -> " + str(exc))
+                rospy.loginfo("Failed to send data to "+str(adc_number) +
+                              " channel "+str(channel_number)+" -> " + str(exc))
         result = int(spi_res.data[1])
         result <<= 8
         result |= int(spi_res.data[2])
@@ -169,6 +168,6 @@ if __name__ == '__main__':
         rospy.loginfo("Controllers loaded")
     else:
         rospy.loginfo("No Controllers loaded")
-    for i in range(10):
+    for i in range(20):
         spi_test.run_one_case([False, True, True, True, True, True],
                               [[3947, 3942, 3180, 3941], [3951, 3940, 3180, 3940]])

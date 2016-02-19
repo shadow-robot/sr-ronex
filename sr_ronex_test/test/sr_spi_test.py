@@ -35,7 +35,6 @@ from time import sleep
 
 
 class TestSPIWithHardware(unittest.TestCase):
-class TestSPIWithHardware(unittest.TestCase):
     '''
     A class used to test the Shadow Robot SPI HW.
     '''
@@ -99,30 +98,29 @@ class TestSPIWithHardware(unittest.TestCase):
                             msg="Available controllers: " + str(available_controllers.controller) +
                                 " / expected controller: " + str(self.controllers_list))
 
-
     def test_all_cases(self):
 
         # Test 1, turn on all the digital outputs
         self.run_test_case([True, True, True, True, True, True],
                            [[3947, 3942, 3180, 3941], [3951, 3940, 3180, 3940]], [3563, 3542, 3540, 3535, 3544, 3761])
-#         # Test 2, turn off DIO_0
-#         self.run_test_case([False, True, True, True, True, True],
-#                            [[3950, 3830, 2415, 3941], [3951, 327, 3180, 3831]], [3563, 3542, 3540, 3438, 3445, 671])
-#         # Test 3, turn off DIO_1
-#         self.run_test_case([True, False, True, True, True, True],
-#                            [[3949, 326, 2415, 3941], [3951, 3833, 3188, 3831]], [3544, 3546, 3545, 3439, 310, 3666])
-#         # Test 4, turn off DIO_2
-#         self.run_test_case([True, True, False, True, True, True],
-#                            [[3950, 3832, 2415, 3943], [3949, 3833, 3187, 325]], [3547, 3546, 3545, 310, 3445, 3668])
-#         # Test 5, turn off DIO_3
-#         self.run_test_case([True, True, True, False, True, True],
-#                            [[3842, 3942, 3180, 327], [3842, 3945, 2423, 3942]], [3449, 3449, 312, 3534, 3542, 3762])
-#         # Test 6, turn off DIO_4
-#         self.run_test_case([True, True, True, True, False, True],
-#                            [[3842, 3944, 3181, 3831], [322, 3943, 2420, 3941]], [3450, 306, 3442, 3534, 3544, 3758])
-#         # Test 7, turn off DIO_5
-#         self.run_test_case([True, True, True, True, True, False],
-#                            [[323, 3943, 3180, 3831], [3843, 3943, 2419, 3942]], [308, 3446, 3445, 3536, 3542, 3761])
+        # Test 2, turn off DIO_0
+        self.run_test_case([False, True, True, True, True, True],
+                           [[3950, 3830, 2415, 3941], [3951, 327, 3180, 3831]], [3563, 3542, 3540, 3438, 3445, 671])
+        # Test 3, turn off DIO_1
+        self.run_test_case([True, False, True, True, True, True],
+                           [[3949, 326, 2415, 3941], [3951, 3833, 3188, 3831]], [3544, 3546, 3545, 3439, 310, 3666])
+        # Test 4, turn off DIO_2
+        self.run_test_case([True, True, False, True, True, True],
+                           [[3950, 3832, 2415, 3943], [3949, 3833, 3187, 325]], [3547, 3546, 3545, 310, 3445, 3668])
+        # Test 5, turn off DIO_3
+        self.run_test_case([True, True, True, False, True, True],
+                           [[3842, 3942, 3180, 327], [3842, 3945, 2423, 3942]], [3449, 3449, 312, 3534, 3542, 3762])
+        # Test 6, turn off DIO_4
+        self.run_test_case([True, True, True, True, False, True],
+                           [[3842, 3944, 3181, 3831], [322, 3943, 2420, 3941]], [3450, 306, 3442, 3534, 3544, 3758])
+        # Test 7, turn off DIO_5
+        self.run_test_case([True, True, True, True, True, False],
+                           [[323, 3943, 3180, 3831], [3843, 3943, 2419, 3942]], [308, 3446, 3445, 3536, 3542, 3761])
 
     def run_test_case(self, digital_states, expected_as, expected_analogue):
         success = True
@@ -131,14 +129,10 @@ class TestSPIWithHardware(unittest.TestCase):
         results = []
         for adc_number in range(len(self.spi_srv)):
             results.append(self.read_adc(adc_number, 0))
-            rospy.loginfo("Testing channel 0 of " + str(adc_number) + "failed (delta = " + 
-                          str(results[adc_number] - expected_as[0][adc_number]) +
-                          " / received = " + str(results[adc_number])+
-                          " / expected = " + str(expected_as[0][adc_number]))
-#             self.assertAlmostEquals(results[adc_number], expected_as[0][adc_number],
-#                                     msg="Testing channel 0 of " + str(adc_number) + "failed (delta = " +
-#                                         str(results[adc_number] - expected_as[0][adc_number]) + " / received = " +
-#                                         str(results[adc_number]) + ").", delta=45)
+            self.assertAlmostEquals(results[adc_number], expected_as[0][adc_number],
+                                    msg="Testing channel 0 of " + str(adc_number) + "failed (delta = " +
+                                        str(results[adc_number] - expected_as[0][adc_number]) + " / received = " +
+                                        str(results[adc_number]) + ").", delta=45)
 
         # check channel 1 of all the spi modules
         results = []
