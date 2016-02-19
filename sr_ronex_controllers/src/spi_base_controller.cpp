@@ -29,7 +29,7 @@
 namespace ronex
 {
 SPIBaseController::SPIBaseController()
-  : loop_count_(0), command_queue_(NUM_SPI_OUTPUTS), status_queue_(NUM_SPI_OUTPUTS)
+  : loop_count_(0), command_queue_(NUM_SPI_OUTPUTS), status_queue_(NUM_SPI_OUTPUTS), new_command(NUM_SPI_OUTPUTS)
 {}
 
 bool SPIBaseController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
@@ -83,12 +83,10 @@ bool SPIBaseController::pre_init_(ros_ethercat_model::RobotState* robot, ros::No
   // prealocating memory for the command and statues queues
   for (uint16_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
   {
-    command_queue_[spi_index] = boost::circular_buffer<SplittedSPICommand>(NUM_BUFFER_ELEMENTS);
-    status_queue_[spi_index] = boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > >(NUM_BUFFER_ELEMENTS);
-    for (uint16_t buffer_index = 0; buffer_index < NUM_BUFFER_ELEMENTS; ++buffer_index)
-    {
-      status_queue_[spi_index][buffer_index].second.received = false;
-    }
+    std::queue<int, boost::circular_buffer<SplittedSPICommand> > cq(boost::circular_buffer<SplittedSPICommand>(NUM_BUFFER_ELEMENTS));
+    command_queue_[spi_index] = cq;
+    std::queue<int, boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > > > sq(boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > >(NUM_BUFFER_ELEMENTS));
+    status_queue_[spi_index] = sq;
   }
   return true;
 }
@@ -108,13 +106,13 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
     // Check if we need to update a status
     if ( status_queue_[spi_index].size() > 0)
     {
-      ROS_ERROR_STREAM("Updating spi_index: "<< spi_index <<" new command: "<< new_command << " len=" << status_queue_[spi_index].size());
+      ROS_ERROR_STREAM("Updating spi_index: "<< spi_index <<" new command: "<< new_command[spi_index] << " len=" << status_queue_[spi_index].size());
       if ( status_queue_[spi_index].back().second.received == false )
       {
-        if (new_command)
+        if (new_command[spi_index])
         {
           ROS_ERROR_STREAM("new command true");
-          new_command = false;
+          new_command[spi_index] = false;
           spi_->nullify_command(spi_index);
           continue;
         }
@@ -145,20 +143,20 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
       // first we add the pointer to the command onto the status queue - the status received flag is still false
       // as we haven't received the response yet.
       ROS_ERROR_STREAM("sending available cmd");
-      status_queue_[spi_index].push_back(std::pair<SplittedSPICommand, SPI_PACKET_IN>());
+      status_queue_[spi_index].push(std::pair<SplittedSPICommand, SPIResponse>());
       status_queue_[spi_index].back().first = command_queue_[spi_index].front();
       status_queue_[spi_index].back().second.received = false;
 
       // now we copy the command to the hardware interface
       copy_splitted_to_cmd_(spi_index);
 
-      new_command = true;
+      new_command[spi_index] = true;
 
       // the command will be sent at the end of the iteration,
       // removing the command from the queue but not freeing the
       // memory yet
       ROS_ERROR_STREAM("pop cmd");
-      command_queue_[spi_index].pop_front();
+      command_queue_[spi_index].pop();
     }
   }
 }
