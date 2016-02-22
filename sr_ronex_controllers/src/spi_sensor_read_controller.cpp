@@ -38,7 +38,7 @@ const size_t SPISensorReadController::spi_mode_ = 1;
 const double SPISensorReadController::publish_rate_ = 100;
 
 
-bool SPISensorReadController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
+bool SPISensorReadController::init(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n)
 {
   if ( !pre_init_(robot, n) )
     return false;

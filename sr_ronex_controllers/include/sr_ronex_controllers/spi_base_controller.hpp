@@ -27,7 +27,7 @@
 #include <ros/node_handle.h>
 
 #include <controller_interface/controller.h>
-#include <ros_ethercat_model/robot_state.hpp>
+#include <ros_ethercat_model/robot_state_interface.hpp>
 #include <sr_ronex_hardware_interface/spi_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
@@ -52,12 +52,12 @@ struct SplittedSPICommand
 };
 
 class SPIBaseController
-  : public controller_interface::Controller<ros_ethercat_model::RobotState>
+  : public controller_interface::Controller<ros_ethercat_model::RobotStateInterface>
 {
 public:
   SPIBaseController();
 
-  virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+  virtual bool init(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n);
 
   virtual void starting(const ros::Time&);
 
@@ -82,7 +82,7 @@ protected:
   uint16_t     cmd_pin_output_states_pre_;
   uint16_t     cmd_pin_output_states_post_;
 
-  bool pre_init_(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+  bool pre_init_(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n);
 
   void copy_splitted_to_cmd_(uint16_t spi_index);
 protected:

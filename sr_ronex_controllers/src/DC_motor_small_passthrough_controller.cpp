@@ -35,7 +35,7 @@ DCMotorSmallPassthroughController::DCMotorSmallPassthroughController()
 {
 }
 
-bool DCMotorSmallPassthroughController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
+bool DCMotorSmallPassthroughController::init(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n)
 {
   assert(robot);
   node_ = n;
@@ -70,7 +70,19 @@ bool DCMotorSmallPassthroughController::init(ros_ethercat_model::RobotState* rob
     }
   }
 
-  dc_motor_small_ = static_cast<ronex::DCMotor*>(robot->getCustomHW(path));
+  std::string robot_state_name;
+  node_.param<std::string>("robot_state_name", robot_state_name, "unique_robot_hw");
+
+  try
+  {
+    dc_motor_small_ = static_cast<ronex::DCMotor*>(robot->getHandle(robot_state_name).getState()->getCustomHW(path));
+  }
+  catch(const hardware_interface::HardwareInterfaceException& e)
+  {
+    ROS_ERROR_STREAM("Could not find robot state: " << robot_state_name << " Not loading the controller. " << e.what());
+    return false;
+  }
+
   if ( dc_motor_small_ == NULL)
   {
     ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");

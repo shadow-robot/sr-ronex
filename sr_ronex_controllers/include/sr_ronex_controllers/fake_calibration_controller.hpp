@@ -28,7 +28,7 @@
 #include <ros/node_handle.h>
 
 #include <boost/smart_ptr.hpp>
-#include "ros_ethercat_model/robot_state.hpp"
+#include "ros_ethercat_model/robot_state_interface.hpp"
 #include "realtime_tools/realtime_publisher.h"
 #include "std_msgs/Bool.h"
 #include <controller_interface/controller.h>
@@ -38,12 +38,12 @@
 namespace ronex
 {
 class FakeCalibrationController
-  : public controller_interface::Controller<ros_ethercat_model::RobotState>
+  : public controller_interface::Controller<ros_ethercat_model::RobotStateInterface>
 {
 public:
   FakeCalibrationController();
 
-  virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+  virtual bool init(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n);
 
   /*!
    * \brief Issues commands to the joint. Should be called at regular intervals
@@ -51,7 +51,7 @@ public:
   virtual void update(const ros::Time&, const ros::Duration&);
 
 private:
-  ros_ethercat_model::RobotState* robot_;
+  ros_ethercat_model::RobotStateInterface* robot_;
   ros::NodeHandle node_;
   boost::shared_ptr<realtime_tools::RealtimePublisher<std_msgs::Bool> > pub_calibrated_;
   ros::Time last_publish_time_;

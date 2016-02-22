@@ -41,7 +41,7 @@ class SPISensorReadController
   : public SPIBaseController
 {
 public:
-  virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+  virtual bool init(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n);
 
   void update(const ros::Time&, const ros::Duration&);
   std::vector<double> get_sensor_value();
