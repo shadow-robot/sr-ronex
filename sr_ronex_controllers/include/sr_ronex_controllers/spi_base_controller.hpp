@@ -36,6 +36,7 @@
 #include <string>
 #include <vector>
 #include <boost/circular_buffer.hpp>
+#include <boost/thread/mutex.hpp>
 
 #define NUM_BUFFER_ELEMENTS 100
 
@@ -84,10 +85,9 @@ protected:
 
   int loop_count_;
 
-  ronex::SPI* spi_;
+  boost::mutex mutex;
 
-  //std::vector<std::queue<SplittedSPICommand*> > command_queue_;
-  //std::vector<std::queue<std::pair<SplittedSPICommand*, SPI_PACKET_IN* > > > status_queue_;
+  ronex::SPI* spi_;
 
   std::vector<std::queue<int, boost::circular_buffer<SplittedSPICommand> > > command_queue_;
   std::vector<std::queue<int, boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > > > > status_queue_;

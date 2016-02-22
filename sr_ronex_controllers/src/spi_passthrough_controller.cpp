@@ -74,8 +74,11 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
     }
   }
 
-  // pushing to the command queue to be sent through etherCAT
-  command_queue_[spi_out_index].push(standard_commands_[spi_out_index]);
+  {
+	  boost::mutex::scoped_lock lock(mutex);
+    // pushing to the command queue to be sent through etherCAT
+    command_queue_[spi_out_index].push(standard_commands_[spi_out_index]);
+  }
 
   // wait for the response to be received
   bool not_received = true;
