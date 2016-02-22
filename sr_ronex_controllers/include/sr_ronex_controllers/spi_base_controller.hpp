@@ -36,7 +36,6 @@
 #include <string>
 #include <vector>
 #include <boost/circular_buffer.hpp>
-#include <boost/thread/mutex.hpp>
 
 #define NUM_BUFFER_ELEMENTS 100
 
@@ -85,8 +84,6 @@ protected:
 
   int loop_count_;
 
-  boost::mutex mutex;
-
   ronex::SPI* spi_;
 
   std::vector<std::queue<int, boost::circular_buffer<SplittedSPICommand> > > command_queue_;
@@ -99,7 +96,8 @@ protected:
 
   void copy_splitted_to_cmd_(uint16_t spi_index);
 protected:
-  std::vector<bool> new_command;
+  // set to true when response have been processed and it is ready to be deleted
+  std::vector<bool> delete_status_;
 };
 }  // namespace ronex
 

@@ -58,6 +58,8 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
                                               sr_ronex_msgs::SPI::Response &res,
                                               size_t spi_out_index)
 {
+  delete_status_[spi_out_index] = false;
+
   // transmitting the bytes we received
   standard_commands_[spi_out_index].packet.num_bytes = static_cast<int8u>(req.data.size());
 
@@ -74,11 +76,8 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
     }
   }
 
-  {
-	  boost::mutex::scoped_lock lock(mutex);
-    // pushing to the command queue to be sent through etherCAT
-    command_queue_[spi_out_index].push(standard_commands_[spi_out_index]);
-  }
+  // pushing to the command queue to be sent through etherCAT
+  command_queue_[spi_out_index].push(standard_commands_[spi_out_index]);
 
   // wait for the response to be received
   bool not_received = true;
@@ -87,48 +86,38 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
     // sleep roughly 1ms to wait for new etherCAT packet to be received.
     usleep(1000);
 
-    if (status_queue_[spi_out_index].size() > 0)
+    if (status_queue_[spi_out_index].size() > 0 and
+        std::equal(status_queue_[spi_out_index].front().first.packet.data_bytes,
+        status_queue_[spi_out_index].front().first.packet.data_bytes +
+        sizeof status_queue_[spi_out_index].front().first.packet.data_bytes /
+        sizeof *status_queue_[spi_out_index].front().first.packet.data_bytes,
+        standard_commands_[spi_out_index].packet.data_bytes) and
+        status_queue_[spi_out_index].front().second.received == true)
     {
-      ROS_ERROR_STREAM("PT: sq not empty. size: "<<status_queue_[spi_out_index].size());
-      // check if the commands are the same comparing the data_bytes array
-      if (std::equal(status_queue_[spi_out_index].front().first.packet.data_bytes,
-          status_queue_[spi_out_index].front().first.packet.data_bytes +
-          sizeof status_queue_[spi_out_index].front().first.packet.data_bytes /
-          sizeof *status_queue_[spi_out_index].front().first.packet.data_bytes,
-          standard_commands_[spi_out_index].packet.data_bytes))
+      ROS_ERROR_STREAM("PT: response is true");
+      // found the status command corresponding to the command we sent
+      // updating the response
+      for (size_t j = 0; j < req.data.size(); ++j)
       {
-        ROS_ERROR_STREAM("PT: command found");
-        if ( status_queue_[spi_out_index].front().second.received == true)
+        std::ostringstream hex;
+        try
         {
-          ROS_ERROR_STREAM("PT: response is true");
-          // found the status command corresponding to the command we sent
-          // updating the response
-          for (size_t j = 0; j < req.data.size(); ++j)
-          {
-            std::ostringstream hex;
-            try
-            {
-              hex << static_cast<unsigned int>(status_queue_[spi_out_index].front().second.packet.data_bytes[j]);
-            }
-              catch(...)
-            {
-              ROS_ERROR_STREAM("Can't cast to uint.");
-              hex << "bad_data";
-            }
-            res.data.push_back(hex.str());
-          }
-          not_received = false;
-
-          // we used the status (sent it back to the user through the service
-          // response -> popping from the queue
-          ROS_ERROR_STREAM("just before pop.");
-          status_queue_[spi_out_index].pop();
-          ROS_ERROR_STREAM("just after pop.");
-          break;
+          hex << static_cast<unsigned int>(status_queue_[spi_out_index].front().second.packet.data_bytes[j]);
         }
+          catch(...)
+        {
+          ROS_ERROR_STREAM("Can't cast to uint.");
+          hex << "bad_data";
+        }
+        res.data.push_back(hex.str());
       }
-    }
+      not_received = false;
 
+      // we used the status (sent it back to the user through the service
+      // response -> set flag to pop status from the queue
+      delete_status_[spi_out_index] = true;
+      break;
+    }
   }
   return true;
 }

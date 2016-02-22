@@ -113,11 +113,11 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
     {
       if (status_queue_[*channel_iter].back().second.received == false)
       {
-        if (new_command[*channel_iter])
+/*        if (new_command[*channel_iter])
         {
           new_command[*channel_iter] = false;
           spi_->nullify_command(*channel_iter);
-        }
+        }*/
 
         // the response has not been received. If the command type is NORMAL
         // then the response can be updated (it's INVALID until the SPI responds)
@@ -157,7 +157,7 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
       // now we copy the command to the hardware interface
       copy_splitted_to_cmd_(*channel_iter);
 
-      new_command[*channel_iter] = true;
+      //new_command[*channel_iter] = true;
     }
     catch(...)
     {
