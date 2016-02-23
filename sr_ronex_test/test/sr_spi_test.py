@@ -132,7 +132,7 @@ class TestSPIWithHardware(unittest.TestCase):
             self.assertAlmostEquals(results[adc_number], expected_as[0][adc_number],
                                     msg="Testing channel 0 of " + str(adc_number) + "failed (delta = " +
                                         str(results[adc_number] - expected_as[0][adc_number]) + " / received = " +
-                                        str(results[adc_number]) + ").", delta=45)
+                                        str(results[adc_number]) + ").", delta=400)
 
         # check channel 1 of all the spi modules
         results = []
@@ -141,14 +141,14 @@ class TestSPIWithHardware(unittest.TestCase):
             self.assertAlmostEquals(results[adc_number], expected_as[1][adc_number],
                                     msg="Testing channel 1 of " + str(adc_number) + "failed (delta = " +
                                         str(results[adc_number] - expected_as[1][adc_number]) + " / received = " +
-                                        str(results[adc_number]) + ").", delta=45)
+                                        str(results[adc_number]) + ").", delta=400)
 
         # check all the analogue inputs
         for analogue_id in range(0, 6):
             self.assertAlmostEquals(self.analogue_in[analogue_id], expected_analogue[analogue_id],
                                     msg="Testing analogue input" + str(analogue_id) + "failed (delta = " +
                                         str(self.analogue_in[analogue_id] - expected_analogue[analogue_id]) +
-                                        " / received = " + str(self.analogue_in[analogue_id]) + ").", delta=45)
+                                        " / received = " + str(self.analogue_in[analogue_id]) + ").", delta=400)
 
     def set_DIO_states(self, digital_states):
         # set pre / post states
