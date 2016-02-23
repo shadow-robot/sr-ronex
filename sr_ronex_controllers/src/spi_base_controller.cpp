@@ -84,10 +84,11 @@ bool SPIBaseController::pre_init_(ros_ethercat_model::RobotState* robot, ros::No
   // preallocating memory for the command and statues queues
   for (uint16_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
   {
-    std::queue<SplittedSPICommand, boost::circular_buffer<SplittedSPICommand> > cq(boost::circular_buffer<SplittedSPICommand>(
-        NUM_BUFFER_ELEMENTS));
+    std::queue<SplittedSPICommand, boost::circular_buffer<SplittedSPICommand> > cq(
+        boost::circular_buffer<SplittedSPICommand>(NUM_BUFFER_ELEMENTS));
     command_queue_[spi_index] = cq;
-    std::queue<std::pair<SplittedSPICommand, SPIResponse >, boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > > > sq(boost::circular_buffer<
+    std::queue<std::pair<SplittedSPICommand, SPIResponse >,
+        boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > > > sq(boost::circular_buffer<
         std::pair<SplittedSPICommand, SPIResponse > >(NUM_BUFFER_ELEMENTS));
     status_queue_[spi_index] = sq;
   }

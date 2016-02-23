@@ -87,7 +87,8 @@ protected:
   ronex::SPI* spi_;
 
   std::vector<std::queue<SplittedSPICommand, boost::circular_buffer<SplittedSPICommand> > > command_queue_;
-  std::vector<std::queue<std::pair<SplittedSPICommand, SPIResponse>, boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > > > > status_queue_;
+  std::vector<std::queue<std::pair<SplittedSPICommand, SPIResponse>,
+    boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > > > > status_queue_;
 
   uint16_t     cmd_pin_output_states_pre_;
   uint16_t     cmd_pin_output_states_post_;
