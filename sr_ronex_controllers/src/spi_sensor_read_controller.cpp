@@ -109,19 +109,15 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
   for (std::vector<int>::const_iterator channel_iter = spi_channel_.begin(); channel_iter != spi_channel_.end();
         ++channel_iter)
   {
-    if (status_queue_[*channel_iter].size() > 0)
+    // Check if we need to update a status
+    if ( status_queue_[*channel_iter].size() > 0)
     {
-      if (status_queue_[*channel_iter].back().second.received == false)
+      // check if two cycles has passed since the cmd was received so it contains its answer
+      if (loop_count_ == status_queue_[*channel_iter].front().second.loop_number + 2 )
       {
-/*        if (new_command[*channel_iter])
-        {
-          new_command[*channel_iter] = false;
-          spi_->nullify_command(*channel_iter);
-        }*/
-
         // the response has not been received. If the command type is NORMAL
         // then the response can be updated (it's INVALID until the SPI responds)
-        if (spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL)
+        if ( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL )
         {
           status_queue_[*channel_iter].back().second.received = true;
           status_queue_[*channel_iter].back().second.packet =
