@@ -157,7 +157,7 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
       // now we copy the command to the hardware interface
       copy_splitted_to_cmd_(*channel_iter);
 
-      //new_command[*channel_iter] = true;
+      // new_command[*channel_iter] = true;
     }
     catch(...)
     {

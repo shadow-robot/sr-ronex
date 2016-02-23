@@ -25,6 +25,7 @@
 #include "pluginlib/class_list_macros.h"
 #include <utility>
 #include <string>
+#include <queue>
 
 namespace ronex
 {
@@ -105,93 +106,43 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
 {
   for (uint16_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
   {
-/*    if (spi_index == 2)
-    {
-      SPI_PACKET_IN response = SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
-      std::ostringstream hex;
-      for (uint16_t data_index = 0; data_index < 3; ++data_index)
-      {
-        try
-        {
-          hex << static_cast<unsigned int>(response.data_bytes[data_index]);
-        }
-          catch(...)
-        {
-          ROS_ERROR_STREAM("Can't cast to uint.");
-          hex << "bad_data";
-        }
-        hex << " ";
-
-      }
-      ROS_ERROR_STREAM(loop_count_ << " " << hex.str());
-    }*/
-
     // Check if the status has been processed
-    if (delete_status_[spi_index] and status_queue_[spi_index].size() > 0)
+    if (delete_status_[spi_index] && status_queue_[spi_index].size() > 0)
     {
+      ROS_ERROR_STREAM("pop status_queue");
       status_queue_[spi_index].pop();
       delete_status_[spi_index] = false;
     }
-
     // Check if we need to update a status
     if ( status_queue_[spi_index].size() > 0)
     {
-      // ROS_ERROR_STREAM("Updating spi_index: "<< spi_index << " len=" << status_queue_[spi_index].s
-      // ROS_ERROR_STREAM("loop_count_"<< loop_count_);
-      // ROS_ERROR_STREAM("loop_number"<< status_queue_[spi_index].front().second.loop_number );
+    	ROS_ERROR_STREAM("At loop: "<<loop_count_<<" Updating spi_index: "<< spi_index << " len=" << status_queue_[spi_index].size());
+      // check if two cycles has passed since the cmd was received so it contains its answer
       if (loop_count_ == status_queue_[spi_index].front().second.loop_number + 2 )
       {
-        ROS_ERROR_STREAM("loop number:"<< status_queue_[spi_index].back().second.loop_number);
-//        if (new_command[spi_index])
-//        {
-//          ROS_ERROR_STREAM("new command true");
-//          new_command[spi_index] = false;
-//          spi_->nullify_command(spi_index);
-//          continue;
-//        }
-
+        ROS_ERROR_STREAM("From base: after two cycles. sending answer of cmd:"<< status_queue_[spi_index].front().second.loop_number);
         // the response has not been received. If the command type is NORMAL
         // then the response can be updated (it's INVALID until the SPI responds)
         if ( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL )
         {
-          ROS_ERROR_STREAM("command normal");
           status_queue_[spi_index].back().second.received = true;
-          status_queue_[spi_index].back().second.packet = SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
-
-          SPI_PACKET_IN response = SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
-          std::ostringstream hex;
-          for (uint16_t data_index = 0; data_index < 3; ++data_index)
-          {
-            try
-            {
-              hex << static_cast<unsigned int>(response.data_bytes[data_index]);
-            }
-              catch(...)
-            {
-              ROS_ERROR_STREAM("Can't cast to uint.");
-              hex << "bad_data";
-            }
-            hex << " ";
-
-          }
-          ROS_ERROR_STREAM(hex.str());
+          status_queue_[spi_index].back().second.packet =
+              SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
+          ROS_ERROR_STREAM("From base: answer send");
         }
       }
     }
     // if no available command then send the NULL command
     if ( command_queue_[spi_index].empty() )
     {
-      //ROS_ERROR_STREAM("command empty");l");
-
       spi_->nullify_command(spi_index);
     }
     else
     {
       // sending the available command
-
+      ROS_ERROR_STREAM("From base: new command found. Loop:"<< loop_count_);
       // first we add the pointer to the command onto the status queue - the status received flag is still false
       // as we haven't received the response yet.
-      ROS_ERROR_STREAM("*******************sending available cmd loop_count_:" << loop_count_);
       status_queue_[spi_index].push(std::pair<SplittedSPICommand, SPIResponse>());
       status_queue_[spi_index].back().first = command_queue_[spi_index].front();
       status_queue_[spi_index].back().second.received = false;
@@ -203,7 +154,6 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
       // the command will be sent at the end of the iteration,
       // removing the command from the queue but not freeing the
       // memory yet
-      ROS_ERROR_STREAM("pop cmd spi_index: " << spi_index);
       command_queue_[spi_index].pop();
     }
   }

@@ -63,7 +63,7 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
   // transmitting the bytes we received
   standard_commands_[spi_out_index].packet.num_bytes = static_cast<int8u>(req.data.size());
 
-  ROS_DEBUG_STREAM("From passthrough: received "<< req.data.size() << "bytes.");
+  ROS_INFO_STREAM("From passthrough: received "<< req.data.size() << "bytes.");
   for (size_t i = 0; i < req.data.size(); ++i)
   {
     try
@@ -87,14 +87,16 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
     usleep(1000);
 
     // check if the status_queue has the same command and that the response has been received
-    if (status_queue_[spi_out_index].size() > 0 and
+    if (status_queue_[spi_out_index].size() > 0 &&
         std::equal(status_queue_[spi_out_index].front().first.packet.data_bytes,
         status_queue_[spi_out_index].front().first.packet.data_bytes +
         sizeof status_queue_[spi_out_index].front().first.packet.data_bytes /
         sizeof *status_queue_[spi_out_index].front().first.packet.data_bytes,
-        standard_commands_[spi_out_index].packet.data_bytes) and
+        standard_commands_[spi_out_index].packet.data_bytes) &&
         status_queue_[spi_out_index].front().second.received == true)
     {
+      ROS_INFO_STREAM("From passthrough: answer received ");
+
       // found the status command corresponding to the command we sent
       // updating the response
       for (size_t j = 0; j < req.data.size(); ++j)
