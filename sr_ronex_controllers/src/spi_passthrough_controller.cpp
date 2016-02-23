@@ -113,8 +113,7 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
 
       // we used the status (sent it back to the user through the service
       // response -> set flag to pop status from the queue
-      //delete_status_[spi_out_index] = true;
-      status_queue_[spi_out_index].front().second.processed = true;
+      delete_status_[spi_out_index] = true;
       break;
     }
   }
