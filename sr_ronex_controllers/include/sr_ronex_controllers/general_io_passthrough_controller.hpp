@@ -28,7 +28,7 @@
 #include <ros/node_handle.h>
 
 #include <controller_interface/controller.h>
-#include <ros_ethercat_model/robot_state.hpp>
+#include <ros_ethercat_model/robot_state_interface.hpp>
 #include <sr_ronex_hardware_interface/mk2_gio_hardware_interface.hpp>
 #include <realtime_tools/realtime_publisher.h>
 #include <sr_ronex_utilities/sr_ronex_utilities.hpp>
@@ -40,12 +40,12 @@
 namespace ronex
 {
 class GeneralIOPassthroughController
-  : public controller_interface::Controller<ros_ethercat_model::RobotState>
+  : public controller_interface::Controller<ros_ethercat_model::RobotStateInterface>
 {
 public:
   GeneralIOPassthroughController();
 
-  virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+  virtual bool init(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n);
 
   /*!
    * \brief Issues commands to the joint. Should be called at regular intervals

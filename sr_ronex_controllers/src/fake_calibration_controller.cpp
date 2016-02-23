@@ -36,7 +36,7 @@ FakeCalibrationController::FakeCalibrationController()
 {
 }
 
-bool FakeCalibrationController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
+bool FakeCalibrationController::init(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n)
 {
   robot_ = robot;
   node_ = n;
@@ -48,7 +48,21 @@ bool FakeCalibrationController::init(ros_ethercat_model::RobotState* robot, ros:
     ROS_ERROR("No joint given (namespace: %s)", node_.getNamespace().c_str());
     return false;
   }
-  if (!(joint_ = robot->getJointState(joint_name)))
+
+  std::string robot_state_name;
+  node_.param<std::string>("robot_state_name", robot_state_name, "unique_robot_hw");
+
+  try
+  {
+    joint_ = robot->getHandle(robot_state_name).getState()->getJointState(joint_name);
+  }
+  catch(const hardware_interface::HardwareInterfaceException& e)
+  {
+    ROS_ERROR_STREAM("Could not find robot state: " << robot_state_name << " Not loading the controller. " << e.what());
+    return false;
+  }
+
+  if (joint_ == NULL)
   {
     ROS_ERROR("Could not find joint %s (namespace: %s)",
               joint_name.c_str(), node_.getNamespace().c_str());
@@ -66,7 +80,7 @@ bool FakeCalibrationController::init(ros_ethercat_model::RobotState* robot, ros:
 /*!
  * \brief Sets the joint to calibrated = true; Also publishes true to the calibrated topic
  */
-void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
+void FakeCalibrationController::update(const ros::Time& time, const ros::Duration&)
 {
   assert(joint_);
 
@@ -81,17 +95,17 @@ void FakeCalibrationController::update(const ros::Time&, const ros::Duration&)
     state_ = CALIBRATED;
     // We add the following line to delay for some time the first publish and allow the correct initialization of the
     // subscribers in calibrate.py
-    last_publish_time_ = robot_->getTime();
+    last_publish_time_ = time;
     break;
   case CALIBRATED:
     if (pub_calibrated_)
     {
-      if (last_publish_time_ + ros::Duration(0.5) < robot_->getTime())
+      if (last_publish_time_ + ros::Duration(0.5) < time)
       {
         assert(pub_calibrated_);
         if (pub_calibrated_->trylock())
         {
-          last_publish_time_ = robot_->getTime();
+          last_publish_time_ = time;
           pub_calibrated_->msg_ = calib_msg_;
           pub_calibrated_->unlockAndPublish();
         }

@@ -32,12 +32,12 @@ SPIBaseController::SPIBaseController()
   : loop_count_(0), command_queue_(NUM_SPI_OUTPUTS), status_queue_(NUM_SPI_OUTPUTS)
 {}
 
-bool SPIBaseController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
+bool SPIBaseController::init(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n)
 {
   return pre_init_(robot, n);
 }
 
-bool SPIBaseController::pre_init_(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
+bool SPIBaseController::pre_init_(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n)
 {
   assert(robot);
   node_ = n;
@@ -73,7 +73,19 @@ bool SPIBaseController::pre_init_(ros_ethercat_model::RobotState* robot, ros::No
   }
   topic_prefix_ = path;
 
-  spi_ = static_cast<ronex::SPI*>(robot->getCustomHW(path));
+  std::string robot_state_name;
+  node_.param<std::string>("robot_state_name", robot_state_name, "unique_robot_hw");
+
+  try
+  {
+    spi_ = static_cast<ronex::SPI*>(robot->getHandle(robot_state_name).getState()->getCustomHW(path));
+  }
+  catch(const hardware_interface::HardwareInterfaceException& e)
+  {
+    ROS_ERROR_STREAM("Could not find robot state: " << robot_state_name << " Not loading the controller. " << e.what());
+    return false;
+  }
+
   if (spi_ == NULL)
   {
     ROS_ERROR_STREAM("Could not find RoNeX module: " << ronex_id << " not loading the controller");

@@ -42,7 +42,7 @@ class SPIPassthroughController
   : public SPIBaseController
 {
 public:
-  virtual bool init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
+  virtual bool init(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n);
 
   bool command_srv_cb(sr_ronex_msgs::SPI::Request &req,
                        sr_ronex_msgs::SPI::Response &res,

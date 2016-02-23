@@ -29,7 +29,7 @@ PLUGINLIB_EXPORT_CLASS(ronex::SPIPassthroughController, controller_interface::Co
 
 namespace ronex
 {
-bool SPIPassthroughController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
+bool SPIPassthroughController::init(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n)
 {
   if ( !pre_init_(robot, n) )
     return false;
