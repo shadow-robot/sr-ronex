@@ -86,6 +86,7 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
     // sleep roughly 1ms to wait for new etherCAT packet to be received.
     usleep(1000);
 
+    // check if the status_queue has the same command and that the response has been received
     if (status_queue_[spi_out_index].size() > 0 and
         std::equal(status_queue_[spi_out_index].front().first.packet.data_bytes,
         status_queue_[spi_out_index].front().first.packet.data_bytes +
@@ -94,7 +95,6 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
         standard_commands_[spi_out_index].packet.data_bytes) and
         status_queue_[spi_out_index].front().second.received == true)
     {
-      ROS_ERROR_STREAM("PT: response is true");
       // found the status command corresponding to the command we sent
       // updating the response
       for (size_t j = 0; j < req.data.size(); ++j)

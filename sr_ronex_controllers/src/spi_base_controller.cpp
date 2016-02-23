@@ -80,12 +80,14 @@ bool SPIBaseController::pre_init_(ros_ethercat_model::RobotState* robot, ros::No
     return false;
   }
 
-  // prealocating memory for the command and statues queues
+  // preallocating memory for the command and statues queues
   for (uint16_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
   {
-    std::queue<int, boost::circular_buffer<SplittedSPICommand> > cq(boost::circular_buffer<SplittedSPICommand>(NUM_BUFFER_ELEMENTS));
+    std::queue<int, boost::circular_buffer<SplittedSPICommand> > cq(boost::circular_buffer<SplittedSPICommand>(
+        NUM_BUFFER_ELEMENTS));
     command_queue_[spi_index] = cq;
-    std::queue<int, boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > > > sq(boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > >(NUM_BUFFER_ELEMENTS));
+    std::queue<int, boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > > > sq(boost::circular_buffer<
+        std::pair<SplittedSPICommand, SPIResponse > >(NUM_BUFFER_ELEMENTS));
     status_queue_[spi_index] = sq;
   }
   return true;
@@ -101,10 +103,9 @@ void SPIBaseController::starting(const ros::Time&)
  */
 void SPIBaseController::update(const ros::Time&, const ros::Duration&)
 {
-  //ROS_ERROR_STREAM("b");
   for (uint16_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
   {
-    if (spi_index == 2)
+/*    if (spi_index == 2)
     {
       SPI_PACKET_IN response = SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
       std::ostringstream hex;
@@ -122,29 +123,24 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
         hex << " ";
 
       }
-      //ROS_ERROR_STREAM(loop_count_ << " " << hex.str());
-    }
+      ROS_ERROR_STREAM(loop_count_ << " " << hex.str());
+    }*/
 
     // Check if the status has been processed
     if (delete_status_[spi_index] and status_queue_[spi_index].size() > 0)
     {
-      ROS_ERROR_STREAM("poping status");
       status_queue_[spi_index].pop();
       delete_status_[spi_index] = false;
     }
-    //ROS_ERROR_STREAM("spi_index"<<spi_index);
 
     // Check if we need to update a status
     if ( status_queue_[spi_index].size() > 0)
     {
-      ROS_ERROR_STREAM("Updating spi_index: "<< spi_index << " len=" << status_queue_[spi_index].size());
-      //ROS_ERROR_STREAM("Response received:" << status_queue_[spi_index].back().second.received);
-      ROS_ERROR_STREAM("loop_count_"<< loop_count_);
-      ROS_ERROR_STREAM("loop_number"<< status_queue_[spi_index].front().second.loop_number );
+      // ROS_ERROR_STREAM("Updating spi_index: "<< spi_index << " len=" << status_queue_[spi_index].s
+      // ROS_ERROR_STREAM("loop_count_"<< loop_count_);
+      // ROS_ERROR_STREAM("loop_number"<< status_queue_[spi_index].front().second.loop_number );
       if (loop_count_ == status_queue_[spi_index].front().second.loop_number + 2 )
       {
-
-
         ROS_ERROR_STREAM("loop number:"<< status_queue_[spi_index].back().second.loop_number);
 //        if (new_command[spi_index])
 //        {
@@ -180,16 +176,13 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
           }
           ROS_ERROR_STREAM(hex.str());
         }
-        else
-          ROS_ERROR_STREAM("command NOT normal");
       }
-      else
-        ROS_ERROR_STREAM("status not null");
     }
     // if no available command then send the NULL command
     if ( command_queue_[spi_index].empty() )
     {
-      //ROS_ERROR_STREAM("command empty");
+      //ROS_ERROR_STREAM("command empty");l");
+
       spi_->nullify_command(spi_index);
     }
     else
