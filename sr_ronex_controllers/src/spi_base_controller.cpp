@@ -30,7 +30,7 @@
 namespace ronex
 {
 SPIBaseController::SPIBaseController()
-  : loop_count_(0), command_queue_(NUM_SPI_OUTPUTS), status_queue_(NUM_SPI_OUTPUTS), delete_status_(NUM_SPI_OUTPUTS)
+  : loop_count_(0), command_queue_(NUM_SPI_OUTPUTS), status_queue_(NUM_SPI_OUTPUTS)
 {}
 
 bool SPIBaseController::init(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n)
@@ -107,20 +107,18 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
   for (uint16_t spi_index = 0; spi_index < NUM_SPI_OUTPUTS; ++spi_index)
   {
     // Check if the status has been processed
-    if (delete_status_[spi_index] && status_queue_[spi_index].size() > 0)
+    if (status_queue_[spi_index].size() > 0 && status_queue_[spi_index].front().second.processed == true)
     {
-      ROS_ERROR_STREAM("pop status_queue");
       status_queue_[spi_index].pop();
-      delete_status_[spi_index] = false;
     }
     // Check if we need to update a status
     if ( status_queue_[spi_index].size() > 0)
     {
-    	ROS_ERROR_STREAM("At loop: "<<loop_count_<<" Updating spi_index: "<< spi_index << " len=" << status_queue_[spi_index].size());
+    	// ROS_ERROR_STREAM("At loop: "<<loop_count_<<" Updating spi_index: "<< spi_index << " len=" << status_queue_[spi_index].size());
       // check if two cycles has passed since the cmd was received so it contains its answer
       if (loop_count_ == status_queue_[spi_index].front().second.loop_number + 2 )
       {
-        ROS_ERROR_STREAM("From base: after two cycles. sending answer of cmd:"<< status_queue_[spi_index].front().second.loop_number);
+        // ROS_ERROR_STREAM("From base: after two cycles. sending answer of cmd:"<< status_queue_[spi_index].front().second.loop_number);
         // the response has not been received. If the command type is NORMAL
         // then the response can be updated (it's INVALID until the SPI responds)
         if ( spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL )
@@ -128,7 +126,6 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
           status_queue_[spi_index].back().second.received = true;
           status_queue_[spi_index].back().second.packet =
               SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
-          ROS_ERROR_STREAM("From base: answer send");
         }
       }
     }
@@ -140,12 +137,13 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
     else
     {
       // sending the available command
-      ROS_ERROR_STREAM("From base: new command found. Loop:"<< loop_count_);
+
       // first we add the pointer to the command onto the status queue - the status received flag is still false
       // as we haven't received the response yet.
       status_queue_[spi_index].push(std::pair<SplittedSPICommand, SPIResponse>());
       status_queue_[spi_index].back().first = command_queue_[spi_index].front();
       status_queue_[spi_index].back().second.received = false;
+      status_queue_[spi_index].back().second.processed = false;
       status_queue_[spi_index].back().second.loop_number = loop_count_;
 
       // now we copy the command to the hardware interface

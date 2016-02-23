@@ -57,6 +57,7 @@ struct SplittedSPICommand
 struct SPIResponse
 {
   bool received;
+  bool processed;
   int loop_number;
   SPI_PACKET_IN packet;
 };
@@ -95,11 +96,6 @@ protected:
   bool pre_init_(ros_ethercat_model::RobotState* robot, ros::NodeHandle &n);
 
   void copy_splitted_to_cmd_(uint16_t spi_index);
-
-protected:
-
-  // set to true when response have been processed and it is ready to be deleted
-  std::vector<bool> delete_status_;
 };
 }  // namespace ronex
 

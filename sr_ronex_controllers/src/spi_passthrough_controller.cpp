@@ -58,12 +58,10 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
                                               sr_ronex_msgs::SPI::Response &res,
                                               size_t spi_out_index)
 {
-  delete_status_[spi_out_index] = false;
-
   // transmitting the bytes we received
   standard_commands_[spi_out_index].packet.num_bytes = static_cast<int8u>(req.data.size());
 
-  ROS_INFO_STREAM("From passthrough: received "<< req.data.size() << "bytes.");
+  ROS_DEBUG_STREAM("From passthrough: received "<< req.data.size() << "bytes.");
   for (size_t i = 0; i < req.data.size(); ++i)
   {
     try
@@ -95,8 +93,6 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
         standard_commands_[spi_out_index].packet.data_bytes) &&
         status_queue_[spi_out_index].front().second.received == true)
     {
-      ROS_INFO_STREAM("From passthrough: answer received ");
-
       // found the status command corresponding to the command we sent
       // updating the response
       for (size_t j = 0; j < req.data.size(); ++j)
@@ -117,7 +113,8 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
 
       // we used the status (sent it back to the user through the service
       // response -> set flag to pop status from the queue
-      delete_status_[spi_out_index] = true;
+      //delete_status_[spi_out_index] = true;
+      status_queue_[spi_out_index].front().second.processed = true;
       break;
     }
   }
