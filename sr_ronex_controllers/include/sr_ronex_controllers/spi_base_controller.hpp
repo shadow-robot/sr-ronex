@@ -35,6 +35,9 @@
 #include <utility>
 #include <string>
 #include <vector>
+#include <boost/circular_buffer.hpp>
+
+#define NUM_BUFFER_ELEMENTS 100
 
 namespace ronex
 {
@@ -49,6 +52,13 @@ struct SplittedSPICommand
   {
     this->packet = copy_me->packet;
   }
+};
+
+struct SPIResponse
+{
+  bool received;
+  int loop_number;
+  SPI_PACKET_IN packet;
 };
 
 class SPIBaseController
@@ -76,8 +86,9 @@ protected:
 
   ronex::SPI* spi_;
 
-  std::vector<std::queue<SplittedSPICommand*> > command_queue_;
-  std::vector<std::queue<std::pair<SplittedSPICommand*, SPI_PACKET_IN* > > > status_queue_;
+  std::vector<std::queue<SplittedSPICommand, boost::circular_buffer<SplittedSPICommand> > > command_queue_;
+  std::vector<std::queue<std::pair<SplittedSPICommand, SPIResponse>,
+    boost::circular_buffer<std::pair<SplittedSPICommand, SPIResponse > > > > status_queue_;
 
   uint16_t     cmd_pin_output_states_pre_;
   uint16_t     cmd_pin_output_states_post_;
@@ -85,8 +96,10 @@ protected:
   bool pre_init_(ros_ethercat_model::RobotStateInterface* robot, ros::NodeHandle &n);
 
   void copy_splitted_to_cmd_(uint16_t spi_index);
+
 protected:
-  bool new_command;
+  // set to true when response have been processed and it is ready to be deleted
+  std::vector<bool> delete_status_;
 };
 }  // namespace ronex
 
