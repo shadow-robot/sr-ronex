@@ -117,7 +117,7 @@ void SPISensorReadController::update(const ros::Time& time, const ros::Duration&
       {
         // the response has not been received. If the command type is NORMAL
         // then the response can be updated (it's INVALID until the SPI responds)
-        if (spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL )
+        if (spi_->state_->command_type == RONEX_COMMAND_02000002_COMMAND_TYPE_NORMAL)
         {
           status_queue_[*channel_iter].back().second.received = true;
           status_queue_[*channel_iter].back().second.packet =

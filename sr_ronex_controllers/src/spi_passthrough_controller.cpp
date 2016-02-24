@@ -102,7 +102,7 @@ bool SPIPassthroughController::command_srv_cb(sr_ronex_msgs::SPI::Request &req,
         {
           hex << static_cast<unsigned int>(status_queue_[spi_out_index].front().second.packet.data_bytes[j]);
         }
-          catch(...)
+        catch(...)
         {
           ROS_ERROR_STREAM("Can't cast to uint.");
           hex << "bad_data";

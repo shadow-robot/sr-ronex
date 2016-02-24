@@ -125,7 +125,7 @@ void SPIBaseController::update(const ros::Time&, const ros::Duration&)
         {
           status_queue_[spi_index].back().second.received = true;
           status_queue_[spi_index].back().second.packet =
-              SPI_PACKET_IN(spi_->state_->info_type.status_data.spi_in[spi_index]);
+              spi_->state_->info_type.status_data.spi_in[spi_index];
         }
       }
     }
