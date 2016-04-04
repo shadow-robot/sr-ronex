@@ -6,18 +6,21 @@ python:
 env:
   - secure: 1aosZSYrFWGyuqotwoZyd6oc+TxghPlv/Y7Rv8fBzlghWX+WDNJVieSlQ5aIaIzT0VX3dd/Bf2Hb8V0Id/meZkzEudfCzdjzQDvgLDdhLy2aapKvggfNqVPk/bjJ/DXsD8oqxrKYsX0Jnz6IweYmnE80Q3OBvQXB6gLrzKPaghfYd6X8Xv/2Q8fsXJYfLKbOZ5+lWj2qIyghaDzee+8EOYstpHTFZXpF/9qUJQBwOdP5haHf3UpFwqRv/qsDHzziRQu0bF90jYHDBJpnXmfQWyppMLfQvjK6CqTsCNWZ4LEZj6woT+5aakF1ZEULeQi8ZZooTXxIGTDUF5Y+nu6Gdg==
 
-cache: true
+build:
+  pre_ci_boot:
+    image_name: shadowrobot/ubuntu-ros-indigo-build-tools
+    image_tag: latest
+    pull: true
 
-install:
-  - sudo apt-get update
-  - sudo apt-get install curl -y
+    options: "-e HOME=/root"
 
-script:
-  - export toolset_branch="master"
-  - export server_type="shippable"
-  - export used_modules="build_pr_only,check_cache,codecov_tool"
-  - export remote_shell_script="https://raw.githubusercontent.com/shadow-robot/sr-build-tools/$toolset_branch/bin/sr-run-ci-build.sh"
-  - curl -s "$( echo "$remote_shell_script" | sed 's/#/%23/g' )" | bash /dev/stdin "$toolset_branch" $server_type $used_modules
-
-after_failure:
-  - curl -X POST --data-urlencode "payload={\"channel\":\"#bots\", \"username\":\"shippable\", \"text\":\"[$SHIPPABLE_REPO_SLUG branch $BRANCH] <$BUILD_URL|Build $SHIPPABLE_BUILD_NUMBER> failed\", \"icon_emoji\":\":monkey_face:\"}" $SLACK_WEB_HOOK_URL
+  ci:
+    - sudo apt-get update
+    - sudo apt-get install curl -y
+    - export toolset_branch="master"
+    - export server_type="shippable"
+    - export used_modules="build_pr_only,check_cache,codecov_tool"
+    - export remote_shell_script="https://raw.githubusercontent.com/shadow-robot/sr-build-tools/$toolset_branch/bin/sr-run-ci-build.sh"
+    - curl -s "$( echo "$remote_shell_script" | sed 's/#/%23/g' )" | bash /dev/stdin "$toolset_branch" $server_type $used_modules
+  on_failure:
+    - curl -X POST --data-urlencode "payload={\"channel\":\"#bots\", \"username\":\"shippable\", \"text\":\"[$SHIPPABLE_REPO_SLUG branch $BRANCH] <$BUILD_URL|Build $SHIPPABLE_BUILD_NUMBER> failed\", \"icon_emoji\":\":monkey_face:\"}" $SLACK_WEB_HOOK_URL
