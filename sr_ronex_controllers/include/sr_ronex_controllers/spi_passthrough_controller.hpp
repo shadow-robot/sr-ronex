@@ -36,6 +36,9 @@
 #include <dynamic_reconfigure/server.h>
 #include "sr_ronex_drivers/SPIConfig.h"
 
+#include <boost/scoped_array.hpp>
+#include <boost/scoped_ptr.hpp>
+
 namespace ronex
 {
 class SPIPassthroughController
