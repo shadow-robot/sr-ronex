@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /tmp/repository
     docker:
-      - image: shadowrobot/build-tools:trusty-indigo
+      - image: shadowrobot/build-tools:xenial-kinetic
         environment:
           toolset_branch: F#SRC-1420_circle_ci_2_0
           server_type: circle
